@@ -1,6 +1,7 @@
 import Head from 'next/head'
 import Image from 'next/image'
-import Footer from '../component/footer/footer'
+import Footer from '../components/footer/footer'
+import Header from '../components/header/header'
 // import styles from '../styles/Home.css'
 // import '../styles/Landing.css'
 
@@ -8,6 +9,7 @@ export default function Home() {
   return (
     <>
       <section className="banner full-height">
+        <Header/>
         <div className="pt-36 pl-36 text-white">
           <h1 className="font-bold text-5xl">All-in-One Sites <br />
             for Preparation Exam</h1>
