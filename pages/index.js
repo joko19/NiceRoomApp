@@ -1,19 +1,73 @@
 import Head from 'next/head'
 import Image from 'next/image'
+import { useState } from 'react'
 import Footer from '../components/footer/footer'
 import Header from '../components/header/header'
 // import styles from '../styles/Home.css'
 // import '../styles/Landing.css'
 
 export default function Home() {
+  const [formStatus, setFormStatus] = useState('forgotPassword')
+  const changeFormStatus = (data) => {
+    setFormStatus(data)
+  }
   return (
     <>
       <section className="banner full-height">
-        <Header/>
-        <div className="pt-36 pl-36 text-white">
-          <h1 className="font-bold text-5xl">All-in-One Sites <br />
-            for Preparation Exam</h1>
-          <p className="mt-2">Makes preparation simplified with Examz</p>
+        <Header />
+        <div className="grid md:grid-cols-2 mt-12">
+          <div className="pt-36 pl-36 hidden md:flex md:flex-col text-white">
+            <h1 className="font-bold text-5xl">All-in-One Sites <br />
+              for Preparation Exam</h1>
+            <p className="mt-2">Makes preparation simplified with Examz</p>
+          </div>
+          {formStatus === 'login' &&(
+            <div className="my-40 bg-white rounded-lg p-4 m-4 md:m-24">
+              <h1 className="text-xl text-center">Welcome to Examz!</h1>
+              <p className="text-black-3 text-center">Be ready for exam with us</p>
+              <p className="mt-4">Email / Phone</p>
+              <input type="text" className="p-4 border rounded-xl w-full" placeholder="Input Email or Phone" />
+              <p className="mt-4">Password</p>
+              <input type="password" placeholder="Input Password" className="p-4 border w-full rounded-xl" />
+              <button className="text-right text-end mt-2 text-black-3" onClick={() => setFormStatus('forgotPassword')}>Forgot Password</button>
+              <button className="w-full bg-yellow-1 text-white p-2 mt-4 rounded-xl">Login</button>
+              <p className="text-center m-4 text-black-4">or continue with</p>
+              <div className="flex gap-4">
+                <button className="flex w-full justify-center gap-4 border px-6 py-2 border-yellow-1 rounded-lg"><img src="/asset/icon/ic_facebook.png" alt="login with facebook" /> Facebook</button>
+                <button className="flex w-full  gap-4 justify-center border px-6 py-2 border-yellow-1 rounded-lg"><img src="/asset/icon/ic_google.png" alt="login with google" /> Google</button>
+              </div>
+              <p className="text-right mt-2 text-black-3">Don't you have account ?  <button onClick={() => setFormStatus('register')}>Register</button></p>
+            </div>
+          )}
+
+          {formStatus === 'register' && (
+            <div className="my-40 bg-white rounded-lg m-4 p-4 md:m-24">
+              <h1 className="text-xl text-center">Create Account</h1>
+              <p className="text-black-3 text-center">create an account and get a lot of benefits</p>
+              <p className="mt-4">Full Name</p>
+              <input type="text" className="p-4 border rounded-xl w-full" placeholder="Input Your Fullname" />
+              <p className="mt-4">Email</p>
+              <input type="text" className="p-4 border rounded-xl w-full" placeholder="Input Your Email" />
+              <p className="mt-4">Phone</p>
+              <input type="number" className="p-4 border rounded-xl w-full" placeholder="Input Your Phone Number" />
+              <p className="mt-4">Password</p>
+              <input type="password" placeholder="Input Password" className="p-4 border w-full rounded-xl" />
+              <button className="w-full bg-yellow-1 text-white p-2 mt-4 rounded-xl">Register</button>
+              <p className="text-right mt-2 text-black-3">Do you have account ? <button onClick={() => setFormStatus('login')}> Login </button></p>
+            </div>
+          )}
+
+
+          {formStatus === 'forgotPassword' && (
+            <div className="my-40 bg-white rounded-lg p-4 m-4 md:m-24">
+              <h1 className="text-xl text-center">Forgot Password ?</h1>
+              <p className="text-black-3 text-center">Enter your email or phone number to reset your password.</p>
+              <p className="mt-4">Email / Phone</p>
+              <input type="text" className="p-4 border rounded-xl w-full" placeholder="Input Email or Phone" />
+              <button className="w-full bg-yellow-1 text-white p-2 mt-4 rounded-xl">Login</button>
+              <p className="text-right mt-2 text-black-3 text-center">Remember Password ?  <button classname="text-blue-1" onClick={() => setFormStatus('login')}>Login</button> or <button onClick={() => setFormStatus('register')}>Register</button> </p>
+            </div>
+          )}
         </div>
       </section>
 
@@ -196,9 +250,9 @@ export default function Home() {
 
       <section className="py-20">
         <h1 className="text-2xl text-center font-bold text-blue-1 p-1">Lates news from us</h1>
-        <p className="text-black-4 mt-1 text-center">Read and get inspired by these latest news curated by us</p>
+        <p className="text-black-4 mx-8 mt-1 text-center">Read and get inspired by these latest news curated by us</p>
 
-        <div className="grid grid-cols-3 md:px-8 mt-8">
+        <div className="grid md:grid-cols-3 px-4 gap-4 md:px-8 mt-8">
           <div>
             <img src="/asset/img/news1.png" alt="news image" />
             <p className="text-black-3">12/07/2021</p>
@@ -221,8 +275,8 @@ export default function Home() {
       </section>
 
       <section className="py-20 bg-blue-6 flex-row items-center text-center">
-        <h1 className="text-4xl text-center font-bold text-blue-1 p-1">Start your preparation for now</h1>
-        <p className="text-black-3 mt-3 text-center">Makes your exam preparation more simplified with Examz</p>
+        <h1 className="text-4xl text-center  font-bold text-blue-1 p-1">Start your preparation for now</h1>
+        <p className="text-black-3 mx-4 mt-3 text-center">Makes your exam preparation more simplified with Examz</p>
         <button className="mt-8 bg-blue-1 p-4 rounded-lg text-white">Get Started For Free</button>
       </section>
 

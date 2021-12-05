@@ -42,7 +42,7 @@ function Footer(props) {
           </ul>
         </div>
       </div >
-      <div className="md:px-10 flex justify-between">
+      <div className="md:px-10 md:flex md:justify-between mx-4">
         <p>© 2021 Examz. All rights reserved</p>
         <p>Terms & Conditions | Privacy Policy | Sitemap | Disclaimer</p>
       </div>
