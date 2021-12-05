@@ -36,7 +36,7 @@ export default function Home() {
                 <button className="flex w-full justify-center gap-4 border px-6 py-2 border-yellow-1 rounded-lg"><img src="/asset/icon/ic_facebook.png" alt="login with facebook" /> Facebook</button>
                 <button className="flex w-full  gap-4 justify-center border px-6 py-2 border-yellow-1 rounded-lg"><img src="/asset/icon/ic_google.png" alt="login with google" /> Google</button>
               </div>
-              <p className="text-right mt-2 text-black-3">Don't you have account ?  <button onClick={() => setFormStatus('register')}>Register</button></p>
+              <p className="text-right mt-2 text-black-3">Dont you have account ?  <button onClick={() => setFormStatus('register')}>Register</button></p>
             </div>
           )}
 
@@ -65,7 +65,7 @@ export default function Home() {
               <p className="mt-4">Email / Phone</p>
               <input type="text" className="p-4 border rounded-xl w-full" placeholder="Input Email or Phone" />
               <button className="w-full bg-yellow-1 text-white p-2 mt-4 rounded-xl">Login</button>
-              <p className="text-right mt-2 text-black-3 text-center">Remember Password ?  <button classname="text-blue-1" onClick={() => setFormStatus('login')}>Login</button> or <button onClick={() => setFormStatus('register')}>Register</button> </p>
+              <p className="text-right mt-2 text-black-3 text-center">Remember Password ?  <button className="text-blue-1" onClick={() => setFormStatus('login')}>Login</button> or <button onClick={() => setFormStatus('register')}>Register</button> </p>
             </div>
           )}
         </div>
