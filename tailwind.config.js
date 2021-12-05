@@ -28,6 +28,7 @@ module.exports = {
           2: '#75A2E3',
           3: '#E9F4FF',
           4: '#FBFEFF',
+          6: '#EEF1FB',
         },
         red: {
           1: '#FF4B4B',

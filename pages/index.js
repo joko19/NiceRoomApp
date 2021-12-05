@@ -1,5 +1,6 @@
 import Head from 'next/head'
 import Image from 'next/image'
+import Footer from '../component/footer/footer'
 // import styles from '../styles/Home.css'
 // import '../styles/Landing.css'
 
@@ -191,6 +192,41 @@ export default function Home() {
         </div>
       </section>
 
+      <section className="py-20">
+        <h1 className="text-2xl text-center font-bold text-blue-1 p-1">Lates news from us</h1>
+        <p className="text-black-4 mt-1 text-center">Read and get inspired by these latest news curated by us</p>
+
+        <div className="grid grid-cols-3 md:px-8 mt-8">
+          <div>
+            <img src="/asset/img/news1.png" alt="news image" />
+            <p className="text-black-3">12/07/2021</p>
+            <h1 className="font-bold text-xl">Learn From Home Can Be Fun And More Colorful Nowadays</h1>
+            <p className="text-yellow-1">Read More</p>
+          </div>
+          <div>
+            <img src="/asset/img/news2.png" alt="news image" />
+            <p className="text-black-3">12/07/2021</p>
+            <h1 className="font-bold text-xl">Learn From Home Can Be Fun And More Colorful Nowadays</h1>
+            <p className="text-yellow-1">Read More</p>
+          </div>
+          <div>
+            <img src="/asset/img/news3.png" alt="news image" />
+            <p className="text-black-3">12/07/2021</p>
+            <h1 className="font-bold text-xl">Learn From Home Can Be Fun And More Colorful Nowadays</h1>
+            <p className="text-yellow-1">Read More</p>
+          </div>
+        </div>
+      </section>
+
+      <section className="py-20 bg-blue-6 flex-row items-center text-center">
+        <h1 className="text-4xl text-center font-bold text-blue-1 p-1">Start your preparation for now</h1>
+        <p className="text-black-3 mt-3 text-center">Makes your exam preparation more simplified with Examz</p>
+        <button className="mt-8 bg-blue-1 p-4 rounded-lg text-white">Get Started For Free</button>
+      </section>
+
+      <section>
+        <Footer />
+      </section>
 
     </>
   )
