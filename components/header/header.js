@@ -5,33 +5,33 @@ import { useRouter } from 'next/router';
 function Header(props) {
   const menu = [
     {
+      id:0,
       slug: '/test-series',
       name: 'Test Series'
     },
     {
+
+      id:1,
       slug: '/quizzes',
       name: 'Quizzes'
     },
     {
+      id:2,
       slug: '/prev-paper',
       name: 'Prev Paper'
     },
     {
+      id:3,
       slug: '/upcoming-exam',
       name: 'Upcoming Exam'
     },
     {
+      id:4,
       slug: '/exam',
       name: 'Exam'
     },
   ]
   const { pathname } = useRouter();
-  console.log(props.path)
-  console.log(pathname)
-
-  const style = {
-    color: pathname === props.path ? 'text-blue-1' : 'text-white'
-  }
   return (
     <div className="flex bg-blue-1 md:px-12 py-4 gap-8 justify-between fixed w-full top-0 z-50">
       <h1 className="text-white text-4xl mx-4"><Link href="/"><a> Examz.</a></Link></h1>
@@ -42,7 +42,7 @@ function Header(props) {
               color : item.slug === pathname ? 'text-white border-b' : 'text-gray-400'
             } 
             return(
-            <li className={status.color}><Link href={item.slug}><a>{item.name}</a></Link></li>
+            <li key={item.id} className={status.color}><Link href={item.slug}><a>{item.name}</a></Link></li>
           )})}
         </ul>
       </div>

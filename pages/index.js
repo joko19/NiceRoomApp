@@ -7,10 +7,35 @@ import Header from '../components/header/header'
 // import '../styles/Landing.css'
 
 export default function Home() {
-  const [formStatus, setFormStatus] = useState('forgotPassword')
-  const changeFormStatus = (data) => {
-    setFormStatus(data)
+  const [formStatus, setFormStatus] = useState('register')
+  const [name, setName] = useState()
+  const [emailOrPhone, setEmailOrPhone] = useState()
+  const [email, setEmail] = useState()
+  const [phone, setPhone] = useState()
+  const [password, setPassword] = useState()
+
+  const onRegister = () => {
+    const data = {
+      name: name,
+      email: email,
+      phone: phone,
+      password: password
+    }
+    console.log(data)
   }
+
+  const onLogin = () => {
+    const data = {
+      emailOrPhone: emailOrPhone,
+      password: password
+    }
+    console.log(data)
+  }
+
+  const onForgot = () => {
+    console.log(email)
+  } 
+  
   return (
     <>
       <section className="banner full-height">
@@ -21,16 +46,16 @@ export default function Home() {
               for Preparation Exam</h1>
             <p className="mt-2">Makes preparation simplified with Examz</p>
           </div>
-          {formStatus === 'login' &&(
+          {formStatus === 'login' && (
             <div className="my-40 bg-white rounded-lg p-4 m-4 md:m-24">
               <h1 className="text-xl text-center">Welcome to Examz!</h1>
               <p className="text-black-3 text-center">Be ready for exam with us</p>
               <p className="mt-4">Email / Phone</p>
-              <input type="text" className="p-4 border rounded-xl w-full" placeholder="Input Email or Phone" />
+              <input type="text" className="p-4 border rounded-xl w-full" placeholder="Input Email or Phone" onChange={(data) => setEmailOrPhone(data.target.value)} />
               <p className="mt-4">Password</p>
-              <input type="password" placeholder="Input Password" className="p-4 border w-full rounded-xl" />
+              <input type="password" placeholder="Input Password" className="p-4 border w-full rounded-xl" onChange={(data) => setPassword(data.target.value)} />
               <button className="text-right text-end mt-2 text-black-3" onClick={() => setFormStatus('forgotPassword')}>Forgot Password</button>
-              <button className="w-full bg-yellow-1 text-white p-2 mt-4 rounded-xl">Login</button>
+              <button className="w-full bg-yellow-1 text-white p-2 mt-4 rounded-xl" onClick={() => onLogin()}>Login</button>
               <p className="text-center m-4 text-black-4">or continue with</p>
               <div className="flex gap-4">
                 <button className="flex w-full justify-center gap-4 border px-6 py-2 border-yellow-1 rounded-lg"><img src="/asset/icon/ic_facebook.png" alt="login with facebook" /> Facebook</button>
@@ -45,14 +70,14 @@ export default function Home() {
               <h1 className="text-xl text-center">Create Account</h1>
               <p className="text-black-3 text-center">create an account and get a lot of benefits</p>
               <p className="mt-4">Full Name</p>
-              <input type="text" className="p-4 border rounded-xl w-full" placeholder="Input Your Fullname" />
+              <input type="text" className="p-4 border rounded-xl w-full" placeholder="Input Your Fullname" onChange={(data) => setName(data.target.value)} />
               <p className="mt-4">Email</p>
-              <input type="text" className="p-4 border rounded-xl w-full" placeholder="Input Your Email" />
+              <input type="text" className="p-4 border rounded-xl w-full" placeholder="Input Your Email" onChange={(data) => setEmail(data.target.value)} />
               <p className="mt-4">Phone</p>
-              <input type="number" className="p-4 border rounded-xl w-full" placeholder="Input Your Phone Number" />
+              <input type="number" className="p-4 border rounded-xl w-full" placeholder="Input Your Phone Number" onChange={(data) => setPhone(data.target.value)} />
               <p className="mt-4">Password</p>
-              <input type="password" placeholder="Input Password" className="p-4 border w-full rounded-xl" />
-              <button className="w-full bg-yellow-1 text-white p-2 mt-4 rounded-xl">Register</button>
+              <input type="password" placeholder="Input Password" className="p-4 border w-full rounded-xl" onChange={(data) => setPassword(data.target.value)} />
+              <button className="w-full bg-yellow-1 text-white p-2 mt-4 rounded-xl" onClick={() => onRegister()}>Register</button>
               <p className="text-right mt-2 text-black-3">Do you have account ? <button onClick={() => setFormStatus('login')}> Login </button></p>
             </div>
           )}
@@ -62,9 +87,9 @@ export default function Home() {
             <div className="my-40 bg-white rounded-lg p-4 m-4 md:m-24">
               <h1 className="text-xl text-center">Forgot Password ?</h1>
               <p className="text-black-3 text-center">Enter your email or phone number to reset your password.</p>
-              <p className="mt-4">Email / Phone</p>
-              <input type="text" className="p-4 border rounded-xl w-full" placeholder="Input Email or Phone" />
-              <button className="w-full bg-yellow-1 text-white p-2 mt-4 rounded-xl">Login</button>
+              <p className="mt-4">Email</p>
+              <input type="text" className="p-4 border rounded-xl w-full" placeholder="Input Your Email" onChange={(data) => setEmail(data.target.value)} />
+              <button className="w-full bg-yellow-1 text-white p-2 mt-4 rounded-xl" onClick={() => onForgot()}>Submit</button>
               <p className="text-right mt-2 text-black-3 text-center">Remember Password ?  <button className="text-blue-1" onClick={() => setFormStatus('login')}>Login</button> or <button onClick={() => setFormStatus('register')}>Register</button> </p>
             </div>
           )}
