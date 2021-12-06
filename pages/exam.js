@@ -14,7 +14,7 @@ function Exam() {
         </div>
         <div className=" grid md:grid-cols-3 gap-4 my-4">
           {list.map((item) => (
-            <div className="bg-white rounded-lg p-6 m-4">
+            <div key={item} className="bg-white rounded-lg p-6 m-4">
               <div className="flex flex-row ">
                 <img src="/asset/icon/ic_paper.png" />
                 <p className="font-bold self-center ml-2">The Hindu Vocab Exam</p>
@@ -44,7 +44,7 @@ function Exam() {
         </div>
         <div className=" grid md:grid-cols-3 gap-4 my-4">
           {list.map((item) => (
-            <div className="bg-white rounded-lg p-6 m-4">
+            <div key={item} className="bg-white rounded-lg p-6 m-4">
               <div className="flex flex-row ">
                 <img src="/asset/icon/ic_paper.png" />
                 <p className="font-bold self-center ml-2">The Hindu Vocab Exam</p>
@@ -74,7 +74,7 @@ function Exam() {
         </div>
         <div className=" grid md:grid-cols-3 gap-4 my-4">
           {list.map((item) => (
-            <div className="bg-white rounded-lg p-6 m-4">
+            <div key={item} className="bg-white rounded-lg p-6 m-4">
               <div className="flex flex-row ">
                 <img src="/asset/icon/ic_paper.png" />
                 <p className="font-bold self-center ml-2">The Hindu Vocab Exam</p>

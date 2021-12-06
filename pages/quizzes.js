@@ -14,7 +14,7 @@ function Quizzes() {
         </div>
         <div className=" grid md:grid-cols-4 gap-4 my-4">
           {list.map((item) => (
-            <div className="bg-white rounded-lg p-6">
+            <div key={item} className="bg-white rounded-lg p-6">
               <div className="flex flex-row gap-4">
                 <img src="/asset/icon/ic_paper.png" />
                 <div>
@@ -44,7 +44,7 @@ function Quizzes() {
         </div>
         <div className=" grid md:grid-cols-4 gap-4 my-4">
           {list.map((item) => (
-            <div className="bg-white rounded-lg p-6">
+            <div key={item} className="bg-white rounded-lg p-6">
               <div className="flex flex-row gap-4">
                 <img src="/asset/icon/ic_paper.png" />
                 <div>
@@ -74,7 +74,7 @@ function Quizzes() {
         </div>
         <div className=" grid md:grid-cols-4 gap-4 my-4">
           {list.map((item) => (
-            <div className="bg-white rounded-lg p-6">
+            <div key={item} className="bg-white rounded-lg p-6">
               <div className="flex flex-row gap-4">
                 <img src="/asset/icon/ic_paper.png" />
                 <div>
