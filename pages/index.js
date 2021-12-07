@@ -3,13 +3,12 @@ import Image from 'next/image'
 import { useState } from 'react'
 import Footer from '../components/footer/footer'
 import Header from '../components/header/header'
-// import styles from '../styles/Home.css'
-// import '../styles/Landing.css'
+import apiAuth from './api/auth'
+import Link from 'next/link'
 
 export default function Home() {
-  const [formStatus, setFormStatus] = useState('register')
+  const [formStatus, setFormStatus] = useState('login')
   const [name, setName] = useState()
-  const [emailOrPhone, setEmailOrPhone] = useState()
   const [email, setEmail] = useState()
   const [phone, setPhone] = useState()
   const [password, setPassword] = useState()
@@ -32,10 +31,18 @@ export default function Home() {
     console.log(data)
   }
 
+  const onLoginGoogle = async () => {
+    console.log("login with google")
+    await apiAuth.loginGoogle()
+      .then((res) => {
+        window.location.href = res.data.data.url
+      })
+  }
+
   const onForgot = () => {
     console.log(email)
-  } 
-  
+  }
+
   return (
     <>
       <section className="banner full-height">
@@ -55,11 +62,14 @@ export default function Home() {
               <p className="mt-4">Password</p>
               <input type="password" placeholder="Input Password" className="p-4 border w-full rounded-xl" onChange={(data) => setPassword(data.target.value)} />
               <button className="text-right text-end mt-2 text-black-3" onClick={() => setFormStatus('forgotPassword')}>Forgot Password</button>
-              <button className="w-full bg-yellow-1 text-white p-2 mt-4 rounded-xl" onClick={() => onLogin()}>Login</button>
+              <button className="w-full bg-yellow-1 text-white p-2 mt-4 rounded-xl">Login</button>
               <p className="text-center m-4 text-black-4">or continue with</p>
               <div className="flex gap-4">
+                {/* <Link href="https://exams.vieproject.xyz/api/auth/social/google">
+                  <a> */}
                 <button className="flex w-full justify-center gap-4 border px-6 py-2 border-yellow-1 rounded-lg"><img src="/asset/icon/ic_facebook.png" alt="login with facebook" /> Facebook</button>
-                <button className="flex w-full  gap-4 justify-center border px-6 py-2 border-yellow-1 rounded-lg"><img src="/asset/icon/ic_google.png" alt="login with google" /> Google</button>
+                <button className="flex w-full  gap-4 justify-center border px-6 py-2 border-yellow-1 rounded-lg" onClick={() => onLoginGoogle()}><img src="/asset/icon/ic_google.png" alt="login with google"/> Google</button>
+                {/* </a></Link> */}
               </div>
               <p className="text-right mt-2 text-black-3">Dont you have account ?  <button onClick={() => setFormStatus('register')}>Register</button></p>
             </div>
