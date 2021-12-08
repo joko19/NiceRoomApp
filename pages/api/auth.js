@@ -1,11 +1,23 @@
 import instance from './instance'
 
-const loginGoogle = () => instance.get('/api/auth/social/google')
-const callbackGoogle = (path) => instance.get('/api/auth/social/google/callback' + path)
-const loginFacebook = () => instance.get('/api/auth/social/facebook')
-const callbackFacebook = (path) => instance.get('/api/auth/social/facebook/callback' + path)
+const loginGoogle = () => instance.get('/auth/social/google')
+const callbackGoogle = (path) => instance.get('/auth/social/google/callback' + path)
+const loginFacebook = () => instance.get('/auth/social/facebook')
+const callbackFacebook = (path) => instance.get('/auth/social/facebook/callback' + path)
 
 const register = (data) => instance.post('/auth/register', data, {
+  headers: {
+    'Content-Type': 'application/json'
+  }
+})
+
+const login = (data) => instance.post('/auth/login', data, {
+  headers: {
+    'Content-Type': 'application/json'
+  }
+})
+
+const forgotPassword = (email) => instance.post('/auth/forgot-password', email,  {
   headers: {
     'Content-Type': 'application/json'
   }
@@ -16,7 +28,9 @@ const apiAuth = {
   callbackGoogle,
   loginFacebook,
   callbackFacebook,
-  register
+  register,
+  login,
+  forgotPassword
 }
 
 export default apiAuth

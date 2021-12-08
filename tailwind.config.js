@@ -16,18 +16,14 @@ module.exports = {
           9: '#F8F9FA',
         },
         green: {
-          1: '#7AA939',
-          2: '#8FC247',
-          3: '#ABD175',
-          4: '#C7E0A3',
-          5: '#ECF5E0',
-          6: '#F5FAF0'
+          1: '#00BB1D',
+          2: '#EBFFEE',
         },
         blue: {
-          1: '#2C51B0',
-          2: '#75A2E3',
-          3: '#E9F4FF',
-          4: '#FBFEFF',
+          1: '#324ECF',
+          2: '#5A71D8',
+          3: '#7B8DE0',
+          4: '#9CAAE8',
           6: '#EEF1FB',
         },
         red: {
@@ -35,12 +31,9 @@ module.exports = {
           2: '#FFE8E8',
           3: '#FFF8F8',
         },
-        greenAlert: {
-          1: '#00BB1D',
-          2: '#EBFFEE'
-        },
         yellow: {
-          1: '#FFD200'
+          1: '#FFC431',
+          2: '#FFDC85'
         }
       }
     },

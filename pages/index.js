@@ -6,34 +6,47 @@ import Header from '../components/header/header'
 import apiAuth from './api/auth'
 
 export default function Home() {
-  const [formStatus, setFormStatus] = useState('login')
+  const [formStatus, setFormStatus] = useState('forgotPassword')
   const [name, setName] = useState()
   const [email, setEmail] = useState()
   const [phone, setPhone] = useState()
   const [password, setPassword] = useState()
-  const [password2, setPassword2] = useState()
+  const [password_confirmation, setPasswordConfirmation] = useState()
+  const [infoReset, setInfoReset] = useState()
 
-  const onRegister = async() => {
+  const onRegister = async () => {
     const data = {
       name: name,
       email: email,
       phone: phone,
       password: password,
-      password_confirmation: password2
+      password_confirmation: password_confirmation
     }
-    const dataStr = JSON.stringify(data)
-    await apiAuth.register(dataStr)
+    console.log(data)
+    await apiAuth.register(data)
       .then((res) => {
         console.log(res)
+
+        window.location.href = '/dashboard'
+      })
+      .catch((err) => {
+        console.log(err.response)
       })
   }
 
-  const onLogin = () => {
+  const onLogin = async () => {
     const data = {
-      emailOrPhone: emailOrPhone,
+      email: email,
       password: password
     }
-    
+    await apiAuth.login(data)
+      .then((res) => {
+        window.location.href = '/dashboard'
+      })
+      .catch((err) => {
+        console.log(err)
+      })
+
     console.log(data)
   }
 
@@ -51,7 +64,12 @@ export default function Home() {
       })
   }
 
-  const onForgot = () => {
+  const onForgot = async() => {
+    await apiAuth.forgotPassword({email: email})
+      .then((res) => {
+        setInfoReset(res.data.message)
+        // console.log(res.data.message)
+      })
     console.log(email)
   }
 
@@ -70,11 +88,11 @@ export default function Home() {
               <h1 className="text-xl text-center">Welcome to Examz!</h1>
               <p className="text-black-3 text-center">Be ready for exam with us</p>
               <p className="mt-4">Email / Phone</p>
-              <input type="text" className="p-4 border rounded-xl w-full" placeholder="Input Email or Phone" onChange={(data) => setEmailOrPhone(data.target.value)} />
+              <input type="text" className="p-4 border rounded-xl w-full" placeholder="Input Email or Phone" onChange={(data) => setEmail(data.target.value)} />
               <p className="mt-4">Password</p>
               <input type="password" placeholder="Input Password" className="p-4 border w-full rounded-xl" onChange={(data) => setPassword(data.target.value)} />
               <button className="text-right text-end mt-2 text-black-3" onClick={() => setFormStatus('forgotPassword')}>Forgot Password</button>
-              <button className="w-full bg-yellow-1 text-white p-3 mt-4 rounded-xl">Login</button>
+              <button type="submit" className="w-full bg-yellow-1 text-white p-3 mt-4 rounded-xl" onClick={() => onLogin()}>Login</button>
               <p className="text-center m-4 text-black-4">or continue with</p>
               <div className="flex gap-4">
                 <button className="flex w-full justify-center gap-4 border px-6 py-3 border-yellow-1 rounded-lg" onClick={() => onLoginFacebook()}><img src="/asset/icon/ic_facebook.png" alt="login with facebook" /> Facebook</button>
@@ -97,12 +115,11 @@ export default function Home() {
               <p className="mt-4">Password</p>
               <input type="password" placeholder="Input Password" className="p-4 border w-full rounded-xl" onChange={(data) => setPassword(data.target.value)} />
               <p className="mt-4">Password Confirmation</p>
-              <input type="password" placeholder="Input Password" className="p-4 border w-full rounded-xl" onChange={(data) => setPassword2(data.target.value)} />
+              <input type="password" placeholder="Input Password" className="p-4 border w-full rounded-xl" onChange={(data) => setPasswordConfirmation(data.target.value)} />
               <button className="w-full bg-yellow-1 text-white p-2 mt-4 rounded-xl" onClick={() => onRegister()}>Register</button>
               <p className="text-right mt-2 text-black-3">Do you have account ? <button onClick={() => setFormStatus('login')}> Login </button></p>
             </div>
           )}
-
 
           {formStatus === 'forgotPassword' && (
             <div className="my-40 bg-white rounded-lg p-4 m-4 md:m-24">
@@ -110,6 +127,7 @@ export default function Home() {
               <p className="text-black-3 text-center">Enter your email or phone number to reset your password.</p>
               <p className="mt-4">Email</p>
               <input type="text" className="p-4 border rounded-xl w-full" placeholder="Input Your Email" onChange={(data) => setEmail(data.target.value)} />
+              <p className="text-blue-1 text-xs">{infoReset}</p>
               <button className="w-full bg-yellow-1 text-white p-2 mt-4 rounded-xl" onClick={() => onForgot()}>Submit</button>
               <p className="text-right mt-2 text-black-3 text-center">Remember Password ?  <button className="text-blue-1" onClick={() => setFormStatus('login')}>Login</button> or <button onClick={() => setFormStatus('register')}>Register</button> </p>
             </div>

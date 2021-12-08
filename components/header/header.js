@@ -35,7 +35,7 @@ function Header() {
   return (
     <div className="flex bg-blue-1 md:px-12 py-4 gap-8 justify-between fixed w-full top-0 z-50">
       <h1 className="text-white text-4xl mx-4"><Link href="/"><a> Examz.</a></Link></h1>
-      <div>
+      {/* <div>
         <ul className="pt-4 hidden md:flex text-white flex flex-row gap-5">
           {menu.map((item) => {
             const status = {
@@ -45,10 +45,12 @@ function Header() {
             <li key={item.id} className={status.color}><Link href={item.slug}><a>{item.name}</a></Link></li>
           )})}
         </ul>
-      </div>
-      <div className="hidden md:flex">
-        <button className="bg-white text-blue-1 rounded-lg p-3 mx-4">Select Category</button>
-        <button className="text-white border rounded-lg p-3">Register</button>
+      </div> */}
+      <div className="hidden md:flex gap-4 justify-center">
+        <img src="/asset/icon/ic_profile.png" alt="photo profile" />
+        <p className="text-white align-middle self-center">Username</p>
+        {/* <button className="bg-white text-blue-1 rounded-lg p-3 mx-4">Select Category</button>
+        <button className="text-white border rounded-lg p-3">Register</button> */}
       </div>
     </div>
   )

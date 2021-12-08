@@ -1,7 +1,9 @@
+import Header from "../../components/header/header"
+
 function Index(){
   return(
     <div>
-      <h1>Selamat datang</h1>
+      <Header/>
     </div>
   )
 }
