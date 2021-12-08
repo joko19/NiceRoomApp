@@ -4,7 +4,7 @@ import apiAuth from '../../api/auth'
 
 function Facebook (){
   const router = useRouter()
-  const path = router.asPath.replace('/auth/login','')
+  const path = router.asPath.replace('/auth/login/facebook','')
   console.log(path)
   useEffect(async() => {
     await apiAuth.callbackFacebook(path)

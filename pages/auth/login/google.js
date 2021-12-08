@@ -4,7 +4,7 @@ import apiAuth from '../../api/auth'
 
 function Google (){
   const router = useRouter()
-  const path = router.asPath.replace('/auth/login','')
+  const path = router.asPath.replace('/auth/login/google','')
   console.log(path)
   useEffect(async() => {
     await apiAuth.callbackGoogle(path)
