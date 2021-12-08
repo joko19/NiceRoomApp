@@ -4,7 +4,6 @@ import { useState } from 'react'
 import Footer from '../components/footer/footer'
 import Header from '../components/header/header'
 import apiAuth from './api/auth'
-import Link from 'next/link'
 
 export default function Home() {
   const [formStatus, setFormStatus] = useState('login')
@@ -12,15 +11,21 @@ export default function Home() {
   const [email, setEmail] = useState()
   const [phone, setPhone] = useState()
   const [password, setPassword] = useState()
+  const [password2, setPassword2] = useState()
 
-  const onRegister = () => {
+  const onRegister = async() => {
     const data = {
       name: name,
       email: email,
       phone: phone,
-      password: password
+      password: password,
+      password_confirmation: password2
     }
-    console.log(data)
+    const dataStr = JSON.stringify(data)
+    await apiAuth.register(dataStr)
+      .then((res) => {
+        console.log(res)
+      })
   }
 
   const onLogin = () => {
@@ -28,12 +33,19 @@ export default function Home() {
       emailOrPhone: emailOrPhone,
       password: password
     }
+    
     console.log(data)
   }
 
   const onLoginGoogle = async () => {
-    console.log("login with google")
     await apiAuth.loginGoogle()
+      .then((res) => {
+        window.location.href = res.data.data.url
+      })
+  }
+
+  const onLoginFacebook = async () => {
+    await apiAuth.loginFacebook()
       .then((res) => {
         window.location.href = res.data.data.url
       })
@@ -54,7 +66,7 @@ export default function Home() {
             <p className="mt-2">Makes preparation simplified with Examz</p>
           </div>
           {formStatus === 'login' && (
-            <div className="my-40 bg-white rounded-lg p-4 m-4 md:m-24">
+            <div className="my-40 bg-white rounded-lg p-6 m-4 md:m-24">
               <h1 className="text-xl text-center">Welcome to Examz!</h1>
               <p className="text-black-3 text-center">Be ready for exam with us</p>
               <p className="mt-4">Email / Phone</p>
@@ -62,14 +74,11 @@ export default function Home() {
               <p className="mt-4">Password</p>
               <input type="password" placeholder="Input Password" className="p-4 border w-full rounded-xl" onChange={(data) => setPassword(data.target.value)} />
               <button className="text-right text-end mt-2 text-black-3" onClick={() => setFormStatus('forgotPassword')}>Forgot Password</button>
-              <button className="w-full bg-yellow-1 text-white p-2 mt-4 rounded-xl">Login</button>
+              <button className="w-full bg-yellow-1 text-white p-3 mt-4 rounded-xl">Login</button>
               <p className="text-center m-4 text-black-4">or continue with</p>
               <div className="flex gap-4">
-                {/* <Link href="https://exams.vieproject.xyz/api/auth/social/google">
-                  <a> */}
-                <button className="flex w-full justify-center gap-4 border px-6 py-2 border-yellow-1 rounded-lg"><img src="/asset/icon/ic_facebook.png" alt="login with facebook" /> Facebook</button>
-                <button className="flex w-full  gap-4 justify-center border px-6 py-2 border-yellow-1 rounded-lg" onClick={() => onLoginGoogle()}><img src="/asset/icon/ic_google.png" alt="login with google"/> Google</button>
-                {/* </a></Link> */}
+                <button className="flex w-full justify-center gap-4 border px-6 py-3 border-yellow-1 rounded-lg" onClick={() => onLoginFacebook()}><img src="/asset/icon/ic_facebook.png" alt="login with facebook" /> Facebook</button>
+                <button className="flex w-full  gap-4 justify-center border px-6 py-3 border-yellow-1 rounded-lg" onClick={() => onLoginGoogle()}><img src="/asset/icon/ic_google.png" alt="login with google" /> Google</button>
               </div>
               <p className="text-right mt-2 text-black-3">Dont you have account ?  <button onClick={() => setFormStatus('register')}>Register</button></p>
             </div>
@@ -87,6 +96,8 @@ export default function Home() {
               <input type="number" className="p-4 border rounded-xl w-full" placeholder="Input Your Phone Number" onChange={(data) => setPhone(data.target.value)} />
               <p className="mt-4">Password</p>
               <input type="password" placeholder="Input Password" className="p-4 border w-full rounded-xl" onChange={(data) => setPassword(data.target.value)} />
+              <p className="mt-4">Password Confirmation</p>
+              <input type="password" placeholder="Input Password" className="p-4 border w-full rounded-xl" onChange={(data) => setPassword2(data.target.value)} />
               <button className="w-full bg-yellow-1 text-white p-2 mt-4 rounded-xl" onClick={() => onRegister()}>Register</button>
               <p className="text-right mt-2 text-black-3">Do you have account ? <button onClick={() => setFormStatus('login')}> Login </button></p>
             </div>

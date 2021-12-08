@@ -1,15 +1,13 @@
 import { useRouter } from 'next/router'
 import { useEffect } from 'react'
-import apiAuth from '../api/auth'
+import apiAuth from '../../../api/auth'
 
-function Login (){
+function Facebook (){
   const router = useRouter()
-  // console.log(router)
-  // console.log(router.asPath)
   const path = router.asPath.replace('/auth/login','')
   console.log(path)
   useEffect(async() => {
-    await apiAuth.callbackGoogle(path)
+    await apiAuth.callbackFacebook(path)
       .then(() => {
         window.location.href = '/dashboard'
       })
@@ -23,4 +21,4 @@ function Login (){
   )
 }
 
-export default Login
+export default Facebook
