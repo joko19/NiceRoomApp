@@ -23,6 +23,12 @@ const forgotPassword = (email) => instance.post('/auth/forgot-password', email, 
   }
 })
 
+const resetPassword = (data) => instance.post('/auth/reset-password', data, {
+  headers: {
+    'Content-Type': 'application/json'
+  }
+})
+
 const apiAuth = {
   loginGoogle,
   callbackGoogle,
@@ -30,7 +36,8 @@ const apiAuth = {
   callbackFacebook,
   register,
   login,
-  forgotPassword
+  forgotPassword,
+  resetPassword
 }
 
 export default apiAuth

@@ -6,7 +6,7 @@ import Header from '../components/header/header'
 import apiAuth from './api/auth'
 
 export default function Home() {
-  const [formStatus, setFormStatus] = useState('forgotPassword')
+  const [formStatus, setFormStatus] = useState('login')
   const [name, setName] = useState()
   const [email, setEmail] = useState()
   const [phone, setPhone] = useState()
