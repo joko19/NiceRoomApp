@@ -1,6 +1,7 @@
 import React from 'react'
 import Link from 'next/link'
 import { useRouter } from 'next/router';
+import UserDropdown from '../Dropdowns/UserDropdown';
 
 function Header() {
   const menu = [
@@ -48,7 +49,8 @@ function Header() {
       </div> */}
       <div className="hidden md:flex gap-4 justify-center">
         <img src="/asset/icon/ic_profile.png" alt="photo profile" />
-        <p className="text-white align-middle self-center">Username</p>
+        <UserDropdown user="Nungky Reza" />
+        {/* <p className="text-white align-middle self-center">Username</p> */}
         {/* <button className="bg-white text-blue-1 rounded-lg p-3 mx-4">Select Category</button>
         <button className="text-white border rounded-lg p-3">Register</button> */}
       </div>

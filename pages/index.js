@@ -1,53 +1,36 @@
 import Head from 'next/head'
 import Image from 'next/image'
 import { useState } from 'react'
+import PropTypes from "prop-types";
+import { connect, useDispatch } from "react-redux";
 import Footer from '../components/footer/footer'
 import Header from '../components/header/header'
 import apiAuth from './api/auth'
+import { useForm } from "react-hook-form";
+import { loginUser, registerUser } from '../action/auth/authAction'
 
-export default function Home() {
+function Home(props) {
   const [formStatus, setFormStatus] = useState('login')
-  const [name, setName] = useState()
-  const [email, setEmail] = useState()
-  const [phone, setPhone] = useState()
-  const [password, setPassword] = useState()
-  const [password_confirmation, setPasswordConfirmation] = useState()
   const [infoReset, setInfoReset] = useState()
+  const { register, handleSubmit, resetField, getValues } = useForm();
 
   const onRegister = async () => {
     const data = {
-      name: name,
-      email: email,
-      phone: phone,
-      password: password,
-      password_confirmation: password_confirmation
+      name: getValues('name'),
+      email: getValues('email'),
+      phone: getValues('phone'),
+      password: getValues('password'),
+      password_confirmation: getValues('password_confirmation')
     }
-    console.log(data)
-    await apiAuth.register(data)
-      .then((res) => {
-        console.log(res)
-
-        window.location.href = '/dashboard'
-      })
-      .catch((err) => {
-        console.log(err.response)
-      })
+    props.registerUser(data)
   }
 
   const onLogin = async () => {
     const data = {
-      email: email,
-      password: password
+      email: getValues('email'),
+      password: getValues('password')
     }
-    await apiAuth.login(data)
-      .then((res) => {
-        window.location.href = '/dashboard'
-      })
-      .catch((err) => {
-        console.log(err)
-      })
-
-    console.log(data)
+    props.loginUser(data)
   }
 
   const onLoginGoogle = async () => {
@@ -64,13 +47,22 @@ export default function Home() {
       })
   }
 
-  const onForgot = async() => {
-    await apiAuth.forgotPassword({email: email})
+  const onForgot = async () => {
+    await apiAuth.forgotPassword({ email: email })
       .then((res) => {
         setInfoReset(res.data.message)
         // console.log(res.data.message)
       })
     console.log(email)
+  }
+
+  const onChangeForm = (to) => {
+    resetField('name')
+    resetField('phone')
+    resetField('email')
+    resetField('password')
+    resetField('confirmation_password')
+    setFormStatus(to)
   }
 
   return (
@@ -84,53 +76,53 @@ export default function Home() {
             <p className="mt-2">Makes preparation simplified with Examz</p>
           </div>
           {formStatus === 'login' && (
-            <div className="my-40 bg-white rounded-lg p-6 m-4 md:m-24">
+            <form onSubmit={handleSubmit(onLogin)} className="my-40 bg-white rounded-lg p-6 m-4 md:m-24">
               <h1 className="text-xl text-center">Welcome to Examz!</h1>
               <p className="text-black-3 text-center">Be ready for exam with us</p>
               <p className="mt-4">Email / Phone</p>
-              <input type="text" className="p-4 border rounded-xl w-full" placeholder="Input Email or Phone" onChange={(data) => setEmail(data.target.value)} />
+              <input type="text" className="p-4 border rounded-xl w-full" placeholder="Input Email or Phone" {...register("email", { required: true })} />
               <p className="mt-4">Password</p>
-              <input type="password" placeholder="Input Password" className="p-4 border w-full rounded-xl" onChange={(data) => setPassword(data.target.value)} />
-              <button className="text-right text-end mt-2 text-black-3" onClick={() => setFormStatus('forgotPassword')}>Forgot Password</button>
+              <input type="password" placeholder="Input Password" className="p-4 border w-full rounded-xl" {...register("password", { required: true, minLength: 6 })} />
+              <span className="text-right text-end mt-2 text-black-3 cursor-pointer" onClick={() => setFormStatus('forgotPassword')}>Forgot Password</span>
               <button type="submit" className="w-full bg-yellow-1 text-white p-3 mt-4 rounded-xl" onClick={() => onLogin()}>Login</button>
               <p className="text-center m-4 text-black-4">or continue with</p>
               <div className="flex gap-4">
                 <button className="flex w-full justify-center gap-4 border px-6 py-3 border-yellow-1 rounded-lg" onClick={() => onLoginFacebook()}><img src="/asset/icon/ic_facebook.png" alt="login with facebook" /> Facebook</button>
                 <button className="flex w-full  gap-4 justify-center border px-6 py-3 border-yellow-1 rounded-lg" onClick={() => onLoginGoogle()}><img src="/asset/icon/ic_google.png" alt="login with google" /> Google</button>
               </div>
-              <p className="text-right mt-2 text-black-3">Dont you have account ?  <button onClick={() => setFormStatus('register')}>Register</button></p>
-            </div>
+              <p className="text-right mt-2 text-black-3">Dont you have account ?  <button onClick={() => onChangeForm('register')}>Register</button></p>
+            </form>
           )}
 
           {formStatus === 'register' && (
-            <div className="my-40 bg-white rounded-lg m-4 p-4 md:m-24">
+            <form onSubmit={handleSubmit(onRegister)} className="my-40 bg-white rounded-lg m-4 p-4 md:m-24">
               <h1 className="text-xl text-center">Create Account</h1>
               <p className="text-black-3 text-center">create an account and get a lot of benefits</p>
               <p className="mt-4">Full Name</p>
-              <input type="text" className="p-4 border rounded-xl w-full" placeholder="Input Your Fullname" onChange={(data) => setName(data.target.value)} />
+              <input type="text" className="p-4 border rounded-xl w-full" placeholder="Input Your Fullname"{...register("name", { required: true })} />
               <p className="mt-4">Email</p>
-              <input type="text" className="p-4 border rounded-xl w-full" placeholder="Input Your Email" onChange={(data) => setEmail(data.target.value)} />
+              <input type="text" className="p-4 border rounded-xl w-full" placeholder="Input Your Email" {...register("email", { required: true })} />
               <p className="mt-4">Phone</p>
-              <input type="number" className="p-4 border rounded-xl w-full" placeholder="Input Your Phone Number" onChange={(data) => setPhone(data.target.value)} />
+              <input type="number" className="p-4 border rounded-xl w-full" placeholder="Input Your Phone Number"{...register("phone", { required: true })} />
               <p className="mt-4">Password</p>
-              <input type="password" placeholder="Input Password" className="p-4 border w-full rounded-xl" onChange={(data) => setPassword(data.target.value)} />
+              <input type="password" placeholder="Input Password" className="p-4 border w-full rounded-xl" {...register("password", { required: true, minLength: 6 })} />
               <p className="mt-4">Password Confirmation</p>
-              <input type="password" placeholder="Input Password" className="p-4 border w-full rounded-xl" onChange={(data) => setPasswordConfirmation(data.target.value)} />
-              <button className="w-full bg-yellow-1 text-white p-2 mt-4 rounded-xl" onClick={() => onRegister()}>Register</button>
-              <p className="text-right mt-2 text-black-3">Do you have account ? <button onClick={() => setFormStatus('login')}> Login </button></p>
-            </div>
+              <input type="password" placeholder="Input Password" className="p-4 border w-full rounded-xl" {...register("password_confirmation", { required: true, minLength: 6 })} />
+              <button className="w-full bg-yellow-1 text-white p-2 mt-4 rounded-xl" >Register</button>
+              <p className="text-right mt-2 text-black-3">Do you have account ? <button onClick={() => onChangeForm('login')}> Login </button></p>
+            </form>
           )}
 
           {formStatus === 'forgotPassword' && (
-            <div className="my-40 bg-white rounded-lg p-4 m-4 md:m-24">
+            <form onSubmit={handleSubmit(onForgot)} className="my-40 bg-white rounded-lg p-4 m-4 md:m-24">
               <h1 className="text-xl text-center">Forgot Password ?</h1>
               <p className="text-black-3 text-center">Enter your email or phone number to reset your password.</p>
               <p className="mt-4">Email</p>
-              <input type="text" className="p-4 border rounded-xl w-full" placeholder="Input Your Email" onChange={(data) => setEmail(data.target.value)} />
+              <input type="text" className="p-4 border rounded-xl w-full" placeholder="Input Your Email" {...register("email", { required: true })} />
               <p className="text-blue-1 text-xs">{infoReset}</p>
-              <button className="w-full bg-yellow-1 text-white p-2 mt-4 rounded-xl" onClick={() => onForgot()}>Submit</button>
-              <p className="text-right mt-2 text-black-3 text-center">Remember Password ?  <button className="text-blue-1" onClick={() => setFormStatus('login')}>Login</button> or <button onClick={() => setFormStatus('register')}>Register</button> </p>
-            </div>
+              <button className="w-full bg-yellow-1 text-white p-2 mt-4 rounded-xl">Submit</button>
+              <p className="text-right mt-2 text-black-3 text-center">Remember Password ?  <button className="text-blue-1" onClick={() => onChangeForm('login')}>Login</button> or <button onClick={() => onChangeForm('register')}>Register</button> </p>
+            </form>
           )}
         </div>
       </section>
@@ -351,3 +343,13 @@ export default function Home() {
     </>
   )
 }
+
+Home.propTypes = {
+  auth: PropTypes.object.isRequired,
+  errors: PropTypes.object.isRequired,
+};
+const mapStateToProps = (state) => ({
+  auth: state.auth,
+  errors: state.errors,
+});
+export default connect(mapStateToProps, { loginUser, registerUser })(Home);
