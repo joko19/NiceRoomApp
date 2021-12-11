@@ -3,10 +3,11 @@ import { admin } from "../../redux/privateRoute"
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
 
-function Index(){
+function Index(props){
+  console.log(props)
   return(
     <div>
-      <Header/>
+      <Header name={props.auth.user.user.name}/>
     </div>
   )
 }

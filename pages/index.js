@@ -36,6 +36,7 @@ function Home(props) {
   const onLoginGoogle = async () => {
     await apiAuth.loginGoogle()
       .then((res) => {
+        console.log(res)
         window.location.href = res.data.data.url
       })
   }

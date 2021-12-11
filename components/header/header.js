@@ -3,31 +3,31 @@ import Link from 'next/link'
 import { useRouter } from 'next/router';
 import UserDropdown from '../Dropdowns/UserDropdown';
 
-function Header() {
+function Header(props) {
   const menu = [
     {
-      id:0,
+      id: 0,
       slug: '/test-series',
       name: 'Test Series'
     },
     {
 
-      id:1,
+      id: 1,
       slug: '/quizzes',
       name: 'Quizzes'
     },
     {
-      id:2,
+      id: 2,
       slug: '/prev-paper',
       name: 'Prev Paper'
     },
     {
-      id:3,
+      id: 3,
       slug: '/upcoming-exam',
       name: 'Upcoming Exam'
     },
     {
-      id:4,
+      id: 4,
       slug: '/exam',
       name: 'Exam'
     },
@@ -36,7 +36,8 @@ function Header() {
   return (
     <div className="flex bg-blue-1 md:px-12 py-4 gap-8 justify-between fixed w-full top-0 z-50">
       <h1 className="text-white text-4xl mx-4"><Link href="/"><a> Examz.</a></Link></h1>
-      {/* <div>
+      {!props.name && (
+        <div>
         <ul className="pt-4 hidden md:flex text-white flex flex-row gap-5">
           {menu.map((item) => {
             const status = {
@@ -46,15 +47,22 @@ function Header() {
             <li key={item.id} className={status.color}><Link href={item.slug}><a>{item.name}</a></Link></li>
           )})}
         </ul>
-      </div> */}
+      </div> 
+      )}
       <div className="hidden md:flex gap-4 justify-center">
-        <img src="/asset/icon/ic_profile.png" alt="photo profile" />
-        <UserDropdown user="Nungky Reza" />
-        {/* <p className="text-white align-middle self-center">Username</p> */}
-        {/* <button className="bg-white text-blue-1 rounded-lg p-3 mx-4">Select Category</button>
-        <button className="text-white border rounded-lg p-3">Register</button> */}
+
+        {props.name ? (
+          <>
+            <img src="/asset/icon/ic_profile.png" alt="photo profile" />
+            <UserDropdown username={props.name} />
+          </>) : (
+          <>
+            <button className="bg-white text-blue-1 rounded-lg p-3 mx-4">Select Category</button>
+            <button className="text-white border rounded-lg p-3">Register</button>
+          </>
+        )}
       </div>
-    </div>
+    </div >
   )
 }
 

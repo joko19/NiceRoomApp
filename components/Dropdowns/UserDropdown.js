@@ -32,15 +32,15 @@ const UserDropdown = (props) => {
           dropdownPopoverShow ? closeDropdownPopover() : openDropdownPopover();
         }}
       >
-        <div className="items-center flex space-x-5 py-2 text-east-bay-500">
-          <span className="w-12 h-12 text-sm bg-blueGray-200 inline-flex items-center justify-center rounded-full">
+        <div className="items-center flex space-x-5 text-white py-2 text-east-bay-500">
+          {/* <span className="w-12 h-12 text-sm bg-blueGray-200 inline-flex items-center justify-center rounded-full">
             <img
               alt="..."
               className="rounded-full align-middle border-none shadow-lg w-8 h-8"
               src="/img/team-1-800x800.jpg"
             />
-          </span>
-          <span>{props?.user?.username || ''}</span>
+          </span> */}
+          <span>{props.username || ''}</span>
           <FiChevronDown size={16} />
         </div>
       </a>

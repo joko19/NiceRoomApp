@@ -23,6 +23,36 @@ export const loginUser = (data) => (dispatch) => {
     })
 }
 
+export const loginFacebook = (path) => (dispatch) => {
+  console.log("facebook")
+  instance.get('/auth/social/facebook/callback' + path)
+    .then((result) => {
+      if (result.status) {
+        console.log(result)
+        const { token } = result.data.data;
+        localStorage.setItem('ACCESS_TOKEN', token)
+        setAuthToken(token)
+        dispatch(setCurrentUser(result.data.data));
+        dispatch(setUserLoading(false))
+        window.location.href = '/dashboard'
+      }
+    })
+}
+
+export const loginGoogle = (path) => (dispatch) => {
+  instance.get('/auth/social/google/callback' + path)
+    .then((result) => {
+      if (result.status) {
+        console.log(result)
+        const { token } = result.data.data;
+        localStorage.setItem('ACCESS_TOKEN', token)
+        setAuthToken(token)
+        dispatch(setCurrentUser(result.data.data));
+        dispatch(setUserLoading(false))
+        // window.location.href = '/dashboard'
+      }
+    })
+}
 
 export const registerUser = (data) => (dispatch) => {
   console.log(data)

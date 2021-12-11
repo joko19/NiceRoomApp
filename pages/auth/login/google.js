@@ -1,16 +1,19 @@
 import { useRouter } from 'next/router'
 import { useEffect } from 'react'
 import apiAuth from '../../api/auth'
+import { loginGoogle } from '../../../action/auth/authAction'
+import { connect, useDispatch } from "react-redux";
 
 function Google (){
   const router = useRouter()
   const path = router.asPath.replace('/auth/login/google','')
   console.log(path)
   useEffect(async() => {
-    await apiAuth.callbackGoogle(path)
-      .then(() => {
-        window.location.href = '/dashboard'
-      })
+    loginGoogle(path)
+    // await apiAuth.callbackGoogle(path)
+    //   .then(() => {
+    //     window.location.href = '/dashboard'
+    //   })
   }, [])
 
   console.log(path)
@@ -21,4 +24,4 @@ function Google (){
   )
 }
 
-export default Google
+export default connect(loginGoogle)(Google);
