@@ -61,7 +61,7 @@ class App extends Component {
           <SplashScreen />
         ) : (
           <WebView
-            source={{ uri: "https://joko19.github.io/online-programming-platform/" }}
+            source={{ uri: "https://niceroom.jokoslamet.id" }}
             ref={this.WEBVIEW_REF}
             onNavigationStateChange={this.onNavigationStateChange}
           />
