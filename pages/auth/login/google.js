@@ -4,16 +4,13 @@ import apiAuth from '../../api/auth'
 import { loginGoogle } from '../../../action/auth/authAction'
 import { connect, useDispatch } from "react-redux";
 
-function Google (){
+function Google (props){
+  console.log(props)
   const router = useRouter()
   const path = router.asPath.replace('/auth/login/google','')
   console.log(path)
   useEffect(async() => {
-    loginGoogle(path)
-    // await apiAuth.callbackGoogle(path)
-    //   .then(() => {
-    //     window.location.href = '/dashboard'
-    //   })
+    props.loginGoogle(path)
   }, [])
 
   console.log(path)
@@ -24,4 +21,8 @@ function Google (){
   )
 }
 
-export default connect(loginGoogle)(Google);
+const mapStateToProps = (state) => ({
+  auth: '',
+});
+
+export default connect(mapStateToProps, {loginGoogle})(Google);

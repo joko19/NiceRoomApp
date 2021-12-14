@@ -40,6 +40,8 @@ export const loginFacebook = (path) => (dispatch) => {
 }
 
 export const loginGoogle = (path) => (dispatch) => {
+  console.log("hello google")
+  console.log(path)
   instance.get('/auth/social/google/callback' + path)
     .then((result) => {
       if (result.status) {
@@ -49,7 +51,7 @@ export const loginGoogle = (path) => (dispatch) => {
         setAuthToken(token)
         dispatch(setCurrentUser(result.data.data));
         dispatch(setUserLoading(false))
-        // window.location.href = '/dashboard'
+        window.location.href = '/dashboard'
       }
     })
 }

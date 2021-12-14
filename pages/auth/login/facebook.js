@@ -7,14 +7,8 @@ import { connect, useDispatch } from "react-redux";
 function Facebook(props) {
   const router = useRouter()
   const path = router.asPath.replace('/auth/login/facebook', '')
-  console.log(props)
-  console.log("hello world login with facebook")
   useEffect(async () => {
-    // props.loginFacebook(path)
-    // await apiAuth.callbackFacebook(path)
-    //   .then(() => {
-    //     window.location.href = '/dashboard'
-    //   })
+    props.loginFacebook(path)
   }, [])
 
   console.log(path)
@@ -25,4 +19,8 @@ function Facebook(props) {
   )
 }
 
-export default connect(loginFacebook)(Facebook);
+const mapStateToProps = (state) => ({
+  auth: '',
+});
+
+export default connect(mapStateToProps, {loginFacebook})(Facebook);

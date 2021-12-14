@@ -77,22 +77,25 @@ function Home(props) {
             <p className="mt-2">Makes preparation simplified with Examz</p>
           </div>
           {formStatus === 'login' && (
-            <form onSubmit={handleSubmit(onLogin)} className="my-40 bg-white rounded-lg p-6 m-4 md:m-24">
-              <h1 className="text-xl text-center">Welcome to Examz!</h1>
-              <p className="text-black-3 text-center">Be ready for exam with us</p>
-              <p className="mt-4">Email / Phone</p>
-              <input type="text" className="p-4 border rounded-xl w-full" placeholder="Input Email or Phone" {...register("email", { required: true })} />
-              <p className="mt-4">Password</p>
-              <input type="password" placeholder="Input Password" className="p-4 border w-full rounded-xl" {...register("password", { required: true, minLength: 6 })} />
-              <span className="text-right text-end mt-2 text-black-3 cursor-pointer" onClick={() => setFormStatus('forgotPassword')}>Forgot Password</span>
-              <button type="submit" className="w-full bg-yellow-1 text-white p-3 mt-4 rounded-xl" onClick={() => onLogin()}>Login</button>
+            <div className='my-40 bg-white rounded-lg p-6 m-4 md:m-24'>
+              <form onSubmit={handleSubmit(onLogin)}>
+                <h1 className="text-xl text-center">Welcome to Examz!</h1>
+                <p className="text-black-3 text-center">Be ready for exam with us</p>
+                <p className="mt-4">Email / Phone</p>
+                <input type="text" className="p-4 border rounded-xl w-full" placeholder="Input Email or Phone" {...register("email", { required: true })} />
+                <p className="mt-4">Password</p>
+                <input type="password" placeholder="Input Password" className="p-4 border w-full rounded-xl" {...register("password", { required: true, minLength: 6 })} />
+                <span className="text-right text-end mt-2 text-black-3 cursor-pointer" onClick={() => setFormStatus('forgotPassword')}>Forgot Password</span>
+                <button type="submit" className="w-full bg-yellow-1 text-white p-3 mt-4 rounded-xl" onClick={() => onLogin()}>Login</button>
+              </form>
               <p className="text-center m-4 text-black-4">or continue with</p>
               <div className="flex gap-4">
                 <button className="flex w-full justify-center gap-4 border px-6 py-3 border-yellow-1 rounded-lg" onClick={() => onLoginFacebook()}><img src="/asset/icon/ic_facebook.png" alt="login with facebook" /> Facebook</button>
                 <button className="flex w-full  gap-4 justify-center border px-6 py-3 border-yellow-1 rounded-lg" onClick={() => onLoginGoogle()}><img src="/asset/icon/ic_google.png" alt="login with google" /> Google</button>
               </div>
               <p className="text-right mt-2 text-black-3">Dont you have account ?  <button onClick={() => onChangeForm('register')}>Register</button></p>
-            </form>
+
+            </div>
           )}
 
           {formStatus === 'register' && (
