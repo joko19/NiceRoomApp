@@ -1,5 +1,5 @@
 import Footer from "../components/footer/footer";
-import Header from "../components/header/header";
+import Header from '../components/Navbar/header';
 
 function Quizzes() {
   const list = [1, 2, 3, 4]
@@ -16,7 +16,7 @@ function Quizzes() {
           {list.map((item) => (
             <div key={item} className="bg-white rounded-lg p-6">
               <div className="flex flex-row gap-4">
-                <img src="/asset/icon/ic_paper.png" />
+                <img src="/asset/icon/ic_paper.png" alt="icon paper"/>
                 <div>
                   <p className="font-bold self-center">Hindu Vocab Exam</p>
                   <p className="text-black-3">Vocabs Topic</p>
@@ -46,7 +46,7 @@ function Quizzes() {
           {list.map((item) => (
             <div key={item} className="bg-white rounded-lg p-6">
               <div className="flex flex-row gap-4">
-                <img src="/asset/icon/ic_paper.png" />
+                <img src="/asset/icon/ic_paper.png" alt="icon paper"/>
                 <div>
                   <p className="font-bold self-center">Hindu Vocab Exam</p>
                   <p className="text-black-3">Vocabs Topic</p>
@@ -76,7 +76,7 @@ function Quizzes() {
           {list.map((item) => (
             <div key={item} className="bg-white rounded-lg p-6">
               <div className="flex flex-row gap-4">
-                <img src="/asset/icon/ic_paper.png" />
+                <img src="/asset/icon/ic_paper.png" alt="icon paper"/>
                 <div>
                   <p className="font-bold self-center">Hindu Vocab Exam</p>
                   <p className="text-black-3">Vocabs Topic</p>

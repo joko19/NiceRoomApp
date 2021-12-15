@@ -1,5 +1,5 @@
 import Footer from "../components/footer/footer"
-import Header from "../components/header/header"
+import Header from '../components/Navbar/header';
 
 function TestSeries() {
   const list = [1, 2, 3, 4]

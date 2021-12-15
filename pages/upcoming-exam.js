@@ -1,5 +1,5 @@
 import Footer from "../components/footer/footer"
-import Header from "../components/header/header"
+import Header from '../components/Navbar/header';
 
 function UpcomingExam() {
   const list = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16]

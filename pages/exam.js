@@ -1,4 +1,4 @@
-import Header from "../components/header/header"
+import Header from '../components/Navbar/header';
 import Footer from "../components/footer/footer";
 
 function Exam() {
@@ -16,7 +16,7 @@ function Exam() {
           {list.map((item) => (
             <div key={item} className="bg-white rounded-lg p-6 m-4">
               <div className="flex flex-row ">
-                <img src="/asset/icon/ic_paper.png" />
+                <img src="/asset/icon/ic_paper.png" alt="icon paper"/>
                 <p className="font-bold self-center ml-2">The Hindu Vocab Exam</p>
               </div>
               <div className="flex justify-between">
@@ -46,7 +46,7 @@ function Exam() {
           {list.map((item) => (
             <div key={item} className="bg-white rounded-lg p-6 m-4">
               <div className="flex flex-row ">
-                <img src="/asset/icon/ic_paper.png" />
+                <img src="/asset/icon/ic_paper.png" alt="icon paper"/>
                 <p className="font-bold self-center ml-2">The Hindu Vocab Exam</p>
               </div>
               <div className="flex justify-between">
@@ -76,7 +76,7 @@ function Exam() {
           {list.map((item) => (
             <div key={item} className="bg-white rounded-lg p-6 m-4">
               <div className="flex flex-row ">
-                <img src="/asset/icon/ic_paper.png" />
+                <img src="/asset/icon/ic_paper.png" alt="icon paper"/>
                 <p className="font-bold self-center ml-2">The Hindu Vocab Exam</p>
               </div>
               <div className="flex justify-between">
