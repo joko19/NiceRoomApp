@@ -9,6 +9,7 @@ import apiAuth from './api/auth'
 import { useForm } from "react-hook-form";
 import { loginUser, registerUser } from '../action/auth/authAction'
 
+
 function Home(props) {
   const [formStatus, setFormStatus] = useState('login')
   const [infoReset, setInfoReset] = useState()
