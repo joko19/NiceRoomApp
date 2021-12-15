@@ -4,7 +4,7 @@ import { useState } from 'react'
 import PropTypes from "prop-types";
 import { connect, useDispatch } from "react-redux";
 import Footer from '../components/footer/footer'
-import Header from '../components/header/header'
+import Header from '../components/Navbar/header';
 import apiAuth from './api/auth'
 import { useForm } from "react-hook-form";
 import { loginUser, registerUser } from '../action/auth/authAction'

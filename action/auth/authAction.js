@@ -18,7 +18,7 @@ export const loginUser = (data) => (dispatch) => {
         setAuthToken(token)
         dispatch(setCurrentUser(result.data.data));
         dispatch(setUserLoading(false))
-        window.location.href = '/dashboard'
+        window.location.href = '/admin/dashboard'
       }
     })
 }
@@ -34,7 +34,7 @@ export const loginFacebook = (path) => (dispatch) => {
         setAuthToken(token)
         dispatch(setCurrentUser(result.data.data));
         dispatch(setUserLoading(false))
-        window.location.href = '/dashboard'
+        window.location.href = '/admin/dashboard'
       }
     })
 }
@@ -51,7 +51,7 @@ export const loginGoogle = (path) => (dispatch) => {
         setAuthToken(token)
         dispatch(setCurrentUser(result.data.data));
         dispatch(setUserLoading(false))
-        window.location.href = '/dashboard'
+        window.location.href = '/admin/dashboard'
       }
     })
 }
@@ -71,7 +71,7 @@ export const registerUser = (data) => (dispatch) => {
         setAuthToken(token)
         dispatch(setCurrentUser(res.data.data));
         dispatch(setUserLoading(false))
-        window.location.href = '/dashboard'
+        window.location.href = '/admin/dashboard'
       }
     })
     .catch((err) => {
