@@ -18,3 +18,10 @@ a {
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+tr:nth-child(even) {
+  background-color: #F8F9FA;
+}
+tr:nth-child(odd) {
+  background-color: #FFFFFF;
+}

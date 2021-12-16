@@ -5,17 +5,19 @@ import instance from './../instance'
 import * as jwt from 'jsonwebtoken'
 
 export const loginUser = (data) => (dispatch) => {
-  instance.post('/auth/login', data, {
+  console.log(data)
+  instance.noAuth.post('/auth/login', data, {
     headers: {
       'Content-Type': 'application/json'
     }
   })
     .then((result) => {
       if (result.status) {
-        console.log(result)
-        const { token } = result.data.data;
-        localStorage.setItem('ACCESS_TOKEN', token)
-        setAuthToken(token)
+        console.log(result.data.data)
+        const { access_token } = result.data.data;
+        console.log(access_token)
+        localStorage.setItem('ACCESS_TOKEN', access_token)
+        setAuthToken(access_token)
         dispatch(setCurrentUser(result.data.data));
         dispatch(setUserLoading(false))
         window.location.href = '/admin/dashboard'
@@ -25,7 +27,7 @@ export const loginUser = (data) => (dispatch) => {
 
 export const loginFacebook = (path) => (dispatch) => {
   console.log("facebook")
-  instance.get('/auth/social/facebook/callback' + path)
+  instance.noAuth.get('/auth/social/facebook/callback' + path)
     .then((result) => {
       if (result.status) {
         console.log(result)
@@ -42,7 +44,7 @@ export const loginFacebook = (path) => (dispatch) => {
 export const loginGoogle = (path) => (dispatch) => {
   console.log("hello google")
   console.log(path)
-  instance.get('/auth/social/google/callback' + path)
+  instance.noAuth.get('/auth/social/google/callback' + path)
     .then((result) => {
       if (result.status) {
         console.log(result)
@@ -59,7 +61,7 @@ export const loginGoogle = (path) => (dispatch) => {
 export const registerUser = (data) => (dispatch) => {
   console.log(data)
   dispatch(setUserLoading(true))
-  instance.post('/auth/register', data, {
+  instance.noAuth.post('/auth/register', data, {
     headers: {
       'Content_Type': 'application/json',
     }
