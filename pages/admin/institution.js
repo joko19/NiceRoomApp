@@ -5,8 +5,6 @@ import { useEffect, useState, useRef, } from 'react'
 import Image from "next/image";
 // import Button from "../../components/Button/button";
 import Icon from "../../components/Button/Icon";
-import { ModalHeadless } from "../../components/Modals/HeadlessModal";
-import DeleteModal from "../../components/Modals/DeleteModal";
 import {
   Button,
   Modal,
@@ -75,7 +73,7 @@ export default function Institute(props) {
                   <table className="table min-w-full divide-y divide-gray-200">
                     <thead className="bg-black-9" >
                       {TableHead.map((item) => (
-                        <th scope="col" className="px-6 py-3 text-left tracking-wider">
+                        <th key={item} scope="col" className="px-6 py-3 text-left tracking-wider">
                           {item}
                         </th>
                       ))}

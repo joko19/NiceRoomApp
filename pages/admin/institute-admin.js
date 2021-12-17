@@ -9,7 +9,7 @@ export default function InstituteAdmin(props) {
   const [allAdmin, setAllAdmin] = useState([])
   const tableHead = ['Employee ID', 'Name', 'Email', 'Phone', 'Institute', 'Action']
 
-  useEffect(async() => {
+  const getAllAdmin = async() =>  {
     await apiAdmin.all()
       .then((res) => {
         console.log(res.data.data.data)
@@ -18,6 +18,10 @@ export default function InstituteAdmin(props) {
       .catch((err) => {
         console.log(err)
       })
+  }
+
+  useEffect(async() => {
+    getAllAdmin()
   }, [])
 
   return (
@@ -42,7 +46,7 @@ export default function InstituteAdmin(props) {
                 <table className="table min-w-full divide-y divide-gray-200">
                   <thead className="bg-black-9" >
                     {tableHead.map((item) => (
-                    <th scope="col" className="px-6 py-3 text-left tracking-wider">
+                    <th key={item} scope="col" className="px-6 py-3 text-left tracking-wider">
                       {item}
                     </th>
                     ))}
