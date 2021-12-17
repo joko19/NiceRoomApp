@@ -3,7 +3,6 @@ import Card from "../../components/Cards/Card";
 import apiInstitute from "../../action/institute";
 import { useEffect, useState, useRef, } from 'react'
 import Image from "next/image";
-// import Button from "../../components/Button/button";
 import Icon from "../../components/Button/Icon";
 import {
   Button,
@@ -17,12 +16,10 @@ import {
   useDisclosure
 } from '@chakra-ui/react'
 
-export default function Institute(props) {
-
+export default function Institute() {
   const { isOpen, onOpen, onClose } = useDisclosure()
-  const deleteModalRef = useRef(null)
-  const [dataInstitute, setDataInstitute] = useState([])
   const [selectedData, setSelectedData] = useState(null)
+  const [dataInstitute, setDataInstitute] = useState([])
   const TableHead = ['Institute Name', 'State', ' City', 'Year Established', 'Action']
 
   const getAll = async () => {
