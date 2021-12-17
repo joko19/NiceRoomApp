@@ -50,7 +50,7 @@ function Sidebar() {
   return (
     // <nav className=" md:overflow-y-auto md:flex-row md:flex-nowrap md:overflow-hidden shadow-xl bg-white flex flex-wrap items-center justify-between relative z-10 py-4 px-4">
     //   <div className="md:flex-col md:items-stretch md:min-h-full md:flex-nowrap px-0 flex flex-wrap items-center justify-between  mx-auto">
-        <ul className="py-24 px-8 inline-block bg-white">
+        <ul className="py-24 px-8 inline-block bg-white h-full">
           {list.map((item) => {
             const isActive = router.pathname.indexOf(item.path) !== -1
             return (

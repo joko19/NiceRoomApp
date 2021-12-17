@@ -6,6 +6,7 @@ import { connect } from "react-redux";
 import Sidebar from "../components/Sidebar/Sidebar";
 import AdminNavbar from "../components/Navbar/AdminNavbar";
 import { admin } from './../redux/privateRoute'
+import Footer from "../components/footer/footer";
 
 function Admin(props) {
   return (
@@ -16,11 +17,12 @@ function Admin(props) {
           <div className="flex-none grow-0">
             <Sidebar />
           </div>
-          <div className="px-2 md:px-10 mx-auto p-8 grow">
+          <div className="px-2 md:px-10 w-full p-8 grow">
             {props.children}
             {/* <FooterAdmin /> */}
           </div>
         </div>
+        <Footer />
       </div>
     </>
   )

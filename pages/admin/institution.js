@@ -3,22 +3,11 @@ import Card from "../../components/Cards/Card";
 import apiInstitute from "../../action/institute";
 import { useEffect, useState } from 'react'
 import Image from "next/image";
+import Button from "../../components/Button/button";
+import Icon from "../../components/Button/Icon";
 
 export default function Institute(props) {
   const [dataInstitute, setDataInstitute] = useState([])
-  const people = [
-    {
-      name: 'Jane Cooper',
-      title: 'Regional Paradigm Technician',
-      department: 'Optimization',
-      role: 'Admin',
-      email: 'jane.cooper@example.com',
-      image:
-        'https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=4&w=256&h=256&q=60',
-    },
-    // More people...
-  ]
-
   useEffect(async () => {
     await apiInstitute.all()
       .then((res) => {
@@ -35,43 +24,51 @@ export default function Institute(props) {
     <div className="md:py-24">
       <Card
         title="Institution"
-        right="Create Institusion"
+        right={(
+          <button className="btn btn-md bg-blue-1 text-white p-3 rounded-lg" onClick={() => {
+            setSelectedData(null)
+            manageModalRef.current.open()
+          }}>
+            + Create Institute
+          </button>
+        )}
       >
-        <input type="text" />
+           <input type="text" className="p-4 border rounded-lg w-1/2 mb-4" placeholder="Search Institute" />
+              
         <div className="flex flex-col">
           <div className="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
             <div className="py-2 align-middle inline-block min-w-full sm:px-6 lg:px-8">
               <div className="shadow overflow-hidden border-b border-gray-200 sm:rounded-lg">
                 <table className="table min-w-full divide-y divide-gray-200">
                   <thead className="bg-black-9" >
-                      <th
-                        scope="col"
-                        className="px-6 py-3 text-left tracking-wider"
-                      >
-                        Institute Name
-                      </th>
-                      <th
-                        scope="col"
-                        className="px-6 py-3 text-left tracking-wider"
-                      >
-                        State
-                      </th>
-                      <th
-                        scope="col"
-                        className="px-6 py-3 text-left tracking-wider"
-                      >
-                        City
-                      </th>
-                      <th
-                        scope="col"
-                        className="px-6 py-3 text-left tracking-wider"
-                      >
-                        Year<br/> 
-                        Established
-                      </th>
-                      <th scope="col" className="relative px-6 py-3">
-                        Action
-                      </th>
+                    <th
+                      scope="col"
+                      className="px-6 py-3 text-left tracking-wider"
+                    >
+                      Institute Name
+                    </th>
+                    <th
+                      scope="col"
+                      className="px-6 py-3 text-left tracking-wider"
+                    >
+                      State
+                    </th>
+                    <th
+                      scope="col"
+                      className="px-6 py-3 text-left tracking-wider"
+                    >
+                      City
+                    </th>
+                    <th
+                      scope="col"
+                      className="px-6 py-3 text-left tracking-wider"
+                    >
+                      Year<br />
+                      Established
+                    </th>
+                    <th scope="col" className="text-left px-6 tracking-wider py-3">
+                      Action
+                    </th>
                     {/* </tr> */}
                   </thead>
                   <tbody className="bg-white divide-y divide-gray-200">
@@ -94,20 +91,29 @@ export default function Institute(props) {
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap ">{item.establishment_year}</td>
                         <td className="px-6 py-4 whitespace-nowrap flex text-right gap-2 text-sm font-medium">
-                        <a href="#" className="text-indigo-600 hover:text-indigo-900">
-                            <Image src="/asset/icon/table/fi_eye.png" width={16} height={16} alt="icon edit"/>
+                          <a href="#" className="text-indigo-600 hover:text-indigo-900">
+                            <Image src="/asset/icon/table/fi_eye.png" width={16} height={16} alt="icon edit" />
                           </a>
                           <a href="#" className="text-indigo-600 hover:text-indigo-900">
-                            <Image src="/asset/icon/table/fi_edit.png" width={16} height={16} alt="icon edit"/>
+                            <Image src="/asset/icon/table/fi_edit.png" width={16} height={16} alt="icon edit" />
                           </a>
                           <a href="#" className="text-indigo-600 hover:text-indigo-900">
-                            <Image src="/asset/icon/table/fi_trash-2.png" width={16} height={16} alt="icon edit"/>
+                            <Image src="/asset/icon/table/fi_trash-2.png" width={16} height={16} alt="icon edit" />
                           </a>
                         </td>
                       </tr>
                     ))}
                   </tbody>
                 </table>
+              </div>
+              <div className="flex mt-8 flex-row-reverse flex-end gap-4">
+                <Icon src="/asset/icon/table/ic_last.png" />
+                <Icon src="/asset/icon/table/ic_next.png" />
+                <Icon src="/asset/icon/table/ic_prev.png" />
+                <Icon src="/asset/icon/table/ic_first.png" />
+                <span> 1 - 10 from 4</span>
+                <Icon src="/asset/icon/table/ic_down.png" />
+                <span>Data per page : 10 </span>
               </div>
             </div>
           </div>
