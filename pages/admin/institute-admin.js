@@ -7,6 +7,7 @@ import Image from "next/image";
 
 export default function InstituteAdmin(props) {
   const [allAdmin, setAllAdmin] = useState([])
+  const tableHead = ['Employee ID', 'Name', 'Email', 'Phone', 'Institute', 'Action']
 
   useEffect(async() => {
     await apiAdmin.all()
@@ -40,40 +41,11 @@ export default function InstituteAdmin(props) {
               <div className="shadow overflow-hidden border-b border-gray-200 sm:rounded-lg">
                 <table className="table min-w-full divide-y divide-gray-200">
                   <thead className="bg-black-9" >
-                    <th
-                      scope="col"
-                      className="px-6 py-3 text-left tracking-wider"
-                    >
-                      Employee ID
+                    {tableHead.map((item) => (
+                    <th scope="col" className="px-6 py-3 text-left tracking-wider">
+                      {item}
                     </th>
-                    <th
-                      scope="col"
-                      className="px-6 py-3 text-left tracking-wider"
-                    >
-                      Name
-                    </th>
-                    <th
-                      scope="col"
-                      className="px-6 py-3 text-left tracking-wider"
-                    >
-                      Email
-                    </th>
-                    <th
-                      scope="col"
-                      className="px-6 py-3 text-left tracking-wider"
-                    >
-                      Phone
-                    </th>
-                    <th
-                      scope="col"
-                      className="px-6 py-3 text-left tracking-wider"
-                    >
-                      Institute
-                    </th>
-                    <th scope="col" className="text-left px-6 tracking-wider py-3">
-                      Action
-                    </th>
-                    {/* </tr> */}
+                    ))}
                   </thead>
                   <tbody className="bg-white divide-y divide-gray-200">
                     {allAdmin.map((item) => (

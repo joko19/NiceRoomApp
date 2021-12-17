@@ -7,6 +7,7 @@ import apiNews from "../../action/news";
 
 export default function News(props) {
   const [news, setNews] = useState([])
+  const tableHead = ['Title', 'Sub-Title', 'Data', 'Action']
   useEffect(async () => {
     await apiNews.all()
       .then((res) => {
@@ -41,28 +42,11 @@ export default function News(props) {
               <div className="shadow overflow-hidden border-b border-gray-200 sm:rounded-lg">
                 <table className="table min-w-full divide-y divide-gray-200">
                   <thead className="bg-black-9" >
-                    <th
-                      scope="col"
-                      className="px-6 py-3 text-left tracking-wider"
-                    >
-                      Title
+                    {tableHead.map((item) => (
+                    <th scope="col" className="px-6 py-3 text-left tracking-wider">
+                      {item}
                     </th>
-                    <th
-                      scope="col"
-                      className="px-6 py-3 text-left tracking-wider"
-                    >
-                      Sub-Title
-                    </th>
-                    <th
-                      scope="col"
-                      className="px-6 py-3 text-left tracking-wider"
-                    >
-                      Date
-                    </th>
-                    <th scope="col" className="text-left px-6 tracking-wider py-3">
-                      Action
-                    </th>
-                    {/* </tr> */}
+                    ))}
                   </thead>
                   <tbody className="bg-white divide-y divide-gray-200">
                     {news.map((item) => (

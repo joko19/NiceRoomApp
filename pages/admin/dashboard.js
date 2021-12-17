@@ -10,7 +10,6 @@ export default function Index(props) {
         title="Home" >
         <h1>Hello world</h1>
       </Card>
-      ff
     </div>
   )
 }

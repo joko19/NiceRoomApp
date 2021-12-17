@@ -35,9 +35,9 @@ function Footer(props) {
         <div>
           <h1 className="font-bold text-xl">Reach Us </h1>
           <ul className="text-sm mt-6">
-            <li className="mb-4"><img src="/asset/icon/ic_Message.png" className="inline w-6" />hello@examz.io</li>
-            <li className="mb-4"><img src="/asset/icon/ic_Mobile.png" className="inline w-6" /> +91 01234 56789</li>
-            <li className="mb-4"><img src="/asset/icon/ic_Location.png" className="inline w-6" /> 772 Mountain Ave
+            <li className="mb-4"><img src="/asset/icon/ic_Message.png" className="inline w-6 mr-2" />hello@examz.io</li>
+            <li className="mb-4"><img src="/asset/icon/ic_Mobile.png" className="inline w-6 mr-2" /> +91 01234 56789</li>
+            <li className="mb-4"><img src="/asset/icon/ic_Location.png" className="inline w-6 mr-2" /> 772 Mountain Ave
               Bangalore, India 92451</li>
           </ul>
         </div>
