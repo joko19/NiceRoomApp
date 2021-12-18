@@ -13,28 +13,41 @@ import {
   ModalFooter,
   ModalBody,
   ModalCloseButton,
-  useDisclosure
+  useDisclosure,
+  Select
 } from '@chakra-ui/react'
 import { useForm } from "react-hook-form";
-import Select from 'react-select';
+import { FaAngleLeft, FaAngleRight, FaAngleDoubleLeft, FaAngleDoubleRight } from "react-icons/fa";
 
 export default function Institute() {
+  const [search, setSearch] = useState('')
+  const [limit, setLimit] = useState('5')
+  const [page, setPage] = useState('1')
+  const [total, setTotal] = useState()
   const { isOpen, onOpen, onClose } = useDisclosure()
   const {
     isOpen: isCreateModal,
     onOpen: onOpenCreateModal,
     onClose: onCloseCreateModal
   } = useDisclosure()
+  const {
+    isOpen: isSuccessModal,
+    onOpen: onOpenSuccessModal,
+    onClose: onCloseSuccessModal
+  } = useDisclosure()
   const [selectedData, setSelectedData] = useState(null)
   const [dataInstitute, setDataInstitute] = useState([])
+  const [list, setList] = useState([])
   const TableHead = ['Institute Name', 'State', ' City', 'Year Established', 'Action']
-  const { register, handleSubmit, setValue } = useForm();
+  const { register, handleSubmit, setValue, getValues } = useForm();
 
-  const getAll = async () => {
-    await apiInstitute.all()
+  const getData = async (search, limit, page) => {
+    await apiInstitute.all(search, limit, page)
       .then((res) => {
-        console.log(res.data.data.data)
-        setDataInstitute(res.data.data.data)
+        console.log(res.data.data)
+        setDataInstitute(res.data.data)
+        setList(res.data.data.data)
+        setPage(res.data.data.current_page)
 
       })
       .catch((err) => {
@@ -42,7 +55,7 @@ export default function Institute() {
       })
   }
   useEffect(async () => {
-    getAll()
+    getData(search, limit, page)
   }, [])
 
   const onSubmit = async (data) => {
@@ -56,6 +69,7 @@ export default function Institute() {
       })
     getAll()
     onCloseCreateModal()
+    onOpenSuccessModal()
   }
 
   const onDelete = async (id) => {
@@ -66,6 +80,11 @@ export default function Institute() {
       .catch((err) => {
         console.log(err)
       })
+  }
+
+  const onSearch = (e) => {
+    console.log(e.target.value)
+
   }
 
   return (
@@ -79,7 +98,10 @@ export default function Institute() {
             </button>
           )}
         >
-          <input type="text" className="p-4 border rounded-lg w-1/2 mb-4" placeholder="Search Institute" />
+          <input type="text" className="p-4 border rounded-lg w-1/2 mb-4" placeholder="Search Institute" onChange={(e) => {
+            setSearch(e.target.value)
+            getData(e.target.value, limit, page)
+          }} />
 
           <div className="flex flex-col">
             <div className="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
@@ -94,7 +116,7 @@ export default function Institute() {
                       ))}
                     </thead>
                     <tbody className="bg-white divide-y divide-gray-200">
-                      {dataInstitute.map((item) => (
+                      {list.map((item) => (
                         <tr key={item.email}>
                           <td className="px-6 py-4 whitespace-nowrap">
                             <div className="flex items-center">
@@ -132,13 +154,46 @@ export default function Institute() {
                   </table>
                 </div>
                 <div className="flex mt-8 flex-row-reverse flex-end gap-4">
-                  <Icon src="/asset/icon/table/ic_last.png" />
-                  <Icon src="/asset/icon/table/ic_next.png" />
-                  <Icon src="/asset/icon/table/ic_prev.png" />
-                  <Icon src="/asset/icon/table/ic_first.png" />
-                  <span> 1 - 10 from 4</span>
-                  <Icon src="/asset/icon/table/ic_down.png" />
-                  <span>Data per page : 10 </span>
+                  <button className={`${page !== dataInstitute.last_page ? 'bg-black-6' : 'cursor-default'} rounded-full p-1`} onClick={() => {
+                    if (page !== dataInstitute.last_page) {
+                      getData(search, limit, dataInstitute.last_page)
+                    }
+                  }}>
+                    <FaAngleDoubleRight />
+                  </button>
+                  <button className={`${page < dataInstitute.last_page ? 'bg-black-6' : 'cursor-default'} rounded-full p-1`} onClick={() => {
+                    if (page < dataInstitute.last_page) {
+                      getData(search, limit, page + 1)
+                    }
+                  }}>
+                    <FaAngleRight />
+                  </button>
+                  <button className={`${page > 1 ? 'bg-black-6' : 'cursor-default'} p-1  rounded-full align-middle`} onClick={() => {
+                    if (page > 1) {
+                      getData(search, limit, page - 1)
+                    }
+                  }}>
+                    <FaAngleLeft />
+                  </button>
+                  <button className={`${page !== 1 ? 'bg-black-6' : 'cursor-default'} rounded-full p-1`} onClick={() => {
+                    if (page !== 1) {
+                      getData(search, limit, 1)
+                    }
+                  }}>
+                    <FaAngleDoubleLeft />
+                  </button>
+                  <span> {page < dataInstitute.last_page ? page : dataInstitute.last_page} - {dataInstitute.last_page} from {dataInstitute.total}</span>
+                  <select className="bg-white" value={limit} onChange={(e) => {
+                    setLimit(e.target.value)
+                    getData(search, e.target.value, page)
+                  }}>
+                    <option>1</option>
+                    <option>2</option>
+                    <option>3</option>
+                    <option>4</option>
+                    <option>5</option>
+                  </select>
+                  <span>Data per page : </span>
                 </div>
               </div>
             </div>
@@ -147,13 +202,13 @@ export default function Institute() {
       </div>
 
 
-      <Modal isOpen={isCreateModal} onClose={onCloseCreateModal} size='xl'>
+      <Modal isOpen={isCreateModal} onClose={onCloseCreateModal} size='xl'
+        motionPreset='slideInBottom'>
         <ModalOverlay />
         <ModalContent>
           <ModalHeader>Create Institute</ModalHeader>
           <ModalCloseButton />
           <ModalBody>
-
             <form onSubmit={handleSubmit(onSubmit)} >
               <div className="flex gap-4">
                 <div>
@@ -190,6 +245,23 @@ export default function Institute() {
                 <button type="button" className="text-black-4 p-3 rounded-lg" onClick={onCloseCreateModal}>Close</button>
               </div>
             </form>
+          </ModalBody>
+        </ModalContent>
+      </Modal>
+
+      {/* Success Modal */}
+      <Modal isOpen={isSuccessModal} onClose={onCloseSuccessModal} isCentered>
+        <ModalOverlay />
+        <ModalContent>
+          <ModalHeader><center>Success</center></ModalHeader>
+          <ModalCloseButton />
+          <ModalBody>
+            <div className="flex flex-col text-center ">
+              <p>{getValues('name')} Created Successfully </p>
+              <div className="self-center">
+                <button className="bg-blue-1 rounded-lg text-white mt-4 block align-center p-3" onClick={onCloseSuccessModal}>Okay</button>
+              </div>
+            </div>
           </ModalBody>
         </ModalContent>
       </Modal>
