@@ -1,9 +1,10 @@
-import Admin from "../../Layout/Admin";
-import Card from "../../components/Cards/Card";
-import apiInstitute from "../../action/institute";
+import Admin from "../../../Layout/Admin";
+import Card from "../../../components/Cards/Card";
+import apiInstitute from "../../../action/institute";
 import { useEffect, useState, useRef, } from 'react'
 import Image from "next/image";
-import Icon from "../../components/Button/Icon";
+import Link from "next/link";
+import Icon from "../../../components/Button/Icon";
 import {
   Button,
   Modal,
@@ -21,8 +22,10 @@ import { FaAngleLeft, FaAngleRight, FaAngleDoubleLeft, FaAngleDoubleRight } from
 
 export default function Institute() {
   const [search, setSearch] = useState('')
+  const [update, setUpdate] = useState(false)
   const [limit, setLimit] = useState('5')
   const [page, setPage] = useState('1')
+  const [detail, setDetail] = useState({})
   const [total, setTotal] = useState()
   const { isOpen, onOpen, onClose } = useDisclosure()
   const {
@@ -39,7 +42,7 @@ export default function Institute() {
   const [dataInstitute, setDataInstitute] = useState([])
   const [list, setList] = useState([])
   const TableHead = ['Institute Name', 'State', ' City', 'Year Established', 'Action']
-  const { register, handleSubmit, setValue, getValues } = useForm();
+  const { register, handleSubmit, setValue, getValues, reset } = useForm();
 
   const getData = async (search, limit, page) => {
     await apiInstitute.all(search, limit, page)
@@ -58,14 +61,36 @@ export default function Institute() {
     getData(search, limit, page)
   }, [])
 
+  const getDetail = async (id) => {
+    console.log(id)
+    await apiInstitute.detail(id)
+      .then((result) => {
+        const res = result.data.data
+        setDetail(res)
+        setValue("name", res.name)
+        setValue("address", res.address)
+        setValue("state", res.state)
+        setValue("city", res.city)
+        setValue("establishment_year", res.establishment_year)
+        setValue("pin_code", res.pin_code)
+      })
+  }
+
   const onSubmit = async (data) => {
-    await apiInstitute.create(data)
+    update ? await apiInstitute.update(selectedData, data)
       .then((res) => {
-        console.log(res)
+        reset(res)
       })
       .catch((err) => {
+        setUpdate(false)
         console.log(err)
-      })
+      }) : await apiInstitute.create(data)
+        .then((res) => {
+          console.log(res)
+        })
+        .catch((err) => {
+          console.log(err)
+        })
     getData(search, limit, page)
     onCloseCreateModal()
     onOpenSuccessModal()
@@ -81,14 +106,9 @@ export default function Institute() {
       })
   }
 
-  const onSearch = (e) => {
-    console.log(e.target.value)
-
-  }
-
   return (
     <>
-      <div className="md:py-24">
+      <div className="md:py-24 mt-24 md:mt-12">
         <Card
           title="Institution"
           right={(
@@ -106,7 +126,7 @@ export default function Institute() {
             <div className="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
               <div className="py-2 align-middle inline-block min-w-full sm:px-6 lg:px-8">
                 <div className="shadow overflow-hidden border-b border-gray-200 sm:rounded-lg">
-                  <table className="table min-w-full divide-y divide-gray-200">
+                  <table className="table md:min-w-full overflow-auto divide-y divide-gray-200">
                     <thead className="bg-black-9" >
                       {TableHead.map((item) => (
                         <th key={item} scope="col" className="px-6 py-3 text-left tracking-wider">
@@ -134,12 +154,19 @@ export default function Institute() {
                           </td>
                           <td className="px-6 py-4 whitespace-nowrap ">{item.establishment_year}</td>
                           <td className="px-6 py-4 whitespace-nowrap flex text-right gap-2 text-sm font-medium">
-                            <a href="#" className="text-indigo-600 hover:text-indigo-900">
-                              <Image src="/asset/icon/table/fi_eye.png" width={16} height={16} alt="icon edit" />
-                            </a>
-                            <a href="#" className="text-indigo-600 hover:text-indigo-900">
+                            <Link href={`/admin/institution/${item.id}`}>
+                              <a className="text-indigo-600 hover:text-indigo-900">
+                                <Image src="/asset/icon/table/fi_eye.png" width={16} height={16} alt="icon detail" />
+                              </a>
+                            </Link>
+                            <button className="text-indigo-600 hover:text-indigo-900" onClick={() => {
+                              getDetail(item.id)
+                              setSelectedData(item.id)
+                              setUpdate(true)
+                              onOpenCreateModal()
+                            }}>
                               <Image src="/asset/icon/table/fi_edit.png" width={16} height={16} alt="icon edit" />
-                            </a>
+                            </button>
                             <button href="#" className="text-indigo-600 hover:text-indigo-900">
                               <Image src="/asset/icon/table/fi_trash-2.png" width={16} height={16} alt="icon deleted" onClick={() => {
                                 setSelectedData(item.id),
@@ -205,7 +232,7 @@ export default function Institute() {
         motionPreset='slideInBottom'>
         <ModalOverlay />
         <ModalContent>
-          <ModalHeader>Create Institute</ModalHeader>
+          <ModalHeader>{update ? 'Edit' : 'Create'} Institute</ModalHeader>
           <ModalCloseButton />
           <ModalBody>
             <form onSubmit={handleSubmit(onSubmit)} >
@@ -256,9 +283,12 @@ export default function Institute() {
           <ModalCloseButton />
           <ModalBody>
             <div className="flex flex-col text-center ">
-              <p>{getValues('name')} Created Successfully </p>
+              <p>{getValues('name')} {update ? 'Update' : 'Create'} Successfully </p>
               <div className="self-center">
-                <button className="bg-blue-1 rounded-lg text-white mt-4 block align-center p-3" onClick={onCloseSuccessModal}>Okay</button>
+                <button className="bg-blue-1 rounded-lg text-white mt-4 block align-center p-3" onClick={() => {
+                  onCloseSuccessModal()
+                  setUpdate(false)
+                }}>Okay</button>
               </div>
             </div>
           </ModalBody>
