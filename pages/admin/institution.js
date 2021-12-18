@@ -15,12 +15,20 @@ import {
   ModalCloseButton,
   useDisclosure
 } from '@chakra-ui/react'
+import { useForm } from "react-hook-form";
+import Select from 'react-select';
 
 export default function Institute() {
   const { isOpen, onOpen, onClose } = useDisclosure()
+  const {
+    isOpen: isCreateModal,
+    onOpen: onOpenCreateModal,
+    onClose: onCloseCreateModal
+  } = useDisclosure()
   const [selectedData, setSelectedData] = useState(null)
   const [dataInstitute, setDataInstitute] = useState([])
   const TableHead = ['Institute Name', 'State', ' City', 'Year Established', 'Action']
+  const { register, handleSubmit, setValue } = useForm();
 
   const getAll = async () => {
     await apiInstitute.all()
@@ -36,6 +44,19 @@ export default function Institute() {
   useEffect(async () => {
     getAll()
   }, [])
+
+  const onSubmit = async (data) => {
+    console.log(data)
+    await apiInstitute.create(data)
+      .then((res) => {
+        console.log(res)
+      })
+      .catch((err) => {
+        console.log(err)
+      })
+    getAll()
+    onCloseCreateModal()
+  }
 
   const onDelete = async (id) => {
     await apiInstitute.deleted(id)
@@ -53,10 +74,7 @@ export default function Institute() {
         <Card
           title="Institution"
           right={(
-            <button className="btn btn-md bg-blue-1 text-white p-3 rounded-lg" onClick={() => {
-              setSelectedData(null)
-              manageModalRef.current.open()
-            }}>
+            <button className="btn btn-md bg-blue-1 text-white p-3 rounded-lg" onClick={onOpenCreateModal}>
               + Create Institute
             </button>
           )}
@@ -104,7 +122,7 @@ export default function Institute() {
                             <button href="#" className="text-indigo-600 hover:text-indigo-900">
                               <Image src="/asset/icon/table/fi_trash-2.png" width={16} height={16} alt="icon deleted" onClick={() => {
                                 setSelectedData(item.id),
-                                onOpen()
+                                  onOpen()
                               }} />
                             </button>
                           </td>
@@ -127,6 +145,56 @@ export default function Institute() {
           </div>
         </Card>
       </div>
+
+
+      <Modal isOpen={isCreateModal} onClose={onCloseCreateModal} size='xl'>
+        <ModalOverlay />
+        <ModalContent>
+          <ModalHeader>Create Institute</ModalHeader>
+          <ModalCloseButton />
+          <ModalBody>
+
+            <form onSubmit={handleSubmit(onSubmit)} >
+              <div className="flex gap-4">
+                <div>
+                  <p>Institute Name</p>
+                  <input type="text" className="form border p-4 rounded-lg" placeholder="Input Institute Name" {...register("name", { required: true })} />
+                </div>
+                <div>
+                  <p>Address</p>
+                  <input type="text" className="form border p-4 rounded-lg" placeholder="Input Institute Address" {...register("address", { required: true })} />
+                </div>
+              </div>
+              <div className="flex gap-4">
+                <div>
+                  <p className="mt-4">State</p>
+                  <input type="text" className="form border p-4 rounded-lg" placeholder="Input Institute Name" {...register("state", { required: true })} />
+                </div>
+                <div>
+                  <p className="mt-4">City</p>
+                  <input type="text" className="form border p-4 rounded-lg" placeholder="Input Institute Name" {...register("city", { required: true })} />
+                </div>
+              </div>
+              <div className="flex gap-4">
+                <div>
+                  <p className="mt-4">Establishment Year</p>
+                  <input type="text" className="form border p-4 rounded-lg" placeholder="Input Establishment Year" {...register("establishment_year", { required: true })} />
+                </div>
+                <div>
+                  <p className="mt-4">Pin Code</p>
+                  <input type="number" className="form border p-4 rounded-lg" placeholder="Input 6-Digits Code Number" {...register("pin_code", { required: true })} />
+                </div>
+              </div>
+              <div className="flex flex-row-reverse gap-4 mt-4">
+                <button type="submit" className="bg-blue-1 p-3 rounded-lg text-white" >Save Institute</button>
+                <button type="button" className="text-black-4 p-3 rounded-lg" onClick={onCloseCreateModal}>Close</button>
+              </div>
+            </form>
+          </ModalBody>
+        </ModalContent>
+      </Modal>
+
+      {/* Delete Confirmation */}
       <Modal isOpen={isOpen} onClose={onClose}>
         <ModalOverlay />
         <ModalContent>
@@ -140,8 +208,9 @@ export default function Institute() {
               Cancel
             </Button>
             <Button colorScheme='red' onClick={() => {
-              onDelete(selectedData) 
-              onClose()}} onClose={onClose}>Deleted</Button>
+              onDelete(selectedData)
+              onClose()
+            }} onClose={onClose}>Deleted</Button>
           </ModalFooter>
         </ModalContent>
       </Modal>
