@@ -59,7 +59,6 @@ export default function Institute() {
   }, [])
 
   const onSubmit = async (data) => {
-    console.log(data)
     await apiInstitute.create(data)
       .then((res) => {
         console.log(res)
@@ -67,7 +66,7 @@ export default function Institute() {
       .catch((err) => {
         console.log(err)
       })
-    getAll()
+    getData(search, limit, page)
     onCloseCreateModal()
     onOpenSuccessModal()
   }

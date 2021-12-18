@@ -15,12 +15,20 @@ import {
   ModalCloseButton,
   useDisclosure
 } from '@chakra-ui/react'
+import { useForm } from "react-hook-form";
 
 
 export default function Topics() {
   const { isOpen, onOpen, onClose } = useDisclosure()
   const [selectedData, setSelectedData] = useState(null)
   const [topics, setTopics] = useState([])
+  const {
+    isOpen: isCreateModal,
+    onOpen: onOpenCreateModal,
+    onClose: onCloseCreateModal
+  } = useDisclosure()
+  const { register, handleSubmit, setValue, getValues } = useForm();
+
 
   const getTopics = async () => {
     await apiTopic.all()
@@ -37,6 +45,19 @@ export default function Topics() {
     getTopics()
   }, [])
 
+  const onSubmit = async (data) => {
+    console.log(data)
+    const dataStr = JSON.stringify(data)
+    await apiTopic.create(data)
+      .then((res) => {
+        getTopics()
+        onCloseCreateModal()
+      })
+      .catch((err) => {
+        console.log(err)
+      })
+  }
+
   const onDelete = async (id) => {
     await apiTopic.deleted(id)
       .then((res) => {
@@ -52,10 +73,7 @@ export default function Topics() {
         <Card
           title="Topics"
           right={(
-            <button className="btn btn-md bg-blue-1 text-white p-3 rounded-lg" onClick={() => {
-              setSelectedData(null)
-              manageModalRef.current.open()
-            }}>
+            <button className="btn btn-md bg-blue-1 text-white p-3 rounded-lg" onClick={onOpenCreateModal}>
               + Create Topic
             </button>
           )}
@@ -118,6 +136,30 @@ export default function Topics() {
           </div>
         </Card>
       </div>
+
+
+      <Modal isOpen={isCreateModal} onClose={onCloseCreateModal} size='xl'
+        motionPreset='slideInBottom'>
+        <ModalOverlay />
+        <ModalContent>
+          <ModalHeader>Create Topic</ModalHeader>
+          <ModalCloseButton />
+          <ModalBody>
+            <form onSubmit={handleSubmit(onSubmit)} >
+              <div>
+                <p>Topic Name</p>
+                <input type="text" className="form border w-full p-4 rounded-lg" placeholder="Input Topic Name" {...register("name", { required: true })} />
+              </div>
+              <div className="flex flex-row-reverse gap-4 mt-4">
+                <button type="submit" className="bg-blue-1 p-3 rounded-lg text-white" >Save Institute</button>
+                <button type="button" className="text-black-4 p-3 rounded-lg" onClick={onCloseCreateModal}>Close</button>
+              </div>
+            </form>
+          </ModalBody>
+        </ModalContent>
+      </Modal>
+
+      {/* Delete Confirmation */}
       <Modal isOpen={isOpen} onClose={onClose}>
         <ModalOverlay />
         <ModalContent>
