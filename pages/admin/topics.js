@@ -1,7 +1,6 @@
 import { useState, useEffect } from "react";
 import Admin from "../../Layout/Admin";
 import Card from "../../components/Cards/Card";
-import Icon from "../../components/Button/Icon";
 import Image from "next/image";
 import apiTopic from "../../action/topics";
 import {
@@ -16,25 +15,33 @@ import {
   useDisclosure
 } from '@chakra-ui/react'
 import { useForm } from "react-hook-form";
+import { FaAngleLeft, FaAngleRight, FaAngleDoubleLeft, FaAngleDoubleRight } from "react-icons/fa";
 
 
 export default function Topics() {
+  const [search, setSearch] = useState('')
+  const [limit, setLimit] = useState('5')
+  const [page, setPage] = useState('1')
   const { isOpen, onOpen, onClose } = useDisclosure()
   const [selectedData, setSelectedData] = useState(null)
   const [topics, setTopics] = useState([])
+  const [list, setList] = useState([])
+  const [update, setUpdate] = useState(false)
   const {
     isOpen: isCreateModal,
     onOpen: onOpenCreateModal,
     onClose: onCloseCreateModal
   } = useDisclosure()
-  const { register, handleSubmit, setValue, getValues } = useForm();
+  const { register, handleSubmit, setValue, getValues, reset } = useForm();
 
 
-  const getTopics = async () => {
-    await apiTopic.all()
+  const getData = async (search, limit, page) => {
+    await apiTopic.all(search, limit, page)
       .then((res) => {
-        console.log(res.data.data.data)
-        setTopics(res.data.data.data)
+        console.log(res.data.data)
+        setTopics(res.data.data)
+        setList(res.data.data.data)
+        setPage(res.data.data.current_page)
 
       })
       .catch((err) => {
@@ -42,20 +49,20 @@ export default function Topics() {
       })
   }
   useEffect(async () => {
-    getTopics()
+    getData(search, limit, page)
+  }, [])
+
+  useEffect(async () => {
+    getData(search, limit, page)
   }, [])
 
   const onSubmit = async (data) => {
-    console.log(data)
-    const dataStr = JSON.stringify(data)
-    await apiTopic.create(data)
-      .then((res) => {
-        getTopics()
-        onCloseCreateModal()
-      })
-      .catch((err) => {
-        console.log(err)
-      })
+    update ? await apiTopic.update(selectedData, data)
+    .then((res)=> setUpdate(false)) :
+     await apiTopic.create(data)
+      .then((res) => getData(search, limit, page))
+    getData(search, limit, page)
+    onCloseCreateModal()
   }
 
   const onDelete = async (id) => {
@@ -73,12 +80,18 @@ export default function Topics() {
         <Card
           title="Topics"
           right={(
-            <button className="btn btn-md bg-blue-1 text-white p-3 rounded-lg" onClick={onOpenCreateModal}>
+            <button className="btn btn-md bg-blue-1 text-white p-3 rounded-lg" onClick={() => {
+              setValue("name", "")
+              onOpenCreateModal()
+            }}>
               + Create Topic
             </button>
           )}
         >
-          <input type="text" className="p-4 border rounded-lg w-1/2 mb-4" placeholder="Search Topic" />
+          <input type="text" className="p-4 border rounded-lg w-1/2 mb-4" placeholder="Search Topic" onChange={(e) => {
+            setSearch(e.target.value)
+            getData(e.target.value, limit, page)
+          }} />
 
           <div className="flex flex-col">
             <div className="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
@@ -98,15 +111,21 @@ export default function Topics() {
                       {/* </tr> */}
                     </thead>
                     <tbody className="bg-white divide-y divide-gray-200">
-                      {topics.map((item) => (
+                      {list.map((item) => (
                         <tr key={item.id}>
                           <td className="px-6 py-4 whitespace-nowrap">
                             <div>{item.name}</div>
                           </td>
                           <td className="px-6 py-4 whitespace-nowrap flex text-right gap-2 text-sm font-medium">
-                            <a href="#" className="text-indigo-600 hover:text-indigo-900">
+                            <button className="text-indigo-600 hover:text-indigo-900"
+                              onClick={() => {
+                                setValue("name", item.name)
+                                setSelectedData(item.id)
+                                setUpdate(true)
+                                onOpenCreateModal()
+                              }}>
                               <Image src="/asset/icon/table/fi_edit.png" width={16} height={16} alt="icon edit" />
-                            </a>
+                            </button>
                             <a href="#" className="text-indigo-600 hover:text-indigo-900">
                               <Image src="/asset/icon/table/fi_trash-2.png" width={16} height={16} alt="icon edit" onClick={() => {
                                 setSelectedData(item.id),
@@ -119,14 +138,48 @@ export default function Topics() {
                     </tbody>
                   </table>
                 </div>
+
                 <div className="flex mt-8 flex-row-reverse flex-end gap-4">
-                  <Icon src="/asset/icon/table/ic_last.png" />
-                  <Icon src="/asset/icon/table/ic_next.png" />
-                  <Icon src="/asset/icon/table/ic_prev.png" />
-                  <Icon src="/asset/icon/table/ic_first.png" />
-                  <span> 1 - 10 from 4</span>
-                  <Icon src="/asset/icon/table/ic_down.png" />
-                  <span>Data per page : 10 </span>
+                  <button className={`${page !== topics.last_page ? 'bg-black-6' : 'cursor-default'} rounded-full p-1`} onClick={() => {
+                    if (page !== topics.last_page) {
+                      getData(search, limit, topics.last_page)
+                    }
+                  }}>
+                    <FaAngleDoubleRight />
+                  </button>
+                  <button className={`${page < topics.last_page ? 'bg-black-6' : 'cursor-default'} rounded-full p-1`} onClick={() => {
+                    if (page < topics.last_page) {
+                      getData(search, limit, page + 1)
+                    }
+                  }}>
+                    <FaAngleRight />
+                  </button>
+                  <button className={`${page > 1 ? 'bg-black-6' : 'cursor-default'} p-1  rounded-full align-middle`} onClick={() => {
+                    if (page > 1) {
+                      getData(search, limit, page - 1)
+                    }
+                  }}>
+                    <FaAngleLeft />
+                  </button>
+                  <button className={`${page !== 1 ? 'bg-black-6' : 'cursor-default'} rounded-full p-1`} onClick={() => {
+                    if (page !== 1) {
+                      getData(search, limit, 1)
+                    }
+                  }}>
+                    <FaAngleDoubleLeft />
+                  </button>
+                  <span> {page < topics.last_page ? page : topics.last_page} - {topics.last_page} from {topics.total}</span>
+                  <select className="bg-white" value={limit} onChange={(e) => {
+                    setLimit(e.target.value)
+                    getData(search, e.target.value, page)
+                  }}>
+                    <option>1</option>
+                    <option>2</option>
+                    <option>3</option>
+                    <option>4</option>
+                    <option>5</option>
+                  </select>
+                  <span>Data per page : </span>
                 </div>
               </div>
             </div>
@@ -139,7 +192,7 @@ export default function Topics() {
         motionPreset='slideInBottom'>
         <ModalOverlay />
         <ModalContent>
-          <ModalHeader>Create Topic</ModalHeader>
+          <ModalHeader>{update ? 'Update' : 'Create'} Topic</ModalHeader>
           <ModalCloseButton />
           <ModalBody>
             <form onSubmit={handleSubmit(onSubmit)} >
@@ -171,6 +224,7 @@ export default function Topics() {
             </Button>
             <Button colorScheme='red' onClick={() => {
               onDelete(selectedData)
+              getData(search, limit, page)
               onClose()
             }} onClose={onClose}>Deleted</Button>
           </ModalFooter>

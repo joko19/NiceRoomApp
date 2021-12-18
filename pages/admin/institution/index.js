@@ -15,18 +15,15 @@ import {
   ModalBody,
   ModalCloseButton,
   useDisclosure,
-  Select
 } from '@chakra-ui/react'
 import { useForm } from "react-hook-form";
 import { FaAngleLeft, FaAngleRight, FaAngleDoubleLeft, FaAngleDoubleRight } from "react-icons/fa";
 
 export default function Institute() {
   const [search, setSearch] = useState('')
-  const [update, setUpdate] = useState(false)
   const [limit, setLimit] = useState('5')
   const [page, setPage] = useState('1')
-  const [detail, setDetail] = useState({})
-  const [total, setTotal] = useState()
+  const [update, setUpdate] = useState(false)
   const { isOpen, onOpen, onClose } = useDisclosure()
   const {
     isOpen: isCreateModal,
@@ -66,7 +63,6 @@ export default function Institute() {
     await apiInstitute.detail(id)
       .then((result) => {
         const res = result.data.data
-        setDetail(res)
         setValue("name", res.name)
         setValue("address", res.address)
         setValue("state", res.state)
