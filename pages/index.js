@@ -8,9 +8,12 @@ import Header from '../components/Navbar/header';
 import apiAuth from './api/auth'
 import { useForm } from "react-hook-form";
 import { loginUser, registerUser } from '../action/auth/authAction'
-
+import { FaEye, FaEyeSlash } from "react-icons/fa";
 
 function Home(props) {
+  const [passwdLogin, setPasswdLogin] = useState(true)
+  const [passwdRegister, setPasswdRegister] = useState(true)
+  const [confirm, setConfirm] = useState(true)
   const [formStatus, setFormStatus] = useState('login')
   const [infoReset, setInfoReset] = useState()
   const { register, handleSubmit, resetField, getValues } = useForm();
@@ -85,7 +88,17 @@ function Home(props) {
                 <p className="mt-4">Email / Phone</p>
                 <input type="text" className="p-4 border rounded-xl w-full" placeholder="Input Email or Phone" {...register("email", { required: true })} />
                 <p className="mt-4">Password</p>
-                <input type="password" placeholder="Input Password" className="p-4 border w-full rounded-xl" {...register("password", { required: true, minLength: 6 })} />
+                <div className="relative">
+                  <input type={`${passwdLogin ? 'password' : 'text'}`} className="form w-full border p-4 rounded-lg" placeholder="Input New Password" {...register("password", { required: true })} />
+                  <span className="absolute inset-y-0 cursor-pointer right-0 pr-3 flex items-center text-sm leading-5" onClick={() => {
+                    passwdLogin ? setPasswdLogin(false) : setPasswdLogin(true)
+                  }}>
+                    {passwdLogin ?
+                      (<FaEyeSlash className=" z-10 inline-block align-middle" />) :
+                      (<FaEye className=" z-10 inline-block align-middle" />)
+                    }
+                  </span>
+                </div>
                 <span className="text-right text-end mt-2 text-black-3 cursor-pointer" onClick={() => setFormStatus('forgotPassword')}>Forgot Password</span>
                 <button type="submit" className="w-full bg-yellow-1 text-white p-3 mt-4 rounded-xl" onClick={() => onLogin()}>Login</button>
               </form>
@@ -110,9 +123,29 @@ function Home(props) {
               <p className="mt-4">Phone</p>
               <input type="number" className="p-4 border rounded-xl w-full" placeholder="Input Your Phone Number"{...register("phone", { required: true })} />
               <p className="mt-4">Password</p>
-              <input type="password" placeholder="Input Password" className="p-4 border w-full rounded-xl" {...register("password", { required: true, minLength: 6 })} />
+              <div className="relative">
+                <input type={`${passwdRegister ? 'password' : 'text'}`} className="form w-full border p-4 rounded-lg" placeholder="Input Your Password" {...register("password", { required: true })} />
+                <span className="absolute inset-y-0 cursor-pointer right-0 pr-3 flex items-center text-sm leading-5" onClick={() => {
+                  passwdRegister ? setPasswdRegister(false) : setPasswdRegister(true)
+                }}>
+                  {passwdRegister ?
+                    (<FaEyeSlash className=" z-10 inline-block align-middle" />) :
+                    (<FaEye className=" z-10 inline-block align-middle" />)
+                  }
+                </span>
+              </div>
               <p className="mt-4">Password Confirmation</p>
-              <input type="password" placeholder="Input Password" className="p-4 border w-full rounded-xl" {...register("password_confirmation", { required: true, minLength: 6 })} />
+              <div className="relative">
+                <input type={`${confirm ? 'password' : 'text'}`} className="form w-full border p-4 rounded-lg" placeholder="Confirmation Your Password" {...register("password_confirmation", { required: true })} />
+                <span className="absolute inset-y-0 cursor-pointer right-0 pr-3 flex items-center text-sm leading-5" onClick={() => {
+                  confirm ? setConfirm(false) : setConfirm(true)
+                }}>
+                  {confirm ?
+                    (<FaEyeSlash className=" z-10 inline-block align-middle" />) :
+                    (<FaEye className=" z-10 inline-block align-middle" />)
+                  }
+                </span>
+              </div>
               <button className="w-full bg-yellow-1 text-white p-2 mt-4 rounded-xl" >Register</button>
               <p className="text-right mt-2 text-black-3">Do you have account ? <button onClick={() => onChangeForm('login')}> Login </button></p>
             </form>

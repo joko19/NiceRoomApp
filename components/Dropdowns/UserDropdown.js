@@ -57,7 +57,11 @@ const UserDropdown = (props) => {
             <button className="text-left font-medium" onClick={closeDropdownPopover}>Edit Profile</button>
           </a>
         </Link>
-        <button className="font-medium">Change Password</button>
+        <Link href='/account/password'>
+          <a>
+            <button className="font-medium">Change Password</button>
+          </a>
+        </Link>
         <button
           className={
             "font-medium block w-full whitespace-nowrap bg-transparent text-red-1 text-left"
