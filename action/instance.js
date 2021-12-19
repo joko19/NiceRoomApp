@@ -12,6 +12,15 @@ const auth = axios.create({
   }
 })
 
+const authwithFile = axios.create({
+  baseURL: "https://exams.vieproject.xyz/api",
+  headers: {
+    'Content_Type': 'multipart/form-data',
+    authorization: 'Bearer ' + store.getState().auth.user.access_token
+  }
+})
+
+
 
 auth.interceptors.response.use(function (res) {
   return res;
@@ -24,7 +33,8 @@ auth.interceptors.response.use(function (res) {
 
 const instance ={
   noAuth,
-  auth
+  auth,
+  authwithFile
 }
 
 export default instance

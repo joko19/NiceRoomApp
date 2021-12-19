@@ -1,9 +1,10 @@
-import React, {useEffect, useMemo, useState} from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { createPopper } from "@popperjs/core";
 import { FiChevronDown, FiX } from 'react-icons/fi'
 import { useRouter } from "next/router";
 import { connect, useDispatch } from "react-redux";
 import { reSetCurrentUser } from "../../action/auth/authAction";
+import Link from 'next/link'
 
 const UserDropdown = (props) => {
   const Router = useRouter()
@@ -40,7 +41,7 @@ const UserDropdown = (props) => {
               src="/img/team-1-800x800.jpg"
             />
           </span> */}
-          <span>{props.username || ''}</span>
+          <span className="ml-4">{props.username || ''}</span>
           <FiChevronDown size={16} />
         </div>
       </a>
@@ -48,15 +49,21 @@ const UserDropdown = (props) => {
         ref={popoverDropdownRef}
         className={
           (dropdownPopoverShow ? "block " : "hidden ") +
-          "bg-white text-base z-50 float-left py-2 list-none text-left rounded shadow-lg min-w-48"
+          "bg-white text-base z-50 float-left py-2 list-none rounded shadow-lg min-w-48 flex flex-col p-4 gap-1  "
         }
       >
-        <a
+        <Link href='/account/profile'>
+          <a>
+            <button className="text-left font-medium" onClick={closeDropdownPopover}>Edit Profile</button>
+          </a>
+        </Link>
+        <button className="font-medium">Change Password</button>
+        <button
           className={
-            "text-sm py-2 px-4 font-normal block w-full whitespace-nowrap bg-transparent text-blueGray-700"
+            "font-medium block w-full whitespace-nowrap bg-transparent text-red-1 text-left"
           }
           onClick={(e) => {
-            if(window !== undefined) {
+            if (window !== undefined) {
               dispatch(reSetCurrentUser({}));
               localStorage.removeItem('ACCESS_TOKEN')
               Router.replace('/')
@@ -64,7 +71,7 @@ const UserDropdown = (props) => {
           }}
         >
           Logout
-        </a>
+        </button>
       </div>
     </>
   );

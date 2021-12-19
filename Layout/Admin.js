@@ -9,10 +9,11 @@ import { admin } from './../redux/privateRoute'
 import Footer from "../components/footer/footer";
 
 function Admin(props) {
+console.log(props.auth)
   return (
     <>
       <div className="wrapper bg-black-8">
-        <AdminNavbar />
+        <AdminNavbar user={props.auth.user.user.name}/>
         <div className="flex">
           <div className="flex-none grow-0">
             <Sidebar />

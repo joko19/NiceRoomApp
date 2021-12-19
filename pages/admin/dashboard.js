@@ -1,5 +1,4 @@
 import Card from "../../components/Cards/Card";
-import { HeaderDataTable, PaginationDataTable, EmptyDataTable } from "../../components/Datatables/CustomDataTable";
 import Admin from "../../Layout/Admin";
 
 export default function Index(props) {

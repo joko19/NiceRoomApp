@@ -9,11 +9,6 @@ const initialState = {
 export default function authReducer(state = initialState, action) {
   switch (action.type) {
     case SET_CURRENT_USER:
-      console.log("\n")
-      console.log("\n")
-      console.log("\n")
-      console.log("menyimpan store")
-      console.log(state.user)
       return {
         ...state,
         isAuthenticated: !isEmpty(action.payload),
