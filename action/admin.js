@@ -1,6 +1,6 @@
 import instance from './instance'
 
-const all = () => instance.auth.get('/institute/admin')
+const all = (search, limit, page) => instance.auth.get('/institute/admin?search=' + search + '&limit=' + limit + '&page=' + page)
 const deleted = (id) => instance.auth.delete('/institute/admin/' + id)
 
 const apiAdmin = {

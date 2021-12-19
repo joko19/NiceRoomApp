@@ -1,9 +1,10 @@
 import { useState, useEffect } from "react";
 import Image from "next/image";
-import Icon from "../../components/Button/Icon";
-import Card from "../../components/Cards/Card";
-import Admin from "../../Layout/Admin";
-import apiNews from "../../action/news";
+import Link from "next/link";
+import Icon from "../../../components/Button/Icon";
+import Card from "../../../components/Cards/Card";
+import Admin from "../../../Layout/Admin";
+import apiNews from "../../../action/news";
 import {
   Button,
   Modal,
@@ -53,12 +54,9 @@ export default function News(props) {
         <Card
           title="Institution"
           right={(
-            <button className="btn btn-md bg-blue-1 text-white p-3 rounded-lg" onClick={() => {
-              setSelectedData(null)
-              manageModalRef.current.open()
-            }}>
-              + Create Institute
-            </button>
+            <Link href="/admin/news/create">
+              <a className="btn btn-md bg-blue-1 text-white p-3 rounded-lg" > + Create News</a>
+            </Link>
           )}
         >
           <input type="text" className="p-4 border rounded-lg w-1/2 mb-4" placeholder="Search Institute" />

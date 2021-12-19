@@ -15,27 +15,46 @@ import {
   ModalCloseButton,
   useDisclosure
 } from '@chakra-ui/react'
+import { useForm } from "react-hook-form";
+import { FaAngleLeft, FaAngleRight, FaAngleDoubleLeft, FaAngleDoubleRight } from "react-icons/fa";
 
 
 export default function InstituteAdmin(props) {
+  const [search, setSearch] = useState('')
+  const [limit, setLimit] = useState('5')
+  const [page, setPage] = useState('1')
+  const [dataInstitute, setDataInstitute] = useState([])
   const { isOpen, onOpen, onClose } = useDisclosure()
   const [selectedData, setSelectedData] = useState(null)
   const [allAdmin, setAllAdmin] = useState([])
+  const [list, setList] = useState([])
+  const [update, setUpdate] = useState(false)
   const tableHead = ['Employee ID', 'Name', 'Email', 'Phone', 'Institute', 'Action']
+  const { register, handleSubmit, setValue, getValues, reset } = useForm();
+  const {
+    isOpen: isCreateModal,
+    onOpen: onOpenCreateModal,
+    onClose: onCloseCreateModal
+  } = useDisclosure()
 
-  const getAllAdmin = async () => {
-    await apiAdmin.all()
+
+  const getData = async (search, limit, page) => {
+    await apiAdmin.all(search, limit, page)
       .then((res) => {
-        console.log(res.data.data.data)
-        setAllAdmin(res.data.data.data)
+        console.log(res.data.data)
+        setDataInstitute(res.data.data)
+        setList(res.data.data.data)
+        setPage(res.data.data.current_page)
+
       })
       .catch((err) => {
         console.log(err)
       })
   }
 
+
   useEffect(async () => {
-    getAllAdmin()
+    getData(search, limit, page)
   }, [])
 
   const onDelete = async (id) => {
@@ -54,10 +73,7 @@ export default function InstituteAdmin(props) {
         <Card
           title="Institute Admin"
           right={(
-            <button className="btn btn-md bg-blue-1 text-white p-3 rounded-lg" onClick={() => {
-              setSelectedData(null)
-              manageModalRef.current.open()
-            }}>
+            <button className="btn btn-md bg-blue-1 text-white p-3 rounded-lg" onClick={onOpenCreateModal}>
               + Create Admin
             </button>
           )}
@@ -77,7 +93,7 @@ export default function InstituteAdmin(props) {
                       ))}
                     </thead>
                     <tbody className="bg-white divide-y divide-gray-200">
-                      {allAdmin.map((item) => (
+                      {list.map((item) => (
                         <tr key={item.email}>
                           <td className="px-6 py-4 whitespace-nowrap">
                             <div className="flex items-center">
@@ -116,19 +132,108 @@ export default function InstituteAdmin(props) {
                   </table>
                 </div>
                 <div className="flex mt-8 flex-row-reverse flex-end gap-4">
-                  <Icon src="/asset/icon/table/ic_last.png" />
-                  <Icon src="/asset/icon/table/ic_next.png" />
-                  <Icon src="/asset/icon/table/ic_prev.png" />
-                  <Icon src="/asset/icon/table/ic_first.png" />
-                  <span> 1 - 10 from 4</span>
-                  <Icon src="/asset/icon/table/ic_down.png" />
-                  <span>Data per page : 10 </span>
+                  <button className={`${page !== dataInstitute.last_page ? 'bg-black-6' : 'cursor-default'} rounded-full p-1`} onClick={() => {
+                    if (page !== dataInstitute.last_page) {
+                      getData(search, limit, dataInstitute.last_page)
+                    }
+                  }}>
+                    <FaAngleDoubleRight />
+                  </button>
+                  <button className={`${page < dataInstitute.last_page ? 'bg-black-6' : 'cursor-default'} rounded-full p-1`} onClick={() => {
+                    if (page < dataInstitute.last_page) {
+                      getData(search, limit, page + 1)
+                    }
+                  }}>
+                    <FaAngleRight />
+                  </button>
+                  <button className={`${page > 1 ? 'bg-black-6' : 'cursor-default'} p-1  rounded-full align-middle`} onClick={() => {
+                    if (page > 1) {
+                      getData(search, limit, page - 1)
+                    }
+                  }}>
+                    <FaAngleLeft />
+                  </button>
+                  <button className={`${page !== 1 ? 'bg-black-6' : 'cursor-default'} rounded-full p-1`} onClick={() => {
+                    if (page !== 1) {
+                      getData(search, limit, 1)
+                    }
+                  }}>
+                    <FaAngleDoubleLeft />
+                  </button>
+                  <span> {page < dataInstitute.last_page ? page : dataInstitute.last_page} - {dataInstitute.last_page} from {dataInstitute.total}</span>
+                  <select className="bg-white" value={limit} onChange={(e) => {
+                    setLimit(e.target.value)
+                    getData(search, e.target.value, page)
+                  }}>
+                    <option>1</option>
+                    <option>2</option>
+                    <option>3</option>
+                    <option>4</option>
+                    <option>5</option>
+                  </select>
+                  <span>Data per page : </span>
                 </div>
               </div>
             </div>
           </div>
         </Card>
       </div>
+
+
+      <Modal isOpen={isCreateModal} onClose={onCloseCreateModal} size='xl'
+        motionPreset='slideInBottom'>
+        <ModalOverlay />
+        <ModalContent>
+          <ModalHeader>{update ? 'Edit' : 'Create'} Institute Admin</ModalHeader>
+          <ModalCloseButton />
+          <ModalBody>
+            <form>
+              <div className="flex gap-4 flex-col md:flex-row">
+                <div className="w-full">
+                  <p>Full Name</p>
+                  <input type="text" className="form w-full border p-4 rounded-lg" placeholder="Input Admin Full Name" {...register("name", { required: true })} />
+                </div>
+                <div className="w-full">
+                  <p>Institute</p>
+                  <input type="text" className="form border w-full p-4 rounded-lg" placeholder="Input Institute Address" {...register("address", { required: true })} />
+                </div>
+              </div>
+
+              <div className="flex gap-4 flex-col md:flex-row">
+                <div className="w-full">
+                  <p className="mt-4">Employee ID</p>
+                  <input type="text" className="form  w-full border p-4 rounded-lg" placeholder="Input Institute Name" {...register("state", { required: true })} />
+                </div>
+                <div className="w-full ">
+                  <p className="mt-4">Gender</p>
+                  <select className="form border bg-white w-full p-4 rounded-lg" placeholder="Choose Gender"  {...register("gender", { required: true })} >
+                    <option disabled>Select Gender</option>
+                    <option value="MALE">Male</option>
+                    <option value="FEMALE">Female</option>
+                  </select>
+                </div>
+              </div>
+
+              <div className="flex gap-4 flex-col md:flex-row">
+                <div className="w-full">
+                  <p className="mt-4">Email</p>
+                  <input type="text" className="form w-full border p-4 rounded-lg" placeholder="Input Establishment Year" {...register("establishment_year", { required: true })} />
+                </div>
+                <div className="w-full">
+                  <p className="mt-4">Phone Number</p>
+                  <input type="number" className="form border p-4 rounded-lg" placeholder="Input 6-Digits Code Number" {...register("pin_code", { required: true })} />
+                </div>
+              </div>
+              <div className="flex flex-row-reverse gap-4 mt-4">
+                <button type="submit" className="bg-blue-1 p-3 rounded-lg text-white" >Save Institute</button>
+                <button type="button" className="text-black-4 p-3 rounded-lg" onClick={onCloseCreateModal}>Close</button>
+              </div>
+            </form>
+          </ModalBody>
+        </ModalContent>
+      </Modal>
+
+      {/* Dekete Modal */}
       <Modal isOpen={isOpen} onClose={onClose}>
         <ModalOverlay />
         <ModalContent>
