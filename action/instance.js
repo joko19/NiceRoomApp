@@ -20,7 +20,7 @@ const authwithFile = axios.create({
   }
 })
 
-
+const pathImg = 'https://exams.vieproject.xyz/storage/images/'
 
 auth.interceptors.response.use(function (res) {
   return res;
@@ -34,7 +34,8 @@ auth.interceptors.response.use(function (res) {
 const instance ={
   noAuth,
   auth,
-  authwithFile
+  authwithFile,
+  pathImg
 }
 
 export default instance

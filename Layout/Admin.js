@@ -13,7 +13,7 @@ console.log(props.auth)
   return (
     <>
       <div className="wrapper bg-black-8">
-        <AdminNavbar user={props.auth.user.user.name}/>
+        <AdminNavbar user={props.auth.user.user.name} avatar={props.auth.user.user.avatar}/>
         <div className="flex">
           <div className="flex-none grow-0">
             <Sidebar />

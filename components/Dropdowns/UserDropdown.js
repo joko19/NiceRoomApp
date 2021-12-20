@@ -5,6 +5,8 @@ import { useRouter } from "next/router";
 import { connect, useDispatch } from "react-redux";
 import { reSetCurrentUser } from "../../action/auth/authAction";
 import Link from 'next/link'
+import Image from "next/image";
+import instance from "../../action/instance";
 
 const UserDropdown = (props) => {
   const Router = useRouter()

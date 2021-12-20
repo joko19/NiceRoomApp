@@ -103,7 +103,7 @@ function Home(props) {
                 <button type="submit" className="w-full bg-yellow-1 text-white p-3 mt-4 rounded-xl" onClick={() => onLogin()}>Login</button>
               </form>
               <p className="text-center m-4 text-black-4">or continue with</p>
-              <div className="flex gap-4">
+              <div className="flex flex-col md:flex-row gap-4">
                 <button className="flex w-full justify-center gap-4 border px-6 py-3 border-yellow-1 rounded-lg" onClick={() => onLoginFacebook()}><img src="/asset/icon/ic_facebook.png" alt="login with facebook" /> Facebook</button>
                 <button className="flex w-full  gap-4 justify-center border px-6 py-3 border-yellow-1 rounded-lg" onClick={() => onLoginGoogle()}><img src="/asset/icon/ic_google.png" alt="login with google" /> Google</button>
               </div>
