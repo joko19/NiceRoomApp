@@ -71,13 +71,13 @@ export default function Profile(props) {
               <div className="m-4 relative">
                 <Image className="rounded-full object-cover" src={avatar} alt="photo profile" height={160} width={160} />
                 <div className="absolute bottom-5 right-0">
-                  <label for="file-input">
+                  <label htmlFor="file-input">
                     <Image src="/asset/icon/ic_edit.png" alt="icon update" width={48} height={48} className="ml-6 cursor-pointer" />
                   </label>
                 </div>
               </div>
               <div className="hidden">
-                <input id="file-input" type="file" classname="hidden -z-50" accept="image/*" onChange={choosePhoto}/>
+                <input id="file-input" type="file" className="hidden -z-50" accept="image/*" onChange={choosePhoto}/>
               </div>
             </div>
             <div className="flex flex-col">
