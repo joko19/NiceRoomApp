@@ -16,7 +16,7 @@ import {
   useDisclosure
 } from '@chakra-ui/react'
 import { useForm } from "react-hook-form";
-import { FaAngleLeft, FaAngleRight, FaAngleDoubleLeft, FaAngleDoubleRight } from "react-icons/fa";
+import { FaAngleLeft, FaAngleRight, FaAngleDoubleLeft, FaAngleDoubleRight, FaEye, FaEyeSlash } from "react-icons/fa";
 
 
 export default function InstituteAdmin(props) {
@@ -29,6 +29,7 @@ export default function InstituteAdmin(props) {
   const [allAdmin, setAllAdmin] = useState([])
   const [list, setList] = useState([])
   const [update, setUpdate] = useState(false)
+  const [passwdLogin, setPasswdLogin] = useState(true)
   const tableHead = ['Employee ID', 'Name', 'Email', 'Phone', 'Institute', 'Action']
   const { register, handleSubmit, setValue, getValues, reset } = useForm();
   const {
@@ -36,12 +37,16 @@ export default function InstituteAdmin(props) {
     onOpen: onOpenCreateModal,
     onClose: onCloseCreateModal
   } = useDisclosure()
+  const {
+    isOpen: isSuccessModal,
+    onOpen: onOpenSuccessModal,
+    onClose: onCloseSuccessModal
+  } = useDisclosure()
 
 
   const getData = async (search, limit, page) => {
     await apiAdmin.all(search, limit, page)
       .then((res) => {
-        console.log(res.data.data)
         setDataInstitute(res.data.data)
         setList(res.data.data.data)
         setPage(res.data.data.current_page)
@@ -65,6 +70,17 @@ export default function InstituteAdmin(props) {
       .catch((err) => {
         console.log(err)
       })
+  }
+
+  const onSubmit = async (data) => {
+    await apiAdmin.create(data)
+      .then((res) => {
+        getData(search, limit, page)
+        onCloseCreateModal()
+        onOpenSuccessModal()
+
+      })
+      .catch((err) => console.log(err))
   }
 
   return (
@@ -187,23 +203,29 @@ export default function InstituteAdmin(props) {
           <ModalHeader>{update ? 'Edit' : 'Create'} Institute Admin</ModalHeader>
           <ModalCloseButton />
           <ModalBody>
-            <form>
+            <form onSubmit={handleSubmit(onSubmit)}>
+              <div className="w-full">
+                <p>Full Name</p>
+                <input type="text" className="form w-full border p-4 rounded-lg" placeholder="Input Admin Full Name" {...register("name", { required: true })} />
+              </div>
               <div className="flex gap-4 flex-col md:flex-row">
+
                 <div className="w-full">
-                  <p>Full Name</p>
-                  <input type="text" className="form w-full border p-4 rounded-lg" placeholder="Input Admin Full Name" {...register("name", { required: true })} />
+                  <p className="mt-4">Institute</p>
+                  <select className="form border bg-white w-full p-4 rounded-lg" placeholder="Choose Institute"  {...register("institute_id", { required: true })} >
+                    <option disabled>Select Institute</option>
+                    <option value="1">Unesa</option>
+                    <option value="2">ITS</option>
+                    <option value="3">Unair</option>
+                  </select>
                 </div>
                 <div className="w-full">
-                  <p>Institute</p>
-                  <input type="text" className="form border w-full p-4 rounded-lg" placeholder="Input Institute Address" {...register("address", { required: true })} />
+                  <p className="mt-4">Employee ID</p>
+                  <input type="text" className="form  w-full border p-4 rounded-lg" placeholder="Input Employee ID" {...register("employee_id", { required: true })} />
                 </div>
               </div>
 
               <div className="flex gap-4 flex-col md:flex-row">
-                <div className="w-full">
-                  <p className="mt-4">Employee ID</p>
-                  <input type="text" className="form  w-full border p-4 rounded-lg" placeholder="Input Institute Name" {...register("state", { required: true })} />
-                </div>
                 <div className="w-full ">
                   <p className="mt-4">Gender</p>
                   <select className="form border bg-white w-full p-4 rounded-lg" placeholder="Choose Gender"  {...register("gender", { required: true })} >
@@ -212,16 +234,30 @@ export default function InstituteAdmin(props) {
                     <option value="FEMALE">Female</option>
                   </select>
                 </div>
+                <div className="w-full">
+                  <p className="mt-4">Phone Number</p>
+                  <input type="number" className="form border p-4 w-full rounded-lg" placeholder="Input Phone Number" {...register("phone", { required: true })} />
+                </div>
               </div>
 
               <div className="flex gap-4 flex-col md:flex-row">
                 <div className="w-full">
                   <p className="mt-4">Email</p>
-                  <input type="text" className="form w-full border p-4 rounded-lg" placeholder="Input Establishment Year" {...register("establishment_year", { required: true })} />
+                  <input type="text" className="form w-full border p-4 rounded-lg" placeholder="Input Email Address" {...register("email", { required: true })} />
                 </div>
                 <div className="w-full">
-                  <p className="mt-4">Phone Number</p>
-                  <input type="number" className="form border p-4 rounded-lg" placeholder="Input 6-Digits Code Number" {...register("pin_code", { required: true })} />
+                  <p className="mt-4">Password</p>
+                  <div className="relative">
+                    <input type={`${passwdLogin ? 'password' : 'text'}`} {...register("password", { required: true })} className="form w-full border p-4 rounded-lg" placeholder="Input New Password" />
+                    <span className="absolute inset-y-0 cursor-pointer right-0 pr-3 flex items-center text-sm leading-5" onClick={() => {
+                      passwdLogin ? setPasswdLogin(false) : setPasswdLogin(true)
+                    }}>
+                      {passwdLogin ?
+                        (<FaEyeSlash className=" z-10 inline-block align-middle" />) :
+                        (<FaEye className=" z-10 inline-block align-middle" />)
+                      }
+                    </span>
+                  </div>
                 </div>
               </div>
               <div className="flex flex-row-reverse gap-4 mt-4">
@@ -229,6 +265,27 @@ export default function InstituteAdmin(props) {
                 <button type="button" className="text-black-4 p-3 rounded-lg" onClick={onCloseCreateModal}>Close</button>
               </div>
             </form>
+          </ModalBody>
+        </ModalContent>
+      </Modal>
+
+
+      {/* Success Modal */}
+      <Modal isOpen={isSuccessModal} onClose={onCloseSuccessModal} isCentered>
+        <ModalOverlay />
+        <ModalContent>
+          <ModalHeader><center>Success</center></ModalHeader>
+          <ModalCloseButton />
+          <ModalBody>
+            <div className="flex flex-col text-center ">
+              <p>Create Admin Institute Successfully </p>
+              <div className="self-center">
+                <button className="bg-blue-1 rounded-lg text-white mt-4 block align-center p-3" onClick={() => {
+                  onCloseSuccessModal()
+                  setUpdate(false)
+                }}>Okay</button>
+              </div>
+            </div>
           </ModalBody>
         </ModalContent>
       </Modal>
