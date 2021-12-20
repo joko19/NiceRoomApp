@@ -53,7 +53,7 @@ export default function InstituteAdmin(props) {
   }
 
 
-  useEffect(async () => {
+  useEffect(() => {
     getData(search, limit, page)
   }, [])
 
