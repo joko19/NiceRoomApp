@@ -62,7 +62,7 @@ export default function Profile(props) {
 
   return (
     <>
-      <div className="bg-blue-100 w-full">
+      <div className="mt-24 md:mt-8 p-4 w-full">
         <Card
           className="md:mt-16 w-full bg-white"
           title="Profile" >
@@ -81,7 +81,7 @@ export default function Profile(props) {
               </div>
             </div>
             <div className="flex flex-col">
-              <div className="flex gap-4">
+              <div className="flex flex-col md:flex-row gap-4">
                 <div className="w-full">
                   <p>First Name</p>
                   <input type="text" defaultValue={store.getState().auth.user.user.name.replace(/ .*/, '')} className="form border w-full p-4 rounded-lg" placeholder="Input Your First Name" {...register("firstName", { required: true })} />
@@ -91,7 +91,7 @@ export default function Profile(props) {
                   <input type="text" className="form border p-4 rounded-lg" defaultValue={store.getState().auth.user.user.name.split(' ').slice(1).join(' ')} placeholder="Input Your Last Name" {...register("lastName", { required: true })} />
                 </div>
               </div>
-              <div className="flex gap-4">
+              <div className="flex flex-col md:flex-row gap-4">
                 <div className="flex flex-col w-full">
                   <p>Gender</p>
                   <select className="form border bg-white p-4 rounded-lg" placeholder="Choose Gender" defaultValue={profile.gender} {...register("gender", { required: true })} >
@@ -105,7 +105,7 @@ export default function Profile(props) {
                   <input type="text" className="form border p-4 rounded-lg" defaultValue={store.getState().auth.user.user.email} placeholder="Input Your Email" {...register("email", { required: true })} />
                 </div>
               </div>
-              <div className="flex gap-4">
+              <div className="flex flex-col md:flex-row gap-4">
                 <div className="flex flex-col w-full">
                   <p className="mt-4">Phone</p>
                   <input type="number" defaultValue={store.getState().auth.user.user.phone} className="form border p-4 rounded-lg" placeholder="Input Your Number" {...register("phone", { required: true })} />

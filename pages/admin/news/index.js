@@ -16,9 +16,14 @@ import {
   ModalCloseButton,
   useDisclosure
 } from '@chakra-ui/react'
-
+import { FaAngleLeft, FaAngleRight, FaAngleDoubleLeft, FaAngleDoubleRight } from "react-icons/fa";
 
 export default function News(props) {
+  const [search, setSearch] = useState('')
+  const [limit, setLimit] = useState('5')
+  const [page, setPage] = useState('1')
+  const [dataNews, setDataNews] = useState({})
+  const [list, setList] = useState([])
   const { isOpen, onOpen, onClose } = useDisclosure()
   const [selectedData, setSelectedData] = useState(null)
   const [news, setNews] = useState([])
@@ -34,8 +39,23 @@ export default function News(props) {
         console.log(err)
       })
   }
+
+  const getData = async (search, limit, page) => {
+    await apiNews.all(search, limit, page)
+      .then((res) => {
+        console.log(res.data.data)
+        setDataNews(res.data.data)
+        setList(res.data.data.data)
+        setPage(res.data.data.current_page)
+
+      })
+      .catch((err) => {
+        console.log(err)
+      })
+  }
+
   useEffect(async () => {
-    getNews()
+    getData(search, limit, page)
   }, [])
 
   const onDelete = async (id) => {
@@ -52,7 +72,7 @@ export default function News(props) {
     <>
       <div className="md:py-24">
         <Card
-          title="Institution"
+          title="News"
           right={(
             <Link href="/admin/news/create">
               <a className="btn btn-md bg-blue-1 text-white p-3 rounded-lg" > + Create News</a>
@@ -74,7 +94,7 @@ export default function News(props) {
                       ))}
                     </thead>
                     <tbody className="bg-white divide-y divide-gray-200">
-                      {news.map((item) => (
+                      {list.map((item) => (
                         <tr key={item.id}>
                           <td className="px-6 py-4 whitespace-nowrap">
                             <div className="flex items-center">
@@ -107,13 +127,46 @@ export default function News(props) {
                   </table>
                 </div>
                 <div className="flex mt-8 flex-row-reverse flex-end gap-4">
-                  <Icon src="/asset/icon/table/ic_last.png" />
-                  <Icon src="/asset/icon/table/ic_next.png" />
-                  <Icon src="/asset/icon/table/ic_prev.png" />
-                  <Icon src="/asset/icon/table/ic_first.png" />
-                  <span> 1 - 10 from 4</span>
-                  <Icon src="/asset/icon/table/ic_down.png" />
-                  <span>Data per page : 10 </span>
+                  <button className={`${page !== dataNews.last_page ? 'bg-black-6' : 'cursor-default'} rounded-full p-1`} onClick={() => {
+                    if (page !== dataNews.last_page) {
+                      getData(search, limit, dataNews.last_page)
+                    }
+                  }}>
+                    <FaAngleDoubleRight />
+                  </button>
+                  <button className={`${page < dataNews.last_page ? 'bg-black-6' : 'cursor-default'} rounded-full p-1`} onClick={() => {
+                    if (page < dataNews.last_page) {
+                      getData(search, limit, page + 1)
+                    }
+                  }}>
+                    <FaAngleRight />
+                  </button>
+                  <button className={`${page > 1 ? 'bg-black-6' : 'cursor-default'} p-1  rounded-full align-middle`} onClick={() => {
+                    if (page > 1) {
+                      getData(search, limit, page - 1)
+                    }
+                  }}>
+                    <FaAngleLeft />
+                  </button>
+                  <button className={`${page !== 1 ? 'bg-black-6' : 'cursor-default'} rounded-full p-1`} onClick={() => {
+                    if (page !== 1) {
+                      getData(search, limit, 1)
+                    }
+                  }}>
+                    <FaAngleDoubleLeft />
+                  </button>
+                  <span> {page < dataNews.last_page ? page : dataNews.last_page} - {dataNews.last_page} from {dataNews.total}</span>
+                  <select className="bg-white" value={limit} onChange={(e) => {
+                    setLimit(e.target.value)
+                    getData(search, e.target.value, page)
+                  }}>
+                    <option>1</option>
+                    <option>2</option>
+                    <option>3</option>
+                    <option>4</option>
+                    <option>5</option>
+                  </select>
+                  <span>Data per page : </span>
                 </div>
               </div>
             </div>

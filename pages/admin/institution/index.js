@@ -1,10 +1,9 @@
 import Admin from "../../../Layout/Admin";
 import Card from "../../../components/Cards/Card";
 import apiInstitute from "../../../action/institute";
-import { useEffect, useState, useRef, } from 'react'
+import { useEffect, useState } from 'react'
 import Image from "next/image";
 import Link from "next/link";
-import Icon from "../../../components/Button/Icon";
 import {
   Button,
   Modal,
