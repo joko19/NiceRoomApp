@@ -17,7 +17,7 @@ import {
 } from '@chakra-ui/react'
 import { useForm } from "react-hook-form";
 import { FaAngleLeft, FaAngleRight, FaAngleDoubleLeft, FaAngleDoubleRight } from "react-icons/fa";
-import { region } from "./India";
+import { region } from "../../../action/India";
 
 export default function Institute() {
   const [search, setSearch] = useState('')
