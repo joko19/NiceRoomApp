@@ -27,7 +27,7 @@ export default function News(props) {
   const { isOpen, onOpen, onClose } = useDisclosure()
   const [selectedData, setSelectedData] = useState(null)
   const [news, setNews] = useState([])
-  const tableHead = ['Title', 'Sub-Title', 'Data', 'Action']
+  const tableHead = ['Title', 'Sub-Title', 'Date', 'Action']
   const getNews = async () => {
     await apiNews.all()
       .then((res) => {
@@ -61,7 +61,7 @@ export default function News(props) {
   const onDelete = async (id) => {
     await apiNews.deleted(id)
       .then((res) => {
-        if (res.data.status) getNews()
+        getData(search, limit, page)
       })
       .catch((err) => {
         console.log(err)
@@ -108,12 +108,11 @@ export default function News(props) {
                           </td>
                           <td className="px-6 py-4 whitespace-nowrap ">{item.establishment_year}</td>
                           <td className="px-6 py-4 whitespace-nowrap flex text-right gap-2 text-sm font-medium">
-                            <a href="#" className="text-indigo-600 hover:text-indigo-900">
-                              <Image src="/asset/icon/table/fi_eye.png" width={16} height={16} alt="icon edit" />
-                            </a>
-                            <a href="#" className="text-indigo-600 hover:text-indigo-900">
-                              <Image src="/asset/icon/table/fi_edit.png" width={16} height={16} alt="icon edit" />
-                            </a>
+                            <Link href={`news/edit/${item.id}`}>
+                              <a className="text-indigo-600 hover:text-indigo-900">
+                                <Image src="/asset/icon/table/fi_edit.png" width={16} height={16} alt="icon edit" />
+                              </a>
+                            </Link>
                             <a href="#" className="text-indigo-600 hover:text-indigo-900">
                               <Image src="/asset/icon/table/fi_trash-2.png" width={16} height={16} alt="icon edit" onClick={() => {
                                 setSelectedData(item.id),

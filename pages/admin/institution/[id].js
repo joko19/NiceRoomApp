@@ -5,7 +5,6 @@ import { useEffect, useState, useRef, } from 'react'
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import Icon from "../../../components/Button/Icon";
 import {
   Button,
   Modal,
@@ -60,7 +59,7 @@ export default function Institute() {
   }
   useEffect(() => {
     getData(search, limit, page)
-  }, [dataInstitute])
+  }, [])
 
   const onSubmit = async (data) => {
     await apiInstitute.create(data)
