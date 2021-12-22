@@ -50,7 +50,7 @@ export default function Topics() {
   }
   useEffect(() => {
     getData(search, limit, page)
-  }, [])
+  }, [topics])
 
   const onSubmit = async (data) => {
     update ? await apiTopic.update(selectedData, data)

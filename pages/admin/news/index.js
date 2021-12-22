@@ -56,7 +56,7 @@ export default function News(props) {
 
   useEffect(() => {
     getData(search, limit, page)
-  }, [])
+  }, [dataNews])
 
   const onDelete = async (id) => {
     await apiNews.deleted(id)

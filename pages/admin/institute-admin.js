@@ -59,15 +59,15 @@ export default function InstituteAdmin(props) {
       })
   }
 
-  const getInstitue = async () => {
+  const getInstitute = async () => {
     await apiInstitute.index()
       .then((res) => setAllInstitute(res.data.data))
   }
 
   useEffect(() => {
     getData(search, limit, page)
-    getInstitue()
-  }, [])
+    getInstitute()
+  }, [dataInstitute])
 
   const onDelete = async (id) => {
     await apiAdmin.deleted(id)

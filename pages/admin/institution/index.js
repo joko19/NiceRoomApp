@@ -58,7 +58,7 @@ export default function Institute() {
   useEffect(() => {
     getData(search, limit, page)
     // console.log(region.find(x => x.name = 'Chandigarh').cities)
-  }, [])
+  }, [dataInstitute])
 
   const getDetail = async (id) => {
     console.log(id)

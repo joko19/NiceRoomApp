@@ -60,7 +60,7 @@ export default function Institute() {
   }
   useEffect(() => {
     getData(search, limit, page)
-  }, [])
+  }, [dataInstitute])
 
   const onSubmit = async (data) => {
     await apiInstitute.create(data)
