@@ -54,7 +54,7 @@ export default function News(props) {
       })
   }
 
-  useEffect(async () => {
+  useEffect(() => {
     getData(search, limit, page)
   }, [])
 

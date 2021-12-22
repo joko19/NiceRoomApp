@@ -222,7 +222,7 @@ export default function InstituteAdmin(props) {
                   <select className="form border bg-white w-full p-4 rounded-lg" placeholder="Choose Institute"  {...register("institute_id", { required: true })} >
                     <option disabled>Select Institute</option>
                     {allInstitute.map((item) => (
-                      <option value={item.id}>{item.name}</option>
+                      <option key={item.id} value={item.id}>{item.name}</option>
                     ))}
                   </select>
                 </div>

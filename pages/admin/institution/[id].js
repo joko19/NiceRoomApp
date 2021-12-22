@@ -58,7 +58,7 @@ export default function Institute() {
         console.log(err)
       })
   }
-  useEffect(async () => {
+  useEffect(() => {
     getData(search, limit, page)
   }, [])
 

@@ -48,11 +48,7 @@ export default function Topics() {
         console.log(err)
       })
   }
-  useEffect(async () => {
-    getData(search, limit, page)
-  }, [])
-
-  useEffect(async () => {
+  useEffect(() => {
     getData(search, limit, page)
   }, [])
 

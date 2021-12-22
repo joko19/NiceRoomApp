@@ -55,7 +55,7 @@ export default function Institute() {
         console.log(err)
       })
   }
-  useEffect(async () => {
+  useEffect(() => {
     getData(search, limit, page)
     // console.log(region.find(x => x.name = 'Chandigarh').cities)
   }, [])
@@ -266,7 +266,7 @@ export default function Institute() {
                   <select className="form border bg-white w-full p-4 rounded-lg" placeholder="Choose Gender"  {...register("city", { required: true })} >
                     <option disabled>Select State</option>
                     {cities.map((item) => (
-                      <option value={item.name}>{item.name}</option>
+                      <option key={item.id} value={item.name}>{item.name}</option>
                     ))}
                   </select>
                 </div>
