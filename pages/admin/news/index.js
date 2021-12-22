@@ -16,7 +16,7 @@ import {
   ModalCloseButton,
   useDisclosure
 } from '@chakra-ui/react'
-import { FaAngleLeft, FaAngleRight, FaAngleDoubleLeft, FaAngleDoubleRight } from "react-icons/fa";
+import Pagination from "../../../components/Pagination/pagination";
 
 export default function News(props) {
   const [search, setSearch] = useState('')
@@ -56,7 +56,7 @@ export default function News(props) {
 
   useEffect(() => {
     getData(search, limit, page)
-  }, [dataNews])
+  }, [])
 
   const onDelete = async (id) => {
     await apiNews.deleted(id)
@@ -126,48 +126,7 @@ export default function News(props) {
                     </tbody>
                   </table>
                 </div>
-                <div className="flex mt-8 flex-row-reverse flex-end gap-4">
-                  <button className={`${page !== dataNews.last_page ? 'bg-black-6' : 'cursor-default'} rounded-full p-1`} onClick={() => {
-                    if (page !== dataNews.last_page) {
-                      getData(search, limit, dataNews.last_page)
-                    }
-                  }}>
-                    <FaAngleDoubleRight />
-                  </button>
-                  <button className={`${page < dataNews.last_page ? 'bg-black-6' : 'cursor-default'} rounded-full p-1`} onClick={() => {
-                    if (page < dataNews.last_page) {
-                      getData(search, limit, page + 1)
-                    }
-                  }}>
-                    <FaAngleRight />
-                  </button>
-                  <button className={`${page > 1 ? 'bg-black-6' : 'cursor-default'} p-1  rounded-full align-middle`} onClick={() => {
-                    if (page > 1) {
-                      getData(search, limit, page - 1)
-                    }
-                  }}>
-                    <FaAngleLeft />
-                  </button>
-                  <button className={`${page !== 1 ? 'bg-black-6' : 'cursor-default'} rounded-full p-1`} onClick={() => {
-                    if (page !== 1) {
-                      getData(search, limit, 1)
-                    }
-                  }}>
-                    <FaAngleDoubleLeft />
-                  </button>
-                  <span> {page < dataNews.last_page ? page : dataNews.last_page} - {dataNews.last_page} from {dataNews.total}</span>
-                  <select className="bg-white" value={limit} onChange={(e) => {
-                    setLimit(e.target.value)
-                    getData(search, e.target.value, page)
-                  }}>
-                    <option>1</option>
-                    <option>2</option>
-                    <option>3</option>
-                    <option>4</option>
-                    <option>5</option>
-                  </select>
-                  <span>Data per page : </span>
-                </div>
+                <Pagination page={page} lastPage={dataNews.last_page} limit={limit} search={search} total={dataNews.total} doLimit={data => setLimit(data)} doData={getData} />
               </div>
             </div>
           </div>

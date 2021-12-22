@@ -15,7 +15,7 @@ import {
   useDisclosure
 } from '@chakra-ui/react'
 import { useForm } from "react-hook-form";
-import { FaAngleLeft, FaAngleRight, FaAngleDoubleLeft, FaAngleDoubleRight } from "react-icons/fa";
+import Pagination from "../../components/Pagination/pagination";
 
 
 export default function Topics() {
@@ -48,15 +48,15 @@ export default function Topics() {
         console.log(err)
       })
   }
-  useEffect(() => {
+  useEffect(async() => {
     getData(search, limit, page)
-  }, [topics])
+  }, [])
 
   const onSubmit = async (data) => {
     update ? await apiTopic.update(selectedData, data)
-    .then((res)=> setUpdate(false)) :
-     await apiTopic.create(data)
-      .then((res) => getData(search, limit, page))
+      .then((res) => setUpdate(false)) :
+      await apiTopic.create(data)
+        .then((res) => getData(search, limit, page))
     getData(search, limit, page)
     onCloseCreateModal()
   }
@@ -134,49 +134,7 @@ export default function Topics() {
                     </tbody>
                   </table>
                 </div>
-
-                <div className="flex mt-8 flex-row-reverse flex-end gap-4">
-                  <button className={`${page !== topics.last_page ? 'bg-black-6' : 'cursor-default'} rounded-full p-1`} onClick={() => {
-                    if (page !== topics.last_page) {
-                      getData(search, limit, topics.last_page)
-                    }
-                  }}>
-                    <FaAngleDoubleRight />
-                  </button>
-                  <button className={`${page < topics.last_page ? 'bg-black-6' : 'cursor-default'} rounded-full p-1`} onClick={() => {
-                    if (page < topics.last_page) {
-                      getData(search, limit, page + 1)
-                    }
-                  }}>
-                    <FaAngleRight />
-                  </button>
-                  <button className={`${page > 1 ? 'bg-black-6' : 'cursor-default'} p-1  rounded-full align-middle`} onClick={() => {
-                    if (page > 1) {
-                      getData(search, limit, page - 1)
-                    }
-                  }}>
-                    <FaAngleLeft />
-                  </button>
-                  <button className={`${page !== 1 ? 'bg-black-6' : 'cursor-default'} rounded-full p-1`} onClick={() => {
-                    if (page !== 1) {
-                      getData(search, limit, 1)
-                    }
-                  }}>
-                    <FaAngleDoubleLeft />
-                  </button>
-                  <span> {page < topics.last_page ? page : topics.last_page} - {topics.last_page} from {topics.total}</span>
-                  <select className="bg-white" value={limit} onChange={(e) => {
-                    setLimit(e.target.value)
-                    getData(search, e.target.value, page)
-                  }}>
-                    <option>1</option>
-                    <option>2</option>
-                    <option>3</option>
-                    <option>4</option>
-                    <option>5</option>
-                  </select>
-                  <span>Data per page : </span>
-                </div>
+                <Pagination page={page} lastPage={topics.last_page} limit={limit} search={search} total={topics.total} doLimit={data => setLimit(data)} doData={getData}/>
               </div>
             </div>
           </div>

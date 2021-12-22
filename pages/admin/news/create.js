@@ -16,6 +16,7 @@ import {
   useDisclosure,
 } from '@chakra-ui/react'
 import { useQuill } from 'react-quilljs';
+import instance from "../../../action/instance";
 
 export default function Create(props) {
   const { quill, quillRef } = useQuill();
@@ -30,10 +31,39 @@ export default function Create(props) {
     setFile(e.target.files[0])
   }
 
+  // Insert Image(selected by user) to quill
+  const insertToEditor = (url) => {
+    const range = quill.getSelection();
+    quill.insertEmbed(range.index, 'image', url);
+  };
+
+  const saveToServer = async (file) => {
+    const body = new FormData();
+    body.append('file', file);
+
+    const res = await apiNews.imgUpload(body)
+    console.log(res.data.data)
+    insertToEditor(instance.pathImg + res.data.data.image);
+  };
+
+  const selectLocalImage = () => {
+    const input = document.createElement('input');
+    input.setAttribute('type', 'file');
+    input.setAttribute('accept', 'image/*');
+    input.click();
+
+    input.onchange = () => {
+      const file = input.files[0];
+      saveToServer(file);
+    };
+  };
+  
   useEffect(() => {
     if (quill) {
       quill.on('text-change', (delta, oldDelta, source) => {
         setDescription(quill.root.innerHTML)
+        quill.getModule('toolbar').addHandler('image', selectLocalImage);
+
         // console.log('Text change!');
         // console.log(quill.getText()); // Get text only
         // console.log(quill.getContents()); // Get delta contents
@@ -42,6 +72,7 @@ export default function Create(props) {
       });
     }
   }, [quill])
+
 
   const submitNews = async (req) => {
     const data = new FormData()
@@ -70,7 +101,6 @@ export default function Create(props) {
     if (event.key === 'Enter') {
       setTags([...tags, event.target.value])
       setTag('')
-      console.log(tags)
       // tags.push(event.target.value)
     }
   }
@@ -121,7 +151,7 @@ export default function Create(props) {
           <p className="mt-4" >Sub-Title</p>
           <input type="text" className="border w-full rounded p-4" placeholder="Input News Sub-Title" {...register("subtitle", { required: true })} />
           <p className="mt-4">Description</p>
-          <div className="w-full h-64 mb-16">
+          <div className="w-full h-96 mb-16">
             <div ref={quillRef} />
           </div>
           <p className="mt-4">Tags</p>

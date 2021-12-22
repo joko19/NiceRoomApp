@@ -54,7 +54,7 @@ const UserDropdown = (props) => {
       </a>
       <main
         className={
-          "fixed overflow-hidden w-full z-100 bg-green-900 bg-opacity-25 inset-0 transform ease-in-out " +
+          "fixed overflow-hidden w-full z-100 bg-gray-900 bg-opacity-25 inset-0 transform ease-in-out " +
           (open
             ? " opacity-100  "
             : "  opacity-0 translate-x-full  ")

@@ -16,9 +16,9 @@ import {
   useDisclosure
 } from '@chakra-ui/react'
 import { useForm } from "react-hook-form";
-import { FaAngleLeft, FaAngleRight, FaAngleDoubleLeft, FaAngleDoubleRight, FaEye, FaEyeSlash } from "react-icons/fa";
+import {FaEye, FaEyeSlash } from "react-icons/fa";
 import apiInstitute from "../../action/institute";
-
+import Pagination from "../../components/Pagination/pagination";
 
 export default function InstituteAdmin(props) {
   const [search, setSearch] = useState('')
@@ -67,7 +67,7 @@ export default function InstituteAdmin(props) {
   useEffect(() => {
     getData(search, limit, page)
     getInstitute()
-  }, [dataInstitute])
+  }, [])
 
   const onDelete = async (id) => {
     await apiAdmin.deleted(id)
@@ -154,48 +154,7 @@ export default function InstituteAdmin(props) {
                     </tbody>
                   </table>
                 </div>
-                <div className="flex mt-8 flex-row-reverse flex-end gap-4">
-                  <button className={`${page !== dataInstitute.last_page ? 'bg-black-6' : 'cursor-default'} rounded-full p-1`} onClick={() => {
-                    if (page !== dataInstitute.last_page) {
-                      getData(search, limit, dataInstitute.last_page)
-                    }
-                  }}>
-                    <FaAngleDoubleRight />
-                  </button>
-                  <button className={`${page < dataInstitute.last_page ? 'bg-black-6' : 'cursor-default'} rounded-full p-1`} onClick={() => {
-                    if (page < dataInstitute.last_page) {
-                      getData(search, limit, page + 1)
-                    }
-                  }}>
-                    <FaAngleRight />
-                  </button>
-                  <button className={`${page > 1 ? 'bg-black-6' : 'cursor-default'} p-1  rounded-full align-middle`} onClick={() => {
-                    if (page > 1) {
-                      getData(search, limit, page - 1)
-                    }
-                  }}>
-                    <FaAngleLeft />
-                  </button>
-                  <button className={`${page !== 1 ? 'bg-black-6' : 'cursor-default'} rounded-full p-1`} onClick={() => {
-                    if (page !== 1) {
-                      getData(search, limit, 1)
-                    }
-                  }}>
-                    <FaAngleDoubleLeft />
-                  </button>
-                  <span> {page < dataInstitute.last_page ? page : dataInstitute.last_page} - {dataInstitute.last_page} from {dataInstitute.total}</span>
-                  <select className="bg-white" value={limit} onChange={(e) => {
-                    setLimit(e.target.value)
-                    getData(search, e.target.value, page)
-                  }}>
-                    <option>1</option>
-                    <option>2</option>
-                    <option>3</option>
-                    <option>4</option>
-                    <option>5</option>
-                  </select>
-                  <span>Data per page : </span>
-                </div>
+                <Pagination page={page} lastPage={dataInstitute.last_page} limit={limit} search={search} total={dataInstitute.total} doLimit={data => setLimit(data)} doData={getData} />
               </div>
             </div>
           </div>
