@@ -17,6 +17,7 @@ import {
 } from '@chakra-ui/react'
 import { useForm } from "react-hook-form";
 import { FaAngleLeft, FaAngleRight, FaAngleDoubleLeft, FaAngleDoubleRight, FaEye, FaEyeSlash } from "react-icons/fa";
+import apiInstitute from "../../action/institute";
 
 
 export default function InstituteAdmin(props) {
@@ -24,6 +25,7 @@ export default function InstituteAdmin(props) {
   const [limit, setLimit] = useState('5')
   const [page, setPage] = useState('1')
   const [dataInstitute, setDataInstitute] = useState([])
+  const [allInstitute, setAllInstitute] = useState([])
   const { isOpen, onOpen, onClose } = useDisclosure()
   const [selectedData, setSelectedData] = useState(null)
   const [allAdmin, setAllAdmin] = useState([])
@@ -57,9 +59,14 @@ export default function InstituteAdmin(props) {
       })
   }
 
+  const getInstitue = async () => {
+    await apiInstitute.index()
+      .then((res) => setAllInstitute(res.data.data))
+  }
 
   useEffect(() => {
     getData(search, limit, page)
+    getInstitue()
   }, [])
 
   const onDelete = async (id) => {
@@ -85,7 +92,7 @@ export default function InstituteAdmin(props) {
 
   return (
     <>
-      <div className="md:py-24">
+      <div className="pt-32 md:py-24">
         <Card
           title="Institute Admin"
           right={(
@@ -214,9 +221,9 @@ export default function InstituteAdmin(props) {
                   <p className="mt-4">Institute</p>
                   <select className="form border bg-white w-full p-4 rounded-lg" placeholder="Choose Institute"  {...register("institute_id", { required: true })} >
                     <option disabled>Select Institute</option>
-                    <option value="1">Unesa</option>
-                    <option value="2">ITS</option>
-                    <option value="3">Unair</option>
+                    {allInstitute.map((item) => (
+                      <option value={item.id}>{item.name}</option>
+                    ))}
                   </select>
                 </div>
                 <div className="w-full">

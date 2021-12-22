@@ -1,5 +1,6 @@
 import instance from './instance'
 
+const index = () => instance.auth.get('/institute/all')
 const create = (data) => instance.auth.post('/institute', data)
 const all = (search, limit, page) => instance.auth.get('/institute?search=' + search + '&limit=' + limit + '&page=' + page)
 const detail = (id) => instance.auth.get('/institute/' + id)
@@ -7,6 +8,7 @@ const update = (id, data) => instance.auth.post('/institute/' + id + "?_method=P
 const deleted = (id) => instance.auth.delete('/institute/' + id)
 
 const apiInstitute = {
+  index,
   create,
   all,
   detail,

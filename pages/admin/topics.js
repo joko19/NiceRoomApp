@@ -76,7 +76,7 @@ export default function Topics() {
   }
   return (
     <>
-      <div className="md:py-24">
+      <div className="pt-24 md:py-24">
         <Card
           title="Topics"
           right={(

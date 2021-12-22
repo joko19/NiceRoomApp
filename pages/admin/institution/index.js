@@ -17,6 +17,7 @@ import {
 } from '@chakra-ui/react'
 import { useForm } from "react-hook-form";
 import { FaAngleLeft, FaAngleRight, FaAngleDoubleLeft, FaAngleDoubleRight } from "react-icons/fa";
+import { region } from "./India";
 
 export default function Institute() {
   const [search, setSearch] = useState('')
@@ -24,6 +25,7 @@ export default function Institute() {
   const [page, setPage] = useState('1')
   const [update, setUpdate] = useState(false)
   const { isOpen, onOpen, onClose } = useDisclosure()
+  const [cities, setCities] = useState([])
   const {
     isOpen: isCreateModal,
     onOpen: onOpenCreateModal,
@@ -55,6 +57,7 @@ export default function Institute() {
   }
   useEffect(async () => {
     getData(search, limit, page)
+    // console.log(region.find(x => x.name = 'Chandigarh').cities)
   }, [])
 
   const getDetail = async (id) => {
@@ -99,6 +102,11 @@ export default function Institute() {
       .catch((err) => {
         console.log(err)
       })
+  }
+
+  const chooseState =(e)=>{
+    const city = region.find(state => state.name === e.target.value).cities
+    setCities(city)
   }
 
   return (
@@ -232,33 +240,45 @@ export default function Institute() {
           <ModalBody>
             <form onSubmit={handleSubmit(onSubmit)} >
               <div className="flex gap-4">
-                <div>
+                <div className="w-full">
                   <p>Institute Name</p>
-                  <input type="text" className="form border p-4 rounded-lg" placeholder="Input Institute Name" {...register("name", { required: true })} />
+                  <input type="text" className="w-full form border p-4 rounded-lg" placeholder="Input Institute Name" {...register("name", { required: true })} />
                 </div>
-                <div>
+                <div className="w-full">
                   <p>Address</p>
                   <input type="text" className="form border p-4 rounded-lg" placeholder="Input Institute Address" {...register("address", { required: true })} />
                 </div>
               </div>
               <div className="flex gap-4">
-                <div>
+                <div className="w-full">
                   <p className="mt-4">State</p>
-                  <input type="text" className="form border p-4 rounded-lg" placeholder="Input Institute Name" {...register("state", { required: true })} />
+                  <select id="state" className="form border bg-white w-full p-4 rounded-lg" placeholder="Choose State" {...register("state", { required: true })} onChange={chooseState}>
+                    <option disabled>Select State</option>
+                    {region.map((item)=> {
+                      return (
+                        <option key={item.id} value={item.name}>{item.name}</option>
+                      )
+                    })}
+                  </select>
                 </div>
-                <div>
+                <div className="w-full">
                   <p className="mt-4">City</p>
-                  <input type="text" className="form border p-4 rounded-lg" placeholder="Input Institute Name" {...register("city", { required: true })} />
+                  <select className="form border bg-white w-full p-4 rounded-lg" placeholder="Choose Gender"  {...register("city", { required: true })} >
+                    <option disabled>Select State</option>
+                    {cities.map((item) => (
+                      <option value={item.name}>{item.name}</option>
+                    ))}
+                  </select>
                 </div>
               </div>
               <div className="flex gap-4">
-                <div>
+                <div className="w-full">
                   <p className="mt-4">Establishment Year</p>
-                  <input type="text" className="form border p-4 rounded-lg" placeholder="Input Establishment Year" {...register("establishment_year", { required: true })} />
+                  <input type="text" className=" w-full form border p-4 rounded-lg" placeholder="Input Establishment Year" {...register("establishment_year", { required: true })} />
                 </div>
-                <div>
+                <div className="w-full">
                   <p className="mt-4">Pin Code</p>
-                  <input type="number" className="form border p-4 rounded-lg" placeholder="Input 6-Digits Code Number" {...register("pin_code", { required: true })} />
+                  <input type="number" className="w-full form border p-4 rounded-lg" placeholder="Input 6-Digits Code Number" {...register("pin_code", { required: true })} />
                 </div>
               </div>
               <div className="flex flex-row-reverse gap-4 mt-4">
