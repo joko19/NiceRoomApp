@@ -1,9 +1,9 @@
+import { useEffect, useState } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { FaAngleLeft } from "react-icons/fa";
 import Card from "../../../components/Cards/Card";
 import Admin from "../../../Layout/Admin";
-import Image from "next/image";
-import { useState } from 'react'
 import apiNews from "../../../action/news";
 import { useForm } from "react-hook-form";
 import {
@@ -15,17 +15,33 @@ import {
   ModalCloseButton,
   useDisclosure,
 } from '@chakra-ui/react'
+import { useQuill } from 'react-quilljs';
 
 export default function Create(props) {
+  const { quill, quillRef } = useQuill();
   const [image, setImage] = useState(null)
   const [file, setFile] = useState()
   const [tag, setTag] = useState()
   const [tags, setTags] = useState([])
+  const [description, setDescription] = useState()
   const { register, handleSubmit, setValue, getValues, reset } = useForm();
   const chooseImage = (e) => {
     setImage(URL.createObjectURL(e.target.files[0]))
     setFile(e.target.files[0])
   }
+
+  useEffect(() => {
+    if (quill) {
+      quill.on('text-change', (delta, oldDelta, source) => {
+        setDescription(quill.root.innerHTML)
+        // console.log('Text change!');
+        // console.log(quill.getText()); // Get text only
+        // console.log(quill.getContents()); // Get delta contents
+        console.log(quill.root.innerHTML); // Get innerHTML using quill
+        // console.log(quillRef.current.firstChild.innerHTML); // Get innerHTML using quillRef
+      });
+    }
+  }, [quill])
 
   const submitNews = async (req) => {
     const data = new FormData()
@@ -36,6 +52,7 @@ export default function Create(props) {
       data.append("tags", tags[i])
     }
     data.append("image", file)
+    data.append("description", description)
     // for console log
     // for (var key of data.entries()) {
     //   console.log(key[0] + ', ' + key[1]);
@@ -104,6 +121,9 @@ export default function Create(props) {
           <p className="mt-4" >Sub-Title</p>
           <input type="text" className="border w-full rounded p-4" placeholder="Input News Sub-Title" {...register("subtitle", { required: true })} />
           <p className="mt-4">Description</p>
+          <div className="w-full h-64 mb-16">
+            <div ref={quillRef} />
+          </div>
           <p className="mt-4">Tags</p>
           <div className="flex border p-2">
             {tags.map((item) => (
