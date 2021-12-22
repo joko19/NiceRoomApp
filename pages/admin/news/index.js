@@ -79,7 +79,7 @@ export default function News(props) {
             </Link>
           )}
         >
-          <input type="text" className="p-4 border rounded-lg w-1/2 mb-4" placeholder="Search Institute" />
+          <input type="text" className="p-4 border rounded-lg w-1/2 mb-4" placeholder="Search News" />
 
           <div className="flex flex-col">
             <div className="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">

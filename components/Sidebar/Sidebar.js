@@ -52,7 +52,7 @@ function Sidebar() {
         {list.map((item) => {
           const isActive = router.pathname.indexOf(item.path) !== -1
           return (
-            <li key={item} className={` ${isActive ? 'bg-blue-1 text-white' : 'bg-white'} flex px-1 gap-4 mt-4 rounded inline-block block py-1 text-black-3 `}>
+            <li key={item} className={` ${isActive ? 'bg-blue-1 text-white shadow-lg' : 'bg-white'} flex px-1 gap-4 mt-4 rounded-lg  inline-block block py-1 text-black-3 `}>
               <Link href={'/admin' + item.path}>
                 <a className="flex gap-4 inline-block cursor-pointer p-1 rounded">
                   {isActive ? (

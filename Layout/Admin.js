@@ -18,7 +18,7 @@ console.log(props.auth)
           <div className="flex-none grow-0">
             <Sidebar />
           </div>
-          <div className="px-2 md:px-10 w-full p-8 grow">
+          <div className="px-2 md:px-10 w-full overflow-hidden p-8 grow">
             {props.children}
             {/* <FooterAdmin /> */}
           </div>
