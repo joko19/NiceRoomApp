@@ -29,9 +29,19 @@ export default function Profile(props) {
   const [avatar, setAvatar] = useState('/asset/img/blank_profile.png')
   const [file, setFile] = useState()
 
-  useEffect(() => {
-    setProfile(store.getState().auth.user.user)
-    setAvatar(instance.pathImg + store.getState().auth.user.user.avatar)
+  useEffect(async() => {
+    await apiAccount.detail()
+      .then((res) => {
+        const data = res.data.data.user
+        setValue("firstName", data.name.replace(/ .*/, ''))
+        setValue("lastName", data.name.split(' ').slice(1).join(' '))
+        setValue("phone", data.phone)
+        setValue("email", data.email)
+        setValue("gender", data.gender)
+        if(res.data.data.user.avatar !== null){
+          setAvatar(instance.pathImg + data.avatar)
+        }
+      })
   }, [])
 
   const onSubmit = async (req) => {
@@ -41,7 +51,9 @@ export default function Profile(props) {
     data.append("email", req.email)
     data.append("phone", req.phone)
     data.append("employee_id", req.employee_id)
-    data.append("avatar", file)
+    if(file){
+      data.append("avatar", file)
+    }
     // console.log(data)
     for (var key of data.entries()) {
       console.log(key[0] + ', ' + key[1]);
@@ -84,17 +96,17 @@ export default function Profile(props) {
               <div className="flex flex-col md:flex-row gap-4">
                 <div className="w-full">
                   <p>First Name</p>
-                  <input type="text" defaultValue={store.getState().auth.user.user.name.replace(/ .*/, '')} className="form border w-full p-4 rounded-lg" placeholder="Input Your First Name" {...register("firstName", { required: true })} />
+                  <input type="text"  className="form border w-full p-4 rounded-lg" placeholder="Input Your First Name" {...register("firstName", { required: true })} />
                 </div>
                 <div className="flex flex-col w-full">
                   <p>Last Name</p>
-                  <input type="text" className="form border p-4 rounded-lg" defaultValue={store.getState().auth.user.user.name.split(' ').slice(1).join(' ')} placeholder="Input Your Last Name" {...register("lastName", { required: true })} />
+                  <input type="text" className="form border p-4 rounded-lg" placeholder="Input Your Last Name" {...register("lastName", { required: true })} />
                 </div>
               </div>
               <div className="flex flex-col md:flex-row gap-4">
                 <div className="flex flex-col w-full">
                   <p>Gender</p>
-                  <select className="form border bg-white p-4 rounded-lg" placeholder="Choose Gender" defaultValue={profile.gender} {...register("gender", { required: true })} >
+                  <select className="form border bg-white p-4 rounded-lg" placeholder="Choose Gender" {...register("gender", { required: true })} >
                     <option disabled>Choose Gender</option>
                     <option value="MALE">Male</option>
                     <option value="FEMALE">Female</option>
@@ -102,17 +114,17 @@ export default function Profile(props) {
                 </div>
                 <div className="flex flex-col w-full">
                   <p>Email</p>
-                  <input type="text" className="form border p-4 rounded-lg" defaultValue={store.getState().auth.user.user.email} placeholder="Input Your Email" {...register("email", { required: true })} />
+                  <input type="text" className="form border p-4 rounded-lg"  placeholder="Input Your Email" {...register("email", { required: true })} />
                 </div>
               </div>
               <div className="flex flex-col md:flex-row gap-4">
                 <div className="flex flex-col w-full">
                   <p className="mt-4">Phone</p>
-                  <input type="number" defaultValue={store.getState().auth.user.user.phone} className="form border p-4 rounded-lg" placeholder="Input Your Number" {...register("phone", { required: true })} />
+                  <input type="number"  className="form border p-4 rounded-lg" placeholder="Input Your Number" {...register("phone", { required: true })} />
                 </div>
                 <div className="flex flex-col w-full">
                   <p className="mt-4">Employee ID (Optional)</p>
-                  <input type="number" className="form border p-4 rounded-lg" defaultValue={profile.employee_id} placeholder="Input Your Employee ID" {...register("employee_id")} />
+                  <input type="number" className="form border p-4 rounded-lg"  placeholder="Input Your Employee ID" {...register("employee_id")} />
                 </div>
               </div>
               <div className="flex flex-row-reverse gap-4 mt-4">
@@ -135,6 +147,7 @@ export default function Profile(props) {
               <div className="self-center">
                 <button className="bg-blue-1 rounded-lg text-white mt-4 block align-center p-3" onClick={() => {
                   onCloseSuccessModal()
+                  window.location.href = '/admin/dashboard'
                 }}>Okay</button>
               </div>
             </div>

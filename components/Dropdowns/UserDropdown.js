@@ -66,13 +66,13 @@ const UserDropdown = (props) => {
             // (open ? " translate-x-0 " : " translate-x-full ")
           }
         >
-          <Link href='/account/profile'>
-            <a>
+          <Link href='/account/profile' >
+            <a onClick={() => setOpen(false)}>
               <button className="text-left font-medium" onClick={closeDropdownPopover}>Edit Profile</button>
             </a>
           </Link>
           <Link href='/account/password'>
-            <a>
+            <a onClick={() => setOpen(false)}>
               <button className="font-medium">Change Password</button>
             </a>
           </Link>
