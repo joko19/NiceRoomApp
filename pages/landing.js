@@ -9,8 +9,10 @@ import apiAuth from './api/auth'
 import { useForm } from "react-hook-form";
 import { loginUser, registerUser } from '../action/auth/authAction'
 import { FaEye, FaEyeSlash } from "react-icons/fa";
+import { data } from 'autoprefixer';
 
 function Landing(props) {
+  const list = [0, 1, 2, 3]
   const [passwdLogin, setPasswdLogin] = useState(true)
   const [passwdRegister, setPasswdRegister] = useState(true)
   const [confirm, setConfirm] = useState(true)
@@ -259,86 +261,28 @@ function Landing(props) {
       <section className="bg-blue-1 py-20">
         <h1 className="text-white font-bold text-4xl ml-16">Upcoming Exams</h1>
         <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4">
-          <div className="bg-white rounded-lg p-6 m-4">
-            <div className="flex flex-row ">
-              <img src="/asset/icon/ic_paper.png" />
-              <p className="font-bold self-center ml-2">The Hindu Vocab Exam</p>
-            </div>
-            <div className="flex justify-between">
-              <div className="text-black-3">
-                <p>Duration</p>
-                <p>Number of Section</p>
-                <span>Started</span>
+          {list.map((item) => (
+            <div key={item} className="bg-white rounded-lg p-6 m-4">
+              <div className="flex flex-row ">
+                <img className='w-10 h-10' src="/asset/icon/ic_paper.png" />
+                <p className="font-bold self-center ml-2">The Hindu Vocab Exam</p>
               </div>
-              <div className="text-right text-black-5">
-                <p>120 mins</p>
-                <p>3 Section</p>
-                <span>30 mins ago</span>
+              <div className="flex justify-between">
+                <div className="text-black-3">
+                  <p>Duration</p>
+                  <p>Number of Section</p>
+                  <span>Started</span>
+                </div>
+                <div className="text-right text-black-5">
+                  <p>120 mins</p>
+                  <p>3 Section</p>
+                  <span>30 mins ago</span>
+                </div>
               </div>
+              <div className="text-blue-1 text-center bg-red border-blue-900 border rounded-lg mt-4 p-2 ">Start Exam</div>
+              <p className="text-black-3 text-center my-4">200 Student are writing this exam</p>
             </div>
-            <div className="text-blue-1 text-center bg-red border-blue-900 border rounded-lg mt-4 p-2 ">Start Exam</div>
-            <p className="text-black-3 text-center my-4">200 Student are writing this exam</p>
-          </div>
-          <div className="bg-white rounded-lg p-6 m-4">
-            <div className="flex flex-row ">
-              <img src="/asset/icon/ic_paper.png" />
-              <p className="font-bold self-center ml-2">The Hindu Vocab Exam</p>
-            </div>
-            <div className="flex justify-between">
-              <div className="text-black-3">
-                <p>Duration</p>
-                <p>Number of Section</p>
-                <span>Started</span>
-              </div>
-              <div className="text-right text-black-5">
-                <p>120 mins</p>
-                <p>3 Section</p>
-                <span>30 mins ago</span>
-              </div>
-            </div>
-            <div className="text-blue-1 text-center bg-red border-blue-900 border rounded-lg mt-4 p-2 ">Start Exam</div>
-            <p className="text-black-3 text-center my-4">200 Student are writing this exam</p>
-          </div>
-          <div className="bg-white rounded-lg p-6 m-4">
-            <div className="flex flex-row ">
-              <img src="/asset/icon/ic_paper.png" />
-              <p className="font-bold self-center ml-2">The Hindu Vocab Exam</p>
-            </div>
-            <div className="flex justify-between">
-              <div className="text-black-3">
-                <p>Duration</p>
-                <p>Number of Section</p>
-                <span>Started</span>
-              </div>
-              <div className="text-right text-black-5">
-                <p>120 mins</p>
-                <p>3 Section</p>
-                <span>30 mins ago</span>
-              </div>
-            </div>
-            <div className="text-blue-1 text-center bg-red border-blue-900 border rounded-lg mt-4 p-2 ">Start Exam</div>
-            <p className="text-black-3 text-center my-4">200 Student are writing this exam</p>
-          </div>
-          <div className="bg-white rounded-lg p-6 m-4">
-            <div className="flex flex-row ">
-              <img src="/asset/icon/ic_paper.png" />
-              <p className="font-bold self-center ml-2">The Hindu Vocab Exam</p>
-            </div>
-            <div className="flex justify-between">
-              <div className="text-black-3">
-                <p>Duration</p>
-                <p>Number of Section</p>
-                <span>Started</span>
-              </div>
-              <div className="text-right text-black-5">
-                <p>120 mins</p>
-                <p>3 Section</p>
-                <span>30 mins ago</span>
-              </div>
-            </div>
-            <div className="text-blue-1 text-center bg-red border-blue-900 border rounded-lg mt-4 p-2 ">Start Exam</div>
-            <p className="text-black-3 text-center my-4">200 Student are writing this exam</p>
-          </div>
+          ))}
         </div>
       </section>
 

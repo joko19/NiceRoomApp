@@ -7,27 +7,21 @@ function Header(props) {
   const menu = [
     {
       id: 0,
-      slug: '/test-series',
-      name: 'Test Series'
-    },
-    {
-
-      id: 1,
       slug: '/quizzes',
       name: 'Quizzes'
     },
     {
-      id: 2,
+      id: 1,
       slug: '/prev-paper',
       name: 'Prev Paper'
     },
     {
-      id: 3,
+      id: 2,
       slug: '/upcoming-exam',
       name: 'Upcoming Exam'
     },
     {
-      id: 4,
+      id: 3,
       slug: '/exam',
       name: 'Exam'
     },
@@ -41,7 +35,7 @@ function Header(props) {
         <ul className="pt-4 hidden md:flex text-white flex flex-row gap-5">
           {menu.map((item) => {
             const status = {
-              color : item.slug === pathname ? 'text-white border-b' : 'text-gray-400'
+              color : item.slug === pathname ? 'text-yellow-1 font-bold border-b border-yellow-1' : 'text-white'
             } 
             return(
             <li key={item.id} className={status.color}><Link href={item.slug}><a>{item.name}</a></Link></li>

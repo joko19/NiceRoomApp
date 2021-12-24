@@ -1,12 +1,20 @@
+import Link from "next/link";
 import Footer from "../components/footer/footer"
 import Header from '../components/Navbar/header';
+import {FaAngleRight} from 'react-icons/fa'
 
 function UpcomingExam() {
   const list = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16]
   return (
     <div className=" bg-black-8 pt-20" >
       <Header />
-      <div className="py-4 md:mx-40 my-20">
+      <div className="py-4 md:mx-32 my-16">
+        <div className='flex gap-1'>
+          <Link href="/landing">
+            <a className='mb-12 text-black-5'>Home</a>
+          </Link>
+          <FaAngleRight className='mt-1' /> <span className='text-blue-1'>Upcoming Exam</span>
+        </div>
         <div className="flex gap-8 align-text-bottom">
           <h1 className="text-3xl">Upcoming Exsams</h1><span className="text-2xl text-blue-1 align-text-bottom inline-block">See All</span>
         </div>

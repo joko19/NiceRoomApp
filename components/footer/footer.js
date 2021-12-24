@@ -1,6 +1,8 @@
 import React from 'react'
+import Image from 'next/image'
+
 function Footer(props) {
-  const product = ['Test Series', 'Quizzes', 'Prev Paper', 'Upcoming Exam', 'Exams']
+  const product = ['Quizzes', 'Prev Paper', 'Upcoming Exam', 'Exams']
   const about = ['Vision & Mission', 'Our Team', 'Platforms', 'Funding', 'Careers']
   return (
     <div div className={`w-full  bg-blue-1 text-white py-5`}>
@@ -11,9 +13,15 @@ function Footer(props) {
             Lorem ipsum dolor amet, consectetur adipiscing elit. Eget nisl nunc quam ac sed turpis volutpat. Cursus sed massa non nisi, placerat.
           </p>
           <div className="flex mt-4 gap-4">
-            <img src="/asset/icon/ic_instagram.png" alt="instagram" />
-            <img src="/asset/icon/ic_twitter.png" alt="twitter" />
-            <img src="/asset/icon/ic_youtube.png" alt="youtube" />
+            <div className='w-8'>
+              <img className='object-cover' src="/asset/icon/footer/ic_instagram.png" alt="instagram" />
+            </div>
+            <div  className='w-8'>
+              <img className='object-cover' src="/asset/icon/footer/ic_twitter.png" alt="twitter" />
+            </div>
+            <div  className='w-8'>
+              <img className='object-cover' src="/asset/icon/footer/ic_youtube.png" alt="youtube" />
+            </div>
           </div>
         </div>
         <div>
@@ -35,9 +43,9 @@ function Footer(props) {
         <div>
           <h1 className="font-bold text-xl">Reach Us </h1>
           <ul className="text-sm mt-6">
-            <li className="mb-4"><img src="/asset/icon/ic_Message.png" className="inline w-6 mr-2" />hello@examz.io</li>
-            <li className="mb-4"><img src="/asset/icon/ic_Mobile.png" className="inline w-6 mr-2" /> +91 01234 56789</li>
-            <li className="mb-4"><img src="/asset/icon/ic_Location.png" className="inline w-6 mr-2" /> 772 Mountain Ave
+            <li className="mb-4"><img src="/asset/icon/footer/ic_mail.png" className="inline w-6 mr-2" />hello@examz.io</li>
+            <li className="mb-4"><img src="/asset/icon/footer/ic_phone.png" className="inline w-6 mr-2" /> +91 01234 56789</li>
+            <li className="mb-4"><img src="/asset/icon/footer/ic_location.png" className="inline w-6 mr-2" /> 772 Mountain Ave
               Bangalore, India 92451</li>
           </ul>
         </div>
