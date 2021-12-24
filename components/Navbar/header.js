@@ -29,7 +29,7 @@ function Header(props) {
   const { pathname } = useRouter();
   return (
     <div className="flex bg-blue-1 md:px-12 py-4 gap-8 justify-between fixed w-full top-0 z-50">
-      <h1 className="text-white text-4xl mx-4"><Link href="/"><a> Examz.</a></Link></h1>
+      <h1 className="text-white text-4xl mx-4"><Link href="/landing"><a> Examz.</a></Link></h1>
       {!props.name && (
         <div>
         <ul className="pt-4 hidden md:flex text-white flex flex-row gap-5">
