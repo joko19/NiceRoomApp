@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React, {useState } from "react";
 import { createPopper } from "@popperjs/core";
 import { FiChevronDown, FiX } from 'react-icons/fi'
 import { useRouter } from "next/router";

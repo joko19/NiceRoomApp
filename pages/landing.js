@@ -76,7 +76,7 @@ function Landing(props) {
     <>
       <section className="banner full-height">
         <Header />
-        <div className="grid md:grid-cols-2 mt-12">
+        <div className="grid md:grid-cols-2 ">
           <div className="pt-36 pl-36 hidden md:flex md:flex-col text-white">
             <h1 className="font-bold text-5xl">All-in-One Sites <br />
               for Preparation Exam</h1>
@@ -124,37 +124,45 @@ function Landing(props) {
               <input type="text" className="p-4 border rounded-xl w-full" placeholder="Input Your Email" {...register("email", { required: true })} />
               <p className="mt-4">Phone</p>
               <input type="number" className="p-4 border rounded-xl w-full" placeholder="Input Your Phone Number"{...register("phone", { required: true })} />
-              <p className="mt-4">Password</p>
-              <div className="relative">
-                <input type={`${passwdRegister ? 'password' : 'text'}`} className="form w-full border p-4 rounded-lg" placeholder="Input Your Password" {...register("password", { required: true })} />
-                <span className="absolute inset-y-0 cursor-pointer right-0 pr-3 flex items-center text-sm leading-5" onClick={() => {
-                  passwdRegister ? setPasswdRegister(false) : setPasswdRegister(true)
-                }}>
-                  {passwdRegister ?
-                    (<FaEyeSlash className=" z-10 inline-block align-middle" />) :
-                    (<FaEye className=" z-10 inline-block align-middle" />)
-                  }
-                </span>
+              <div className='flex gap-4'>
+                <div>
+                  <p className="mt-4">Password</p>
+                  <div className="relative">
+                    <input type={`${passwdRegister ? 'password' : 'text'}`} className="form w-full border p-4 rounded-lg" placeholder="Input Your Password" {...register("password", { required: true })} />
+                    <span className="absolute inset-y-0 cursor-pointer right-0 pr-3 flex items-center text-sm leading-5" onClick={() => {
+                      passwdRegister ? setPasswdRegister(false) : setPasswdRegister(true)
+                    }}>
+                      {passwdRegister ?
+                        (<FaEyeSlash className=" z-10 inline-block align-middle" />) :
+                        (<FaEye className=" z-10 inline-block align-middle" />)
+                      }
+                    </span>
+                  </div>
+                </div>
+                <div>
+                  <p className="mt-4">Password Confirmation</p>
+                  <div className="relative">
+                    <input type={`${confirm ? 'password' : 'text'}`} className="form w-full border p-4 rounded-lg" placeholder="Confirmation Password" {...register("password_confirmation", { required: true })} />
+                    <span className="absolute inset-y-0 cursor-pointer right-0 pr-3 flex items-center text-sm leading-5" onClick={() => {
+                      confirm ? setConfirm(false) : setConfirm(true)
+                    }}>
+                      {confirm ?
+                        (<FaEyeSlash className=" z-10 inline-block align-middle" />) :
+                        (<FaEye className=" z-10 inline-block align-middle" />)
+                      }
+                    </span>
+                  </div>
+
+                </div>
               </div>
-              <p className="mt-4">Password Confirmation</p>
-              <div className="relative">
-                <input type={`${confirm ? 'password' : 'text'}`} className="form w-full border p-4 rounded-lg" placeholder="Confirmation Your Password" {...register("password_confirmation", { required: true })} />
-                <span className="absolute inset-y-0 cursor-pointer right-0 pr-3 flex items-center text-sm leading-5" onClick={() => {
-                  confirm ? setConfirm(false) : setConfirm(true)
-                }}>
-                  {confirm ?
-                    (<FaEyeSlash className=" z-10 inline-block align-middle" />) :
-                    (<FaEye className=" z-10 inline-block align-middle" />)
-                  }
-                </span>
-              </div>
+
               <button className="w-full bg-yellow-1 text-white p-2 mt-4 rounded-xl" >Register</button>
               <p className="text-right mt-2 text-black-3">Do you have account ? <button onClick={() => onChangeForm('login')}> Login </button></p>
             </form>
           )}
 
           {formStatus === 'forgotPassword' && (
-            <form onSubmit={handleSubmit(onForgot)} className="my-40 bg-white rounded-lg p-4 m-4 md:m-24">
+            <form onSubmit={handleSubmit(onForgot)} className="my-40 bg-white rounded-lg p-4 md:mt-64  m-4 md:m-24">
               <h1 className="text-xl text-center">Forgot Password ?</h1>
               <p className="text-black-3 text-center">Enter your email or phone number to reset your password.</p>
               <p className="mt-4">Email</p>
