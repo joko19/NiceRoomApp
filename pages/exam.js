@@ -21,21 +21,28 @@ function Exam() {
         </div>
         <div className=" grid md:grid-cols-3 gap-4 my-4">
           {list.map((item) => (
-            <div key={item} className="bg-white rounded-lg p-6 m-4">
-              <div className="flex flex-row ">
-                <img src="/asset/icon/ic_a+_yellow.png" alt="icon exam" />
-                <p className="font-bold self-center ml-2">The Hindu Vocab Exam</p>
-              </div>
-              <div className="flex justify-between">
-                <div className="text-black-3">
-                  <p>Duration</p>
-                  <p>Number of Section</p>
-                  <span>Started</span>
+            <div key={item} className="bg-white rounded-lg p-6">
+              <div className="flex flex-row gap-4">
+                <img className='w-12 h-12' src="/asset/icon/ic_a+_yellow.png" alt="icon paper" />
+                <div className='w-full'>
+                  <div className='flex justify-between'>
+                    <p className="font-bold self-center">The Hindu Vocab Exam</p><img className='inline ml-2' src="/asset/icon/ic_live_text.png" />
+                  </div>
+                  <p className="text-black-3 text-sm">By <span className='text-blue-1'>Student University</span> Engineering</p>
                 </div>
-                <div className="text-right text-black-5">
-                  <p>120 mins</p>
-                  <p>3 Section</p>
-                  <span>30 mins ago</span>
+              </div>
+              <div className="flex flex-col mt-4">
+                <div className="flex gap-2 text-black-3">
+                  <img className='w-4 h-4' src="/asset/icon/ic_clock.png" alt="icon paper" />
+                  <span>120 mins duration </span>
+                </div>
+                <div className="flex gap-2 text-black-3">
+                  <img className='w-4 h-4' src="/asset/icon/ic_signal.png" alt="icon paper" />
+                  <span>3 Section</span>
+                </div>
+                <div className="flex gap-2 text-black-3">
+                  <img className='w-4 h-4' src="/asset/icon/ic_date.png" alt="icon paper" />
+                  <span>12 Jan ~ 20 Feb 2020</span>
                 </div>
               </div>
               <button className="bg-blue-1 text-white justify-center w-full py-2 rounded-lg mt-4">Start Exam</button>
@@ -51,21 +58,26 @@ function Exam() {
         </div>
         <div className=" grid md:grid-cols-3 gap-4 my-4">
           {list.map((item) => (
-            <div key={item} className="bg-white rounded-lg p-6 m-4">
-              <div className="flex flex-row ">
-                <img src="/asset/icon/ic_a+_yellow.png" alt="icon exam" />
-                <p className="font-bold self-center ml-2">The Hindu Vocab Exam</p>
-              </div>
-              <div className="flex justify-between">
-                <div className="text-black-3">
-                  <p>Duration</p>
-                  <p>Number of Section</p>
-                  <span>Started</span>
+            <div key={item} className="bg-white rounded-lg p-6">
+              <div className="flex flex-row gap-4">
+                <img className='w-12 h-12' src="/asset/icon/ic_a+_yellow.png" alt="icon paper" />
+                <div>
+                  <p className="font-bold self-center">The Hindu Vocab Exam</p>
+                  <p className="text-black-3 text-sm">By <span className='text-blue-1'>Student University</span> Engineering</p>
                 </div>
-                <div className="text-right text-black-5">
-                  <p>120 mins</p>
-                  <p>3 Section</p>
-                  <span>30 mins ago</span>
+              </div>
+              <div className="flex flex-col mt-4">
+                <div className="flex gap-2 text-black-3">
+                  <img className='w-4 h-4' src="/asset/icon/ic_clock.png" alt="icon paper" />
+                  <span>120 mins duration </span>
+                </div>
+                <div className="flex gap-2 text-black-3">
+                  <img className='w-4 h-4' src="/asset/icon/ic_signal.png" alt="icon paper" />
+                  <span>3 Section</span>
+                </div>
+                <div className="flex gap-2 text-black-3">
+                  <img className='w-4 h-4' src="/asset/icon/ic_date.png" alt="icon paper" />
+                  <span>12 Jan ~ 20 Feb 2020</span>
                 </div>
               </div>
               <button className="bg-blue-1 text-white justify-center w-full py-2 rounded-lg mt-4">Start Exam</button>
@@ -81,21 +93,26 @@ function Exam() {
         </div>
         <div className=" grid md:grid-cols-3 gap-4 my-4">
           {list.map((item) => (
-            <div key={item} className="bg-white rounded-lg p-6 m-4">
-              <div className="flex flex-row ">
-                <img src="/asset/icon/ic_a+_yellow.png" alt="icon exam" />
-                <p className="font-bold self-center ml-2">The Hindu Vocab Exam</p>
-              </div>
-              <div className="flex justify-between">
-                <div className="text-black-3">
-                  <p>Duration</p>
-                  <p>Number of Section</p>
-                  <span>Started</span>
+            <div key={item} className="bg-white rounded-lg p-6">
+              <div className="flex flex-row gap-4">
+                <img className='w-12 h-12' src="/asset/icon/ic_a+_yellow.png" alt="icon paper" />
+                <div>
+                  <p className="font-bold self-center">The Hindu Vocab Exam</p>
+                  <p className="text-black-3 text-sm">By <span className='text-blue-1'>Student University</span> Engineering</p>
                 </div>
-                <div className="text-right text-black-5">
-                  <p>120 mins</p>
-                  <p>3 Section</p>
-                  <span>30 mins ago</span>
+              </div>
+              <div className="flex flex-col mt-4">
+                <div className="flex gap-2 text-black-3">
+                  <img className='w-4 h-4' src="/asset/icon/ic_clock.png" alt="icon paper" />
+                  <span>120 mins duration </span>
+                </div>
+                <div className="flex gap-2 text-black-3">
+                  <img className='w-4 h-4' src="/asset/icon/ic_signal.png" alt="icon paper" />
+                  <span>3 Section</span>
+                </div>
+                <div className="flex gap-2 text-black-3">
+                  <img className='w-4 h-4' src="/asset/icon/ic_date.png" alt="icon paper" />
+                  <span>12 Jan ~ 20 Feb 2020</span>
                 </div>
               </div>
               <button className="bg-blue-1 text-white justify-center w-full py-2 rounded-lg mt-4">Start Exam</button>
