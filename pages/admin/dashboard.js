@@ -141,7 +141,7 @@ export default function Index(props) {
           <h1 className="p-4 font-bold">List Institute</h1>
           <input type="text" className="p-4 border rounded-lg w-full mb-4" placeholder="Search Institute" />
           {institute.map((item) => (
-            <div className="border-b py-4">
+            <div key={item} className="border-b py-4">
               <span className="border p-2 rounded">{item}</span><span className="font-bold"> &nbsp; Institute {item}</span><span className="text-black-5" > (200 Student)</span>
             </div>
           ))}
