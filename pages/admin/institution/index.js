@@ -204,7 +204,7 @@ export default function Institute() {
                 </div>
                 <div className="w-full">
                   <p>Address</p>
-                  <input type="text" className="form border p-4 rounded-lg" placeholder="Input Institute Address" {...register("address", { required: true })} />
+                  <input type="text" className="form border w-full p-4 rounded-lg" placeholder="Input Institute Address" {...register("address", { required: true })} />
                 </div>
               </div>
               <div className="flex gap-4">

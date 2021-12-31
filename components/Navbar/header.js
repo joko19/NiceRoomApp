@@ -3,6 +3,7 @@ import Link from 'next/link'
 import { useRouter } from 'next/router';
 import UserDropdown from '../Dropdowns/UserDropdown';
 import apiExam from "../../action/exam";
+import { Select } from '@chakra-ui/react'
 
 function Header(props) {
   const [active, setActive] = useState(false);
@@ -62,15 +63,16 @@ function Header(props) {
         </div>
 
         <div className="md:flex hidden md:flex-row flex-col gap-4 justify-center">
-          <select defaultValue="Category" className="bg-white text-blue-1 rounded-lg p-3 mx-4">
-            <option disabled>Category</option>
+          <Select defaultValue="Select Category" placeholder="Select Category" bg='white' className="text-blue-1" size="lg" variant='outline' iconColor="blue">
             {category.map((item) => (
               <option key={item.id}>{item.name}</option>
             ))}
-          </select>
+          </Select>
           <Link href="landing">
-            <a className="text-white border rounded-lg p-3">
-              Register
+            <a className="flex text-white border-2 rounded-lg h-full px-4">
+              <span className="m-auto">
+                Register
+              </span>
             </a>
           </Link>
         </div>

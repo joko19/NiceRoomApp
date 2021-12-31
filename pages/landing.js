@@ -12,7 +12,7 @@ import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { data } from 'autoprefixer';
 
 function Landing(props) {
-  const list = [0, 1, 2, 3]
+  const list = [1, 2, 3]
   const [passwdLogin, setPasswdLogin] = useState(true)
   const [passwdRegister, setPasswdRegister] = useState(true)
   const [confirm, setConfirm] = useState(true)
@@ -101,7 +101,7 @@ function Landing(props) {
                     }
                   </span>
                 </div>
-                <span className="text-right text-end mt-2 text-black-3 cursor-pointer" onClick={() => setFormStatus('forgotPassword')}>Forgot Password</span>
+                <span className="text-right text-end mt-2 text-black-3 cursor-pointer hover:text-blue-1" onClick={() => setFormStatus('forgotPassword')}>Forgot Password ?</span>
                 <button type="submit" className="w-full bg-yellow-1 text-white p-3 mt-4 rounded-xl" onClick={() => onLogin()}>Login</button>
               </form>
               <p className="text-center m-4 text-black-4">or continue with</p>
@@ -109,8 +109,7 @@ function Landing(props) {
                 <button className="flex w-full justify-center gap-4 border px-6 py-3 border-yellow-1 rounded-lg" onClick={() => onLoginFacebook()}><img src="/asset/icon/ic_facebook.png" alt="login with facebook" /> Facebook</button>
                 <button className="flex w-full  gap-4 justify-center border px-6 py-3 border-yellow-1 rounded-lg" onClick={() => onLoginGoogle()}><img src="/asset/icon/ic_google.png" alt="login with google" /> Google</button>
               </div>
-              <p className="text-right mt-2 text-black-3">Dont you have account ?  <button onClick={() => onChangeForm('register')}>Register</button></p>
-
+              <p className="text-right mt-2 text-black-3">Dont you have account ?  <button className='text-blue-1 font-bold' onClick={() => onChangeForm('register')}>Register</button></p>
             </div>
           )}
 
@@ -175,7 +174,7 @@ function Landing(props) {
         </div>
       </section>
 
-      <section className="grid xl:grid-cols-3 md:p-1 m-4 my-20">
+      <section className="grid xl:grid-cols-3 md:mx-16 my-20">
         <div className="m-2">
           <img src="/asset/icon/ic_question.png" />
           <h1 className="font-bold text-2xl mt-4">Top Quality Questions</h1>
@@ -232,7 +231,7 @@ function Landing(props) {
       <section className="py-20">
         <h1 className="text-2xl text-center font-bold text-blue-1 p-1">Real story from our student</h1>
         <p className="text-black-4 mt-4 text-center">Read and get inspired by stories from our happy student</p>
-        <div className="grid grid-cols-1 md:grid-cols-3 xl:grid-cols-3 md:px-24 mt-12">
+        <div className="grid grid-cols-1 md:grid-cols-3 xl:grid-cols-3 md:px-20 mt-12">
           <div className=" filter drop-shadow-lg bg-white p-8 mx-4">
             <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Intega aliquam lectus risus ut vestibulum consequat comodo lorem. Risus, in eget tristique commodo lectus mattis et.</p>
             <div className="flex flex-row mt-4">
@@ -266,29 +265,34 @@ function Landing(props) {
         </div>
       </section>
 
-      <section className="bg-blue-1 py-20">
-        <h1 className="text-white font-bold text-4xl ml-16">Upcoming Exams</h1>
-        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4">
+      <section className="bg-blue-1 py-20 px-20">
+        <h1 className="text-white font-bold text-4xl mb-4">Upcoming Exams</h1>
+        <div className="grid grid-cols-1 md:grid-cols-3 xl:grid-cols-3 gap-4">
           {list.map((item) => (
-            <div key={item} className="bg-white rounded-lg p-6 m-4">
-              <div className="flex flex-row ">
-                <img className='w-10 h-10' src="/asset/icon/ic_paper.png" />
-                <p className="font-bold self-center ml-2">The Hindu Vocab Exam</p>
-              </div>
-              <div className="flex justify-between">
-                <div className="text-black-3">
-                  <p>Duration</p>
-                  <p>Number of Section</p>
-                  <span>Started</span>
-                </div>
-                <div className="text-right text-black-5">
-                  <p>120 mins</p>
-                  <p>3 Section</p>
-                  <span>30 mins ago</span>
+            <div key={item} className="bg-white rounded-lg p-6">
+              <div className="flex flex-row gap-4">
+                <img className='w-12 h-12' src="/asset/icon/ic_a+_yellow.png" alt="icon paper" />
+                <div>
+                  <p className="font-bold self-center">The Hindu Vocab Exam</p>
+                  <p className="text-black-3 text-sm">By <span className='text-blue-1'>Student University</span> Engineering</p>
                 </div>
               </div>
-              <div className="text-blue-1 text-center bg-red border-blue-900 border rounded-lg mt-4 p-2 ">Start Exam</div>
-              <p className="text-black-3 text-center my-4">200 Student are writing this exam</p>
+              <div className="flex flex-col mt-4">
+                <div className="flex gap-2 text-black-3">
+                  <img className='w-4 h-4' src="/asset/icon/ic_clock.png" alt="icon paper" />
+                  <span>120 mins duration </span>
+                </div>
+                <div className="flex gap-2 text-black-3">
+                  <img className='w-4 h-4' src="/asset/icon/ic_signal.png" alt="icon paper" />
+                  <span>3 Section</span>
+                </div>
+                <div className="flex gap-2 text-black-3">
+                  <img className='w-4 h-4' src="/asset/icon/ic_date.png" alt="icon paper" />
+                  <span>12 Jan ~ 20 Feb 2020</span>
+                </div>
+              </div>
+              <button className="bg-blue-1 text-white justify-center w-full py-2 rounded-lg mt-4">Start Exam</button>
+              <p className="text-black-3 text-sm text-center my-4">200 Student are writing this exam</p>
             </div>
           ))}
         </div>
@@ -298,7 +302,7 @@ function Landing(props) {
         <h1 className="text-2xl text-center font-bold text-blue-1 p-1">Lates news from us</h1>
         <p className="text-black-4 mx-8 mt-1 text-center">Read and get inspired by these latest news curated by us</p>
 
-        <div className="grid md:grid-cols-3 px-4 gap-4 md:px-8 mt-8">
+        <div className="grid md:grid-cols-3 px-4 gap-4 md:px-20 mt-8">
           <div>
             <img src="/asset/img/news1.png" alt="news image" />
             <p className="text-black-3">12/07/2021</p>
