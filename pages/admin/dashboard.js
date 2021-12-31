@@ -14,7 +14,7 @@ export default function Index(props) {
       <div className="flex">
         <div className=" w-full">
           <div className="flex gap-2">
-            <div className="flex w-full gap-4 p-4 bg-white rounded-lg ml-4 my-4">
+            <div className="flex w-full gap-4 p-4 bg-white rounded-lg my-4">
               <img src="/asset/icon/table/ic_school.png" />
               <div>
                 <p className="font-bold text-blue-1 text-2xl">
@@ -33,7 +33,7 @@ export default function Index(props) {
               </div>
             </div>
           </div>
-          <div className="pl-4">
+          <div>
             <Card
               className="w-full  bg-white"
               title="Operator Team"

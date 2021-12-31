@@ -48,7 +48,7 @@ function Sidebar() {
   ]
   return (
     <>
-      <ul className="py-24 px-4 inline-block bg-white h-full lg:inline-block hidden">
+      <ul className="py-24 px-4 inline-block bg-white w-60 h-full lg:inline-block hidden">
         {list.map((item) => {
           const isActive = router.pathname.indexOf(item.path) !== -1
           return (
