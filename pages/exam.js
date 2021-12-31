@@ -16,7 +16,7 @@ function Exam() {
           <FaAngleRight className='mt-1' /> <span className='text-blue-1'>Exam</span>
         </div>
         <div className="flex gap-4 align-text-bottom">
-          <img src="/asset/icon/ic_live_transparent.png" alt="icon live" />
+          <img className="w-10 h-10" src="/asset/icon/ic_live_transparent.png" alt="icon live" />
           <h1 className="text-2xl">Live Quiz</h1><span className="text-xl text-blue-1 align-text-bottom inline-block">See All</span>
         </div>
         <div className=" grid md:grid-cols-3 gap-4 my-4">
