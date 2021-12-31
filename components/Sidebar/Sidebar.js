@@ -6,7 +6,7 @@ function Sidebar() {
   const uri = "/asset/icon/sidebar/"
   const list = [{
     icon: uri + 'ic_home.png',
-    active: uri + 'ic_home.png',
+    active: uri + 'ic_home_active.png',
     name: 'Home',
     path: '/dashboard'
   }, {
