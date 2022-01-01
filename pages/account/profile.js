@@ -120,7 +120,7 @@ export default function Profile(props) {
               <div className="flex flex-col md:flex-row gap-4">
                 <div className="flex flex-col w-full">
                   <p className="mt-4">Phone</p>
-                  <input type="number"  className="form border p-4 rounded-lg" placeholder="Input Your Number" {...register("phone", { required: true })} />
+                  <input type="number"  className="form border p-4 rounded-lg" placeholder="Input Your Number" {...register("phone")} />
                 </div>
                 <div className="flex flex-col w-full">
                   <p className="mt-4">Employee ID (Optional)</p>
