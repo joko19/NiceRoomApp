@@ -74,6 +74,14 @@ export default function Institute() {
     onOpenSuccessModal()
   }
 
+  const searchBranch = async(keyword) => {
+    await apiInstitute.searchBranch(id, keyword)
+      .then((res) => {
+        setList(res.data.data.branches)
+        console.log(res.data.data)
+      })
+  }
+
   const onDelete = async (id) => {
     await apiInstitute.deleted(id)
       .then((res) => {
@@ -82,11 +90,6 @@ export default function Institute() {
       .catch((err) => {
         console.log(err)
       })
-  }
-
-  const onSearch = (e) => {
-    console.log(e.target.value)
-
   }
 
   return (
@@ -122,7 +125,8 @@ export default function Institute() {
           <h1 className="font-bold text-xl my-2">List Branch</h1>
           <input type="text" className="p-4 border rounded-lg w-1/2 mb-4" placeholder="Search Institute" onChange={(e) => {
             setSearch(e.target.value)
-            getData(e.target.value, limit, page)
+            searchBranch(e.target.value)
+            // getData(e.target.value, limit, page)
           }} />
 
           <div className="flex flex-col">
@@ -157,18 +161,15 @@ export default function Institute() {
                           </td>
                           <td className="px-6 py-4 whitespace-nowrap ">{item.establishment_year}</td>
                           <td className="px-6 py-4 whitespace-nowrap flex text-right gap-2 text-sm font-medium">
-                            <a href="#" className="text-indigo-600 hover:text-indigo-900">
-                              <Image src="/asset/icon/table/fi_eye.png" width={16} height={16} alt="icon edit" />
-                            </a>
-                            <a href="#" className="text-indigo-600 hover:text-indigo-900">
-                              <Image src="/asset/icon/table/fi_edit.png" width={16} height={16} alt="icon edit" />
-                            </a>
-                            <button href="#" className="text-indigo-600 hover:text-indigo-900">
-                              <Image src="/asset/icon/table/fi_trash-2.png" width={16} height={16} alt="icon deleted" onClick={() => {
-                                setSelectedData(item.id),
-                                  onOpen()
-                              }} />
-                            </button>
+                            {item.status === 'approve' && (
+                              <span className="text-green-1">Accepted</span>
+                            )}
+                            {item.status === 'pending' && (
+                              <span className="text-yellow-1">Pending</span>
+                            )}
+                            {item.status === 'reject' && (
+                              <span className="text-red-1">Rejected</span>
+                            )}
                           </td>
                         </tr>
                       ))}

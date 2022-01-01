@@ -6,6 +6,7 @@ const all = (search, limit, page) => instance.auth.get('/institute?search=' + se
 const detail = (id) => instance.auth.get('/institute/' + id)
 const update = (id, data) => instance.auth.post('/institute/' + id + "?_method=PUT", data)
 const deleted = (id) => instance.auth.delete('/institute/' + id)
+const searchBranch = (id, keyword) => instance.auth.get('/institute/' + id + '?search=' + keyword)
 
 const apiInstitute = {
   index,
@@ -13,7 +14,8 @@ const apiInstitute = {
   all,
   detail,
   update,
-  deleted
+  deleted,
+  searchBranch
 }
 
 export default apiInstitute
