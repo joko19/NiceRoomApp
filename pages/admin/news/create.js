@@ -22,12 +22,14 @@ export default function Create(props) {
   const { quill, quillRef } = useQuill();
   const [image, setImage] = useState(null)
   const [file, setFile] = useState()
+  const [coverName, setCoverName] = useState()
   const [tag, setTag] = useState()
   const [tags, setTags] = useState([])
   const [description, setDescription] = useState()
   const { register, handleSubmit, setValue, getValues, reset } = useForm();
   const chooseImage = (e) => {
-    setImage(URL.createObjectURL(e.target.files[0]))
+    setCoverName(e.target.files[0].name)
+    // setImage(URL.createObjectURL(e.target.files[0]))
     setFile(e.target.files[0])
   }
 
@@ -57,7 +59,7 @@ export default function Create(props) {
       saveToServer(file);
     };
   };
-  
+
   useEffect(() => {
     if (quill) {
       quill.on('text-change', (delta, oldDelta, source) => {
@@ -126,7 +128,7 @@ export default function Create(props) {
         className="md:mt-8 w-full  bg-white"
         title="Create News" >
         <form>
-          {image === null && (
+          {coverName === null && (
             <div className="p-8 border-dashed border-4 border-black self-center justify-center">
               <center>
                 <label htmlFor="file-input">
@@ -136,15 +138,26 @@ export default function Create(props) {
               <p className="text-center text-blue-1">Upload Image</p>
             </div>
           )}
-          {image !== null && (
+          {coverName !== null && (
+            <div className="p-8 border-dashed border-4 border-black self-center justify-center">
+              <center>
+                <p>{coverName}</p>
+                <label htmlFor="file-input">
+                  <Image src="/asset/icon/ic_upload.png" alt="icon upload" htmlFor="" width={24} height={24} className="mx-auto cursor-pointer" />
+                  <p className="text-center text-blue-1">Upload Image</p>
+                </label>
+              </center>
+            </div>
+          )}
+          {/* {image !== null && (
             <center>
-              <img src={image} alt="image preview" className="object-cover" />
+              <img src={image} alt="image preview" className="object-cover w-1/2" />
               <label htmlFor="file-input">
                 <Image src="/asset/icon/ic_upload.png" alt="icon upload" htmlFor="" width={24} height={24} className="mx-auto cursor-pointer" />
                 <p className="text-center text-blue-1">Change Image</p>
               </label>
             </center>
-          )}
+          )} */}
           <input type="file" accept="image/*" className="hidden" id="file-input" onChange={chooseImage} />
           <p className="mt-4">News Title</p>
           <input type="text" className="border w-full rounded p-4" placeholder="Input News Title"  {...register("title", { required: true })} />
@@ -188,7 +201,7 @@ export default function Create(props) {
           </ModalBody>
         </ModalContent>
       </Modal>
-    </div>
+    </div >
   )
 }
 

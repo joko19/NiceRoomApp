@@ -16,15 +16,17 @@ import {
   useDisclosure
 } from '@chakra-ui/react'
 import { useForm } from "react-hook-form";
-import {FaEye, FaEyeSlash } from "react-icons/fa";
+import { FaEye, FaEyeSlash } from "react-icons/fa";
 import apiInstitute from "../../action/institute";
 import Pagination from "../../components/Pagination/pagination";
+import { ErrorMessage } from '@hookform/error-message';
 
 export default function InstituteAdmin(props) {
   const [search, setSearch] = useState('')
   const [limit, setLimit] = useState('5')
   const [page, setPage] = useState('1')
   const [dataInstitute, setDataInstitute] = useState([])
+  const [detail, setDetail] = useState()
   const [allInstitute, setAllInstitute] = useState([])
   const { isOpen, onOpen, onClose } = useDisclosure()
   const [selectedData, setSelectedData] = useState(null)
@@ -33,16 +35,27 @@ export default function InstituteAdmin(props) {
   const [update, setUpdate] = useState(false)
   const [passwdLogin, setPasswdLogin] = useState(true)
   const tableHead = ['Employee ID', 'Name', 'Email', 'Phone', 'Institute', 'Action']
-  const { register, handleSubmit, setValue, getValues, reset } = useForm();
+  const { register, handleSubmit, formState: { errors }, setValue, getValues, reset } = useForm();
   const {
     isOpen: isCreateModal,
     onOpen: onOpenCreateModal,
     onClose: onCloseCreateModal
   } = useDisclosure()
   const {
+    isOpen: isUpdateModal,
+    onOpen: onOpenUpdateModal,
+    onClose: onCloseUpdateModal
+  } = useDisclosure()
+  const {
     isOpen: isSuccessModal,
     onOpen: onOpenSuccessModal,
     onClose: onCloseSuccessModal
+  } = useDisclosure()
+
+  const {
+    isOpen: isDetailModal,
+    onOpen: onOpenDetailModal,
+    onClose: onCloseDetailModal
   } = useDisclosure()
 
 
@@ -72,7 +85,7 @@ export default function InstituteAdmin(props) {
   const onDelete = async (id) => {
     await apiAdmin.deleted(id)
       .then((res) => {
-        if (res.data.status) getAllAdmin()
+        getData(search, limit, page)
       })
       .catch((err) => {
         console.log(err)
@@ -80,14 +93,42 @@ export default function InstituteAdmin(props) {
   }
 
   const onSubmit = async (data) => {
-    await apiAdmin.create(data)
-      .then((res) => {
-        getData(search, limit, page)
-        onCloseCreateModal()
-        onOpenSuccessModal()
+    console.log("clicked ")
+    if (update) {
+      console.log(selectedData)
+      await apiAdmin.update(selectedData, data)
+        .then((res) => {
+          getData(search, limit, page)
+          onCloseCreateModal()
+          onOpenSuccessModal()
+        })
+        .catch((err) => console.log(err))
+    } else {
+      await apiAdmin.create(data)
+        .then((res) => {
+          getData(search, limit, page)
+          onCloseCreateModal()
+          onOpenSuccessModal()
+        })
+        .catch((err) => {
+          console.log("hello world error")
+          console.log(err)
+        })
+    }
+  }
 
+  const getDetail = async (id) => {
+    await apiAdmin.detail(id)
+      .then((res) => {
+        const data = res.data.data
+        setValue("name", data.name)
+        setValue("email", data.email)
+        setValue("phone", data.phone)
+        setValue("employee_id", data.employee_id)
+        setValue("gender", data.gender)
+        setValue("institute", data.institute?.name)
+        setDetail(data)
       })
-      .catch((err) => console.log(err))
   }
 
   return (
@@ -96,7 +137,11 @@ export default function InstituteAdmin(props) {
         <Card
           title="Institute Admin"
           right={(
-            <button className="btn btn-md bg-blue-1 text-white p-3 rounded-lg" onClick={onOpenCreateModal}>
+            <button className="btn btn-md bg-blue-1 text-white p-3 rounded-lg" onClick={() => {
+              setUpdate(false)
+              reset()
+              onOpenCreateModal()
+            }}>
               + Create Admin
             </button>
           )}
@@ -136,12 +181,24 @@ export default function InstituteAdmin(props) {
                           <td className="px-6 py-4 whitespace-nowrap ">{item.phone}</td>
                           <td className="px-6 py-4 whitespace-nowrap ">{item.institute.name}</td>
                           <td className="px-6 py-4 whitespace-nowrap flex text-right gap-2 text-sm font-medium">
-                            <a href="#" className="text-indigo-600 hover:text-indigo-900">
+                            <button className="text-indigo-600 hover:text-indigo-900"
+                              onClick={() => {
+                                getDetail(item.id)
+                                setDetail(item)
+                                onOpenDetailModal()
+                              }}>
                               <Image src="/asset/icon/table/fi_eye.png" width={16} height={16} alt="icon edit" />
-                            </a>
-                            <a href="#" className="text-indigo-600 hover:text-indigo-900">
+                            </button>
+
+                            <button className="text-indigo-600 hover:text-indigo-900"
+                              onClick={() => {
+                                getDetail(item.id)
+                                setSelectedData(item.id)
+                                setUpdate(true)
+                                onOpenUpdateModal()
+                              }}>
                               <Image src="/asset/icon/table/fi_edit.png" width={16} height={16} alt="icon edit" />
-                            </a>
+                            </button>
                             <a href="#" className="text-indigo-600 hover:text-indigo-900">
                               <Image src="/asset/icon/table/fi_trash-2.png" width={16} height={16} alt="icon edit" onClick={() => {
                                 setSelectedData(item.id),
@@ -169,13 +226,16 @@ export default function InstituteAdmin(props) {
           <ModalHeader>{update ? 'Edit' : 'Create'} Institute Admin</ModalHeader>
           <ModalCloseButton />
           <ModalBody>
+
             <form onSubmit={handleSubmit(onSubmit)}>
               <div className="w-full">
-                <p>Full Name</p>
-                <input type="text" className="form w-full border p-4 rounded-lg" placeholder="Input Admin Full Name" {...register("name", { required: true })} />
+                <p>Full Name {errors.name && (
+                  <span className="text-red-1 text-sm">{errors.name.message}</span>
+                )}</p>
+                <input type="text" className="form w-full border p-4 rounded-lg" placeholder="Input Admin Full Name" {...register("name", { required: "please enter name" })} />
               </div>
-              <div className="flex gap-4 flex-col md:flex-row">
 
+              <div className="flex gap-4 flex-col md:flex-row">
                 <div className="w-full">
                   <p className="mt-4">Institute</p>
                   <select className="form border bg-white w-full p-4 rounded-lg" placeholder="Choose Institute"  {...register("institute_id", { required: true })} >
@@ -212,9 +272,11 @@ export default function InstituteAdmin(props) {
                   <input type="text" className="form w-full border p-4 rounded-lg" placeholder="Input Email Address" {...register("email", { required: true })} />
                 </div>
                 <div className="w-full">
-                  <p className="mt-4">Password</p>
+                  <p className="mt-4">Password  {errors.password && (
+                    <span className="text-red-1 text-sm">{errors.password.message}</span>
+                  )}</p>
                   <div className="relative">
-                    <input type={`${passwdLogin ? 'password' : 'text'}`} {...register("password", { required: true })} className="form w-full border p-4 rounded-lg" placeholder="Input New Password" />
+                    <input type={`${passwdLogin ? 'password' : 'text'}`} {...register("password", { required: true, minLength: { value: 6, message: 'Password minimum 6 character' } })} className="form w-full border p-4 rounded-lg" placeholder="Input New Password" />
                     <span className="absolute inset-y-0 cursor-pointer right-0 pr-3 flex items-center text-sm leading-5" onClick={() => {
                       passwdLogin ? setPasswdLogin(false) : setPasswdLogin(true)
                     }}>
@@ -227,10 +289,123 @@ export default function InstituteAdmin(props) {
                 </div>
               </div>
               <div className="flex flex-row-reverse gap-4 mt-4">
-                <button type="submit" className="bg-blue-1 p-3 rounded-lg text-white" >Save Institute</button>
+                <button type="submit" className="bg-blue-1 p-3 rounded-lg text-white" >Save Institute Admin</button>
                 <button type="button" className="text-black-4 p-3 rounded-lg" onClick={onCloseCreateModal}>Close</button>
               </div>
             </form>
+          </ModalBody>
+        </ModalContent>
+      </Modal>
+
+      <Modal isOpen={isUpdateModal} onClose={onCloseUpdateModal} size='xl'
+        motionPreset='slideInBottom'>
+        <ModalOverlay />
+        <ModalContent>
+          <ModalHeader>Edit Institute Admin</ModalHeader>
+          <ModalCloseButton />
+          <ModalBody>
+            <form onSubmit={handleSubmit(onSubmit)}>
+              <div className="flex gap-4 flex-col md:flex-row">
+                <div className="w-full">
+                  <p>Full Name {errors.name && (
+                    <span className="text-red-1 text-sm">{errors.name.message}</span>
+                  )}</p>
+                  <input type="text" className="form w-full border p-4 rounded-lg" placeholder="Input Admin Full Name" {...register("name", { required: "please enter name" })} />
+                </div>
+                <div className="w-full">
+                  <p >Employee ID</p>
+                  <input type="text" className="form  w-full border p-4 rounded-lg" placeholder="Input Employee ID" {...register("employee_id", { required: true })} />
+                </div>
+              </div>
+
+              <div className="flex gap-4 flex-col md:flex-row">
+                <div className="w-full">
+                  <p className="mt-4">Institute</p>
+                  <select className="form border bg-white w-full p-4 rounded-lg" placeholder="Choose Institute"  {...register("institute_id", { required: true })} >
+                    <option disabled>Select Institute</option>
+                    {allInstitute.map((item) => (
+                      <option key={item.id} value={item.id}>{item.name}</option>
+                    ))}
+                  </select>
+                </div>
+                <div className="w-full ">
+                  <p className="mt-4">Gender</p>
+                  <select className="form border bg-white w-full p-4 rounded-lg" placeholder="Choose Gender"  {...register("gender", { required: true })} >
+                    <option disabled>Select Gender</option>
+                    <option value="MALE">Male</option>
+                    <option value="FEMALE">Female</option>
+                  </select>
+                </div>
+
+              </div>
+
+              <div className="flex gap-4 flex-col md:flex-row">
+                <div className="w-full">
+                  <p className="mt-4">Phone Number</p>
+                  <input type="number" className="form border p-4 w-full rounded-lg" placeholder="Input Phone Number" {...register("phone", { required: true })} />
+                </div>
+                <div className="w-full">
+                  <p className="mt-4">Email</p>
+                  <input type="text" className="form w-full border p-4 rounded-lg" placeholder="Input Email Address" {...register("email", { required: true })} />
+                </div>
+
+              </div>
+              <div className="flex flex-row-reverse gap-4 mt-4">
+                <button type="submit" className="bg-blue-1 p-3 rounded-lg text-white" >Save Institute Admin</button>
+                <button type="button" className="text-black-4 p-3 rounded-lg" onClick={onCloseUpdateModal}>Close</button>
+              </div>
+            </form>
+          </ModalBody>
+        </ModalContent>
+      </Modal>
+
+
+      {/* Detail Modal */}
+      <Modal isOpen={isDetailModal} size='xl' onClose={onCloseDetailModal} isCentered>
+        <ModalOverlay />
+        <ModalContent>
+          <ModalHeader>Detail Institute Admin</ModalHeader>
+          <ModalCloseButton />
+          <ModalBody>
+            <div className="flex w-full bg-black-8 space-between justify between">
+              <div className="flex flex-col gap-4 p-4 w-full">
+                <div>
+                  <p>Full Name : </p>
+                  <p className="font-bold">{detail && detail.name}</p>
+                </div>
+                <div>
+                  <p>Gender : </p>
+                  <p className="font-bold">{detail && detail.gender}</p>
+                </div>
+              </div>
+              <div className="flex flex-col gap-4 p-4 w-full">
+                <div>
+                  <p>Institute : </p>
+                  <p className="font-bold">{detail && detail.institute?.name}</p>
+                </div>
+                <div>
+                  <p>Email : </p>
+                  <p className="font-bold">{detail && detail.email}</p>
+                </div>
+              </div>
+              <div className="flex flex-col gap-4 p-4 w-full">
+                <div>
+                  <p>Employee ID : </p>
+                  <p className="font-bold">{detail && detail.employee_id}</p>
+                </div>
+
+                <div>
+                  <p>Phone Number : </p>
+                  <p className="font-bold">{detail && detail.name}</p>
+                </div>
+              </div>
+            </div>
+            <div className="flex flex-row-reverse">
+              <button className="flex flex-row-reverse bg-blue-1 rounded-lg text-white mt-4 block align-center p-3" onClick={() => {
+                onCloseDetailModal()
+                setUpdate(false)
+              }}>Okay</button>
+            </div>
           </ModalBody>
         </ModalContent>
       </Modal>
@@ -244,7 +419,7 @@ export default function InstituteAdmin(props) {
           <ModalCloseButton />
           <ModalBody>
             <div className="flex flex-col text-center ">
-              <p>Create Admin Institute Successfully </p>
+              <p>{update ? 'Update' : 'Create'} Admin Institute Successfully </p>
               <div className="self-center">
                 <button className="bg-blue-1 rounded-lg text-white mt-4 block align-center p-3" onClick={() => {
                   onCloseSuccessModal()
@@ -256,7 +431,7 @@ export default function InstituteAdmin(props) {
         </ModalContent>
       </Modal>
 
-      {/* Dekete Modal */}
+      {/* Delete Modal */}
       <Modal isOpen={isOpen} onClose={onClose}>
         <ModalOverlay />
         <ModalContent>
