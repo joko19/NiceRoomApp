@@ -16,12 +16,12 @@ const register = (data) => instance.noAuth.post('/auth/register', data, {
   }
 })
 
-const apiAuth = {
+const Auth = {
   login,
   register
 }
 
-export default apiAuth
+export default Auth
 
 export const loginUser = (result) => (dispatch) => {
   if (result.status) {

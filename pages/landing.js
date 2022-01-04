@@ -10,7 +10,8 @@ import { loginUser, registerUser } from '../action/auth/authAction'
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { data } from 'autoprefixer';
 import store from './../redux/store'
-import apiAuth from '../action/auth/authAction';
+import Auth from '../action/auth/authAction';
+import apiAuth from './api/auth';
 
 function Landing(props) {
   // const state = store.getState()
@@ -31,7 +32,7 @@ function Landing(props) {
       password: getValues('password'),
       password_confirmation: getValues('password_confirmation')
     }
-    await apiAuth.register(data)
+    await Auth.register(data)
       .then((res) => {
         console.log(res)
         props.registerUser(res)
@@ -47,7 +48,7 @@ function Landing(props) {
       email: getValues('email'),
       password: getValues('password')
     }
-    await apiAuth.login(data)
+    await Auth.login(data)
       .then((res)=> {
         console.log(res)
         props.loginUser(res)

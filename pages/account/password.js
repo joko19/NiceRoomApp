@@ -22,6 +22,8 @@ export default function Reset(props) {
   const [old, setOld] = useState(true)
   const [newPass, setNewPass] = useState(true)
   const [confirm, setConfirm] = useState(true)
+  const [errors, setErrors] = useState()
+  const [hasPassword, setHasPassword] = useState(false)
   const {
     isOpen: isSuccessModal,
     onOpen: onOpenSuccessModal,
@@ -32,16 +34,17 @@ export default function Reset(props) {
 
   useEffect(() => {
     setProfile(store.getState().auth.user.user)
+    setHasPassword(store.getState().auth.user.user.hasPassword)
   }, [])
 
   const onSubmit = async (data) => {
-    
+
     await apiAccount.changepassword(data)
       .then((res) => {
         console.log(res)
         onOpenSuccessModal()
       })
-      .catch((err) => console.log(err))
+      .catch((err) => setErrors(err.response.data.data))
   }
 
   return (
@@ -51,27 +54,36 @@ export default function Reset(props) {
           className="md:mt-16 w-full bg-white"
           title="Password" >
           <form className="flex flex-col">
-            <div className="flex gap-4">
-              <div className="w-full">
-                <p>Old Password</p>
-                <div className="relative">
-                  <input type={`${old ? 'password' : 'text'}`} className="form w-full border p-4 rounded-lg" placeholder="Input New Password" {...register("current_password", { required: true })} />
-                  <span className="absolute inset-y-0 cursor-pointer right-0 pr-3 flex items-center text-sm leading-5" onClick={() => {
-                    old ? setOld(false) : setOld(true)
-                  }}>
-                    {old ?
-                      (<FaEyeSlash className=" z-10 inline-block align-middle" />) :
-                      (<FaEye className=" z-10 inline-block align-middle" />)
-                    }
-                  </span>
+            {hasPassword && (
+              <div className="flex gap-4">
+                <div className="w-full">
+                  <p>Old Password {errors && (
+                    <span className="text-red-1 text-sm">{errors.current_password}</span>
+                  )}</p>
+                  <div className="relative">
+                    <input type={`${old ? 'password' : 'text'}`} className="form w-full border p-4 rounded-lg" placeholder="Input New Password" {...register("current_password")} />
+                    <span className="absolute inset-y-0 cursor-pointer right-0 pr-3 flex items-center text-sm leading-5" onClick={() => {
+                      old ? setOld(false) : setOld(true)
+                    }}>
+                      {old ?
+                        (<FaEyeSlash className=" z-10 inline-block align-middle" />) :
+                        (<FaEye className=" z-10 inline-block align-middle" />)
+                      }
+                    </span>
+                  </div>
                 </div>
               </div>
-            </div>
+            )
+
+            }
             <div className="flex flex-col md:flex-row gap-4">
               <div className="flex flex-col w-full">
-                <p className="mt-4">New Password</p>
+                <p className="mt-4">New Password 
+                  {errors && (
+                    <span className="text-red-1 text-sm"> {errors.password}</span>
+                  )}</p>
                 <div className="relative">
-                  <input type={`${newPass ? 'password' : 'text'}`} className="form w-full border p-4 rounded-lg" placeholder="Input New Password" {...register("password", { required: true })} />
+                  <input type={`${newPass ? 'password' : 'text'}`} className="form w-full border p-4 rounded-lg" placeholder="Input New Password" {...register("password")} />
                   <span className="absolute inset-y-0 cursor-pointer right-0 pr-3 flex items-center text-sm leading-5" onClick={() => {
                     newPass ? setNewPass(false) : setNewPass(true)
                   }}>
@@ -85,7 +97,7 @@ export default function Reset(props) {
               <div className="flex flex-col w-full">
                 <p className="mt-4">Confirm New Password</p>
                 <div className="relative">
-                  <input type={`${confirm ? 'password' : 'text'}`} className="form w-full border p-4 rounded-lg" placeholder="Input New Password" {...register("password_confirmation", { required: true })} />
+                  <input type={`${confirm ? 'password' : 'text'}`} className="form w-full border p-4 rounded-lg" placeholder="Input New Password" {...register("password_confirmation")} />
                   <span className="absolute inset-y-0 cursor-pointer right-0 pr-3 flex items-center text-sm leading-5" onClick={() => {
                     confirm ? setConfirm(false) : setConfirm(true)
                   }}>
