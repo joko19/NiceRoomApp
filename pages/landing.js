@@ -10,14 +10,17 @@ import { useForm } from "react-hook-form";
 import { loginUser, registerUser } from '../action/auth/authAction'
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { data } from 'autoprefixer';
+import store from './../redux/store'
 
 function Landing(props) {
+  // const state = store.getState()
   const list = [1, 2, 3]
   const [passwdLogin, setPasswdLogin] = useState(true)
   const [passwdRegister, setPasswdRegister] = useState(true)
   const [confirm, setConfirm] = useState(true)
   const [formStatus, setFormStatus] = useState('login')
   const [infoReset, setInfoReset] = useState()
+  const [errors, setErrors] = useState()
   const { register, handleSubmit, resetField, getValues } = useForm();
 
   const onRegister = async () => {
@@ -28,6 +31,7 @@ function Landing(props) {
       password: getValues('password'),
       password_confirmation: getValues('password_confirmation')
     }
+    setErrors(props.errors)
     props.registerUser(data)
   }
 
@@ -36,6 +40,7 @@ function Landing(props) {
       email: getValues('email'),
       password: getValues('password')
     }
+    setErrors(props.errors)
     props.loginUser(data)
   }
 
@@ -87,11 +92,15 @@ function Landing(props) {
               <form onSubmit={handleSubmit(onLogin)}>
                 <h1 className="text-xl text-center">Welcome to Examz!</h1>
                 <p className="text-black-3 text-center">Be ready for exam with us</p>
-                <p className="mt-4">Email / Phone</p>
-                <input type="text" className="p-4 border rounded-xl w-full" placeholder="Input Email or Phone" {...register("email", { required: true })} />
-                <p className="mt-4">Password</p>
+                <p className="mt-4">Email / Phone {errors && errors.data && (
+                  <span className="text-red-1 text-sm">{errors.data.email}</span>
+                )}</p>
+                <input type="text" className="p-4 border rounded-xl w-full" placeholder="Input Email or Phone" {...register("email")} />
+                <p className="mt-4">Password {errors && errors.data && (
+                  <span className="text-red-1 text-sm">{errors.data.password}</span>
+                )}</p>
                 <div className="relative">
-                  <input type={`${passwdLogin ? 'password' : 'text'}`} className="form w-full border p-4 rounded-lg" placeholder="Input New Password" {...register("password", { required: true })} />
+                  <input type={`${passwdLogin ? 'password' : 'text'}`} className="form w-full border p-4 rounded-lg" placeholder="Input New Password" {...register("password")} />
                   <span className="absolute inset-y-0 cursor-pointer right-0 pr-3 flex items-center text-sm leading-5" onClick={() => {
                     passwdLogin ? setPasswdLogin(false) : setPasswdLogin(true)
                   }}>
@@ -102,6 +111,9 @@ function Landing(props) {
                   </span>
                 </div>
                 <span className="text-right text-end mt-2 text-black-3 cursor-pointer hover:text-blue-1" onClick={() => setFormStatus('forgotPassword')}>Forgot Password ?</span>
+                {errors && errors.message === 'Unauthorized' && (
+                  <p className="text-red-1 text-sm">Check your email or password</p>
+                )}
                 <button type="submit" className="w-full bg-yellow-1 text-white p-3 mt-4 rounded-xl" onClick={() => onLogin()}>Login</button>
               </form>
               <p className="text-center m-4 text-black-4">or continue with</p>
@@ -117,17 +129,23 @@ function Landing(props) {
             <form onSubmit={handleSubmit(onRegister)} className="my-40 bg-white rounded-lg m-4 p-4 md:m-24">
               <h1 className="text-xl text-center">Create Account</h1>
               <p className="text-black-3 text-center">create an account and get a lot of benefits</p>
-              <p className="mt-4">Full Name</p>
-              <input type="text" className="p-4 border rounded-xl w-full" placeholder="Input Your Fullname"{...register("name", { required: true })} />
-              <p className="mt-4">Email</p>
-              <input type="text" className="p-4 border rounded-xl w-full" placeholder="Input Your Email" {...register("email", { required: true })} />
-              <p className="mt-4">Phone</p>
-              <input type="number" className="p-4 border rounded-xl w-full" placeholder="Input Your Phone Number"{...register("phone", { required: true })} />
+              <p className="mt-4">Full Name {errors && errors.data && (
+                <span className="text-red-1 text-sm">{errors.data.name}</span>
+              )}</p>
+              <input type="text" className="p-4 border rounded-xl w-full" placeholder="Input Your Fullname"{...register("name")} />
+              <p className="mt-4">Email {errors && errors.data && (
+                <span className="text-red-1 text-sm">{errors.data.email}</span>
+              )}</p>
+              <input type="text" className="p-4 border rounded-xl w-full" placeholder="Input Your Email" {...register("email")} />
+              <p className="mt-4">Phone {errors && errors.data && (
+                <span className="text-red-1 text-sm">{errors.data.phone}</span>
+              )}</p>
+              <input type="number" className="p-4 border rounded-xl w-full" placeholder="Input Your Phone Number"{...register("phone")} />
               <div className='flex gap-4'>
-                <div>
+                <div className='w-full'>
                   <p className="mt-4">Password</p>
                   <div className="relative">
-                    <input type={`${passwdRegister ? 'password' : 'text'}`} className="form w-full border p-4 rounded-lg" placeholder="Input Your Password" {...register("password", { required: true })} />
+                    <input type={`${passwdRegister ? 'password' : 'text'}`} className="form w-full border p-4 rounded-lg" placeholder="Input Your Password" {...register("password")} />
                     <span className="absolute inset-y-0 cursor-pointer right-0 pr-3 flex items-center text-sm leading-5" onClick={() => {
                       passwdRegister ? setPasswdRegister(false) : setPasswdRegister(true)
                     }}>
@@ -138,10 +156,10 @@ function Landing(props) {
                     </span>
                   </div>
                 </div>
-                <div>
+                <div className='w-full'>
                   <p className="mt-4">Password Confirmation</p>
                   <div className="relative">
-                    <input type={`${confirm ? 'password' : 'text'}`} className="form w-full border p-4 rounded-lg" placeholder="Confirmation Password" {...register("password_confirmation", { required: true })} />
+                    <input type={`${confirm ? 'password' : 'text'}`} className="form w-full border p-4 rounded-lg" placeholder="Confirmation Password" {...register("password_confirmation")} />
                     <span className="absolute inset-y-0 cursor-pointer right-0 pr-3 flex items-center text-sm leading-5" onClick={() => {
                       confirm ? setConfirm(false) : setConfirm(true)
                     }}>
@@ -154,6 +172,9 @@ function Landing(props) {
 
                 </div>
               </div>
+              {errors && errors.data && (
+                <p className="text-red-1 text-sm">{errors.data.password}</p>
+              )}
 
               <button className="w-full bg-yellow-1 text-white p-2 mt-4 rounded-xl" >Register</button>
               <p className="text-right mt-2 text-black-3">Do you have account ? <button onClick={() => onChangeForm('login')}> Login </button></p>

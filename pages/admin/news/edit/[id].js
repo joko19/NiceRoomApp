@@ -29,6 +29,7 @@ export default function Create(props) {
   const [tag, setTag] = useState()
   const [tags, setTags] = useState([])
   const [description, setDescription] = useState()
+  const [errors, setErrors] = useState()
   const { register, handleSubmit, setValue, getValues, reset } = useForm();
   const chooseImage = (e) => {
     setCoverName(e.target.files[0].name)
@@ -116,7 +117,7 @@ export default function Create(props) {
       .then((res) => {
         onOpenSuccessModal()
       })
-      .catch((err) => console.log(err))
+      .catch((err) => setErrors(err.response.data.data))
   }
 
   const handleKeyDown = (event) => {
@@ -167,11 +168,17 @@ export default function Create(props) {
             </div>
           )}
         <input type="file" accept="image/*" className="hidden" id="file-input" onChange={chooseImage} />
-        <p className="mt-4">News Title</p>
-        <input type="text" className="border w-full rounded p-4" placeholder="Input News Title"  {...register("title", { required: true })} />
-        <p className="mt-4" >Sub-Title</p>
-        <input type="text" className="border w-full rounded p-4" placeholder="Input News Sub-Title" {...register("subtitle", { required: true })} />
-        <p className="mt-4">Description</p>
+        <p className="mt-4">News Title {errors && (
+                    <span className="text-red-1 text-sm">{errors.title}</span>
+                  )}</p>
+        <input type="text" className="border w-full rounded p-4" placeholder="Input News Title"  {...register("title")} />
+        <p className="mt-4" >Sub-Title {errors && (
+                    <span className="text-red-1 text-sm">{errors.sub_title}</span>
+                  )}</p>
+        <input type="text" className="border w-full rounded p-4" placeholder="Input News Sub-Title" {...register("subtitle")} />
+        <p className="mt-4">Description {errors && (
+                    <span className="text-red-1 text-sm">{errors.description}</span>
+                  )}</p>
         <div className="w-full h-96 mb-16">
           <div ref={quillRef} />
         </div>

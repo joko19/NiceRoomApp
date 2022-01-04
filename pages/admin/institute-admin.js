@@ -35,7 +35,8 @@ export default function InstituteAdmin(props) {
   const [update, setUpdate] = useState(false)
   const [passwdLogin, setPasswdLogin] = useState(true)
   const tableHead = ['Employee ID', 'Name', 'Email', 'Phone', 'Institute', 'Action']
-  const { register, handleSubmit, formState: { errors }, setValue, getValues, reset } = useForm();
+  const [errors, setErrors] = useState()
+  const { register, handleSubmit, setValue, getValues, reset } = useForm();
   const {
     isOpen: isCreateModal,
     onOpen: onOpenCreateModal,
@@ -96,13 +97,16 @@ export default function InstituteAdmin(props) {
     console.log("submit clicked")
     await apiAdmin.create(data)
       .then((res) => {
+        console.log(res)
         getData(search, limit, page)
         onCloseCreateModal()
         onOpenSuccessModal()
+        setErrors(null)
       })
       .catch((err) => {
-        console.log("hello world error")
-        console.log(err)
+        if (err.response.status === 400) {
+          setErrors(err.response.data.data)
+        }
       })
   }
 
@@ -113,8 +117,13 @@ export default function InstituteAdmin(props) {
         getData(search, limit, page)
         onCloseCreateModal()
         onOpenSuccessModal()
+        setErrors(null)
       })
-      .catch((err) => console.log(err))
+      .catch((err) => {
+        if (err.response.status === 400) {
+          setErrors(err.response.data.data)
+        }
+      })
   }
 
   const getDetail = async (id) => {
@@ -140,6 +149,7 @@ export default function InstituteAdmin(props) {
             <button className="btn btn-md bg-blue-1 text-white p-3 rounded-lg" onClick={() => {
               setUpdate(false)
               reset()
+              setErrors(null)
               onOpenCreateModal()
             }}>
               + Create Admin
@@ -147,7 +157,6 @@ export default function InstituteAdmin(props) {
           )}
         >
           <input type="text" className="p-4 border rounded-lg w-1/2 mb-4" placeholder="Search Admin" />
-
           <div className="flex flex-col">
             <div className="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
               <div className="py-2 align-middle inline-block min-w-full sm:px-6 lg:px-8">
@@ -196,6 +205,7 @@ export default function InstituteAdmin(props) {
                                 setSelectedData(item.id)
                                 setUpdate(true)
                                 onOpenCreateModal()
+                                setErrors(null)
                               }}>
                               <Image src="/asset/icon/table/fi_edit.png" width={16} height={16} alt="icon edit" />
                             </button>
@@ -230,16 +240,18 @@ export default function InstituteAdmin(props) {
 
               <form onSubmit={handleSubmit(onSubmit)}>
                 <div className="w-full">
-                  <p>Full Name {errors.name && (
-                    <span className="text-red-1 text-sm">{errors.name.message}</span>
+                  <p>Full Name {errors && (
+                    <span className="text-red-1 text-sm">{errors.name}</span>
                   )}</p>
-                  <input type="text" className="form w-full border p-4 rounded-lg" placeholder="Input Admin Full Name" {...register("name", { required: "please enter name" })} />
+                  <input type="text" className="form w-full border p-4 rounded-lg" placeholder="Input Admin Full Name" {...register("name")} />
                 </div>
 
                 <div className="flex gap-4 flex-col md:flex-row">
                   <div className="w-full">
-                    <p className="mt-4">Institute</p>
-                    <select className="form border bg-white w-full p-4 rounded-lg" placeholder="Choose Institute"  {...register("institute_id", { required: true })} >
+                    <p className="mt-4">Institute {errors && (
+                      <span className="text-red-1 text-sm">{errors.institute}</span>
+                    )}</p>
+                    <select className="form border bg-white w-full p-4 rounded-lg" placeholder="Choose Institute"  {...register("institute_id",)} >
                       <option disabled>Select Institute</option>
                       {allInstitute.map((item) => (
                         <option key={item.id} value={item.id}>{item.name}</option>
@@ -247,37 +259,45 @@ export default function InstituteAdmin(props) {
                     </select>
                   </div>
                   <div className="w-full">
-                    <p className="mt-4">Employee ID</p>
-                    <input type="text" className="form  w-full border p-4 rounded-lg" placeholder="Input Employee ID" {...register("employee_id", { required: true })} />
+                    <p className="mt-4">Employee ID{errors && (
+                      <span className="text-red-1 text-sm">{errors.employee_id}</span>
+                    )}</p>
+                    <input type="text" className="form  w-full border p-4 rounded-lg" placeholder="Input Employee ID" {...register("employee_id",)} />
                   </div>
                 </div>
 
                 <div className="flex gap-4 flex-col md:flex-row">
                   <div className="w-full ">
-                    <p className="mt-4">Gender</p>
-                    <select className="form border bg-white w-full p-4 rounded-lg" placeholder="Choose Gender"  {...register("gender", { required: true })} >
+                    <p className="mt-4">Gender{errors && (
+                      <span className="text-red-1 text-sm">{errors.gender}</span>
+                    )}</p>
+                    <select className="form border bg-white w-full p-4 rounded-lg" placeholder="Choose Gender"  {...register("gender",)} >
                       <option disabled>Select Gender</option>
                       <option value="MALE">Male</option>
                       <option value="FEMALE">Female</option>
                     </select>
                   </div>
                   <div className="w-full">
-                    <p className="mt-4">Phone Number</p>
-                    <input type="number" className="form border p-4 w-full rounded-lg" placeholder="Input Phone Number" {...register("phone", { required: true })} />
+                    <p className="mt-4">Phone Number {errors && (
+                      <span className="text-red-1 text-sm">{errors.phone}</span>
+                    )}</p>
+                    <input type="number" className="form border p-4 w-full rounded-lg" placeholder="Input Phone Number" {...register("phone")} />
                   </div>
                 </div>
 
                 <div className="flex gap-4 flex-col md:flex-row">
                   <div className="w-full">
-                    <p className="mt-4">Email</p>
-                    <input type="text" className="form w-full border p-4 rounded-lg" placeholder="Input Email Address" {...register("email", { required: true })} />
+                    <p className="mt-4">Email {errors && (
+                      <span className="text-red-1 text-sm">{errors.email}</span>
+                    )} </p>
+                    <input type="text" className="form w-full border p-4 rounded-lg" placeholder="Input Email Address" {...register("email",)} />
                   </div>
                   <div className="w-full">
-                    <p className="mt-4">Password  {errors.password && (
-                      <span className="text-red-1 text-sm">{errors.password.message}</span>
+                    <p className="mt-4">Password  {errors && (
+                      <span className="text-red-1 text-sm">{errors.password}</span>
                     )}</p>
                     <div className="relative">
-                      <input type={`${passwdLogin ? 'password' : 'text'}`} {...register("password", { required: true, minLength: { value: 6, message: 'Password minimum 6 character' } })} className="form w-full border p-4 rounded-lg" placeholder="Input New Password" />
+                      <input type={`${passwdLogin ? 'password' : 'text'}`} {...register("password")} className="form w-full border p-4 rounded-lg" placeholder="Input New Password" />
                       <span className="absolute inset-y-0 cursor-pointer right-0 pr-3 flex items-center text-sm leading-5" onClick={() => {
                         passwdLogin ? setPasswdLogin(false) : setPasswdLogin(true)
                       }}>
@@ -297,24 +317,27 @@ export default function InstituteAdmin(props) {
             ) : (
 
               <form onSubmit={handleSubmit(onUpdate)}>
-
                 <div className="flex gap-4 flex-col md:flex-row">
                   <div className="w-full mt-4">
-                    <p>Full Name {errors.name && (
-                      <span className="text-red-1 text-sm">{errors.name.message}</span>
+                    <p>Full Name {errors && (
+                      <span className="text-red-1 text-sm">{errors.name}</span>
                     )}</p>
-                    <input type="text" className="form w-full border p-4 rounded-lg" placeholder="Input Admin Full Name" {...register("name", { required: "please enter name" })} />
+                    <input type="text" className="form w-full border p-4 rounded-lg" placeholder="Input Admin Full Name" {...register("name")} />
                   </div>
                   <div className="w-full">
-                    <p className="mt-4">Employee ID</p>
-                    <input type="text" className="form  w-full border p-4 rounded-lg" placeholder="Input Employee ID" {...register("employee_id", { required: true })} />
+                    <p className="mt-4">Employee ID {errors && (
+                      <span className="text-red-1 text-sm">{errors.employee_id}</span>
+                    )}</p>
+                    <input type="text" className="form  w-full border p-4 rounded-lg" placeholder="Input Employee ID" {...register("employee_id",)} />
                   </div>
                 </div>
 
                 <div className="flex gap-4 flex-col md:flex-row">
                   <div className="w-full">
-                    <p className="mt-4">Institute</p>
-                    <select className="form border bg-white w-full p-4 rounded-lg" placeholder="Choose Institute"  {...register("institute_id", { required: true })} >
+                    <p className="mt-4">Institute {errors && (
+                      <span className="text-red-1 text-sm">{errors.institute}</span>
+                    )}</p>
+                    <select className="form border bg-white w-full p-4 rounded-lg" placeholder="Choose Institute"  {...register("institute_id",)} >
                       <option disabled>Select Institute</option>
                       {allInstitute.map((item) => (
                         <option key={item.id} value={item.id}>{item.name}</option>
@@ -322,8 +345,10 @@ export default function InstituteAdmin(props) {
                     </select>
                   </div>
                   <div className="w-full ">
-                    <p className="mt-4">Gender</p>
-                    <select className="form border bg-white w-full p-4 rounded-lg" placeholder="Choose Gender"  {...register("gender", { required: true })} >
+                    <p className="mt-4">Gender {errors && (
+                      <span className="text-red-1 text-sm">{errors.gender}</span>
+                    )}</p>
+                    <select className="form border bg-white w-full p-4 rounded-lg" placeholder="Choose Gender"  {...register("gender",)} >
                       <option disabled>Select Gender</option>
                       <option value="MALE">Male</option>
                       <option value="FEMALE">Female</option>
@@ -333,12 +358,16 @@ export default function InstituteAdmin(props) {
 
                 <div className="flex gap-4 flex-col md:flex-row">
                   <div className="w-full">
-                    <p className="mt-4">Email</p>
-                    <input type="text" className="form w-full border p-4 rounded-lg" placeholder="Input Email Address" {...register("email", { required: true })} />
+                    <p className="mt-4">Email {errors && (
+                      <span className="text-red-1 text-sm">{errors.email}</span>
+                    )}</p>
+                    <input type="text" className="form w-full border p-4 rounded-lg" placeholder="Input Email Address" {...register("email",)} />
                   </div>
                   <div className="w-full">
-                    <p className="mt-4">Phone Number</p>
-                    <input type="number" className="form border p-4 w-full rounded-lg" placeholder="Input Phone Number" {...register("phone", { required: true })} />
+                    <p className="mt-4">Phone Number {errors && (
+                      <span className="text-red-1 text-sm">{errors.phone}</span>
+                    )}</p>
+                    <input type="number" className="form border p-4 w-full rounded-lg" placeholder="Input Phone Number" {...register("phone",)} />
                   </div>
                 </div>
                 <div className="flex flex-row-reverse gap-4 mt-4">
@@ -431,6 +460,7 @@ export default function InstituteAdmin(props) {
                 <button className="bg-blue-1 rounded-lg text-white mt-4 block align-center p-3" onClick={() => {
                   onCloseSuccessModal()
                   setUpdate(false)
+                  setErrors(null)
                 }}>Okay</button>
               </div>
             </div>

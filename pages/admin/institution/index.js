@@ -39,6 +39,7 @@ export default function Institute() {
   const [selectedData, setSelectedData] = useState(null)
   const [dataInstitute, setDataInstitute] = useState([])
   const [list, setList] = useState([])
+  const [errors, setErrors] = useState()
   const TableHead = ['Institute Name', 'State', ' City', 'Year Established', 'Action']
   const { register, handleSubmit, setValue, getValues, reset } = useForm();
 
@@ -77,20 +78,22 @@ export default function Institute() {
     update ? await apiInstitute.update(selectedData, data)
       .then((res) => {
         reset(res)
+        onCloseCreateModal()
+        onOpenSuccessModal()
       })
       .catch((err) => {
         setUpdate(false)
+        setErrors(err.response.data.data)
         console.log(err)
       }) : await apiInstitute.create(data)
         .then((res) => {
-          console.log(res)
+          onCloseCreateModal()
+          onOpenSuccessModal()
         })
         .catch((err) => {
-          console.log(err)
+          setErrors(err.response.data.data)
         })
     getData(search, limit, page)
-    onCloseCreateModal()
-    onOpenSuccessModal()
   }
 
   const onDelete = async (id) => {
@@ -114,7 +117,11 @@ export default function Institute() {
         <Card
           title="Institution"
           right={(
-            <button className="btn btn-md bg-blue-1 text-white p-3 rounded-lg" onClick={onOpenCreateModal}>
+            <button className="btn btn-md bg-blue-1 text-white p-3 rounded-lg" onClick={() => {
+              onOpenCreateModal()
+              setErrors(null)
+              reset()
+            }}>
               + Create Institute
             </button>
           )}
@@ -166,6 +173,7 @@ export default function Institute() {
                               setSelectedData(item.id)
                               setUpdate(true)
                               onOpenCreateModal()
+                              setErrors(null)
                             }}>
                               <Image src="/asset/icon/table/fi_edit.png" width={16} height={16} alt="icon edit" />
                             </button>
@@ -199,18 +207,24 @@ export default function Institute() {
             <form onSubmit={handleSubmit(onSubmit)} >
               <div className="flex gap-4">
                 <div className="w-full">
-                  <p>Institute Name</p>
-                  <input type="text" className="w-full form border p-4 rounded-lg" placeholder="Input Institute Name" {...register("name", { required: true })} />
+                  <p>Institute Name {errors && (
+                    <span className="text-red-1 text-sm">{errors.name}</span>
+                  )}</p>
+                  <input type="text" className="w-full form border p-4 rounded-lg" placeholder="Input Institute Name" {...register("name")} />
                 </div>
                 <div className="w-full">
-                  <p>Address</p>
-                  <input type="text" className="form border w-full p-4 rounded-lg" placeholder="Input Institute Address" {...register("address", { required: true })} />
+                  <p>Address {errors && (
+                    <span className="text-red-1 text-sm">{errors.address}</span>
+                  )}</p>
+                  <input type="text" className="form border w-full p-4 rounded-lg" placeholder="Input Institute Address" {...register("address")} />
                 </div>
               </div>
               <div className="flex gap-4">
                 <div className="w-full">
-                  <p className="mt-4">State</p>
-                  <select id="state" className="form border bg-white w-full p-4 rounded-lg" placeholder="Choose State" {...register("state", { required: true })} onChange={chooseState}>
+                  <p className="mt-4">State {errors && (
+                    <span className="text-red-1 text-sm">{errors.state}</span>
+                  )}</p>
+                  <select id="state" className="form border bg-white w-full p-4 rounded-lg" placeholder="Choose State" {...register("state")} onChange={chooseState}>
                     <option disabled>Select State</option>
                     {region.map((item) => {
                       return (
@@ -220,9 +234,11 @@ export default function Institute() {
                   </select>
                 </div>
                 <div className="w-full">
-                  <p className="mt-4">City</p>
-                  <select className="form border bg-white w-full p-4 rounded-lg" placeholder="Choose Gender"  {...register("city", { required: true })} >
-                    <option disabled>Select State</option>
+                  <p className="mt-4">City {errors && (
+                    <span className="text-red-1 text-sm">{errors.city}</span>
+                  )}</p>
+                  <select className="form border bg-white w-full p-4 rounded-lg" placeholder="Choose Gender"  {...register("city")} >
+                    <option disabled>Select City</option>
                     {cities.map((item) => (
                       <option key={item.id} value={item.name}>{item.name}</option>
                     ))}
@@ -231,12 +247,14 @@ export default function Institute() {
               </div>
               <div className="flex gap-4">
                 <div className="w-full">
-                  <p className="mt-4">Establishment Year</p>
-                  <input type="text" className=" w-full form border p-4 rounded-lg" placeholder="Input Establishment Year" {...register("establishment_year", { required: true })} />
+                  <p className="mt-4">Establishment Year {errors && (
+                    <span className="text-red-1 text-sm">{errors.establishment_year}</span>
+                  )}</p>
+                  <input type="text" className=" w-full form border p-4 rounded-lg" placeholder="Input Establishment Year" {...register("establishment_year")} />
                 </div>
                 <div className="w-full">
                   <p className="mt-4">Pin Code</p>
-                  <input type="number" className="w-full form border p-4 rounded-lg" placeholder="Input 6-Digits Code Number" {...register("pin_code", { required: true })} />
+                  <input type="number" className="w-full form border p-4 rounded-lg" placeholder="Input 6-Digits Code Number" {...register("pin_code")} />
                 </div>
               </div>
               <div className="flex flex-row-reverse gap-4 mt-4">

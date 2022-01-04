@@ -26,6 +26,7 @@ export default function Create(props) {
   const [tag, setTag] = useState()
   const [tags, setTags] = useState([])
   const [description, setDescription] = useState()
+  const [errors, setErrors] = useState()
   const { register, handleSubmit, setValue, getValues, reset } = useForm();
   const chooseImage = (e) => {
     setCoverName(e.target.files[0].name)
@@ -95,7 +96,7 @@ export default function Create(props) {
         console.log(res)
         onOpenSuccessModal()
       })
-      .catch((err) => console.log(err))
+      .catch((err) => setErrors(err.response.data.data))
   }
 
   const handleKeyDown = (event) => {
@@ -159,21 +160,39 @@ export default function Create(props) {
             </center>
           )} */}
           <input type="file" accept="image/*" className="hidden" id="file-input" onChange={chooseImage} />
-          <p className="mt-4">News Title</p>
-          <input type="text" className="border w-full rounded p-4" placeholder="Input News Title"  {...register("title", { required: true })} />
-          <p className="mt-4" >Sub-Title</p>
-          <input type="text" className="border w-full rounded p-4" placeholder="Input News Sub-Title" {...register("subtitle", { required: true })} />
+          <p className="mt-4">News Title {errors && (
+            <span className="text-red-1 text-sm">{errors.sub_title}</span>
+          )}</p>
+          <input type="text" className="border w-full rounded p-4" placeholder="Input News Title"  {...register("title")} />
+          <p className="mt-4" >Sub-Title {errors && (
+            <span className="text-red-1 text-sm">{errors.sub_title}</span>
+          )}</p>
+          <input type="text" className="border w-full rounded p-4" placeholder="Input News Sub-Title" {...register("subtitle")} />
           <p className="mt-4">Description</p>
           <div className="w-full h-96 mb-16">
             <div ref={quillRef} />
           </div>
           <p className="mt-4">Tags</p>
-          <div className="flex border p-2">
+          <div className="flex border p-4">
             {tags.map((item) => (
               <span key={item} className="bg-blue-6 p-2 m-1 rounded text-blue-1">{item}<span className="ml-1 cursor-pointer" name={item} onClick={handleRemoveItem}> x</span> </span>
             ))}
-            <input type="text" onKeyDown={handleKeyDown} onChange={(e) => setTag(e.target.value)} value={tag} className="flex p-2 flex-auto outline-0" placeholder="Input Tag" />
+            {/* <input type="text" onKeyDown={handleKeyDown} onChange={(e) => setTag(e.target.value)} value={tag} className="flex p-2 flex-auto outline-0" placeholder="Input Tag" /> */}
+
           </div>
+          <select className="w-full border" multiple="multiple" onClick={(e) => {
+           const uniq = [...new Set([...tags, e.target.value])]
+           setTags(uniq)
+          }}>
+            <option value=""></option>
+            <option value="Web Master">Web Master</option>
+            <option value="Web Programming">Web Programming</option>
+            <option value="Web Design">Web Design</option>
+            <option value="Digital Marketing">Digital Marketing</option>
+            <option value="Coding For Kids">Coding For Kids</option>
+            <option value="Grafic Desain">Grafic Desain</option>
+            <option value="Motion Grafic">Motion Grafic</option>
+          </select>
           <div className="flex flex-row-reverse">
             <button type="submit" onClick={handleSubmit(submitNews)} className="bg-blue-1 text-white p-4 rounded-lg">Post News</button>
           </div>

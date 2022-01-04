@@ -1,6 +1,6 @@
 import setAuthToken from "./setAuthToken";
 
-import { RESET_CURRENT_USER, SET_CURRENT_USER, USER_LOADING } from "./../../redux/reducers/types";
+import {GET_ERRORS, RESET_CURRENT_USER, SET_CURRENT_USER, USER_LOADING } from "./../../redux/reducers/types";
 import instance from './../instance'
 import * as jwt from 'jsonwebtoken'
 
@@ -22,6 +22,9 @@ export const loginUser = (data) => (dispatch) => {
         dispatch(setUserLoading(false))
         window.location.href = '/admin/dashboard'
       }
+    })
+    .catch((err) => {
+      dispatch(setErrors(err.response.data))
     })
 }
 
@@ -78,8 +81,17 @@ export const registerUser = (data) => (dispatch) => {
     })
     .catch((err) => {
       console.log(err)
+      dispatch(setErrors(err.response.data))
       dispatch(setUserLoading(false))
     })
+}
+
+// set error
+export const setErrors = (data) => {
+  return{
+    type: GET_ERRORS,
+    payload: data
+  }
 }
 
 // Set logged in user
