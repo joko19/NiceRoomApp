@@ -60,12 +60,13 @@ function Landing(props) {
   }
 
   const onForgot = async () => {
-    await apiAuth.forgotPassword({ email: email })
+    await apiAuth.forgotPassword({ email: getValues('email') })
       .then((res) => {
         setInfoReset(res.data.message)
-        // console.log(res.data.message)
       })
-    console.log(email)
+      .catch((err) => {
+        setErrors(err.response.data)
+      })
   }
 
   const onChangeForm = (to) => {
@@ -110,7 +111,10 @@ function Landing(props) {
                     }
                   </span>
                 </div>
-                <span className="text-right text-end mt-2 text-black-3 cursor-pointer hover:text-blue-1" onClick={() => setFormStatus('forgotPassword')}>Forgot Password ?</span>
+                <span className="text-right text-end mt-2 text-black-3 cursor-pointer hover:text-blue-1" onClick={() => {
+                  setErrors(null)
+                  setFormStatus('forgotPassword')
+                }}>Forgot Password ?</span>
                 {errors && errors.message === 'Unauthorized' && (
                   <p className="text-red-1 text-sm">Check your email or password</p>
                 )}
@@ -121,7 +125,10 @@ function Landing(props) {
                 <button className="flex w-full justify-center gap-4 border px-6 py-3 border-yellow-1 rounded-lg" onClick={() => onLoginFacebook()}><img src="/asset/icon/ic_facebook.png" alt="login with facebook" /> Facebook</button>
                 <button className="flex w-full  gap-4 justify-center border px-6 py-3 border-yellow-1 rounded-lg" onClick={() => onLoginGoogle()}><img src="/asset/icon/ic_google.png" alt="login with google" /> Google</button>
               </div>
-              <p className="text-right mt-2 text-black-3">Dont you have account ?  <button className='text-blue-1 font-bold' onClick={() => onChangeForm('register')}>Register</button></p>
+              <p className="text-right mt-2 text-black-3">Dont you have account ?  <button className='text-blue-1 font-bold' onClick={() => {
+                onChangeForm('register')
+                setErrors(null)
+              }}>Register</button></p>
             </div>
           )}
 
@@ -177,7 +184,10 @@ function Landing(props) {
               )}
 
               <button className="w-full bg-yellow-1 text-white p-2 mt-4 rounded-xl" >Register</button>
-              <p className="text-right mt-2 text-black-3">Do you have account ? <button onClick={() => onChangeForm('login')}> Login </button></p>
+              <p className="text-right mt-2 text-black-1">Do you have account ? <button className='font-bold text-blue-1' onClick={() => {
+                onChangeForm('login')
+                setErrors(null)
+              }}> Login </button></p>
             </form>
           )}
 
@@ -185,11 +195,21 @@ function Landing(props) {
             <form onSubmit={handleSubmit(onForgot)} className="my-40 bg-white rounded-lg p-4 md:mt-64  m-4 md:m-24">
               <h1 className="text-xl text-center">Forgot Password ?</h1>
               <p className="text-black-3 text-center">Enter your email or phone number to reset your password.</p>
-              <p className="mt-4">Email</p>
+              <p className="mt-4">Email {errors && (
+                <span className="text-red-1 text-sm">{errors.message}</span>
+              )}</p>
               <input type="text" className="p-4 border rounded-xl w-full" placeholder="Input Your Email" {...register("email", { required: true })} />
               <p className="text-blue-1 text-xs">{infoReset}</p>
               <button className="w-full bg-yellow-1 text-white p-2 mt-4 rounded-xl">Submit</button>
-              <p className="text-right mt-2 text-black-3 text-center">Remember Password ?  <button className="text-blue-1" onClick={() => onChangeForm('login')}>Login</button> or <button onClick={() => onChangeForm('register')}>Register</button> </p>
+              <p className="text-right mt-2 text-black-3 text-center">Remember Password ?
+                <button className="text-blue-1" onClick={() => {
+                  onChangeForm('login')
+                  setErrors(null)
+                }}>Login</button> or
+                <button onClick={() => {
+                  onChangeForm('register')
+                  setErrors(null)
+                }}>Register</button> </p>
             </form>
           )}
         </div>

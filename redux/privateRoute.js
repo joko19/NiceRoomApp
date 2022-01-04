@@ -10,13 +10,31 @@ const admin = (WrappedComponent) => {
     if (typeof window !== "undefined") {
       const Router = useRouter();
       const auth = props.auth
-
-      if (!auth.isAuthenticated) {
+      
+      if (auth.isAuthenticated && auth.user.user.roles[0].name !== 'sa') {
         Router.replace("/");
         return null;
       }
       console.log(auth)
 
+      return <WrappedComponent {...props} />;
+    }
+
+    // If we are on server, return null
+    return null;
+  };
+};
+
+const student = (WrappedComponent) => {
+  return (props) => {
+    // checks whether we are on client / browser or server.
+    if (typeof window !== "undefined") {
+      const Router = useRouter();
+      const auth = props.auth
+      if (auth.isAuthenticated && auth.user.user.roles[0].name !== 'st') {
+        Router.replace("/");
+        return null;
+      }
       return <WrappedComponent {...props} />;
     }
 
@@ -76,4 +94,4 @@ const reseller = (WrappedComponent) => {
   };
 };
 
-export { admin, reseller }
+export { admin, reseller, student }

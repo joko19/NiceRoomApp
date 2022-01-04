@@ -14,11 +14,15 @@ function Home(props) {
 
   useEffect(() => {
     console.log(props.auth)
-  if(!props.auth.isAuthenticated){
-    window.location.href = '/landing'
-  }else{
-    window.location.href = '/admin/dashboard'
-  }
+    if (!props.auth.isAuthenticated) {
+      window.location.href = '/landing'
+    } else {
+      if (props.auth.user.user.roles[0].name === 'sa') {
+        window.location.href = '/admin/dashboard'
+      } else if (props.auth.user.user.roles[0].name === 'st') {
+        window.location.href = '/student'
+      }
+    }
   }, [])
   return (
     <div className='text-center mt-12'>

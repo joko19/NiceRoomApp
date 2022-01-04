@@ -1,11 +1,10 @@
 import setAuthToken from "./setAuthToken";
 
-import {GET_ERRORS, RESET_CURRENT_USER, SET_CURRENT_USER, USER_LOADING } from "./../../redux/reducers/types";
+import { GET_ERRORS, RESET_CURRENT_USER, SET_CURRENT_USER, USER_LOADING } from "./../../redux/reducers/types";
 import instance from './../instance'
 import * as jwt from 'jsonwebtoken'
 
 export const loginUser = (data) => (dispatch) => {
-  console.log(data)
   instance.noAuth.post('/auth/login', data, {
     headers: {
       'Content-Type': 'application/json'
@@ -13,18 +12,24 @@ export const loginUser = (data) => (dispatch) => {
   })
     .then((result) => {
       if (result.status) {
-        console.log(result.data.data)
+        const role = result.data.data.user.roles[0].name
         const { access_token } = result.data.data;
-        console.log(access_token)
         localStorage.setItem('ACCESS_TOKEN', access_token)
         setAuthToken(access_token)
         dispatch(setCurrentUser(result.data.data));
         dispatch(setUserLoading(false))
-        window.location.href = '/admin/dashboard'
+        if (role === 'st') {
+          window.location.href = '/student'
+        } else if (role === 'sa') {
+          window.location.href = '/admin/dashboard'
+        }
+        // window.location.href = '/admin/dashboard'
       }
     })
     .catch((err) => {
-      dispatch(setErrors(err.response.data))
+      if (err.response.status === 400) {
+        dispatch(setErrors(err.response.data))
+      }
     })
 }
 
@@ -76,7 +81,7 @@ export const registerUser = (data) => (dispatch) => {
         setAuthToken(token)
         dispatch(setCurrentUser(res.data.data));
         dispatch(setUserLoading(false))
-        window.location.href = '/admin/dashboard'
+        window.location.href = '/landing'
       }
     })
     .catch((err) => {
@@ -88,7 +93,7 @@ export const registerUser = (data) => (dispatch) => {
 
 // set error
 export const setErrors = (data) => {
-  return{
+  return {
     type: GET_ERRORS,
     payload: data
   }

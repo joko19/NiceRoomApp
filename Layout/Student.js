@@ -5,31 +5,28 @@ import { connect } from "react-redux";
 // components
 import Sidebar from "../components/Sidebar/Sidebar";
 import AdminNavbar from "../components/Navbar/AdminNavbar";
-import { admin } from './../redux/privateRoute'
+import { student } from '../redux/privateRoute'
 import Footer from "../components/footer/footer";
 
-function Admin(props) {
+function Student(props) {
 console.log(props.auth)
   return (
     <>
       <div className="wrapper bg-black-8">
-        <AdminNavbar user={props.auth.isAuthenticated ? props.auth.user.user.name : ''} avatar={props.auth.isAuthenticated && props.auth.user.user.avatar}/>
+        <AdminNavbar user={props.auth.isAuthenticated && props.auth.user.user.name } avatar={props.auth.isAuthenticated && props.auth.user.user.avatar}/>
         <div className="flex">
-          <div className="flex-none grow-0">
-            <Sidebar />
-          </div>
           <div className="px-2 md:px-10 w-full overflow-hidden p-8 grow">
             {props.children}
             {/* <FooterAdmin /> */}
           </div>
         </div>
-        <Footer />
+        {/* <Footer /> */}
       </div>
     </>
   )
 }
 
-const withAuth = admin(Admin)
+const withAuth = student(Student)
 withAuth.propTypes = {
   auth: PropTypes.object.isRequired,
 };
