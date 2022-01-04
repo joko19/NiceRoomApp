@@ -24,12 +24,14 @@ export default function Create(props) {
   const { id } = Router.query
   const { quill, quillRef } = useQuill();
   const [image, setImage] = useState(null)
+  const [coverName, setCoverName] = useState()
   const [file, setFile] = useState()
   const [tag, setTag] = useState()
   const [tags, setTags] = useState([])
   const [description, setDescription] = useState()
   const { register, handleSubmit, setValue, getValues, reset } = useForm();
   const chooseImage = (e) => {
+    setCoverName(e.target.files[0].name)
     setImage(URL.createObjectURL(e.target.files[0]))
     setFile(e.target.files[0])
   }
@@ -60,12 +62,14 @@ export default function Create(props) {
       saveToServer(file);
     };
   };
-  
+
   const detail = async () => {
     await apiNews.detail(id)
       .then((res) => {
         const data = res.data.data
-        setImage(instance.pathImg+data.image)
+        console.log(data)
+        setImage(instance.pathImg + data.image)
+        setCoverName(data.image)
         setValue("title", data.title)
         setValue("subtitle", data.sub_title)
         setDescription(data.description)
@@ -78,7 +82,7 @@ export default function Create(props) {
   useEffect(() => {
     detail()
     if (quill) {
-      quill.on('text-change', (delta, oldDelta, source) => {   
+      quill.on('text-change', (delta, oldDelta, source) => {
         setDescription(quill.root.innerHTML)
 
         quill.getModule('toolbar').addHandler('image', selectLocalImage);
@@ -100,8 +104,8 @@ export default function Create(props) {
     for (let i = 0; i < tags; i++) {
       data.append("tags", tags[i])
     }
-    if(file){
-    data.append("image", file)
+    if (file) {
+      data.append("image", file)
     }
     data.append("description", description)
     // for console log
@@ -145,7 +149,7 @@ export default function Create(props) {
         className="md:mt-8 w-full  bg-white"
         title="Create News" >
         <form>
-          {image === null && (
+          {coverName === null && (
             <div className="p-8 border-dashed border-4 border-black self-center justify-center">
               <center>
                 <label htmlFor="file-input">
@@ -155,59 +159,57 @@ export default function Create(props) {
               <p className="text-center text-blue-1">Upload Image</p>
             </div>
           )}
-          {image !== null && (
+          {coverName !== null && (
+            <div className="p-8 border-dashed border-4 border-black self-center justify-center">
             <center>
-              <img src={image} alt="image preview" className="object-cover" />
-              <label htmlFor="file-input">
-                <Image src="/asset/icon/ic_upload.png" alt="icon upload" htmlFor="" width={24} height={24} className="mx-auto cursor-pointer" />
-                <p className="text-center text-blue-1">Change Image</p>
-              </label>
+              <span>{coverName}</span> <span className="text-red-1 rounded border p-1 border-red-1 hover:cursor-pointer" onClick={() => setCoverName(null)}>x</span>
             </center>
+            </div>
           )}
-          <input type="file" accept="image/*" className="hidden" id="file-input" onChange={chooseImage} />
-          <p className="mt-4">News Title</p>
-          <input type="text" className="border w-full rounded p-4" placeholder="Input News Title"  {...register("title", { required: true })} />
-          <p className="mt-4" >Sub-Title</p>
-          <input type="text" className="border w-full rounded p-4" placeholder="Input News Sub-Title" {...register("subtitle", { required: true })} />
-          <p className="mt-4">Description</p>
-          <div className="w-full h-96 mb-16">
-            <div ref={quillRef} />
-          </div>
-          <p className="mt-4">Tags</p>
-          <div className="flex border p-2">
-            {tags.map((item) => (
-              <span key={item} className="bg-blue-6 p-2 m-1 rounded text-blue-1">{item}<span className="ml-1 cursor-pointer" name={item} onClick={handleRemoveItem}> x</span> </span>
-            ))}
-            <input type="text" onKeyDown={handleKeyDown} onChange={(e) => setTag(e.target.value)} value={tag} className="flex p-2 flex-auto outline-0" placeholder="Input Tag" />
-          </div>
-          <div className="flex flex-row-reverse">
-            <button type="submit" onClick={handleSubmit(submitNews)} className="bg-blue-1 text-white p-4 rounded-lg">Post News</button>
-          </div>
-        </form>
-      </Card>
+        <input type="file" accept="image/*" className="hidden" id="file-input" onChange={chooseImage} />
+        <p className="mt-4">News Title</p>
+        <input type="text" className="border w-full rounded p-4" placeholder="Input News Title"  {...register("title", { required: true })} />
+        <p className="mt-4" >Sub-Title</p>
+        <input type="text" className="border w-full rounded p-4" placeholder="Input News Sub-Title" {...register("subtitle", { required: true })} />
+        <p className="mt-4">Description</p>
+        <div className="w-full h-96 mb-16">
+          <div ref={quillRef} />
+        </div>
+        <p className="mt-4">Tags</p>
+        <div className="flex border p-2">
+          {tags.map((item) => (
+            <span key={item} className="bg-blue-6 p-2 m-1 rounded text-blue-1">{item}<span className="ml-1 cursor-pointer" name={item} onClick={handleRemoveItem}> x</span> </span>
+          ))}
+          <input type="text" onKeyDown={handleKeyDown} onChange={(e) => setTag(e.target.value)} value={tag} className="flex p-2 flex-auto outline-0" placeholder="Input Tag" />
+        </div>
+        <div className="flex flex-row-reverse">
+          <button type="submit" onClick={handleSubmit(submitNews)} className="bg-blue-1 text-white p-4 rounded-lg">Post News</button>
+        </div>
+      </form>
+    </Card>
 
-      {/* Success Modal */}
-      <Modal isOpen={isSuccessModal} onClose={onCloseSuccessModal} isCentered>
-        <ModalOverlay />
-        <ModalContent>
-          <ModalHeader><center>Success</center></ModalHeader>
-          <ModalCloseButton />
-          <ModalBody>
-            <div className="flex flex-col text-center ">
-              <p> News Created Successfully </p>
-              <div className="self-center">
-                <Link href="/admin/news">
-                  <a className="bg-blue-1 rounded-lg text-white mt-4 block align-center p-3">Okay</a>
-                </Link>
-                {/* <button className="bg-blue-1 rounded-lg text-white mt-4 block align-center p-3" onClick={() => {
+      {/* Success Modal */ }
+  <Modal isOpen={isSuccessModal} onClose={onCloseSuccessModal} isCentered>
+    <ModalOverlay />
+    <ModalContent>
+      <ModalHeader><center>Success</center></ModalHeader>
+      <ModalCloseButton />
+      <ModalBody>
+        <div className="flex flex-col text-center ">
+          <p> News Created Successfully </p>
+          <div className="self-center">
+            <Link href="/admin/news">
+              <a className="bg-blue-1 rounded-lg text-white mt-4 block align-center p-3">Okay</a>
+            </Link>
+            {/* <button className="bg-blue-1 rounded-lg text-white mt-4 block align-center p-3" onClick={() => {
                   onCloseSuccessModal()
                 }}>Okay</button> */}
-              </div>
-            </div>
-          </ModalBody>
-        </ModalContent>
-      </Modal>
-    </div>
+          </div>
+        </div>
+      </ModalBody>
+    </ModalContent>
+  </Modal>
+    </div >
   )
 }
 

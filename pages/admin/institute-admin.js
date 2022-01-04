@@ -93,28 +93,28 @@ export default function InstituteAdmin(props) {
   }
 
   const onSubmit = async (data) => {
-    console.log("clicked ")
-    if (update) {
-      console.log(selectedData)
-      await apiAdmin.update(selectedData, data)
-        .then((res) => {
-          getData(search, limit, page)
-          onCloseCreateModal()
-          onOpenSuccessModal()
-        })
-        .catch((err) => console.log(err))
-    } else {
-      await apiAdmin.create(data)
-        .then((res) => {
-          getData(search, limit, page)
-          onCloseCreateModal()
-          onOpenSuccessModal()
-        })
-        .catch((err) => {
-          console.log("hello world error")
-          console.log(err)
-        })
-    }
+    console.log("submit clicked")
+    await apiAdmin.create(data)
+      .then((res) => {
+        getData(search, limit, page)
+        onCloseCreateModal()
+        onOpenSuccessModal()
+      })
+      .catch((err) => {
+        console.log("hello world error")
+        console.log(err)
+      })
+  }
+
+  const onUpdate = async (data) => {
+    console.log("clicked")
+    await apiAdmin.update(selectedData, data)
+      .then((res) => {
+        getData(search, limit, page)
+        onCloseCreateModal()
+        onOpenSuccessModal()
+      })
+      .catch((err) => console.log(err))
   }
 
   const getDetail = async (id) => {
@@ -195,7 +195,7 @@ export default function InstituteAdmin(props) {
                                 getDetail(item.id)
                                 setSelectedData(item.id)
                                 setUpdate(true)
-                                onOpenUpdateModal()
+                                onOpenCreateModal()
                               }}>
                               <Image src="/asset/icon/table/fi_edit.png" width={16} height={16} alt="icon edit" />
                             </button>
@@ -226,77 +226,134 @@ export default function InstituteAdmin(props) {
           <ModalHeader>{update ? 'Edit' : 'Create'} Institute Admin</ModalHeader>
           <ModalCloseButton />
           <ModalBody>
+            {!update ? (
 
-            <form onSubmit={handleSubmit(onSubmit)}>
-              <div className="w-full">
-                <p>Full Name {errors.name && (
-                  <span className="text-red-1 text-sm">{errors.name.message}</span>
-                )}</p>
-                <input type="text" className="form w-full border p-4 rounded-lg" placeholder="Input Admin Full Name" {...register("name", { required: "please enter name" })} />
-              </div>
-
-              <div className="flex gap-4 flex-col md:flex-row">
+              <form onSubmit={handleSubmit(onSubmit)}>
                 <div className="w-full">
-                  <p className="mt-4">Institute</p>
-                  <select className="form border bg-white w-full p-4 rounded-lg" placeholder="Choose Institute"  {...register("institute_id", { required: true })} >
-                    <option disabled>Select Institute</option>
-                    {allInstitute.map((item) => (
-                      <option key={item.id} value={item.id}>{item.name}</option>
-                    ))}
-                  </select>
-                </div>
-                <div className="w-full">
-                  <p className="mt-4">Employee ID</p>
-                  <input type="text" className="form  w-full border p-4 rounded-lg" placeholder="Input Employee ID" {...register("employee_id", { required: true })} />
-                </div>
-              </div>
-
-              <div className="flex gap-4 flex-col md:flex-row">
-                <div className="w-full ">
-                  <p className="mt-4">Gender</p>
-                  <select className="form border bg-white w-full p-4 rounded-lg" placeholder="Choose Gender"  {...register("gender", { required: true })} >
-                    <option disabled>Select Gender</option>
-                    <option value="MALE">Male</option>
-                    <option value="FEMALE">Female</option>
-                  </select>
-                </div>
-                <div className="w-full">
-                  <p className="mt-4">Phone Number</p>
-                  <input type="number" className="form border p-4 w-full rounded-lg" placeholder="Input Phone Number" {...register("phone", { required: true })} />
-                </div>
-              </div>
-
-              <div className="flex gap-4 flex-col md:flex-row">
-                <div className="w-full">
-                  <p className="mt-4">Email</p>
-                  <input type="text" className="form w-full border p-4 rounded-lg" placeholder="Input Email Address" {...register("email", { required: true })} />
-                </div>
-                <div className="w-full">
-                  <p className="mt-4">Password  {errors.password && (
-                    <span className="text-red-1 text-sm">{errors.password.message}</span>
+                  <p>Full Name {errors.name && (
+                    <span className="text-red-1 text-sm">{errors.name.message}</span>
                   )}</p>
-                  <div className="relative">
-                    <input type={`${passwdLogin ? 'password' : 'text'}`} {...register("password", { required: true, minLength: { value: 6, message: 'Password minimum 6 character' } })} className="form w-full border p-4 rounded-lg" placeholder="Input New Password" />
-                    <span className="absolute inset-y-0 cursor-pointer right-0 pr-3 flex items-center text-sm leading-5" onClick={() => {
-                      passwdLogin ? setPasswdLogin(false) : setPasswdLogin(true)
-                    }}>
-                      {passwdLogin ?
-                        (<FaEyeSlash className=" z-10 inline-block align-middle" />) :
-                        (<FaEye className=" z-10 inline-block align-middle" />)
-                      }
-                    </span>
+                  <input type="text" className="form w-full border p-4 rounded-lg" placeholder="Input Admin Full Name" {...register("name", { required: "please enter name" })} />
+                </div>
+
+                <div className="flex gap-4 flex-col md:flex-row">
+                  <div className="w-full">
+                    <p className="mt-4">Institute</p>
+                    <select className="form border bg-white w-full p-4 rounded-lg" placeholder="Choose Institute"  {...register("institute_id", { required: true })} >
+                      <option disabled>Select Institute</option>
+                      {allInstitute.map((item) => (
+                        <option key={item.id} value={item.id}>{item.name}</option>
+                      ))}
+                    </select>
+                  </div>
+                  <div className="w-full">
+                    <p className="mt-4">Employee ID</p>
+                    <input type="text" className="form  w-full border p-4 rounded-lg" placeholder="Input Employee ID" {...register("employee_id", { required: true })} />
                   </div>
                 </div>
-              </div>
-              <div className="flex flex-row-reverse gap-4 mt-4">
-                <button type="submit" className="bg-blue-1 p-3 rounded-lg text-white" >Save Institute Admin</button>
-                <button type="button" className="text-black-4 p-3 rounded-lg" onClick={onCloseCreateModal}>Close</button>
-              </div>
-            </form>
+
+                <div className="flex gap-4 flex-col md:flex-row">
+                  <div className="w-full ">
+                    <p className="mt-4">Gender</p>
+                    <select className="form border bg-white w-full p-4 rounded-lg" placeholder="Choose Gender"  {...register("gender", { required: true })} >
+                      <option disabled>Select Gender</option>
+                      <option value="MALE">Male</option>
+                      <option value="FEMALE">Female</option>
+                    </select>
+                  </div>
+                  <div className="w-full">
+                    <p className="mt-4">Phone Number</p>
+                    <input type="number" className="form border p-4 w-full rounded-lg" placeholder="Input Phone Number" {...register("phone", { required: true })} />
+                  </div>
+                </div>
+
+                <div className="flex gap-4 flex-col md:flex-row">
+                  <div className="w-full">
+                    <p className="mt-4">Email</p>
+                    <input type="text" className="form w-full border p-4 rounded-lg" placeholder="Input Email Address" {...register("email", { required: true })} />
+                  </div>
+                  <div className="w-full">
+                    <p className="mt-4">Password  {errors.password && (
+                      <span className="text-red-1 text-sm">{errors.password.message}</span>
+                    )}</p>
+                    <div className="relative">
+                      <input type={`${passwdLogin ? 'password' : 'text'}`} {...register("password", { required: true, minLength: { value: 6, message: 'Password minimum 6 character' } })} className="form w-full border p-4 rounded-lg" placeholder="Input New Password" />
+                      <span className="absolute inset-y-0 cursor-pointer right-0 pr-3 flex items-center text-sm leading-5" onClick={() => {
+                        passwdLogin ? setPasswdLogin(false) : setPasswdLogin(true)
+                      }}>
+                        {passwdLogin ?
+                          (<FaEyeSlash className=" z-10 inline-block align-middle" />) :
+                          (<FaEye className=" z-10 inline-block align-middle" />)
+                        }
+                      </span>
+                    </div>
+                  </div>
+                </div>
+                <div className="flex flex-row-reverse gap-4 mt-4">
+                  <button type="submit" className="bg-blue-1 p-3 rounded-lg text-white" >Save Institute Admin</button>
+                  <button type="button" className="text-black-4 p-3 rounded-lg" onClick={onCloseCreateModal}>Close</button>
+                </div>
+              </form>
+            ) : (
+
+              <form onSubmit={handleSubmit(onUpdate)}>
+
+                <div className="flex gap-4 flex-col md:flex-row">
+                  <div className="w-full mt-4">
+                    <p>Full Name {errors.name && (
+                      <span className="text-red-1 text-sm">{errors.name.message}</span>
+                    )}</p>
+                    <input type="text" className="form w-full border p-4 rounded-lg" placeholder="Input Admin Full Name" {...register("name", { required: "please enter name" })} />
+                  </div>
+                  <div className="w-full">
+                    <p className="mt-4">Employee ID</p>
+                    <input type="text" className="form  w-full border p-4 rounded-lg" placeholder="Input Employee ID" {...register("employee_id", { required: true })} />
+                  </div>
+                </div>
+
+                <div className="flex gap-4 flex-col md:flex-row">
+                  <div className="w-full">
+                    <p className="mt-4">Institute</p>
+                    <select className="form border bg-white w-full p-4 rounded-lg" placeholder="Choose Institute"  {...register("institute_id", { required: true })} >
+                      <option disabled>Select Institute</option>
+                      {allInstitute.map((item) => (
+                        <option key={item.id} value={item.id}>{item.name}</option>
+                      ))}
+                    </select>
+                  </div>
+                  <div className="w-full ">
+                    <p className="mt-4">Gender</p>
+                    <select className="form border bg-white w-full p-4 rounded-lg" placeholder="Choose Gender"  {...register("gender", { required: true })} >
+                      <option disabled>Select Gender</option>
+                      <option value="MALE">Male</option>
+                      <option value="FEMALE">Female</option>
+                    </select>
+                  </div>
+                </div>
+
+                <div className="flex gap-4 flex-col md:flex-row">
+                  <div className="w-full">
+                    <p className="mt-4">Email</p>
+                    <input type="text" className="form w-full border p-4 rounded-lg" placeholder="Input Email Address" {...register("email", { required: true })} />
+                  </div>
+                  <div className="w-full">
+                    <p className="mt-4">Phone Number</p>
+                    <input type="number" className="form border p-4 w-full rounded-lg" placeholder="Input Phone Number" {...register("phone", { required: true })} />
+                  </div>
+                </div>
+                <div className="flex flex-row-reverse gap-4 mt-4">
+                  <button type="submit" className="bg-blue-1 p-3 rounded-lg text-white" >Save Institute Admin</button>
+                  <button type="button" className="text-black-4 p-3 rounded-lg" onClick={onCloseCreateModal}>Close</button>
+                </div>
+              </form>
+            )}
+
+
           </ModalBody>
         </ModalContent>
       </Modal>
 
+      {/* Update Modal */}
       <Modal isOpen={isUpdateModal} onClose={onCloseUpdateModal} size='xl'
         motionPreset='slideInBottom'>
         <ModalOverlay />
@@ -304,57 +361,7 @@ export default function InstituteAdmin(props) {
           <ModalHeader>Edit Institute Admin</ModalHeader>
           <ModalCloseButton />
           <ModalBody>
-            <form onSubmit={handleSubmit(onSubmit)}>
-              <div className="flex gap-4 flex-col md:flex-row">
-                <div className="w-full">
-                  <p>Full Name {errors.name && (
-                    <span className="text-red-1 text-sm">{errors.name.message}</span>
-                  )}</p>
-                  <input type="text" className="form w-full border p-4 rounded-lg" placeholder="Input Admin Full Name" {...register("name", { required: "please enter name" })} />
-                </div>
-                <div className="w-full">
-                  <p >Employee ID</p>
-                  <input type="text" className="form  w-full border p-4 rounded-lg" placeholder="Input Employee ID" {...register("employee_id", { required: true })} />
-                </div>
-              </div>
 
-              <div className="flex gap-4 flex-col md:flex-row">
-                <div className="w-full">
-                  <p className="mt-4">Institute</p>
-                  <select className="form border bg-white w-full p-4 rounded-lg" placeholder="Choose Institute"  {...register("institute_id", { required: true })} >
-                    <option disabled>Select Institute</option>
-                    {allInstitute.map((item) => (
-                      <option key={item.id} value={item.id}>{item.name}</option>
-                    ))}
-                  </select>
-                </div>
-                <div className="w-full ">
-                  <p className="mt-4">Gender</p>
-                  <select className="form border bg-white w-full p-4 rounded-lg" placeholder="Choose Gender"  {...register("gender", { required: true })} >
-                    <option disabled>Select Gender</option>
-                    <option value="MALE">Male</option>
-                    <option value="FEMALE">Female</option>
-                  </select>
-                </div>
-
-              </div>
-
-              <div className="flex gap-4 flex-col md:flex-row">
-                <div className="w-full">
-                  <p className="mt-4">Phone Number</p>
-                  <input type="number" className="form border p-4 w-full rounded-lg" placeholder="Input Phone Number" {...register("phone", { required: true })} />
-                </div>
-                <div className="w-full">
-                  <p className="mt-4">Email</p>
-                  <input type="text" className="form w-full border p-4 rounded-lg" placeholder="Input Email Address" {...register("email", { required: true })} />
-                </div>
-
-              </div>
-              <div className="flex flex-row-reverse gap-4 mt-4">
-                <button type="submit" className="bg-blue-1 p-3 rounded-lg text-white" >Save Institute Admin</button>
-                <button type="button" className="text-black-4 p-3 rounded-lg" onClick={onCloseUpdateModal}>Close</button>
-              </div>
-            </form>
           </ModalBody>
         </ModalContent>
       </Modal>
@@ -404,7 +411,7 @@ export default function InstituteAdmin(props) {
               <button className="flex flex-row-reverse bg-blue-1 rounded-lg text-white mt-4 block align-center p-3" onClick={() => {
                 onCloseDetailModal()
                 setUpdate(false)
-              }}>Okay</button>
+              }}>Close</button>
             </div>
           </ModalBody>
         </ModalContent>

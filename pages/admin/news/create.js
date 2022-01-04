@@ -22,7 +22,7 @@ export default function Create(props) {
   const { quill, quillRef } = useQuill();
   const [image, setImage] = useState(null)
   const [file, setFile] = useState()
-  const [coverName, setCoverName] = useState()
+  const [coverName, setCoverName] = useState(null)
   const [tag, setTag] = useState()
   const [tags, setTags] = useState([])
   const [description, setDescription] = useState()
@@ -141,11 +141,11 @@ export default function Create(props) {
           {coverName !== null && (
             <div className="p-8 border-dashed border-4 border-black self-center justify-center">
               <center>
-                <p>{coverName}</p>
-                <label htmlFor="file-input">
+                <span>{coverName}</span> <span className="text-red-1 rounded border p-1 border-red-1 hover:cursor-pointer" onClick={() => setCoverName(null)}>x</span>
+                {/* <label htmlFor="file-input">
                   <Image src="/asset/icon/ic_upload.png" alt="icon upload" htmlFor="" width={24} height={24} className="mx-auto cursor-pointer" />
                   <p className="text-center text-blue-1">Upload Image</p>
-                </label>
+                </label> */}
               </center>
             </div>
           )}
