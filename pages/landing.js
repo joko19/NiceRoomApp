@@ -5,12 +5,12 @@ import PropTypes from "prop-types";
 import { connect, useDispatch } from "react-redux";
 import Footer from '../components/footer/footer'
 import Header from '../components/Navbar/header';
-import apiAuth from './api/auth'
-import { useForm } from "react-hook-form";
+import { set, useForm } from "react-hook-form";
 import { loginUser, registerUser } from '../action/auth/authAction'
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { data } from 'autoprefixer';
 import store from './../redux/store'
+import apiAuth from '../action/auth/authAction';
 
 function Landing(props) {
   // const state = store.getState()
@@ -20,7 +20,7 @@ function Landing(props) {
   const [confirm, setConfirm] = useState(true)
   const [formStatus, setFormStatus] = useState('login')
   const [infoReset, setInfoReset] = useState()
-  const [errors, setErrors] = useState()
+  const [errors, setErrors] = useState(null)
   const { register, handleSubmit, resetField, getValues } = useForm();
 
   const onRegister = async () => {
@@ -31,17 +31,31 @@ function Landing(props) {
       password: getValues('password'),
       password_confirmation: getValues('password_confirmation')
     }
-    props.registerUser(data)
-    setErrors(props.errors)
+    await apiAuth.register(data)
+      .then((res) => {
+        console.log(res)
+        props.registerUser(res)
+      })
+      .catch((err) => {
+        setErrors(err.response.data)
+      })
   }
 
   const onLogin = async () => {
+    console.log(errors)
     const data = {
       email: getValues('email'),
       password: getValues('password')
     }
-    props.loginUser(data)
-    setErrors(props.errors)
+    await apiAuth.login(data)
+      .then((res)=> {
+        console.log(res)
+        props.loginUser(res)
+      })
+      .catch((err)=>{
+        console.log(err.response.data)
+        setErrors(err.response.data)
+      })
   }
 
   const onLoginGoogle = async () => {

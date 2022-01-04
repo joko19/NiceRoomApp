@@ -68,7 +68,13 @@ export default function Create(props) {
     await apiNews.detail(id)
       .then((res) => {
         const data = res.data.data
-        console.log(data)
+        console.log(data.tags)
+        if (data.tags) {
+          const str = data.tags.replace(/['"]+/g, '').slice(1)
+          const myArr = str.slice(0, str.length - 1).split(", ")
+          setTags(myArr)
+
+        }
         setImage(instance.pathImg + data.image)
         setCoverName(data.image)
         setValue("title", data.title)
@@ -102,8 +108,13 @@ export default function Create(props) {
     const data = new FormData()
     data.append("title", req.title)
     data.append("sub_title", req.subtitle)
-    for (let i = 0; i < tags; i++) {
-      data.append("tags", tags[i])
+    // for (let i = 0; i < tags; i++) {
+    //   data.append("tags", tags[i])
+    // }
+
+    for (let i = 0; i < tags.length; i++) {
+      console.log(tags[i])
+      data.append("tags[" + i + "]", tags[i])
     }
     if (file) {
       data.append("image", file)
@@ -148,7 +159,7 @@ export default function Create(props) {
       </Link>
       <Card
         className="md:mt-8 w-full  bg-white"
-        title="Create News" >
+        title="Edit News" >
         <form>
           {coverName === null && (
             <div className="p-8 border-dashed border-4 border-black self-center justify-center">
@@ -162,60 +173,70 @@ export default function Create(props) {
           )}
           {coverName !== null && (
             <div className="p-8 border-dashed border-4 border-black self-center justify-center">
-            <center>
-              <span>{coverName}</span> <span className="text-red-1 rounded border p-1 border-red-1 hover:cursor-pointer" onClick={() => setCoverName(null)}>x</span>
-            </center>
+              <center>
+                <span>{coverName}</span> <span className="text-red-1 rounded border p-1 border-red-1 hover:cursor-pointer" onClick={() => setCoverName(null)}>x</span>
+              </center>
             </div>
           )}
-        <input type="file" accept="image/*" className="hidden" id="file-input" onChange={chooseImage} />
-        <p className="mt-4">News Title {errors && (
-                    <span className="text-red-1 text-sm">{errors.title}</span>
-                  )}</p>
-        <input type="text" className="border w-full rounded p-4" placeholder="Input News Title"  {...register("title")} />
-        <p className="mt-4" >Sub-Title {errors && (
-                    <span className="text-red-1 text-sm">{errors.sub_title}</span>
-                  )}</p>
-        <input type="text" className="border w-full rounded p-4" placeholder="Input News Sub-Title" {...register("subtitle")} />
-        <p className="mt-4">Description {errors && (
-                    <span className="text-red-1 text-sm">{errors.description}</span>
-                  )}</p>
-        <div className="w-full h-96 mb-16">
-          <div ref={quillRef} />
-        </div>
-        <p className="mt-4">Tags</p>
-        <div className="flex border p-2">
-          {tags.map((item) => (
-            <span key={item} className="bg-blue-6 p-2 m-1 rounded text-blue-1">{item}<span className="ml-1 cursor-pointer" name={item} onClick={handleRemoveItem}> x</span> </span>
-          ))}
-          <input type="text" onKeyDown={handleKeyDown} onChange={(e) => setTag(e.target.value)} value={tag} className="flex p-2 flex-auto outline-0" placeholder="Input Tag" />
-        </div>
-        <div className="flex flex-row-reverse">
-          <button type="submit" onClick={handleSubmit(submitNews)} className="bg-blue-1 text-white p-4 rounded-lg">Post News</button>
-        </div>
-      </form>
-    </Card>
+          <input type="file" accept="image/*" className="hidden" id="file-input" onChange={chooseImage} />
+          <p className="mt-4">News Title {errors && (
+            <span className="text-red-1 text-sm">{errors.title}</span>
+          )}</p>
+          <input type="text" className="border w-full rounded p-4" placeholder="Input News Title"  {...register("title")} />
+          <p className="mt-4" >Sub-Title {errors && (
+            <span className="text-red-1 text-sm">{errors.sub_title}</span>
+          )}</p>
+          <input type="text" className="border w-full rounded p-4" placeholder="Input News Sub-Title" {...register("subtitle")} />
+          <p className="mt-4">Description {errors && (
+            <span className="text-red-1 text-sm">{errors.description}</span>
+          )}</p>
+          <div className="w-full h-96 mb-16">
+            <div ref={quillRef} />
+          </div>
+          <p className="mt-4">Tags</p>
+          <div className="flex border p-4">
+            {tags.map((item) => (
+              <span key={item} className="bg-blue-6 p-2 m-1 rounded text-blue-1">{item}<span className="ml-1 cursor-pointer" name={item} onClick={handleRemoveItem}> x</span> </span>
+            ))}
+            {/* <input type="text" onKeyDown={handleKeyDown} onChange={(e) => setTag(e.target.value)} value={tag} className="flex p-2 flex-auto outline-0" placeholder="Input Tag" /> */}
+          </div>
+          <select className="w-full border" multiple="multiple" onClick={(e) => {
+            const uniq = [...new Set([...tags, e.target.value])]
+            setTags(uniq)
+          }}>
+            <option value="Web Master">Web Master</option>
+            <option value="Web Programming">Web Programming</option>
+            <option value="Web Design">Web Design</option>
+            <option value="Grafic Desain">Grafic Desain</option>
+            <option value="Motion Grafic">Motion Grafic</option>
+          </select>
+          <div className="flex flex-row-reverse">
+            <button type="submit" onClick={handleSubmit(submitNews)} className="bg-blue-1 text-white p-4 rounded-lg">Post News</button>
+          </div>
+        </form>
+      </Card>
 
-      {/* Success Modal */ }
-  <Modal isOpen={isSuccessModal} onClose={onCloseSuccessModal} isCentered>
-    <ModalOverlay />
-    <ModalContent>
-      <ModalHeader><center>Success</center></ModalHeader>
-      <ModalCloseButton />
-      <ModalBody>
-        <div className="flex flex-col text-center ">
-          <p> News Created Successfully </p>
-          <div className="self-center">
-            <Link href="/admin/news">
-              <a className="bg-blue-1 rounded-lg text-white mt-4 block align-center p-3">Okay</a>
-            </Link>
-            {/* <button className="bg-blue-1 rounded-lg text-white mt-4 block align-center p-3" onClick={() => {
+      {/* Success Modal */}
+      <Modal isOpen={isSuccessModal} onClose={onCloseSuccessModal} isCentered>
+        <ModalOverlay />
+        <ModalContent>
+          <ModalHeader><center>Success</center></ModalHeader>
+          <ModalCloseButton />
+          <ModalBody>
+            <div className="flex flex-col text-center ">
+              <p> Update News Successfully </p>
+              <div className="self-center">
+                <Link href="/admin/news">
+                  <a className="bg-blue-1 rounded-lg text-white mt-4 block align-center p-3">Okay</a>
+                </Link>
+                {/* <button className="bg-blue-1 rounded-lg text-white mt-4 block align-center p-3" onClick={() => {
                   onCloseSuccessModal()
                 }}>Okay</button> */}
-          </div>
-        </div>
-      </ModalBody>
-    </ModalContent>
-  </Modal>
+              </div>
+            </div>
+          </ModalBody>
+        </ModalContent>
+      </Modal>
     </div >
   )
 }

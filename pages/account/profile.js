@@ -2,16 +2,13 @@ import Card from "../../components/Cards/Card";
 import Admin from "../../Layout/Admin";
 import { useForm } from "react-hook-form";
 import Image from "next/image";
-import { store } from "../../redux/store";
 import { useEffect, useState } from "react";
 import apiAccount from "../../action/account";
 import {
-  Button,
   Modal,
   ModalOverlay,
   ModalContent,
   ModalHeader,
-  ModalFooter,
   ModalBody,
   ModalCloseButton,
   useDisclosure,
@@ -25,7 +22,7 @@ export default function Profile(props) {
     onClose: onCloseSuccessModal
   } = useDisclosure()
   const { register, handleSubmit, setValue, getValues, reset } = useForm();
-  const [profile, setProfile] = useState({})
+  const [errors, setErrors] = useState()
   const [avatar, setAvatar] = useState('/asset/img/blank_profile.png')
   const [file, setFile] = useState()
 
@@ -64,7 +61,10 @@ export default function Profile(props) {
         console.log(res)
         onOpenSuccessModal()
       })
-      .catch((err) => console.log(err))
+      .catch((err) => {
+        setErrors(err.response.data.data)
+        console.log(err.response.data)
+      })
   }
 
   const choosePhoto = (e) => {
@@ -95,26 +95,34 @@ export default function Profile(props) {
             <div className="flex flex-col">
               <div className="flex flex-col md:flex-row gap-4">
                 <div className="w-full">
-                  <p>First Name</p>
-                  <input type="text"  className="form border w-full p-4 rounded-lg" placeholder="Input Your First Name" {...register("firstName", { required: true })} />
+                  <p>First Name {errors && (
+                    <span className="text-red-1 text-sm">{errors.name}</span>
+                  )}</p>
+                  <input type="text"  className="form border w-full p-4 rounded-lg" placeholder="Input Your First Name" {...register("firstName")} />
                 </div>
                 <div className="flex flex-col w-full">
-                  <p>Last Name</p>
-                  <input type="text" className="form border p-4 rounded-lg" placeholder="Input Your Last Name" {...register("lastName", { required: true })} />
+                  <p>Last Name {errors && (
+                    <span className="text-red-1 text-sm">{errors.name}</span>
+                  )}</p>
+                  <input type="text" className="form border p-4 rounded-lg" placeholder="Input Your Last Name" {...register("lastName")} />
                 </div>
               </div>
               <div className="flex flex-col md:flex-row gap-4">
                 <div className="flex flex-col w-full">
-                  <p>Gender</p>
-                  <select className="form border bg-white p-4 rounded-lg" placeholder="Choose Gender" {...register("gender", { required: true })} >
+                  <p>Gender {errors && (
+                    <span className="text-red-1 text-sm">{errors.gender}</span>
+                  )}</p>
+                  <select className="form border bg-white p-4 rounded-lg" placeholder="Choose Gender" {...register("gender")} >
                     <option disabled>Choose Gender</option>
                     <option value="MALE">Male</option>
                     <option value="FEMALE">Female</option>
                   </select>
                 </div>
                 <div className="flex flex-col w-full">
-                  <p>Email</p>
-                  <input type="text" className="form border p-4 rounded-lg"  placeholder="Input Your Email" {...register("email", { required: true })} />
+                  <p>Email {errors && (
+                    <span className="text-red-1 text-sm">{errors.email}</span>
+                  )}</p>
+                  <input type="text" className="form border p-4 rounded-lg"  placeholder="Input Your Email" {...register("email")} />
                 </div>
               </div>
               <div className="flex flex-col md:flex-row gap-4">

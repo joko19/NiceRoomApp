@@ -71,6 +71,8 @@ export default function Institute() {
         setValue("city", res.city)
         setValue("establishment_year", res.establishment_year)
         setValue("pin_code", res.pin_code)
+        const city = region.find(state => state.name === res.state).cities
+        setCities(city)
       })
   }
 

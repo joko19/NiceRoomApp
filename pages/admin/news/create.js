@@ -82,9 +82,15 @@ export default function Create(props) {
     data.append("title", req.title)
     data.append("sub_title", req.subtitle)
     data.append("description", "hello world")
-    for (let i = 0; i < tags; i++) {
-      data.append("tags", tags[i])
+    const tag = Array.from(tags)
+    // tag.forEach((item) => {
+    //   data.append("tags"+, item)
+    // })
+    for (let i = 0; i < tag.length; i++) {
+      console.log(tag[i])
+      data.append("tags["+i+"]", tag[i])
     }
+    // data.append("tags[0]", tags)
     data.append("image", file)
     data.append("description", description)
     // for console log
@@ -184,7 +190,6 @@ export default function Create(props) {
            const uniq = [...new Set([...tags, e.target.value])]
            setTags(uniq)
           }}>
-            <option value=""></option>
             <option value="Web Master">Web Master</option>
             <option value="Web Programming">Web Programming</option>
             <option value="Web Design">Web Design</option>

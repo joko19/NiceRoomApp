@@ -4,33 +4,39 @@ import { GET_ERRORS, RESET_CURRENT_USER, SET_CURRENT_USER, USER_LOADING } from "
 import instance from './../instance'
 import * as jwt from 'jsonwebtoken'
 
-export const loginUser = (data) => (dispatch) => {
-  instance.noAuth.post('/auth/login', data, {
-    headers: {
-      'Content-Type': 'application/json'
+const login = (data) => instance.noAuth.post('/auth/login', data, {
+  headers: {
+    'Content-Type': 'application/json'
+  }
+})
+
+const register = (data) => instance.noAuth.post('/auth/register', data, {
+  headers: {
+    'Content_Type': 'application/json',
+  }
+})
+
+const apiAuth = {
+  login,
+  register
+}
+
+export default apiAuth
+
+export const loginUser = (result) => (dispatch) => {
+  if (result.status) {
+    const role = result.data.data.user.roles[0].name
+    const { access_token } = result.data.data;
+    localStorage.setItem('ACCESS_TOKEN', access_token)
+    setAuthToken(access_token)
+    dispatch(setCurrentUser(result.data.data));
+    dispatch(setUserLoading(false))
+    if (role === 'st') {
+      window.location.href = '/student'
+    } else if (role === 'sa') {
+      window.location.href = '/admin/dashboard'
     }
-  })
-    .then((result) => {
-      if (result.status) {
-        const role = result.data.data.user.roles[0].name
-        const { access_token } = result.data.data;
-        localStorage.setItem('ACCESS_TOKEN', access_token)
-        setAuthToken(access_token)
-        dispatch(setCurrentUser(result.data.data));
-        dispatch(setUserLoading(false))
-        if (role === 'st') {
-          window.location.href = '/student'
-        } else if (role === 'sa') {
-          window.location.href = '/admin/dashboard'
-        }
-        // window.location.href = '/admin/dashboard'
-      }
-    })
-    .catch((err) => {
-      if (err.response.status === 400) {
-        dispatch(setErrors(err.response.data))
-      }
-    })
+  }
 }
 
 export const loginFacebook = (path) => (dispatch) => {
@@ -66,29 +72,15 @@ export const loginGoogle = (path) => (dispatch) => {
     })
 }
 
-export const registerUser = (data) => (dispatch) => {
-  console.log(data)
-  dispatch(setUserLoading(true))
-  instance.noAuth.post('/auth/register', data, {
-    headers: {
-      'Content_Type': 'application/json',
-    }
-  })
-    .then((res) => {
-      if (res.status) {
-        const { token } = res.data.data;
-        localStorage.setItem('ACCESS_TOKEN', token)
-        setAuthToken(token)
-        dispatch(setCurrentUser(res.data.data));
-        dispatch(setUserLoading(false))
-        window.location.href = '/landing'
-      }
-    })
-    .catch((err) => {
-      console.log(err)
-      dispatch(setErrors(err.response.data))
-      dispatch(setUserLoading(false))
-    })
+export const registerUser = (res) => (dispatch) => {
+  if (res.status) {
+    const { token } = res.data.data;
+    localStorage.setItem('ACCESS_TOKEN', token)
+    setAuthToken(token)
+    dispatch(setCurrentUser(res.data.data));
+    dispatch(setUserLoading(false))
+    window.location.href = '/landing'
+  }
 }
 
 // set error
