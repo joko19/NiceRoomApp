@@ -31,8 +31,8 @@ function Landing(props) {
       password: getValues('password'),
       password_confirmation: getValues('password_confirmation')
     }
-    setErrors(props.errors)
     props.registerUser(data)
+    setErrors(props.errors)
   }
 
   const onLogin = async () => {
@@ -40,8 +40,8 @@ function Landing(props) {
       email: getValues('email'),
       password: getValues('password')
     }
-    setErrors(props.errors)
     props.loginUser(data)
+    setErrors(props.errors)
   }
 
   const onLoginGoogle = async () => {
