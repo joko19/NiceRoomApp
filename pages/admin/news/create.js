@@ -180,16 +180,8 @@ export default function Create(props) {
           <div className="w-full h-96 mb-16">
             <div ref={quillRef} />
           </div>
-          <p className="mt-4">Tags</p>
-          {tags.length > 0 && (
-            <div className="flex border p-4">
-              {tags.map((item) => (
-                <span key={item} className="bg-blue-6 p-2 m-1 rounded text-blue-1">{item}<span className="ml-1 cursor-pointer" name={item} onClick={handleRemoveItem}> x</span> </span>
-              ))}
-              {/* <input type="text" onKeyDown={handleKeyDown} onChange={(e) => setTag(e.target.value)} value={tag} className="flex p-2 flex-auto outline-0" placeholder="Input Tag" /> */}
-            </div>
-          )}
-          <select className="w-full border" defaultValue="Select Tag" onClick={(e) => {
+          <p className="mt-4 pt-4">Tags</p>
+          <select className="form border bg-white w-full p-4 rounded-lg" defaultValue="Select Tag" onClick={(e) => {
             if (e.target.value !== 'Select Tag') {
               const uniq = [...new Set([...tags, e.target.value])]
               setTags(uniq)
@@ -204,7 +196,15 @@ export default function Create(props) {
             <option value="Grafic Desain">Grafic Desain</option>
             <option value="Motion Grafic">Motion Grafic</option>
           </select>
-          <div className="flex flex-row-reverse">
+          {tags.length > 0 && (
+            <div className="flex mt-4 rounded-lg border p-2">
+              {tags.map((item) => (
+                <span key={item} className="bg-blue-200 p-2 m-1 rounded-lg text-black-1">{item}<span className="ml-1 cursor-pointer" name={item} onClick={handleRemoveItem}> x</span> </span>
+              ))}
+              {/* <input type="text" onKeyDown={handleKeyDown} onChange={(e) => setTag(e.target.value)} value={tag} className="flex p-2 flex-auto outline-0" placeholder="Input Tag" /> */}
+            </div>
+          )}
+          <div className="flex flex-row-reverse mt-4">
             <button type="submit" onClick={handleSubmit(submitNews)} className="bg-blue-1 text-white p-4 rounded-lg">Post News</button>
           </div>
         </form>
