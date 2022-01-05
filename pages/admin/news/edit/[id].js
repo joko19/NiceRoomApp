@@ -200,10 +200,11 @@ export default function Create(props) {
             ))}
             {/* <input type="text" onKeyDown={handleKeyDown} onChange={(e) => setTag(e.target.value)} value={tag} className="flex p-2 flex-auto outline-0" placeholder="Input Tag" /> */}
           </div>
-          <select className="w-full border" onClick={(e) => {
+          <select className="w-full border" defaultValue="Select Tag" onClick={(e) => {
             const uniq = [...new Set([...tags, e.target.value])]
             setTags(uniq)
           }}>
+            <option disabled>Select Tag</option>
             <option value="Web Master">Web Master</option>
             <option value="Web Programming">Web Programming</option>
             <option value="Web Design">Web Design</option>
