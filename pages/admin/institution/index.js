@@ -206,7 +206,7 @@ export default function Institute() {
           <ModalHeader>{update ? 'Edit' : 'Create'} Institute</ModalHeader>
           <ModalCloseButton />
           <ModalBody>
-            <form onSubmit={handleSubmit(onSubmit)} >
+            <form onSubmit={handleSubmit(onSubmit)} className="pb-4">
               <div className="flex gap-4">
                 <div className="w-full">
                   <p>Institute Name {errors && (
@@ -226,7 +226,7 @@ export default function Institute() {
                   <p className="mt-4">State {errors && (
                     <span className="text-red-1 text-sm">{errors.state}</span>
                   )}</p>
-                  <select id="state" className="form border bg-white w-full p-4 rounded-lg" placeholder="Choose State" {...register("state")} onChange={chooseState}>
+                  <select id="state" className="form border bg-white w-full p-4 rounded-lg" defaultValue="Select State" placeholder="Choose State" {...register("state")} onChange={chooseState}>
                     <option disabled>Select State</option>
                     {region.map((item) => {
                       return (
@@ -239,7 +239,7 @@ export default function Institute() {
                   <p className="mt-4">City {errors && (
                     <span className="text-red-1 text-sm">{errors.city}</span>
                   )}</p>
-                  <select className="form border bg-white w-full p-4 rounded-lg" placeholder="Choose Gender"  {...register("city")} >
+                  <select className="form border bg-white w-full p-4 rounded-lg" defaultValue="Select City" placeholder="Choose Gender"  {...register("city")} >
                     <option disabled>Select City</option>
                     {cities.map((item) => (
                       <option key={item.id} value={item.name}>{item.name}</option>

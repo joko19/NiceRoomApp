@@ -15,7 +15,6 @@ import {
   ModalBody,
   ModalCloseButton,
   useDisclosure,
-  Select
 } from '@chakra-ui/react'
 import { useForm } from "react-hook-form";
 import { FaAngleLeft, FaAngleRight, FaAngleDoubleLeft, FaAngleDoubleRight } from "react-icons/fa";

@@ -79,7 +79,10 @@ export default function News(props) {
             </Link>
           )}
         >
-          <input type="text" className="p-4 border rounded-lg w-1/2 mb-4" placeholder="Search News" />
+          <input type="text" className="p-4 border rounded-lg w-1/2 mb-4" placeholder="Search News" onChange={(e) => {
+            setSearch(e.target.value)
+            getData(e.target.value, limit, page)
+          }} />
 
           <div className="flex flex-col">
             <div className="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">

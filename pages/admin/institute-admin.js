@@ -156,7 +156,10 @@ export default function InstituteAdmin(props) {
             </button>
           )}
         >
-          <input type="text" className="p-4 border rounded-lg w-1/2 mb-4" placeholder="Search Admin" />
+          <input type="text" className="p-4 border rounded-lg w-1/2 mb-4" placeholder="Search Admin" onChange={(e) => {
+            setSearch(e.target.value)
+            getData(e.target.value, limit, page)
+          }} />
           <div className="flex flex-col">
             <div className="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
               <div className="py-2 align-middle inline-block min-w-full sm:px-6 lg:px-8">
@@ -238,7 +241,7 @@ export default function InstituteAdmin(props) {
           <ModalBody>
             {!update ? (
 
-              <form onSubmit={handleSubmit(onSubmit)}>
+              <form onSubmit={handleSubmit(onSubmit)} className="pb-4">
                 <div className="w-full">
                   <p>Full Name {errors && (
                     <span className="text-red-1 text-sm">{errors.name}</span>
@@ -316,7 +319,7 @@ export default function InstituteAdmin(props) {
               </form>
             ) : (
 
-              <form onSubmit={handleSubmit(onUpdate)}>
+              <form onSubmit={handleSubmit(onUpdate)}  className="pb-4">
                 <div className="flex gap-4 flex-col md:flex-row">
                   <div className="w-full mt-4">
                     <p>Full Name {errors && (
@@ -436,7 +439,7 @@ export default function InstituteAdmin(props) {
                 </div>
               </div>
             </div>
-            <div className="flex flex-row-reverse">
+            <div className="flex flex-row-reverse pb-2">
               <button className="flex flex-row-reverse bg-blue-1 rounded-lg text-white mt-4 block align-center p-3" onClick={() => {
                 onCloseDetailModal()
                 setUpdate(false)

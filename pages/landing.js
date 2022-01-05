@@ -1,6 +1,6 @@
 import Head from 'next/head'
 import Image from 'next/image'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import PropTypes from "prop-types";
 import { connect, useDispatch } from "react-redux";
 import Footer from '../components/footer/footer'
@@ -12,9 +12,12 @@ import { data } from 'autoprefixer';
 import store from './../redux/store'
 import Auth from '../action/auth/authAction';
 import apiAuth from './api/auth';
+import { useToast } from '@chakra-ui/react'
+import { useRouter } from "next/router";
 
 function Landing(props) {
-  // const state = store.getState()
+  const Router = useRouter()
+  const toast = useToast()
   const list = [1, 2, 3]
   const [passwdLogin, setPasswdLogin] = useState(true)
   const [passwdRegister, setPasswdRegister] = useState(true)
@@ -22,7 +25,14 @@ function Landing(props) {
   const [formStatus, setFormStatus] = useState('login')
   const [infoReset, setInfoReset] = useState()
   const [errors, setErrors] = useState(null)
-  const { register, handleSubmit, resetField, getValues } = useForm();
+  const { register, handleSubmit, resetField, reset, getValues } = useForm();
+
+  useEffect(() => {
+    const uri = Router.asPath.split('#')
+    if(uri[1] === 'register'){
+      setFormStatus('register')
+    }
+  }, [])
 
   const onRegister = async () => {
     const data = {
@@ -34,8 +44,20 @@ function Landing(props) {
     }
     await Auth.register(data)
       .then((res) => {
-        console.log(res)
         props.registerUser(res)
+        console.log(res)
+        if(res.status === 201){
+        toast({
+          title: 'Account created.',
+          description: "We've created your account for you. Please Login to Continue",
+          status: 'success',
+          position: 'top-right',
+          duration: 9000,
+          isClosable: true,
+        })
+        reset()
+        setFormStatus('login')
+        }
       })
       .catch((err) => {
         setErrors(err.response.data)
@@ -49,11 +71,11 @@ function Landing(props) {
       password: getValues('password')
     }
     await Auth.login(data)
-      .then((res)=> {
+      .then((res) => {
         console.log(res)
         props.loginUser(res)
       })
-      .catch((err)=>{
+      .catch((err) => {
         console.log(err.response.data)
         setErrors(err.response.data)
       })

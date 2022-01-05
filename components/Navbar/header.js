@@ -68,7 +68,7 @@ function Header(props) {
               <option key={item.id}>{item.name}</option>
             ))}
           </Select>
-          <Link href="landing">
+          <Link href="landing#register">
             <a className="flex text-white border-2 rounded-lg h-full px-4">
               <span className="m-auto">
                 Register

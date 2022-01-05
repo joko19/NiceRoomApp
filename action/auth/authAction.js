@@ -79,7 +79,7 @@ export const registerUser = (res) => (dispatch) => {
     setAuthToken(token)
     dispatch(setCurrentUser(res.data.data));
     dispatch(setUserLoading(false))
-    window.location.href = '/landing'
+    // window.location.href = '/landing'
   }
 }
 

@@ -149,7 +149,7 @@ export default function Topics() {
           <ModalHeader>{update ? 'Update' : 'Create'} Topic</ModalHeader>
           <ModalCloseButton />
           <ModalBody>
-            <form onSubmit={handleSubmit(onSubmit)} >
+            <form onSubmit={handleSubmit(onSubmit)}  className="pb-4">
               <div>
                 <p>Topic Name</p>
                 <input type="text" className="form border w-full p-4 rounded-lg" placeholder="Input Topic Name" {...register("name", { required: true })} />
