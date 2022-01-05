@@ -21,7 +21,7 @@ import instance from "../../../action/instance";
 export default function Create(props) {
   const { quill, quillRef } = useQuill();
   const [image, setImage] = useState(null)
-  const [file, setFile] = useState()
+  const [file, setFile] = useState(null)
   const [coverName, setCoverName] = useState(null)
   const [tag, setTag] = useState()
   const [tags, setTags] = useState([])
@@ -91,7 +91,9 @@ export default function Create(props) {
       data.append("tags[" + i + "]", tag[i])
     }
     // data.append("tags[0]", tags)
-    data.append("image", file)
+    if (file !== null) {
+      data.append("image", file)
+    }
     data.append("description", description)
     // for console log
     // for (var key of data.entries()) {
@@ -179,7 +181,7 @@ export default function Create(props) {
             <div ref={quillRef} />
           </div>
           <p className="mt-4">Tags</p>
-          {tags.length > 0 && (
+          {tags.length > 0  && (
             <div className="flex border p-4">
               {tags.map((item) => (
                 <span key={item} className="bg-blue-6 p-2 m-1 rounded text-blue-1">{item}<span className="ml-1 cursor-pointer" name={item} onClick={handleRemoveItem}> x</span> </span>
@@ -187,7 +189,7 @@ export default function Create(props) {
               {/* <input type="text" onKeyDown={handleKeyDown} onChange={(e) => setTag(e.target.value)} value={tag} className="flex p-2 flex-auto outline-0" placeholder="Input Tag" /> */}
             </div>
           )}
-          <select className="w-full border" defaultValue="Select Tag"  onClick={(e) => {
+          <select className="w-full border" defaultValue="Select Tag" onClick={(e) => {
             const uniq = [...new Set([...tags, e.target.value])]
             setTags(uniq)
           }}>

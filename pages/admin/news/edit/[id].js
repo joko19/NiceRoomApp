@@ -25,7 +25,7 @@ export default function Create(props) {
   const { quill, quillRef } = useQuill();
   const [image, setImage] = useState(null)
   const [coverName, setCoverName] = useState()
-  const [file, setFile] = useState()
+  const [file, setFile] = useState(null)
   const [tag, setTag] = useState()
   const [tags, setTags] = useState([])
   const [description, setDescription] = useState()
@@ -69,12 +69,16 @@ export default function Create(props) {
       .then((res) => {
         const data = res.data.data
         console.log(data.tags)
-        if (data.tags !== null) {
+        const tag = res.data.data.tags
+        console.log(tag)
+        if (tag !== 'null' ) {
+          console.log("ada tag")
           const str = data.tags.replace(/['"]+/g, '').slice(1)
           const myArr = str.slice(0, str.length - 1).split(", ")
           setTags(myArr)
-
+          console.log(myArr)
         }
+        console.log(tags)
         setImage(instance.pathImg + data.image)
         setCoverName(data.image)
         setValue("title", data.title)
@@ -116,6 +120,7 @@ export default function Create(props) {
       console.log(tags[i])
       data.append("tags[" + i + "]", tags[i])
     }
+    console.log(file)
     if (file !== null) {
       data.append("image", file)
     }
