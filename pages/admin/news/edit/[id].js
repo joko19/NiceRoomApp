@@ -71,7 +71,7 @@ export default function Create(props) {
         console.log(data.tags)
         const tag = res.data.data.tags
         console.log(tag)
-        if (tag !== 'null' ) {
+        if (tag !== 'null') {
           console.log("ada tag")
           const str = data.tags.replace(/['"]+/g, '').slice(1)
           const myArr = str.slice(0, str.length - 1).split(", ")
@@ -207,9 +207,11 @@ export default function Create(props) {
               {/* <input type="text" onKeyDown={handleKeyDown} onChange={(e) => setTag(e.target.value)} value={tag} className="flex p-2 flex-auto outline-0" placeholder="Input Tag" /> */}
             </div>
           )}
-          <select className="w-full border" onClick={(e) => {
-            const uniq = [...new Set([...tags, e.target.value])]
-            setTags(uniq)
+          <select className="w-full border" defaultValue="Select Tag" onClick={(e) => {
+            if (e.target.value !== 'Select Tag') {
+              const uniq = [...new Set([...tags, e.target.value])]
+              setTags(uniq)
+            }
           }}>
             <option disabled>Select Tag</option>
             <option value="Web Master">Web Master</option>

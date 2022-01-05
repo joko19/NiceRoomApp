@@ -181,7 +181,7 @@ export default function Create(props) {
             <div ref={quillRef} />
           </div>
           <p className="mt-4">Tags</p>
-          {tags.length > 0  && (
+          {tags.length > 0 && (
             <div className="flex border p-4">
               {tags.map((item) => (
                 <span key={item} className="bg-blue-6 p-2 m-1 rounded text-blue-1">{item}<span className="ml-1 cursor-pointer" name={item} onClick={handleRemoveItem}> x</span> </span>
@@ -190,8 +190,10 @@ export default function Create(props) {
             </div>
           )}
           <select className="w-full border" defaultValue="Select Tag" onClick={(e) => {
-            const uniq = [...new Set([...tags, e.target.value])]
-            setTags(uniq)
+            if (e.target.value !== 'Select Tag') {
+              const uniq = [...new Set([...tags, e.target.value])]
+              setTags(uniq)
+            }
           }}>
 
             <option disabled>Select Tag</option>
