@@ -88,7 +88,7 @@ export default function Create(props) {
     // })
     for (let i = 0; i < tag.length; i++) {
       console.log(tag[i])
-      data.append("tags["+i+"]", tag[i])
+      data.append("tags[" + i + "]", tag[i])
     }
     // data.append("tags[0]", tags)
     data.append("image", file)
@@ -179,18 +179,19 @@ export default function Create(props) {
             <div ref={quillRef} />
           </div>
           <p className="mt-4">Tags</p>
-          <div className="flex border p-4">
-            {tags.map((item) => (
-              <span key={item} className="bg-blue-6 p-2 m-1 rounded text-blue-1">{item}<span className="ml-1 cursor-pointer" name={item} onClick={handleRemoveItem}> x</span> </span>
-            ))}
-            {/* <input type="text" onKeyDown={handleKeyDown} onChange={(e) => setTag(e.target.value)} value={tag} className="flex p-2 flex-auto outline-0" placeholder="Input Tag" /> */}
-
-          </div>
-          <select className="w-full border" defaultValue="Select Tag" onClick={(e) => {
-           const uniq = [...new Set([...tags, e.target.value])]
-           setTags(uniq)
+          {tags.length > 0 && (
+            <div className="flex border p-4">
+              {tags.map((item) => (
+                <span key={item} className="bg-blue-6 p-2 m-1 rounded text-blue-1">{item}<span className="ml-1 cursor-pointer" name={item} onClick={handleRemoveItem}> x</span> </span>
+              ))}
+              {/* <input type="text" onKeyDown={handleKeyDown} onChange={(e) => setTag(e.target.value)} value={tag} className="flex p-2 flex-auto outline-0" placeholder="Input Tag" /> */}
+            </div>
+          )}
+          <select className="w-full border" defaultValue="Select Tag"  onClick={(e) => {
+            const uniq = [...new Set([...tags, e.target.value])]
+            setTags(uniq)
           }}>
-            
+
             <option disabled>Select Tag</option>
             <option value="Web Programming">Web Programming</option>
             <option value="Web Design">Web Design</option>
