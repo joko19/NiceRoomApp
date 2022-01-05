@@ -435,7 +435,7 @@ export default function InstituteAdmin(props) {
 
                 <div>
                   <p>Phone Number : </p>
-                  <p className="font-bold">{detail && detail.name}</p>
+                  <p className="font-bold">{detail && detail.phone}</p>
                 </div>
               </div>
             </div>
