@@ -495,3 +495,17 @@ export default function InstituteAdmin(props) {
   )
 }
 InstituteAdmin.layout = Admin
+
+
+
+
+
+
+
+
+
+
+
+
+
+
