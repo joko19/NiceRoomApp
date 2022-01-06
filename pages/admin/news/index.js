@@ -180,7 +180,7 @@ export default function News(props) {
           <ModalCloseButton />
           <ModalBody>
             <div className="flex flex-col text-center ">
-              <p>Are you sure you want to change the status of <span className="text-blue-1"> {isPublish ? 'Publish' : 'Draft'} </span> to <span className="text-blue-1">{isPublish ? 'Draft' : 'Publish'}</span> on the news "{title}" ? </p>
+              <p>Are you sure you want to change the status of <span className="text-blue-1"> {isPublish ? 'Publish' : 'Draft'} </span> to <span className="text-blue-1">{isPublish ? 'Draft' : 'Publish'}</span> on the news &quot;{title}&quot; ? </p>
               <div className="self-center flex gap-4">
                 <button className=" rounded-lg text-black-4 mt-4 block align-center p-3" onClick={() => {
                   onCloseConfirmModal()
