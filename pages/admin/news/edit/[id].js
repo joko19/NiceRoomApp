@@ -82,6 +82,7 @@ export default function Create(props) {
             })
           }
           setChooseTags(arr)
+          setTags(arr)
         }
         setImage(instance.pathImg + data.image)
         setCoverName(data.image)
