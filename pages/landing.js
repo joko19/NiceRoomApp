@@ -238,15 +238,15 @@ function Landing(props) {
               <input type="text" className="p-4 border rounded-xl w-full" placeholder="Input Your Email" {...register("email", { required: true })} />
               <p className="text-blue-1 text-xs">{infoReset}</p>
               <button className="w-full bg-yellow-1 text-white p-2 mt-4 rounded-xl">Submit</button>
-              <p className="text-right mt-2 text-black-3 text-center">Remember Password ?
+              <p className="text-right mt-2 text-black-3 text-center">Remember Password ? &nbsp;
                 <button className="text-blue-1" onClick={() => {
                   onChangeForm('login')
                   setErrors(null)
-                }}>Login</button> or
-                <button onClick={() => {
+                }}>Login</button>&nbsp;or&nbsp;
+                <button className="text-blue-1" onClick={() => {
                   onChangeForm('register')
                   setErrors(null)
-                }}>Register</button> </p>
+                }}> Register</button> </p>
             </form>
           )}
         </div>

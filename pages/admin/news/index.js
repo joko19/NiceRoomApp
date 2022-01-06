@@ -26,8 +26,15 @@ export default function News(props) {
   const [list, setList] = useState([])
   const { isOpen, onOpen, onClose } = useDisclosure()
   const [selectedData, setSelectedData] = useState(null)
+  const [isPublish, setIsPublish] = useState()
+  const [title, setTitle] = useState()
   const [news, setNews] = useState([])
   const tableHead = ['Title', 'Sub-Title', 'Date', 'Status', 'Action']
+  const {
+    isOpen: isConfirmModal,
+    onOpen: onOpenConfirmModal,
+    onClose: onCloseConfirmModal
+  } = useDisclosure()
 
   const getData = async (search, limit, page) => {
     await apiNews.all(search, limit, page)
@@ -57,8 +64,8 @@ export default function News(props) {
   }
 
   const onPublish = async (id, status) => {
-    console.log(id+status)
-    await apiNews.publish(id, {status:status})
+    console.log(id + status)
+    await apiNews.publish(id, { status: status })
       .then((res) => {
         console.log(res)
         getData(search, limit, page)
@@ -109,31 +116,46 @@ export default function News(props) {
                               <div>{item.sub_title}</div>
                             </td>
                             <td className="px-6 py-4 whitespace-nowrap ">{date.toDateString()}</td>
-                            <td className="px-6 py-4 whitespace-nowrap ">{item.status}</td>
+                            <td className="px-6 py-4 whitespace-nowrap ">
+                              <div className={`${item.status === 'draft' ? 'bg-black-8 text-black-3' : 'bg-green-2 text-green-1'} text-center rounded-lg p-3`}>
+                                {item.status}
+                              </div>
+                            </td>
                             <td className="px-6 py-4 whitespace-nowrap flex text-right gap-2 text-sm font-medium">
+                              {item.status === 'draft' ? (
+                                <>
+                                  <Link href={`news/edit/${item.id}`}>
+                                    <a className="text-indigo-600 hover:text-indigo-900">
+                                      <Image src="/asset/icon/table/fi_edit.png" width={16} height={16} alt="icon edit" />
+                                    </a>
+                                  </Link>
+                                  <button onClick={() => {
+                                    setIsPublish(false)
+                                    setTitle(item.title)
+                                    setSelectedData(item.id)
+                                    onOpenConfirmModal()
+                                    
+                                  }}>
+                                    <Image src="/asset/icon/table/ic_repeat.png" width={16} height={16} alt="icon publish" />
+                                  </button>
+                                </>
+                              ) : (
+                                <button onClick={() => {
+                                  setIsPublish(true)
+                                  setTitle(item.title)
+                                  setSelectedData(item.id)
+                                  onOpenConfirmModal()
+                                }}>
+                                  <Image src="/asset/icon/table/ic_repeat.png" width={16} height={16} alt="icon unpublish" />
+                                </button>
+
+                              )}
                               <a href="#" className="text-indigo-600 hover:text-indigo-900">
                                 <Image src="/asset/icon/table/fi_trash-2.png" width={16} height={16} alt="icon delete" onClick={() => {
                                   setSelectedData(item.id),
                                     onOpen()
                                 }} />
                               </a>
-                              {item.status === 'draft' ? (
-                                <>
-                                  <button onClick={() => onPublish(item.id, 'published')}>
-                                    <Image src="/asset/icon/table/ic_publish.png" width={16} height={16} alt="icon publish" />
-                                  </button>
-                                  <Link href={`news/edit/${item.id}`}>
-                                    <a className="text-indigo-600 hover:text-indigo-900">
-                                      <Image src="/asset/icon/table/fi_edit.png" width={16} height={16} alt="icon edit" />
-                                    </a>
-                                  </Link>
-                                </>
-                              ) : (
-                                <button onClick={() => onPublish(item.id, 'draft')}>
-                                  <Image src="/asset/icon/table/ic_unpublish.png" width={16} height={16} alt="icon unpublish" />
-                                </button>
-
-                              )}
                             </td>
                           </tr>
                         )
@@ -147,6 +169,33 @@ export default function News(props) {
           </div>
         </Card>
       </div>
+
+
+
+      {/* Success Modal */}
+      <Modal isOpen={isConfirmModal} onClose={onCloseConfirmModal} isCentered>
+        <ModalOverlay />
+        <ModalContent>
+          <ModalHeader><center>Confirmation</center></ModalHeader>
+          <ModalCloseButton />
+          <ModalBody>
+            <div className="flex flex-col text-center ">
+              <p>Are you sure you want to change the status of <span className="text-blue-1"> {isPublish ? 'Publish' : 'Draft'} </span> to <span className="text-blue-1">{isPublish ? 'Draft' : 'Publish'}</span> on the news "{title}" ? </p>
+              <div className="self-center flex gap-4">
+                <button className=" rounded-lg text-black-4 mt-4 block align-center p-3" onClick={() => {
+                  onCloseConfirmModal()
+                }}>Cancel</button>
+                <button className="bg-blue-1 rounded-lg text-white mt-4 block align-center p-3" onClick={() => {
+                  onCloseConfirmModal()
+                  onPublish(selectedData, isPublish ? 'draft' : 'published')
+                }}>Yes, Im sure</button>
+              </div>
+            </div>
+          </ModalBody>
+        </ModalContent>
+      </Modal>
+
+      {/* Deleted Modal */}
       <Modal isOpen={isOpen} onClose={onClose}>
         <ModalOverlay />
         <ModalContent>
