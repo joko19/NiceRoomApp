@@ -56,6 +56,15 @@ export default function News(props) {
       })
   }
 
+  const onPublish = async (id, status) => {
+    console.log(id+status)
+    await apiNews.publish(id, {status:status})
+      .then((res) => {
+        console.log(res)
+        getData(search, limit, page)
+      })
+  }
+
   return (
     <>
       <div className="md:py-24">
@@ -102,22 +111,29 @@ export default function News(props) {
                             <td className="px-6 py-4 whitespace-nowrap ">{date.toDateString()}</td>
                             <td className="px-6 py-4 whitespace-nowrap ">{item.status}</td>
                             <td className="px-6 py-4 whitespace-nowrap flex text-right gap-2 text-sm font-medium">
-                              {item.status === 'draft' && (
-                                <>
-                                  <Link href={`news/edit/${item.id}`}>
-                                    <a className="text-indigo-600 hover:text-indigo-900">
-                                      <Image src="/asset/icon/table/fi_edit.png" width={16} height={16} alt="icon edit" />
-                                    </a>
-                                  </Link>
-                                  {/* <Image src="/asset/icon/table/ic_publish.png" width={16} height={16} alt="icon publish" /> */}
-                                </>
-                              )}
                               <a href="#" className="text-indigo-600 hover:text-indigo-900">
                                 <Image src="/asset/icon/table/fi_trash-2.png" width={16} height={16} alt="icon delete" onClick={() => {
                                   setSelectedData(item.id),
                                     onOpen()
                                 }} />
                               </a>
+                              {item.status === 'draft' ? (
+                                <>
+                                  <button onClick={() => onPublish(item.id, 'published')}>
+                                    <Image src="/asset/icon/table/ic_publish.png" width={16} height={16} alt="icon publish" />
+                                  </button>
+                                  <Link href={`news/edit/${item.id}`}>
+                                    <a className="text-indigo-600 hover:text-indigo-900">
+                                      <Image src="/asset/icon/table/fi_edit.png" width={16} height={16} alt="icon edit" />
+                                    </a>
+                                  </Link>
+                                </>
+                              ) : (
+                                <button onClick={() => onPublish(item.id, 'draft')}>
+                                  <Image src="/asset/icon/table/ic_unpublish.png" width={16} height={16} alt="icon unpublish" />
+                                </button>
+
+                              )}
                             </td>
                           </tr>
                         )

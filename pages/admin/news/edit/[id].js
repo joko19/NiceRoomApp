@@ -124,7 +124,6 @@ export default function Create(props) {
       const tag = 'tags['+i+']'
       data.append(tag, tags[i].name)
     }
-    console.log(file)
     if (file !== null) {
       data.append("image", file)
     }
