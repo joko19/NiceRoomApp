@@ -94,7 +94,7 @@ export default function InstituteBranch(props) {
                             </span>
                           </td>
                           <td className="px-6 py-4 whitespace-nowrap flex text-right gap-2 text-sm font-medium">
-                            <Link href={`/admin/institution/${item.id}`}>
+                            <Link href={`#`}>
                               <a className="text-indigo-600 hover:text-indigo-900">
                                 <Image src="/asset/icon/table/ic_decline.png" width={32} height={32} alt="icon detail" />
                               </a>

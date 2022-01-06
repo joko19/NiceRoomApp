@@ -9,7 +9,6 @@ import { student } from '../redux/privateRoute'
 import Footer from "../components/footer/footer";
 
 function Student(props) {
-console.log(props.auth)
   return (
     <>
       <div className="wrapper bg-black-8">

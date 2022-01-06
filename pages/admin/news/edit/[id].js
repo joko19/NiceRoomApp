@@ -18,6 +18,7 @@ import {
 import { useQuill } from 'react-quilljs';
 import instance from "../../../../action/instance";
 import { useRouter } from "next/router";
+import Multiselect from 'multiselect-react-dropdown';
 
 export default function Create(props) {
   const Router = useRouter()
@@ -26,10 +27,12 @@ export default function Create(props) {
   const [image, setImage] = useState(null)
   const [coverName, setCoverName] = useState()
   const [file, setFile] = useState(null)
-  const [tag, setTag] = useState()
   const [tags, setTags] = useState([])
+  const [listTags, setListTags] = useState([{ name: 'Programming'}, { name: 'Design'}, { name: 'Marketing'}, , { name: 'UI/UX'}, { name: 'Education'}, { name: 'Web'}, { name: 'Android'}, , { name: 'Linux'}])
+  const [chooseTags, setChooseTags] = useState([])
   const [description, setDescription] = useState()
   const [errors, setErrors] = useState()
+  const [isPublish, setIsPublish] = useState()
   const { register, handleSubmit, setValue, getValues, reset } = useForm();
   const chooseImage = (e) => {
     setCoverName(e.target.files[0].name)
@@ -68,17 +71,18 @@ export default function Create(props) {
     await apiNews.detail(id)
       .then((res) => {
         const data = res.data.data
-        console.log(data.tags)
         const tag = res.data.data.tags
-        console.log(tag)
         if (tag !== 'null') {
-          console.log("ada tag")
           const str = data.tags.replace(/['"]+/g, '').slice(1)
           const myArr = str.slice(0, str.length - 1).split(", ")
-          setTags(myArr)
-          console.log(myArr)
+          var arr = []
+          for(let i = 0; i < myArr.length; i++){
+            arr.push({
+              name: myArr[i]
+            })
+          }
+          setChooseTags(arr)
         }
-        console.log(tags)
         setImage(instance.pathImg + data.image)
         setCoverName(data.image)
         setValue("title", data.title)
@@ -117,8 +121,8 @@ export default function Create(props) {
     // }
 
     for (let i = 0; i < tags.length; i++) {
-      console.log(tags[i])
-      data.append("tags[" + i + "]", tags[i])
+      const tag = 'tags['+i+']'
+      data.append(tag, tags[i].name)
     }
     console.log(file)
     if (file !== null) {
@@ -129,6 +133,7 @@ export default function Create(props) {
     // for (var key of data.entries()) {
     //   console.log(key[0] + ', ' + key[1]);
     // }
+    data.append("status", isPublish)
     await apiNews.update(id, data)
       .then((res) => {
         onOpenSuccessModal()
@@ -136,36 +141,30 @@ export default function Create(props) {
       .catch((err) => setErrors(err.response.data.data))
   }
 
-  const handleKeyDown = (event) => {
-    // console.log(event.target.value)
-    if (event.key === 'Enter') {
-      setTags([...tags, event.target.value])
-      setTag('')
-      // tags.push(event.target.value)
-    }
-  }
-
-  const handleRemoveItem = (e) => {
-    console.log(e.target.getAttribute("name"))
-    const name = e.target.getAttribute("name")
-    setTags(tags.filter(item => item !== name));
-  };
-
   const {
     isOpen: isSuccessModal,
     onOpen: onOpenSuccessModal,
     onClose: onCloseSuccessModal
   } = useDisclosure()
 
+
+  const onSelectTags = (list, item) => {
+    setTags(list)
+  }
+
+  const onRemoveTags = (list, item) => {
+    setTags(list)
+  }
+
   return (
-    <div className="md:py-12">
+    <div className="md:pt-12 md:mb-28">
       <Link href="/admin/news">
         <a className="flex gap-4 text-blue-1 my-8"><FaAngleLeft /> Back</a>
       </Link>
       <Card
-        className="md:mt-8 w-full  bg-white"
+        className="md:mt-8 w-full  bg-white overflow-visible"
         title="Edit News" >
-        <form>
+        <form onSubmit={handleSubmit(submitNews)}>
           {coverName === null && (
             <div className="p-8 border-dashed border-4 border-black self-center justify-center">
               <center>
@@ -199,30 +198,21 @@ export default function Create(props) {
             <div ref={quillRef} />
           </div>
           <p className="mt-4 pt-4">Tags</p>
+          <div className="z-10">
+            <Multiselect
+              className="z-100 "
+              // options={[{ name: 'Programming' }, { name: 'Design' }, { name: 'Marketing' }, , { name: 'UI/UX' }, { name: 'Programming' }, { name: 'Design' }, { name: 'Marketing' }, , { name: 'UI/UX' }]}
+              options={listTags} // Options to display in the dropdown
+              selectedValues={chooseTags} // Preselected value to persist in dropdown
+              onSelect={onSelectTags} // Function will trigger on select event
+              onRemove={onRemoveTags} // Function will trigger on remove event
+              displayValue="name" // Property name to display in the dropdown options
 
-          <select className="form border bg-white w-full p-4 rounded-lg" defaultValue="Select Tag" onClick={(e) => {
-            if (e.target.value !== 'Select Tag') {
-              const uniq = [...new Set([...tags, e.target.value])]
-              setTags(uniq)
-            }
-          }}>
-            <option disabled>Select Tag</option>
-            <option value="Web Master">Web Master</option>
-            <option value="Web Programming">Web Programming</option>
-            <option value="Web Design">Web Design</option>
-            <option value="Grafic Desain">Grafic Desain</option>
-            <option value="Motion Grafic">Motion Grafic</option>
-          </select>
-          {tags.length > 0 && (
-            <div  className="flex mt-4 rounded-lg border p-2">
-              {tags.map((item) => (
-                <span key={item} className="bg-blue-200 p-2 m-1 rounded-lg text-black-1">{item}<span className="ml-1 cursor-pointer" name={item} onClick={handleRemoveItem}> x</span> </span>
-              ))}
-              {/* <input type="text" onKeyDown={handleKeyDown} onChange={(e) => setTag(e.target.value)} value={tag} className="flex p-2 flex-auto outline-0" placeholder="Input Tag" /> */}
-            </div>
-          )}
-          <div className="flex flex-row-reverse mt-4">
-            <button type="submit" onClick={handleSubmit(submitNews)} className="bg-blue-1 text-white p-4 rounded-lg">Post News</button>
+            />
+          </div>
+          <div className="flex flex-row-reverse gap-4 my-4">
+            <button onClick={() =>setIsPublish("published")} className="bg-blue-1 text-white p-4 rounded-lg">Publish News</button>
+            <button onClick={() => setIsPublish("draft")} className="bg-yellow-1 text-white p-4 rounded-lg">Save as Draft</button>
           </div>
         </form>
       </Card>

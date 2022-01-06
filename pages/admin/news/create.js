@@ -17,13 +17,16 @@ import {
 } from '@chakra-ui/react'
 import { useQuill } from 'react-quilljs';
 import instance from "../../../action/instance";
+import Multiselect from 'multiselect-react-dropdown';
 
 export default function Create(props) {
   const { quill, quillRef } = useQuill();
   const [image, setImage] = useState(null)
   const [file, setFile] = useState(null)
   const [coverName, setCoverName] = useState(null)
-  const [tag, setTag] = useState()
+  const [isPublish, setIsPublish] = useState()
+  // const [tag, setTag] = useState()
+  const [listTags, setListTags] = useState([{ name: 'Programming' }, { name: 'Design' }, { name: 'Marketing' }, , { name: 'UI/UX' }, { name: 'Education' }, { name: 'Web' }, { name: 'Android' }, , { name: 'Linux' }])
   const [tags, setTags] = useState([])
   const [description, setDescription] = useState()
   const [errors, setErrors] = useState()
@@ -77,20 +80,20 @@ export default function Create(props) {
   }, [quill])
 
 
-  const submitNews = async (req) => {
+  const submitNews = async (req,status) => {
+    console.log(status)
     const data = new FormData()
     data.append("title", req.title)
     data.append("sub_title", req.subtitle)
     data.append("description", "hello world")
-    const tag = Array.from(tags)
+    // const tag = Array.from(tags)
     // tag.forEach((item) => {
     //   data.append("tags"+, item)
     // })
-    for (let i = 0; i < tag.length; i++) {
-      console.log(tag[i])
-      data.append("tags[" + i + "]", tag[i])
+    for (let i = 0; i < tags.length; i++) {
+      const tag = 'tags[' + i + ']'
+      data.append(tag, tags[i].name)
     }
-    // data.append("tags[0]", tags)
     if (file !== null) {
       data.append("image", file)
     }
@@ -99,28 +102,14 @@ export default function Create(props) {
     // for (var key of data.entries()) {
     //   console.log(key[0] + ', ' + key[1]);
     // }
+    console.log(isPublish)
+    data.append("status", isPublish)
     await apiNews.create(data)
       .then((res) => {
-        console.log(res)
         onOpenSuccessModal()
       })
       .catch((err) => setErrors(err.response.data.data))
   }
-
-  const handleKeyDown = (event) => {
-    console.log(event.target.value)
-    if (event.key === 'Enter') {
-      setTags([...tags, event.target.value])
-      setTag('')
-      // tags.push(event.target.value)
-    }
-  }
-
-  const handleRemoveItem = (e) => {
-    console.log(e.target.getAttribute("name"))
-    const name = e.target.getAttribute("name")
-    setTags(tags.filter(item => item !== name));
-  };
 
   const {
     isOpen: isSuccessModal,
@@ -128,15 +117,23 @@ export default function Create(props) {
     onClose: onCloseSuccessModal
   } = useDisclosure()
 
+  const onSelectTags = (list, item) => {
+    setTags(list)
+  }
+
+  const onRemoveTags = (list, item) => {
+    setTags(list)
+  }
+
   return (
-    <div className="md:py-12">
+    <div className="md:pt-12 md:pb-28">
       <Link href="/admin/news">
         <a className="flex gap-4 text-blue-1 my-8"><FaAngleLeft /> Back</a>
       </Link>
       <Card
-        className="md:mt-8 w-full  bg-white"
+        className="md:mt-8 w-full  bg-white overflow-visible"
         title="Create News" >
-        <form>
+        <form onSubmit={handleSubmit(submitNews)}>
           {coverName === null && (
             <div className="p-8 border-dashed border-4 border-black self-center justify-center">
               <center>
@@ -180,32 +177,22 @@ export default function Create(props) {
           <div className="w-full h-96 mb-16">
             <div ref={quillRef} />
           </div>
-          <p className="mt-4 pt-4">Tags</p>
-          <select className="form border bg-white w-full p-4 rounded-lg" defaultValue="Select Tag" onClick={(e) => {
-            if (e.target.value !== 'Select Tag') {
-              const uniq = [...new Set([...tags, e.target.value])]
-              setTags(uniq)
-            }
-          }}>
+          <p className="mt-4 ">Tags</p>
+          <div className="z-10">
+            <Multiselect
+              className="z-100 "
+              options={listTags}
+              // options={listTag} // Options to display in the dropdown
+              // selectedValues={this.state.selectedValue} // Preselected value to persist in dropdown
+              onSelect={onSelectTags} // Function will trigger on select event
+              onRemove={onRemoveTags} // Function will trigger on remove event
+              displayValue="name" // Property name to display in the dropdown options
 
-            <option disabled>Select Tag</option>
-            <option value="Web Programming">Web Programming</option>
-            <option value="Web Design">Web Design</option>
-            <option value="Digital Marketing">Digital Marketing</option>
-            <option value="Coding For Kids">Coding For Kids</option>
-            <option value="Grafic Desain">Grafic Desain</option>
-            <option value="Motion Grafic">Motion Grafic</option>
-          </select>
-          {tags.length > 0 && (
-            <div className="flex mt-4 rounded-lg border p-2">
-              {tags.map((item) => (
-                <span key={item} className="bg-blue-200 p-2 m-1 rounded-lg text-black-1">{item}<span className="ml-1 cursor-pointer" name={item} onClick={handleRemoveItem}> x</span> </span>
-              ))}
-              {/* <input type="text" onKeyDown={handleKeyDown} onChange={(e) => setTag(e.target.value)} value={tag} className="flex p-2 flex-auto outline-0" placeholder="Input Tag" /> */}
-            </div>
-          )}
-          <div className="flex flex-row-reverse mt-4">
-            <button type="submit" onClick={handleSubmit(submitNews)} className="bg-blue-1 text-white p-4 rounded-lg">Post News</button>
+            />
+          </div>
+          <div className="flex -z-10 gap-4 flex-row-reverse my-4">
+            <button onClick={() =>setIsPublish("published")} className="bg-blue-1 text-white p-4 rounded-lg">Publish News</button>
+            <button onClick={() => setIsPublish("draft")} className="bg-yellow-1 text-white p-4 rounded-lg">Save as Draft</button>
           </div>
         </form>
       </Card>
@@ -223,9 +210,6 @@ export default function Create(props) {
                 <Link href="/admin/news">
                   <a className="bg-blue-1 rounded-lg text-white mt-4 block align-center p-3">Okay</a>
                 </Link>
-                {/* <button className="bg-blue-1 rounded-lg text-white mt-4 block align-center p-3" onClick={() => {
-                  onCloseSuccessModal()
-                }}>Okay</button> */}
               </div>
             </div>
           </ModalBody>

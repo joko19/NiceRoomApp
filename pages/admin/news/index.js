@@ -27,27 +27,15 @@ export default function News(props) {
   const { isOpen, onOpen, onClose } = useDisclosure()
   const [selectedData, setSelectedData] = useState(null)
   const [news, setNews] = useState([])
-  const tableHead = ['Title', 'Sub-Title', 'Date', 'Action']
-  const getNews = async () => {
-    await apiNews.all()
-      .then((res) => {
-        console.log(res.data.data.data)
-        setNews(res.data.data.data)
-
-      })
-      .catch((err) => {
-        console.log(err)
-      })
-  }
+  const tableHead = ['Title', 'Sub-Title', 'Date', 'Status', 'Action']
 
   const getData = async (search, limit, page) => {
     await apiNews.all(search, limit, page)
       .then((res) => {
-        console.log(res.data.data)
         setDataNews(res.data.data)
         setList(res.data.data.data)
         setPage(res.data.data.current_page)
-
+        console.log(list)
       })
       .catch((err) => {
         console.log(err)
@@ -97,34 +85,43 @@ export default function News(props) {
                       ))}
                     </thead>
                     <tbody className="bg-white divide-y divide-gray-200">
-                      {list.map((item) => (
-                        <tr key={item.id}>
-                          <td className="px-6 py-4 whitespace-nowrap">
-                            <div className="flex items-center">
-                              <div className="ml-4">
-                                <div>{item.title}</div>
+                      {list.map((item) => {
+                        const date = new Date(item.created_at)
+                        return (
+                          <tr key={item.id}>
+                            <td className="px-6 py-4 whitespace-nowrap">
+                              <div className="flex items-center">
+                                <div className="ml-4">
+                                  <div>{item.title}</div>
+                                </div>
                               </div>
-                            </div>
-                          </td>
-                          <td className="px-6 py-4 whitespace-nowrap">
-                            <div>{item.sub_title}</div>
-                          </td>
-                          <td className="px-6 py-4 whitespace-nowrap ">{item.establishment_year}</td>
-                          <td className="px-6 py-4 whitespace-nowrap flex text-right gap-2 text-sm font-medium">
-                            <Link href={`news/edit/${item.id}`}>
-                              <a className="text-indigo-600 hover:text-indigo-900">
-                                <Image src="/asset/icon/table/fi_edit.png" width={16} height={16} alt="icon edit" />
+                            </td>
+                            <td className="px-6 py-4 whitespace-nowrap">
+                              <div>{item.sub_title}</div>
+                            </td>
+                            <td className="px-6 py-4 whitespace-nowrap ">{date.toDateString()}</td>
+                            <td className="px-6 py-4 whitespace-nowrap ">{item.status}</td>
+                            <td className="px-6 py-4 whitespace-nowrap flex text-right gap-2 text-sm font-medium">
+                              {item.status === 'draft' && (
+                                <>
+                                  <Link href={`news/edit/${item.id}`}>
+                                    <a className="text-indigo-600 hover:text-indigo-900">
+                                      <Image src="/asset/icon/table/fi_edit.png" width={16} height={16} alt="icon edit" />
+                                    </a>
+                                  </Link>
+                                  {/* <Image src="/asset/icon/table/ic_publish.png" width={16} height={16} alt="icon publish" /> */}
+                                </>
+                              )}
+                              <a href="#" className="text-indigo-600 hover:text-indigo-900">
+                                <Image src="/asset/icon/table/fi_trash-2.png" width={16} height={16} alt="icon delete" onClick={() => {
+                                  setSelectedData(item.id),
+                                    onOpen()
+                                }} />
                               </a>
-                            </Link>
-                            <a href="#" className="text-indigo-600 hover:text-indigo-900">
-                              <Image src="/asset/icon/table/fi_trash-2.png" width={16} height={16} alt="icon edit" onClick={() => {
-                                setSelectedData(item.id),
-                                  onOpen()
-                              }} />
-                            </a>
-                          </td>
-                        </tr>
-                      ))}
+                            </td>
+                          </tr>
+                        )
+                      })}
                     </tbody>
                   </table>
                 </div>

@@ -15,7 +15,6 @@ const admin = (WrappedComponent) => {
         Router.replace("/");
         return null;
       }
-      console.log(auth)
 
       return <WrappedComponent {...props} />;
     }

@@ -9,7 +9,6 @@ import { admin } from './../redux/privateRoute'
 import Footer from "../components/footer/footer";
 
 function Admin(props) {
-console.log(props.auth)
   return (
     <>
       <div className="wrapper bg-black-8">

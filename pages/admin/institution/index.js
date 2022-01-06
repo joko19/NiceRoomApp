@@ -91,7 +91,6 @@ export default function Institute() {
         onOpenSuccessModal()
       })
       .catch((err) => {
-        setUpdate(false)
         setErrors(err.response.data.data)
         console.log(err)
       }) : await apiInstitute.create(data)
