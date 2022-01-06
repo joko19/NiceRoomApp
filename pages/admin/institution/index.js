@@ -68,15 +68,22 @@ export default function Institute() {
         setValue("name", res.name)
         setValue("address", res.address)
         setValue("state", res.state)
-        setValue("city", res.city)
         setValue("establishment_year", res.establishment_year)
         setValue("pin_code", res.pin_code)
         const city = region.find(state => state.name === res.state).cities
         setCities(city)
+        setValue("city", res.city)
       })
   }
 
   const onSubmit = async (data) => {
+    console.log(data)
+    if (data.state === 'Select State') {
+      data.state = ''
+    }
+    if (data.city === 'Select City') {
+      data.city = ''
+    }
     update ? await apiInstitute.update(selectedData, data)
       .then((res) => {
         reset(res)
@@ -100,8 +107,8 @@ export default function Institute() {
 
   const onDelete = async (id) => {
     await apiInstitute.deleted(id)
-      .then((res) => {
-        if (res.data.status) getAll()
+      .then(() => {
+        getData(search, limit, page)
       })
       .catch((err) => {
         console.log(err)
@@ -239,7 +246,7 @@ export default function Institute() {
                   <p className="mt-4">City {errors && (
                     <span className="text-red-1 text-sm">{errors.city}</span>
                   )}</p>
-                  <select className="form border bg-white w-full p-4 rounded-lg" defaultValue="Select City" placeholder="Choose Gender"  {...register("city")} >
+                  <select className="form border bg-white w-full p-4 rounded-lg" defaultValue="Select City"  {...register("city")} >
                     <option disabled>Select City</option>
                     {cities.map((item) => (
                       <option key={item.id} value={item.name}>{item.name}</option>
@@ -255,7 +262,9 @@ export default function Institute() {
                   <input type="text" className=" w-full form border p-4 rounded-lg" placeholder="Input Establishment Year" {...register("establishment_year")} />
                 </div>
                 <div className="w-full">
-                  <p className="mt-4">Pin Code</p>
+                  <p className="mt-4">Pin Code{errors && (
+                    <span className="text-red-1 text-sm">{errors.pin_code}</span>
+                  )}</p>
                   <input type="number" className="w-full form border p-4 rounded-lg" placeholder="Input 6-Digits Code Number" {...register("pin_code")} />
                 </div>
               </div>
