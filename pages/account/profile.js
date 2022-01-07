@@ -53,17 +53,15 @@ export default function Profile(props) {
     }
     // console.log(data)
     for (var key of data.entries()) {
-      console.log(key[0] + ', ' + key[1]);
+      // console.log(key[0] + ', ' + key[1]);
     }
 
     await apiAccount.updateProfile(data)
       .then((res) => {
-        console.log(res)
         onOpenSuccessModal()
       })
       .catch((err) => {
         setErrors(err.response.data.data)
-        console.log(err.response.data)
       })
   }
 

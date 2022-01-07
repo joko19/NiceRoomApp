@@ -13,7 +13,6 @@ import { FaEye, FaEyeSlash } from "react-icons/fa";
 function Home(props) {
 
   useEffect(() => {
-    console.log(props.auth)
     if (!props.auth.isAuthenticated) {
       window.location.href = '/landing'
     } else {

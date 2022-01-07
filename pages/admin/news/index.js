@@ -42,7 +42,6 @@ export default function News(props) {
         setDataNews(res.data.data)
         setList(res.data.data.data)
         setPage(res.data.data.current_page)
-        console.log(list)
       })
       .catch((err) => {
         console.log(err)
@@ -64,10 +63,8 @@ export default function News(props) {
   }
 
   const onPublish = async (id, status) => {
-    console.log(id + status)
     await apiNews.publish(id, { status: status })
       .then((res) => {
-        console.log(res)
         getData(search, limit, page)
       })
   }

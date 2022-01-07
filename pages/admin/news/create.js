@@ -48,7 +48,6 @@ export default function Create(props) {
     body.append('file', file);
 
     const res = await apiNews.imgUpload(body)
-    console.log(res.data.data)
     insertToEditor(instance.pathImg + res.data.data.image);
   };
 
@@ -73,7 +72,7 @@ export default function Create(props) {
         // console.log('Text change!');
         // console.log(quill.getText()); // Get text only
         // console.log(quill.getContents()); // Get delta contents
-        console.log(quill.root.innerHTML); // Get innerHTML using quill
+        // console.log(quill.root.innerHTML); // Get innerHTML using quill
         // console.log(quillRef.current.firstChild.innerHTML); // Get innerHTML using quillRef
       });
     }
@@ -81,7 +80,6 @@ export default function Create(props) {
 
 
   const submitNews = async (req,status) => {
-    console.log(status)
     const data = new FormData()
     data.append("title", req.title)
     data.append("sub_title", req.subtitle)
@@ -102,7 +100,6 @@ export default function Create(props) {
     // for (var key of data.entries()) {
     //   console.log(key[0] + ', ' + key[1]);
     // }
-    console.log(isPublish)
     data.append("status", isPublish)
     await apiNews.create(data)
       .then((res) => {

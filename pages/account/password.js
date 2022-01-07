@@ -41,7 +41,6 @@ export default function Reset(props) {
 
     await apiAccount.changepassword(data)
       .then((res) => {
-        console.log(res)
         onOpenSuccessModal()
       })
       .catch((err) => setErrors(err.response.data.data))

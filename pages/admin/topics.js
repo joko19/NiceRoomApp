@@ -38,7 +38,6 @@ export default function Topics() {
   const getData = async (search, limit, page) => {
     await apiTopic.all(search, limit, page)
       .then((res) => {
-        console.log(res.data.data)
         setTopics(res.data.data)
         setList(res.data.data.data)
         setPage(res.data.data.current_page)

@@ -46,7 +46,6 @@ export default function Institute() {
   const getData = async (search, limit, page) => {
     await apiInstitute.all(search, limit, page)
       .then((res) => {
-        console.log(res.data.data)
         setDataInstitute(res.data.data)
         setList(res.data.data.data)
         setPage(res.data.data.current_page)
@@ -61,7 +60,6 @@ export default function Institute() {
   }, [])
 
   const getDetail = async (id) => {
-    console.log(id)
     await apiInstitute.detail(id)
       .then((result) => {
         const res = result.data.data
@@ -77,7 +75,6 @@ export default function Institute() {
   }
 
   const onSubmit = async (data) => {
-    console.log(data)
     if (data.state === 'Select State') {
       data.state = ''
     }

@@ -1,5 +1,4 @@
 import Admin from "../../../Layout/Admin";
-import Card from "../../../components/Cards/Card";
 import apiInstitute from "../../../action/institute";
 import { useEffect, useState, useRef, } from 'react'
 import Image from "next/image";
@@ -46,7 +45,6 @@ export default function Institute() {
   const getData = async () => {
     await apiInstitute.detail(id)
       .then((res) => {
-        console.log(res.data.data)
         setDataInstitute(res.data.data)
         setList(res.data.data.branches)
         setPage(res.data.data.current_page)
@@ -63,7 +61,7 @@ export default function Institute() {
   const onSubmit = async (data) => {
     await apiInstitute.create(data)
       .then((res) => {
-        console.log(res)
+        // console.log(res)
       })
       .catch((err) => {
         console.log(err)
@@ -77,7 +75,6 @@ export default function Institute() {
     await apiInstitute.searchBranch(id, keyword)
       .then((res) => {
         setList(res.data.data.branches)
-        console.log(res.data.data)
       })
   }
 

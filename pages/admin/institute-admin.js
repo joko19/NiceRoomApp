@@ -94,10 +94,8 @@ export default function InstituteAdmin(props) {
   }
 
   const onSubmit = async (data) => {
-    console.log("submit clicked")
     await apiAdmin.create(data)
       .then((res) => {
-        console.log(res)
         getData(search, limit, page)
         onCloseCreateModal()
         onOpenSuccessModal()
@@ -111,7 +109,6 @@ export default function InstituteAdmin(props) {
   }
 
   const onUpdate = async (data) => {
-    console.log("clicked")
     await apiAdmin.update(selectedData, data)
       .then((res) => {
         getData(search, limit, page)

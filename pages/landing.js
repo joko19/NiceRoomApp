@@ -45,7 +45,6 @@ function Landing(props) {
     await Auth.register(data)
       .then((res) => {
         props.registerUser(res)
-        console.log(res)
         if(res.status === 201){
         toast({
           title: 'Account created.',
@@ -65,18 +64,15 @@ function Landing(props) {
   }
 
   const onLogin = async () => {
-    console.log(errors)
     const data = {
       email: getValues('email'),
       password: getValues('password')
     }
     await Auth.login(data)
       .then((res) => {
-        console.log(res)
         props.loginUser(res)
       })
       .catch((err) => {
-        console.log(err.response.data)
         setErrors(err.response.data)
       })
   }
@@ -84,7 +80,6 @@ function Landing(props) {
   const onLoginGoogle = async () => {
     await apiAuth.loginGoogle()
       .then((res) => {
-        console.log(res)
         window.location.href = res.data.data.url
       })
   }
