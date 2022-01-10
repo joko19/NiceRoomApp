@@ -1,5 +1,4 @@
 import Card from "../../components/Cards/Card";
-import Admin from "../../Layout/Admin";
 import { useForm } from "react-hook-form";
 import Image from "next/image";
 import { useEffect, useState } from "react";
@@ -14,6 +13,7 @@ import {
   useDisclosure,
 } from '@chakra-ui/react'
 import instance from "../../action/instance";
+import Layout from "../../Layout/Layout";
 
 export default function Profile(props) {
   const {
@@ -163,4 +163,4 @@ export default function Profile(props) {
     </>
   )
 }
-Profile.layout = Admin
+Profile.layout = Layout

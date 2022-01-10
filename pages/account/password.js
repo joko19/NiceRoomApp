@@ -1,5 +1,4 @@
 import Card from "../../components/Cards/Card";
-import Admin from "../../Layout/Admin";
 import { useForm } from "react-hook-form";
 import Image from "next/image";
 import { store } from "../../redux/store";
@@ -17,6 +16,7 @@ import {
   useDisclosure,
 } from '@chakra-ui/react'
 import { FaEye, FaEyeSlash } from "react-icons/fa";
+import Layout from "../../Layout/Layout";
 
 export default function Reset(props) {
   const [old, setOld] = useState(true)
@@ -137,4 +137,4 @@ export default function Reset(props) {
     </>
   )
 }
-Reset.layout = Admin
+Reset.layout = Layout
