@@ -1,26 +1,24 @@
-import Head from 'next/head'
-import Image from 'next/image'
-import { useState, useEffect } from 'react'
+import { useEffect } from 'react'
 import PropTypes from "prop-types";
-import { connect, useDispatch } from "react-redux";
-import Footer from '../components/footer/footer'
-import Header from '../components/Navbar/header';
-import apiAuth from './api/auth'
-import { useForm } from "react-hook-form";
+import { connect } from "react-redux";
 import { loginUser, registerUser } from '../action/auth/authAction'
-import { FaEye, FaEyeSlash } from "react-icons/fa";
+import role from './../redux/role'
 
-function Home(props) {
-
+function Index(props) {
   useEffect(() => {
     if (!props.auth.isAuthenticated) {
       window.location.href = '/landing'
     } else {
-      if (props.auth.user.user.roles[0].name === 'SA') {
+      if (props.auth.user.user.roles[0].name === role.admin)
         window.location.href = '/admin/dashboard'
-      } else if (props.auth.user.user.roles[0].name === 'ST') {
+      else if (props.auth.user.user.roles[0].name === role.instituteAdmin)
+        window.location.href = '/institute/admin'
+      else if (props.auth.user.user.roles[0].name === role.operator)
+        window.location.href = '/operator'
+      else if (props.auth.user.user.roles[0].name === role.staff)
+        window.location.href = '/staff'
+      else if (props.auth.user.user.roles[0].name === role.student)
         window.location.href = '/student'
-      }
     }
   }, [])
   return (
@@ -30,7 +28,7 @@ function Home(props) {
   )
 }
 
-Home.propTypes = {
+Index.propTypes = {
   auth: PropTypes.object.isRequired,
   errors: PropTypes.object.isRequired,
 };
@@ -38,4 +36,4 @@ const mapStateToProps = (state) => ({
   auth: state.auth,
   errors: state.errors,
 });
-export default connect(mapStateToProps, { loginUser, registerUser })(Home);
+export default connect(mapStateToProps, { loginUser, registerUser })(Index);

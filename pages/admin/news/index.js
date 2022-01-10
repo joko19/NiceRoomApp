@@ -3,7 +3,7 @@ import Image from "next/image";
 import Link from "next/link";
 import Icon from "../../../components/Button/Icon";
 import Card from "../../../components/Cards/Card";
-import Admin from "../../../Layout/Admin";
+import Layout from "../../../Layout/Layout";
 import apiNews from "../../../action/news";
 import {
   Button,
@@ -215,4 +215,4 @@ export default function News(props) {
     </>
   )
 }
-News.layout = Admin
+News.layout = Layout

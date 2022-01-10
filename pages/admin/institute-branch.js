@@ -1,4 +1,3 @@
-import Admin from "../../Layout/Admin";
 import Card from "../../components/Cards/Card";
 import { useEffect, useState } from 'react'
 import Image from "next/image";
@@ -17,6 +16,7 @@ import {
 import { useForm } from "react-hook-form";
 import Pagination from "../../components/Pagination/pagination";
 import apiBranch from "../../action/branch";
+import Layout from "../../Layout/Layout";
 
 export default function InstituteBranch(props) {
 
@@ -119,4 +119,4 @@ export default function InstituteBranch(props) {
     </>
   )
 }
-InstituteBranch.layout = Admin
+InstituteBranch.layout = Layout

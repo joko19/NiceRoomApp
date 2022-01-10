@@ -1,4 +1,4 @@
-import Admin from "../../../Layout/Admin";
+import Layout from "../../../Layout/Layout";
 import Card from "../../../components/Cards/Card";
 import apiInstitute from "../../../action/institute";
 import { useEffect, useState } from 'react'
@@ -316,4 +316,4 @@ export default function Institute() {
     </>
   )
 }
-Institute.layout = Admin
+Institute.layout = Layout

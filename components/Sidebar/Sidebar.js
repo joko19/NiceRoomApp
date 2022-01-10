@@ -1,10 +1,17 @@
 import { useRouter } from "next/router";
 import Link from 'next/link'
+import { store } from './../../redux/store'
+import { useState, useEffect } from 'react'
+import role from "../../redux/role";
 
 function Sidebar() {
   const router = useRouter();
+  const [itemList, setItemList] = useState({})
   const uri = "/asset/icon/sidebar/"
-  const list = [{
+  console.log(store.getState().auth.user.user.roles[0].name)
+  const roleStore = store.getState().auth.user.user.roles[0].name
+  console.log(router.pathname.startsWith("/admin"))
+  const admin = [{
     icon: uri + 'ic_home.png',
     active: uri + 'ic_home_active.png',
     name: 'Home',
@@ -46,10 +53,14 @@ function Sidebar() {
     path: '/news'
   },
   ]
+  useEffect(() => {
+    if (router.pathname.startsWith("/admin") && roleStore === role.admin)
+      setItemList(admin)
+  }, [])
   return (
     <>
       <ul className="py-24 px-4 inline-block bg-white w-60 h-full lg:inline-block hidden">
-        {list.map((item) => {
+        {admin.map((item) => {
           const isActive = router.pathname.indexOf(item.path) !== -1
           return (
             <li key={item} className={` ${isActive ? 'bg-blue-1 text-white shadow-lg' : 'bg-white'} flex px-1 gap-4 mt-4 rounded-lg  inline-block block py-1 text-black-3 `}>

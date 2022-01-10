@@ -1,5 +1,4 @@
 import { useState, useEffect } from "react";
-import Admin from "../../Layout/Admin";
 import Card from "../../components/Cards/Card";
 import Image from "next/image";
 import apiTopic from "../../action/topics";
@@ -16,6 +15,7 @@ import {
 } from '@chakra-ui/react'
 import { useForm } from "react-hook-form";
 import Pagination from "../../components/Pagination/pagination";
+import Layout from "../../Layout/Layout";
 
 
 export default function Topics() {
@@ -186,4 +186,4 @@ export default function Topics() {
     </>
   )
 }
-Topics.layout = Admin
+Topics.layout = Layout

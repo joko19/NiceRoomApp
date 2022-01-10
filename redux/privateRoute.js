@@ -1,22 +1,37 @@
 import { useRouter } from "next/router";
-import * as jwt from 'jsonwebtoken'
-import { useDispatch } from "react-redux";
-import { reSetCurrentUser } from "../action/auth/authAction";
-import apiAuth from "../pages/api/auth";
+import role from "./role";
+import { store } from "./store";
 
-const admin = (WrappedComponent) => {
+function redirect() {
+  const router = useRouter()
+  router.replace('/')
+  return null
+}
+
+const privateRoute = (WrappedComponent) => {
   return (props) => {
     // checks whether we are on client / browser or server.
     if (typeof window !== "undefined") {
-      const Router = useRouter();
-      const auth = props.auth
-      
-      if (auth.isAuthenticated && auth.user.user.roles[0].name !== 'SA') {
-        Router.replace("/");
-        return null;
+      const router = useRouter();
+      const isAuth = store.getState().auth.isAuthenticated
+      console.log()
+      if (isAuth) {
+        const roleUser = store.getState().auth.user.user.roles[0].name
+        if (router.pathname.startsWith("/admin") && roleUser !== role.admin)
+          redirect()
+        else if (router.pathname.startsWith("/institute") && roleUser !== role.instituteAdmin)
+          redirect()
+        else if (router.pathname.startsWith("/operator") && roleUser !== role.operator)
+          redirect()
+        else if (router.pathname.startsWith("/staff") && roleUser !== role.staff)
+          redirect()
+        else if (router.pathname.startsWith("/student") && roleUser !== role.student)
+          redirect()
+        else
+          return <WrappedComponent {...props} />;
+      } else {
+        redirect()
       }
-
-      return <WrappedComponent {...props} />;
     }
 
     // If we are on server, return null
@@ -24,73 +39,5 @@ const admin = (WrappedComponent) => {
   };
 };
 
-const student = (WrappedComponent) => {
-  return (props) => {
-    // checks whether we are on client / browser or server.
-    if (typeof window !== "undefined") {
-      const Router = useRouter();
-      const auth = props.auth
-      if (auth.isAuthenticated && auth.user.user.roles[0].name !== 'ST') {
-        Router.replace("/");
-        return null;
-      }
-      return <WrappedComponent {...props} />;
-    }
 
-    // If we are on server, return null
-    return null;
-  };
-};
-
-const reseller = (WrappedComponent) => {
-  return (props) => {
-    // checks whether we are on client / browser or server.
-    if (typeof window !== "undefined") {
-      const Router = useRouter();
-      const dispatch = useDispatch()
-      const auth = props.auth
-
-      // try request API
-      apiMitra.balance()
-        .then((res) => {
-          const result = res.data
-          if (result.statusCode == 401) {
-            dispatch(reSetCurrentUser({}));
-            localStorage.removeItem('ACCESS_TOKEN')
-            Router.replace('/login')
-          }
-        })
-
-      if (!auth.isAuthenticated) {
-        Router.replace("/login");
-        return null;
-      }
-
-      const accessToken = auth.user?.token
-
-      if (!accessToken) {
-        Router.replace("/login");
-        return null;
-      }
-
-      var user = jwt.decode(accessToken)?.user
-
-      if (!user) {
-        Router.replace("/login");
-        return null;
-      }
-
-      if (!user.roles.includes('reseller')) {
-        Router.replace("/login");
-        return null;
-      }
-
-      return <WrappedComponent {...props} />;
-    }
-
-    // If we are on server, return null
-    return null;
-  };
-};
-
-export { admin, reseller, student }
+export default privateRoute

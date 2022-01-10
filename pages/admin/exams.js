@@ -1,4 +1,4 @@
-import Admin from "../../Layout/Admin";
+import Layout from "../../Layout/Layout"
 
 export default function Exams(props) {
   return (
@@ -9,4 +9,4 @@ export default function Exams(props) {
     </div>
   )
 }
-Exams.layout = Admin
+Exams.layout = Layout

@@ -1,8 +1,8 @@
-import Admin from "../../Layout/Admin";
 import Card from "../../components/Cards/Card";
 import Image from "next/image";
 import { Select } from '@chakra-ui/react'
 import Multiselect from 'multiselect-react-dropdown';
+import Layout from "../../Layout/Layout";
 
 export default function Quizzes(props) {
   const list = [1, 2, 3, 4]
@@ -83,4 +83,4 @@ export default function Quizzes(props) {
     </>
   )
 }
-Quizzes.layout = Admin
+Quizzes.layout = Layout

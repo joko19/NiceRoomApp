@@ -1,4 +1,4 @@
-import Student from "../../Layout/Student";
+import Layout from "../../Layout/Layout"
 
 export default  function Index() {
   return (
@@ -7,4 +7,4 @@ export default  function Index() {
 }
 
 
-Index.layout = Student
+Index.layout = Layout

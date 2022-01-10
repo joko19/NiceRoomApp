@@ -1,4 +1,3 @@
-import Admin from "../../Layout/Admin";
 import Card from "../../components/Cards/Card";
 import Icon from "../../components/Button/Icon";
 import { useState, useEffect } from "react";
@@ -20,6 +19,7 @@ import { FaEye, FaEyeSlash } from "react-icons/fa";
 import apiInstitute from "../../action/institute";
 import Pagination from "../../components/Pagination/pagination";
 import { ErrorMessage } from '@hookform/error-message';
+import Layout from "../../Layout/Layout";
 
 export default function InstituteAdmin(props) {
   const [search, setSearch] = useState('')
@@ -491,7 +491,7 @@ export default function InstituteAdmin(props) {
     </>
   )
 }
-InstituteAdmin.layout = Admin
+InstituteAdmin.layout = Layout
 
 
 

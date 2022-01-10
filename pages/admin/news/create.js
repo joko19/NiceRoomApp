@@ -3,7 +3,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { FaAngleLeft } from "react-icons/fa";
 import Card from "../../../components/Cards/Card";
-import Admin from "../../../Layout/Admin";
+import Layout from "../../../Layout/Layout";
 import apiNews from "../../../action/news";
 import { useForm } from "react-hook-form";
 import {
@@ -216,4 +216,4 @@ export default function Create(props) {
   )
 }
 
-Create.layout = Admin
+Create.layout = Layout

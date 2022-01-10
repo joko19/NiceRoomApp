@@ -1,6 +1,7 @@
 import setAuthToken from "./setAuthToken";
 
 import { GET_ERRORS, RESET_CURRENT_USER, SET_CURRENT_USER, USER_LOADING } from "./../../redux/reducers/types";
+import role from "../../redux/role";
 import instance from './../instance'
 import * as jwt from 'jsonwebtoken'
 
@@ -25,17 +26,22 @@ export default Auth
 
 export const loginUser = (result) => (dispatch) => {
   if (result.status) {
-    const role = result.data.data.user.roles[0].name
+    const roleUser = result.data.data.user.roles[0].name
     const { access_token } = result.data.data;
     localStorage.setItem('ACCESS_TOKEN', access_token)
     setAuthToken(access_token)
     dispatch(setCurrentUser(result.data.data));
     dispatch(setUserLoading(false))
-    if (role === 'st') {
-      window.location.href = '/student'
-    } else if (role === 'sa') {
+    if (roleUser === role.admin)
       window.location.href = '/admin/dashboard'
-    }
+    else if (roleUser === role.instituteAdmin)
+      window.location.href = '/institute/admin'
+    else if (roleUser === role.operator)
+      window.location.href = '/operator'
+    else if (roleUser === role.staff)
+      window.location.href = '/staff'
+    else if (roleUser === role.student)
+      window.location.href = '/student'
   }
 }
 

@@ -1,4 +1,4 @@
-import Admin from "../../../Layout/Admin";
+import Layout from "../../../Layout/Layout";
 import apiInstitute from "../../../action/institute";
 import { useEffect, useState, useRef, } from 'react'
 import Image from "next/image";
@@ -308,4 +308,4 @@ export default function Institute() {
     </>
   )
 }
-Institute.layout = Admin
+Institute.layout = Layout

@@ -1,5 +1,5 @@
 import Card from "../../components/Cards/Card";
-import Admin from "../../Layout/Admin";
+import Layout from "../../Layout/Layout";
 import Link from 'next/link'
 import Image from 'next/image'
 import { FaAngleLeft, FaAngleRight, FaAngleDoubleLeft, FaAngleDoubleRight } from "react-icons/fa";
@@ -150,4 +150,4 @@ export default function Index(props) {
     </div>
   )
 }
-Index.layout = Admin
+Index.layout = Layout
