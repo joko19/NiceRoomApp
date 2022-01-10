@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import Link from 'next/link'
 import { useRouter } from 'next/router';
-import UserDropdown from '../Dropdowns/UserDropdown';
 import apiExam from "../../action/exam";
 import { Select } from '@chakra-ui/react'
 

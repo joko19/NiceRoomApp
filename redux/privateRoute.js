@@ -11,7 +11,7 @@ const admin = (WrappedComponent) => {
       const Router = useRouter();
       const auth = props.auth
       
-      if (auth.isAuthenticated && auth.user.user.roles[0].name !== 'sa') {
+      if (auth.isAuthenticated && auth.user.user.roles[0].name !== 'SA') {
         Router.replace("/");
         return null;
       }
@@ -30,7 +30,7 @@ const student = (WrappedComponent) => {
     if (typeof window !== "undefined") {
       const Router = useRouter();
       const auth = props.auth
-      if (auth.isAuthenticated && auth.user.user.roles[0].name !== 'st') {
+      if (auth.isAuthenticated && auth.user.user.roles[0].name !== 'ST') {
         Router.replace("/");
         return null;
       }

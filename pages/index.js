@@ -16,9 +16,9 @@ function Home(props) {
     if (!props.auth.isAuthenticated) {
       window.location.href = '/landing'
     } else {
-      if (props.auth.user.user.roles[0].name === 'sa') {
+      if (props.auth.user.user.roles[0].name === 'SA') {
         window.location.href = '/admin/dashboard'
-      } else if (props.auth.user.user.roles[0].name === 'st') {
+      } else if (props.auth.user.user.roles[0].name === 'ST') {
         window.location.href = '/student'
       }
     }
