@@ -6,7 +6,7 @@ import role from "../../redux/role";
 
 function Sidebar() {
   const router = useRouter();
-  const [itemList, setItemList] = useState({})
+  const [itemList, setItemList] = useState([])
   const uri = "/asset/icon/sidebar/"
   console.log(store.getState().auth.user.user.roles[0].name)
   const roleStore = store.getState().auth.user.user.roles[0].name
@@ -15,32 +15,32 @@ function Sidebar() {
     icon: uri + 'ic_home.png',
     active: uri + 'ic_home_active.png',
     name: 'Home',
-    path: '/dashboard'
+    path: '/admin/dashboard'
   }, {
     icon: uri + 'ic_institute.png',
     active: uri + 'ic_institute_active.png',
     name: 'Institute',
-    path: '/institution'
+    path: '/admin/institution'
   }, {
     icon: uri + 'ic_institute_admin.png',
     active: uri + 'ic_institute_admin_active.png',
     name: 'Institute Admin',
-    path: '/institute-admin'
+    path: '/admin/institute-admin'
   }, {
     icon: uri + 'ic_institute_branch.png',
     active: uri + 'ic_institute_branch_active.png',
     name: 'Institute Branch',
-    path: '/institute-branch'
+    path: '/admin/institute-branch'
   }, {
     icon: uri + 'ic_topics.png',
     active: uri + 'ic_topics_active.png',
     name: 'Topics',
-    path: '/topics'
+    path: '/admin/topics'
   }, {
     icon: uri + 'ic_exams.png',
     active: uri + 'ic_exams_active.png',
     name: 'Exams',
-    path: '/exams'
+    path: '/admin/exams'
   }, {
     icon: uri + 'ic_quizzes.png',
     active: uri + 'ic_quizzes_active.png',
@@ -53,18 +53,52 @@ function Sidebar() {
     path: '/news'
   },
   ]
+  const instituteAdmin = [{
+    icon: uri + 'ic_home.png',
+    active: uri + 'ic_home_active.png',
+    name: 'Home',
+    path: '/institute/home'
+  }, {
+    icon: uri + 'ic_institute_branch.png',
+    active: uri + 'ic_institute_branch_active.png',
+    name: 'Institute Branch',
+    path: '/institute/branch'
+  }, {
+    icon: uri + 'ic_institute_admin.png',
+    active: uri + 'ic_institute_admin_active.png',
+    name: 'Staff',
+    path: '/institute/staff'
+  }, {
+    icon: uri + 'ic_institute_admin.png',
+    active: uri + 'ic_institute_admin_active.png',
+    name: 'Students',
+    path: '/institute/student'
+  },  {
+    icon: uri + 'ic_exams.png',
+    active: uri + 'ic_exams_active.png',
+    name: 'Exams',
+    path: '/institute/exams'
+  },  {
+    icon: uri + 'ic_exams.png',
+    active: uri + 'ic_exams_active.png',
+    name: 'Announcement',
+    path: '/institute/announcement'
+  }, 
+  ]
   useEffect(() => {
     if (router.pathname.startsWith("/admin") && roleStore === role.admin)
       setItemList(admin)
+    if (router.pathname.startsWith("/institute") && roleStore === role.instituteAdmin)
+      setItemList(instituteAdmin)
   }, [])
   return (
     <>
       <ul className="py-24 px-4 inline-block bg-white w-60 h-full lg:inline-block hidden">
-        {admin.map((item) => {
+        {itemList.map((item) => {
           const isActive = router.pathname.indexOf(item.path) !== -1
           return (
             <li key={item} className={` ${isActive ? 'bg-blue-1 text-white shadow-lg' : 'bg-white'} flex px-1 gap-4 mt-4 rounded-lg  inline-block block py-1 text-black-3 `}>
-              <Link href={'/admin' + item.path}>
+              <Link href={item.path}>
                 <a className="flex gap-4 inline-block cursor-pointer p-1 rounded">
                   {isActive ? (
                     <img src={item.active} alt={item.name} className=" w-4 h-4" />
