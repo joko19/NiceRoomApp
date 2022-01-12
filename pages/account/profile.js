@@ -21,7 +21,7 @@ export default function Profile(props) {
     onOpen: onOpenSuccessModal,
     onClose: onCloseSuccessModal
   } = useDisclosure()
-  const { register, handleSubmit, setValue, getValues, reset } = useForm();
+  const { register, handleSubmit, setValue} = useForm();
   const [errors, setErrors] = useState()
   const [avatar, setAvatar] = useState('/asset/img/blank_profile.png')
   const [file, setFile] = useState()

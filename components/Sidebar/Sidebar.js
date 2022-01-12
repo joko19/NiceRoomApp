@@ -3,6 +3,7 @@ import Link from 'next/link'
 import { store } from './../../redux/store'
 import { useState, useEffect } from 'react'
 import role from "../../redux/role";
+import Image from "next/image";
 
 function Sidebar() {
   const router = useRouter();
@@ -45,12 +46,12 @@ function Sidebar() {
     icon: uri + 'ic_quizzes.png',
     active: uri + 'ic_quizzes_active.png',
     name: 'Quizzes',
-    path: '/quizzes'
+    path: '/admin/quizzes'
   }, {
     icon: uri + 'ic_news.png',
     active: uri + 'ic_news_active.png',
     name: 'News',
-    path: '/news'
+    path: '/admin/news'
   },
   ]
   const instituteAdmin = [{
@@ -69,21 +70,21 @@ function Sidebar() {
     name: 'Staff',
     path: '/institute/staff'
   }, {
-    icon: uri + 'ic_institute_admin.png',
-    active: uri + 'ic_institute_admin_active.png',
+    icon: uri + 'ic_student.png',
+    active: uri + 'ic_student_active.png',
     name: 'Students',
     path: '/institute/student'
-  },  {
+  }, {
     icon: uri + 'ic_exams.png',
     active: uri + 'ic_exams_active.png',
     name: 'Exams',
     path: '/institute/exams'
-  },  {
-    icon: uri + 'ic_exams.png',
-    active: uri + 'ic_exams_active.png',
+  }, {
+    icon: uri + 'ic_announcement.png',
+    active: uri + 'ic_announcement_active.png',
     name: 'Announcement',
     path: '/institute/announcement'
-  }, 
+  },
   ]
   useEffect(() => {
     if (router.pathname.startsWith("/admin") && roleStore === role.admin)
@@ -92,8 +93,14 @@ function Sidebar() {
       setItemList(instituteAdmin)
   }, [])
   return (
-    <>
-      <ul className="py-24 px-4 inline-block bg-white w-60 h-full lg:inline-block hidden">
+    <div className="py-24 bg-white h-full">
+      {router.pathname.startsWith("/institute") && roleStore === role.instituteAdmin && (
+        <div className="bg-black-9 m-2 rounded-lg p-4 flex gap-4 mb-8">
+          <Image src="/asset/icon/sidebar/ic_college.png" height="48" width="48" alt="icon campus" />
+          <span className="text-black-1 m-auto">Hardvard Campus</span>
+        </div>
+      )}
+      <ul className="px-4 inline-block w-60 lg:inline-block hidden">
         {itemList.map((item) => {
           const isActive = router.pathname.indexOf(item.path) !== -1
           return (
@@ -112,7 +119,7 @@ function Sidebar() {
           )
         })}
       </ul>
-    </>
+    </div>
   )
 }
 

@@ -18,7 +18,6 @@ import { useForm } from "react-hook-form";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import apiInstitute from "../../action/institute";
 import Pagination from "../../components/Pagination/pagination";
-import { ErrorMessage } from '@hookform/error-message';
 import Layout from "../../Layout/Layout";
 
 export default function InstituteAdmin(props) {
