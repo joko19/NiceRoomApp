@@ -75,7 +75,6 @@ export default function Institute() {
     await apiStaff.detail(id)
       .then((result) => {
         const res = result.data.data
-        console.log(res.branch_id)
         res.avatar ? setAvatar(instance.pathImg + res.avatar) : setAvatar('/asset/img/blank_profile.png')
         setValue("name", res.name)
         setValue("email", res.email)
@@ -83,8 +82,9 @@ export default function Institute() {
         setValue("phone", res.phone)
         setValue("employee_id", res.email)
         if (res.branch_id) {
+          getBranch()
           setValue("branch_id", res.branch_id)
-        } else{
+        } else {
           setValue("branch_id", "Select Branch")
         }
       })
@@ -116,7 +116,6 @@ export default function Institute() {
         onOpenSuccessModal()
         setAvatar('/asset/img/blank_profile.png')
         setFile(null)
-        setUpdate(false)
       })
       .catch((err) => {
         setErrors(err.response.data.data)

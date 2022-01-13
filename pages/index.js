@@ -12,7 +12,7 @@ function Index(props) {
       if (props.auth.user.user.roles[0].name === role.admin)
         window.location.href = '/admin/dashboard'
       else if (props.auth.user.user.roles[0].name === role.instituteAdmin)
-        window.location.href = '/institute'
+        window.location.href = '/institute/home'
       else if (props.auth.user.user.roles[0].name === role.operator)
         window.location.href = '/operator'
       else if (props.auth.user.user.roles[0].name === role.staff)
