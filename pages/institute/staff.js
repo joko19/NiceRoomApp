@@ -1,6 +1,7 @@
 import Layout from "../../Layout/Layout";
 import Card from "../../components/Cards/Card";
 import apiStaff from "../../action/staff";
+import apiBranch from "../../action/branch";
 import { useEffect, useState } from 'react'
 import Image from "next/image";
 import {
@@ -15,6 +16,7 @@ import {
 import { useForm } from "react-hook-form";
 import Pagination from "../../components/Pagination/pagination";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
+import instance from "../../action/instance";
 
 export default function Institute() {
   const [search, setSearch] = useState('')
@@ -24,6 +26,7 @@ export default function Institute() {
   const { isOpen, onOpen, onClose } = useDisclosure()
   const [nameDeleted, setNameDeleted] = useState()
   const [passwd, setpasswd] = useState(true)
+  const [branch, setBranch] = useState([])
   const [passwdConfirmation, setpasswdConfirmation] = useState(true)
   const {
     isOpen: isCreateModal,
@@ -60,22 +63,50 @@ export default function Institute() {
     getData(search, limit, page)
   }, [])
 
+  const getBranch = async () => {
+    await apiBranch.all()
+      .then((res) => {
+        console.log(res.data.data)
+        setBranch(res.data.data)
+      })
+  }
+
   const getDetail = async (id) => {
     await apiStaff.detail(id)
       .then((result) => {
         const res = result.data.data
+        console.log(res.branch_id)
+        res.avatar ? setAvatar(instance.pathImg + res.avatar) : setAvatar('/asset/img/blank_profile.png')
         setValue("name", res.name)
         setValue("email", res.email)
         setValue("gender", res.gender)
         setValue("phone", res.phone)
         setValue("employee_id", res.email)
-        setValue("", res.email)
+        if (res.branch_id) {
+          setValue("branch_id", res.branch_id)
+        } else{
+          setValue("branch_id", "Select Branch")
+        }
       })
   }
 
-  const onSubmit = async (data) => {
-    if (data.gender === 'Select State') {
+  const onSubmit = async (form) => {
+    if (form.gender === 'Select State') {
       data.gender = ''
+    }
+    var data = new FormData();
+    data.append("name", form.name)
+    data.append("gender", form.gender)
+    data.append("email", form.email)
+    data.append("phone", form.phone)
+    data.append("employee_id", form.employee_id)
+    data.append("password", form.password)
+    data.append("password_confirmation", form.password_confirmation)
+    if (form.branch_id !== 'Select Branch') {
+      data.append("branch_id", form.branch_id)
+    }
+    if (file) {
+      data.append("avatar", file)
     }
     update ? await apiStaff.update(selectedData, data)
       .then((res) => {
@@ -83,16 +114,22 @@ export default function Institute() {
         onCloseCreateModal()
         getData(search, limit, page)
         onOpenSuccessModal()
+        setAvatar('/asset/img/blank_profile.png')
+        setFile(null)
+        setUpdate(false)
       })
       .catch((err) => {
         setErrors(err.response.data.data)
         console.log(err)
       }) : await apiStaff.create(data)
         .then((res) => {
+          reset(res)
           onCloseCreateModal()
           setUpdate(false)
           getData(search, limit, page)
           onOpenSuccessModal()
+          setAvatar('/asset/img/blank_profile.png')
+          setFile(null)
         })
         .catch((err) => {
           setErrors(err.response.data.data)
@@ -122,6 +159,9 @@ export default function Institute() {
           title="Staff"
           right={(
             <button className="btn btn-md bg-blue-1 text-white p-3 rounded-lg" onClick={() => {
+              setAvatar('/asset/img/blank_profile.png')
+              getBranch()
+              setUpdate(false)
               onOpenCreateModal()
               setErrors(null)
               reset()
@@ -205,19 +245,19 @@ export default function Institute() {
           <ModalBody>
             <form onSubmit={handleSubmit(onSubmit)} className="pb-4">
 
-            <div className="flex justify-center">
-              <div className="m-4 relative">
-                <Image className="rounded-full object-cover" src={avatar} alt="photo profile" height={160} width={160} />
-                <div className="absolute bottom-5 right-0">
-                  <label htmlFor="file-input">
-                    <Image src="/asset/icon/ic_edit.png" alt="icon update" width={48} height={48} className="ml-6 cursor-pointer" />
-                  </label>
+              <div className="flex justify-center">
+                <div className="m-4 relative">
+                  <Image className="rounded-full object-cover" src={avatar} alt="photo profile" height={160} width={160} />
+                  <div className="absolute bottom-5 right-0">
+                    <label htmlFor="file-input">
+                      <Image src="/asset/icon/ic_edit.png" alt="icon update" width={48} height={48} className="ml-6 cursor-pointer" />
+                    </label>
+                  </div>
+                </div>
+                <div className="hidden">
+                  <input id="file-input" type="file" className="hidden -z-50" accept="image/*" onChange={choosePhoto} />
                 </div>
               </div>
-              <div className="hidden">
-                <input id="file-input" type="file" className="hidden -z-50" accept="image/*" onChange={choosePhoto}/>
-              </div>
-            </div>
               <div className="flex gap-4">
                 <div className="w-full">
                   <p>Full Name {errors && (
@@ -252,17 +292,22 @@ export default function Institute() {
               </div>
 
               <div className="flex gap-4 flex-col md:flex-row">
-                  <div className="w-full">
-                    <p className="mt-4">Employee ID{errors && (
-                      <span className="text-red-1 text-sm">{errors.employee_id}</span>
-                    )}</p>
-                    <input type="text" className="form  w-full border p-4 rounded-lg" placeholder="Input Employee ID" {...register("employee_id",)} />
-                  </div>
-                  <div className="w-full">
-                    <p className="mt-4">Institute Branch (Optional)</p>
-                    {/* <input type="text" className="form  w-full border p-4 rounded-lg" placeholder="Input Employee ID" {...register("employee_id",)} /> */}
-                  </div>
+                <div className="w-full">
+                  <p className="mt-4">Employee ID{errors && (
+                    <span className="text-red-1 text-sm">{errors.employee_id}</span>
+                  )}</p>
+                  <input type="text" className="form  w-full border p-4 rounded-lg" placeholder="Input Employee ID" {...register("employee_id",)} />
                 </div>
+                <div className="w-full">
+                  <p className="mt-4">Institute Branch (Optional)</p>
+                  <select className="form border bg-white w-full p-4 rounded-lg" defaultValue="Select Branch" placeholder="Choose Branch"  {...register("branch_id",)} >
+                    <option disabled>Select Branch</option>
+                    {branch.map((item) => (
+                      <option key={item.id} value={item.id}>{item.name}</option>
+                    ))}
+                  </select>
+                </div>
+              </div>
 
               <div className="flex gap-4 flex-col md:flex-row">
                 <div className="w-full">
