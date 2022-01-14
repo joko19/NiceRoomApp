@@ -9,9 +9,7 @@ function Sidebar() {
   const router = useRouter();
   const [itemList, setItemList] = useState([])
   const uri = "/asset/icon/sidebar/"
-  console.log(store.getState().auth.user.user.roles[0].name)
   const roleStore = store.getState().auth.user.user.roles[0].name
-  console.log(router.pathname.startsWith("/admin"))
   const admin = [{
     icon: uri + 'ic_home.png',
     active: uri + 'ic_home_active.png',

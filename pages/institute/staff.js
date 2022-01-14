@@ -18,7 +18,7 @@ import Pagination from "../../components/Pagination/pagination";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import instance from "../../action/instance";
 
-export default function Institute() {
+export default function Staff() {
   const [search, setSearch] = useState('')
   const [limit, setLimit] = useState('5')
   const [page, setPage] = useState('1')
@@ -393,4 +393,4 @@ export default function Institute() {
     </>
   )
 }
-Institute.layout = Layout
+Staff.layout = Layout

@@ -33,7 +33,6 @@ export default function Student() {
   const [passwd, setpasswd] = useState(true)
   const [listBranch, setListBranch] = useState([])
   const [listBatch, setListBatch] = useState([])
-  const [passwdConfirmation, setpasswdConfirmation] = useState(true)
   const {
     isOpen: isCreateModal,
     onOpen: onOpenCreateModal,
@@ -56,7 +55,6 @@ export default function Student() {
   const getData = async (search, branch, batch, status, limit, page) => {
     await apiStudent.index(search, branch, batch, status, limit, page)
       .then((res) => {
-        console.log(res.data.data.data)
         setDataInstitute(res.data.data)
         setList(res.data.data.data)
         setPage(res.data.data.current_page)

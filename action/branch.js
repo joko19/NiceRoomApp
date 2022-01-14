@@ -1,6 +1,6 @@
 import instance from './instance'
 
-const index = (search, limit, page) => instance.auth.get('/branch?search=' + search + '&limit=' + limit + '&page=' + page)
+const index = (search, status, limit, page) => instance.auth.get('/branch?search=' + search + '&status=' + status + '&limit=' + limit + '&page=' + page)
 const all = () => instance.auth.get('/branch/all')
 const create = (data) => instance.auth.post('/branch', data)
 const detail = (id) => instance.auth.get('/branch/' + id)

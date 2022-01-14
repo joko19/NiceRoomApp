@@ -10,8 +10,6 @@ import Footer from "../components/footer/footer";
 import { store } from "../redux/store";
 
 function Layout(props) {
-  console.log(props.auth.user.user.roles)
-  console.log(store.getState().auth.user.user.roles[0].name)
   return (
     <>
       <div className="wrapper bg-black-8">
