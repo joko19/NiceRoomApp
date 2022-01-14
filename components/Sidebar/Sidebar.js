@@ -84,11 +84,36 @@ function Sidebar() {
     path: '/institute/announcement'
   },
   ]
+  const operator = [{
+    icon: uri + 'ic_home.png',
+    active: uri + 'ic_home_active.png',
+    name: 'Home',
+    path: '/operator/home'
+  }, {
+    icon: uri + 'ic_exams.png',
+    active: uri + 'ic_exams_active.png',
+    name: 'Exams',
+    path: '/operator/exams'
+  },{
+    icon: uri + 'ic_practice.png',
+    active: uri + 'ic_practice_active.png',
+    name: 'Practice Test',
+    path: '/operator/practice'
+  }, {
+    icon: uri + 'ic_quizzes.png',
+    active: uri + 'ic_quizzes_active.png',
+    name: 'Quizzes',
+    path: '/operator/quizzes'
+  }, 
+  ]
   useEffect(() => {
     if (router.pathname.startsWith("/admin") && roleStore === role.admin)
       setItemList(admin)
     if (router.pathname.startsWith("/institute") && roleStore === role.instituteAdmin)
       setItemList(instituteAdmin)
+    if (router.pathname.startsWith("/operator") && roleStore === role.operator)
+      setItemList(operator)
+
   }, [])
   return (
     <div className="py-24 bg-white h-full">
