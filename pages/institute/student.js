@@ -195,7 +195,7 @@ export default function Student() {
                 getData(search, e.target.value, batch, status, limit, page)
               }}>
                 {listBranch.map((item) => (
-                  <option value={item.name}>{item.name}</option>
+                  <option key={item} value={item.name}>{item.name}</option>
                 ))}
               </Select>
             </div>
@@ -205,7 +205,7 @@ export default function Student() {
                 getData(search, branch, e.target.value, status, limit, page)
               }}>
                 {listBatch.map((item) => (
-                  <option value={item.name}>{item.name}</option>
+                  <option key={item} value={item.name}>{item.name}</option>
                 ))}
               </Select>
             </div>
