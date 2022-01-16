@@ -42,8 +42,8 @@ export default function Quizzes(props) {
                       ))}
                     </thead>
                     <tbody className="bg-white divide-y divide-gray-200">
-                      {list.map((item) => (
-                        <tr key={item.id}>
+                      {list.map((item, index) => (
+                        <tr key={index}>
                           <td className="px-6 py-4 whitespace-nowrap">
                             <div>Name {item}</div>
                           </td>

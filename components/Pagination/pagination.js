@@ -7,7 +7,7 @@ function Pagination({ page, lastPage, total, limit, search, status = false, bran
     <div className="flex mt-8 flex-row-reverse flex-end gap-4">
       <button className={`${page !== lastPage ? 'bg-black-6' : 'cursor-default'} rounded-full p-1`} onClick={() => {
         if (page !== lastPage) {
-          if (branch !== false && batch && false) {
+          if (branch !== false && batch !== false) {
             doData(search, branch, batch, status, limit, lastPage)
           } else if (status !== false) {
             doData(search, status, limit, lastPage)

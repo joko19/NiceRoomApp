@@ -169,8 +169,8 @@ export default function InstituteAdmin(props) {
                       ))}
                     </thead>
                     <tbody className="bg-white divide-y divide-gray-200">
-                      {list.map((item) => (
-                        <tr key={item.email}>
+                      {list.map((item, index) => (
+                        <tr key={index}>
                           <td className="px-6 py-4 whitespace-nowrap">
                             <div className="flex items-center">
                               <div className="ml-4">

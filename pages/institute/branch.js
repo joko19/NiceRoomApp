@@ -254,7 +254,7 @@ export default function Branch() {
                       </thead>
                       <tbody className="bg-white divide-y divide-gray-200">
                         {list.map((item) => (
-                          <tr key={item.email}>
+                          <tr key={item.id}>
                             <td className="px-6 py-4 whitespace-nowrap">
                               <div className="flex items-center">
                                 <div className="ml-4">
@@ -336,7 +336,7 @@ export default function Branch() {
                       </thead>
                       <tbody className="bg-white divide-y divide-gray-200">
                         {listBatch.map((item, index) => (
-                          <tr key={item.email}>
+                          <tr key={index}>
                             <td className="px-6 py-4 whitespace-nowrap">
                               <div className="flex items-center">
                                 <div className="ml-4">
