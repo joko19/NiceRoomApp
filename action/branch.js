@@ -6,6 +6,7 @@ const create = (data) => instance.auth.post('/branch', data)
 const detail = (id) => instance.auth.get('/branch/' + id)
 const update = (id, data) => instance.auth.post('/branch/' + id + "?_method=PUT", data)
 const deleted = (id) => instance.auth.delete('/branch/' + id)
+const updateStatus = (id, data) => instance.auth.put('/branch/' + id + '/status', data)
 
 const apiBranch = {
   index,
@@ -13,7 +14,8 @@ const apiBranch = {
   create,
   detail,
   update,
-  deleted
+  deleted,
+  updateStatus
 }
 
 export default apiBranch

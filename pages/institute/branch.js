@@ -15,10 +15,9 @@ import {
 } from '@chakra-ui/react'
 import { useForm } from "react-hook-form";
 import Pagination from "../../components/Pagination/pagination";
-import { FaEye, FaEyeSlash } from "react-icons/fa";
-import instance from "../../action/instance";
 import apiBatch from "../../action/batch";
 import { region } from "../../action/India";
+import { Select } from '@chakra-ui/react'
 
 export default function Branch() {
   const [search, setSearch] = useState('')
@@ -224,12 +223,23 @@ export default function Branch() {
                 + Create Branch
               </button>
             )}
-          >
-            <input type="text" className="p-4 border rounded-lg w-1/2 mb-4" value={search} placeholder="Search Branch" onChange={(e) => {
-              setSearch(e.target.value)
-              getData(e.target.value, status, limit, page)
-            }} />
+          > 
+            <div className="flex gap-4 mb-4">
+              <input type="text" className=" border rounded-lg w-1/2 p-2" value={search} placeholder="Search Branch" onChange={(e) => {
+                setSearch(e.target.value)
+                getData(e.target.value, status, limit, page)
+              }} />
 
+              <div className=" w-1/2 h-full  ">
+                <Select placeholder='All Status' className="h-full" size="lg" onChange={(e) => {
+                  setStatus(e.target.value)
+                  getData(search, e.target.value, limit, page)
+                }}>
+                  <option value='Pending'>Pending</option>
+                  <option value='Approve'>Approve</option>
+                </Select>
+              </div>
+            </div>
             <div className="flex flex-col">
               <div className="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
                 <div className="py-2 align-middle inline-block min-w-full sm:px-6 lg:px-8">
@@ -288,7 +298,7 @@ export default function Branch() {
                       </tbody>
                     </table>
                   </div>
-                  <Pagination page={page} lastPage={dataInstitute.last_page} limit={limit} search={search} total={dataInstitute.total} doLimit={data => setLimit(data)} doData={getData} />
+                  <Pagination page={page} lastPage={dataInstitute.last_page} limit={limit} search={search}  status={status} total={dataInstitute.total} doLimit={data => setLimit(data)} doData={getData} />
                 </div>
               </div>
             </div>

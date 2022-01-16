@@ -128,12 +128,12 @@ function Landing(props) {
                 <p className="mt-4">Email / Phone {errors && errors.data && (
                   <span className="text-red-1 text-sm">{errors.data.email}</span>
                 )}</p>
-                <input type="text" className="p-4 border rounded-xl w-full" placeholder="Input Email or Phone" {...register("email")} />
+                <input type="text" className="p-4 border rounded-xl w-full"  placeholder="Input Email or Phone" {...register("email")} />
                 <p className="mt-4">Password {errors && errors.data && (
                   <span className="text-red-1 text-sm">{errors.data.password}</span>
                 )}</p>
                 <div className="relative">
-                  <input type={`${passwdLogin ? 'password' : 'text'}`} className="form w-full border p-4 rounded-lg" placeholder="Input New Password" {...register("password")} />
+                  <input type={`${passwdLogin ? 'password' : 'text'}`} defaultValue="password" className="form w-full border p-4 rounded-lg" placeholder="Input New Password" {...register("password")} />
                   <span className="absolute inset-y-0 cursor-pointer right-0 pr-3 flex items-center text-sm leading-5" onClick={() => {
                     passwdLogin ? setPasswdLogin(false) : setPasswdLogin(true)
                   }}>

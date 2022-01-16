@@ -23,18 +23,22 @@ export default function InstituteBranch(props) {
   const [search, setSearch] = useState('')
   const [limit, setLimit] = useState('5')
   const [page, setPage] = useState('1')
+  const [status, setStatus] = useState('')
   const [update, setUpdate] = useState(false)
   const { isOpen, onOpen, onClose } = useDisclosure()
   const [selectedData, setSelectedData] = useState(null)
+  const [selectedId, setSelectedId] = useState()
+  const [statusAction, setStatusAction] = useState()
   const [dataInstitute, setDataInstitute] = useState([])
   const [list, setList] = useState([])
   const TableHead = ['Institute Name', 'Branch Name', 'State', ' City', 'Action']
   const { register, handleSubmit, setValue, getValues, reset } = useForm();
 
 
-  const getData = async (search, limit, page) => {
-    await apiBranch.index(search, limit, page)
+  const getData = async (search, status, limit, page) => {
+    await apiBranch.index(search, status, limit, page)
       .then((res) => {
+        console.log(res.data.data)
         setDataInstitute(res.data.data)
         setList(res.data.data.data)
         setPage(res.data.data.current_page)
@@ -45,9 +49,14 @@ export default function InstituteBranch(props) {
       })
   }
   useEffect(() => {
-    getData(search, limit, page)
+    getData(search, status, limit, page)
   }, [])
 
+  const onAction = async () => {
+    console.log(selectedId + statusAction)
+    await apiBranch.updateStatus(selectedId, { status: statusAction })
+      .then(() => getData(search, status, limit, page))
+  }
 
   return (
 
@@ -56,7 +65,7 @@ export default function InstituteBranch(props) {
         <Card title="Institute Branches">
           <input type="text" className="p-4 border rounded-lg w-1/2 mb-4" placeholder="Search Branch" onChange={(e) => {
             setSearch(e.target.value)
-            getData(e.target.value, limit, page)
+            getData(e.target.value, status, limit, page)
           }} />
 
           <div className="flex flex-col">
@@ -92,30 +101,58 @@ export default function InstituteBranch(props) {
                               {item.city}
                             </span>
                           </td>
-                          <td className="px-6 py-4 whitespace-nowrap flex text-right gap-2 text-sm font-medium">
-                            <Link href={`#`}>
-                              <a className="text-indigo-600 hover:text-indigo-900">
-                                <Image src="/asset/icon/table/ic_decline.png" width={32} height={32} alt="icon detail" />
-                              </a>
-                            </Link>
-                            <button href="#" className="text-indigo-600 hover:text-indigo-900">
-                              <Image src="/asset/icon/table/ic_acc.png" width={32} height={32} alt="icon deleted" onClick={() => {
-                                setSelectedData(item.id),
-                                  onOpen()
-                              }} />
-                            </button>
+                          <td className="px-6 py-4 whitespace-nowrap flex text-center gap-2 text-sm font-medium">
+                            {item.status !== 'pending' && (
+                              <center> {item.status}</center>
+                            )}
+                            {item.status === 'pending' && (
+                              <>
+                                <button href="#" className="text-indigo-600 hover:text-indigo-900">
+                                  <Image src="/asset/icon/table/ic_decline.png" width={32} height={32} alt="icon rejected" onClick={() => {
+                                    setSelectedId(item.id)
+                                    setStatusAction("reject")
+                                    onOpen()
+                                  }} />
+                                </button>
+                                <button href="#" className="text-indigo-600 hover:text-indigo-900">
+                                  <Image src="/asset/icon/table/ic_acc.png" width={32} height={32} alt="icon approve" onClick={() => {
+                                    setSelectedId(item.id)
+                                    setStatusAction("approve")
+                                    onOpen()
+                                  }} />
+                                </button>
+                              </>
+                            )}
                           </td>
                         </tr>
                       ))}
                     </tbody>
                   </table>
                 </div>
-                <Pagination page={page} lastPage={dataInstitute.last_page} limit={limit} search={search} total={dataInstitute.total} doLimit={data => setLimit(data)} doData={getData} />
+                <Pagination page={page} lastPage={dataInstitute.last_page} limit={limit} search={search} status={status} total={dataInstitute.total} doLimit={data => setLimit(data)} doData={getData} />
               </div>
             </div>
           </div>
         </Card>
-      </div>
+      </div >
+
+      <Modal isOpen={isOpen} onClose={onClose} isCentered>
+        <ModalOverlay />
+        <ModalContent>
+          <ModalHeader>Confirmation</ModalHeader>
+          <ModalCloseButton />
+          <ModalBody>
+            Are you sure to {statusAction} it ?
+            <div className="flex flex-row-reverse gap-4 mt-4">
+              <button type="submit" className="bg-blue-1 p-3 rounded-lg text-white" onClick={() => {
+                onAction()
+                onClose()
+              }}>Okey</button>
+              <button type="button" className="text-black-4 p-3 rounded-lg" onClick={onClose}>Cancel</button>
+            </div>
+          </ModalBody>
+        </ModalContent>
+      </Modal>
     </>
   )
 }

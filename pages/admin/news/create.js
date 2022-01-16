@@ -184,7 +184,6 @@ export default function Create(props) {
               onSelect={onSelectTags} // Function will trigger on select event
               onRemove={onRemoveTags} // Function will trigger on remove event
               displayValue="name" // Property name to display in the dropdown options
-
             />
           </div>
           <div className="flex -z-10 gap-4 flex-row-reverse my-4">
