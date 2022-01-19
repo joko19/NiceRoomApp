@@ -31,6 +31,11 @@ function Sidebar() {
     name: 'Institute Branch',
     path: '/admin/institute-branch'
   }, {
+    icon: uri + 'ic_operator.png',
+    active: uri + 'ic_operator_active.png',
+    name: 'Operator Team',
+    path: '/admin/operator'
+  }, {
     icon: uri + 'ic_topics.png',
     active: uri + 'ic_topics_active.png',
     name: 'Topics',
@@ -94,7 +99,7 @@ function Sidebar() {
     active: uri + 'ic_exams_active.png',
     name: 'Exams',
     path: '/operator/exams'
-  },{
+  }, {
     icon: uri + 'ic_practice.png',
     active: uri + 'ic_practice_active.png',
     name: 'Practice Test',
@@ -104,7 +109,7 @@ function Sidebar() {
     active: uri + 'ic_quizzes_active.png',
     name: 'Quizzes',
     path: '/operator/quizzes'
-  }, 
+  },
   ]
   useEffect(() => {
     if (router.pathname.startsWith("/admin") && roleStore === role.admin)

@@ -52,7 +52,6 @@ export default function Announcement() {
   const [errors, setErrors] = useState()
   const TableHead = ['Name', 'Branch', 'Status', 'Action']
   const { register, handleSubmit, setValue, getValues, reset } = useForm();
-  const [avatar, setAvatar] = useState('/asset/img/blank_profile.png')
   const [file, setFile] = useState()
   const [branchItem, setBranchItem] = useState()
   const [fileName, setFileName] = useState("Upload Your File")
@@ -67,7 +66,6 @@ export default function Announcement() {
         setDataInstitute(res.data.data)
         setList(res.data.data.data)
         setPage(res.data.data.current_page)
-
       })
       .catch((err) => {
         console.log(err)
