@@ -12,12 +12,13 @@ import {
   ModalBody,
   ModalCloseButton,
   useDisclosure,
+  Select
 } from '@chakra-ui/react'
 import { useForm } from "react-hook-form";
 import Pagination from "../../components/Pagination/pagination";
-import { FaEye, FaEyeSlash } from "react-icons/fa";
 import instance from "../../action/instance";
 import Multiselect from 'multiselect-react-dropdown';
+import apiBatch from "../../action/batch";
 
 export default function Announcement() {
   const [search, setSearch] = useState('')
@@ -28,13 +29,17 @@ export default function Announcement() {
   const [update, setUpdate] = useState(false)
   const { isOpen, onOpen, onClose } = useDisclosure()
   const [nameDeleted, setNameDeleted] = useState()
-  const [passwd, setpasswd] = useState(true)
   const [listBranch, setListBranch] = useState([])
-  const [passwdConfirmation, setpasswdConfirmation] = useState(true)
+  const [listBatch, setListBatch] = useState([])
   const {
     isOpen: isCreateModal,
     onOpen: onOpenCreateModal,
     onClose: onCloseCreateModal
+  } = useDisclosure()
+  const {
+    isOpen: isPublishModal,
+    onOpen: onOpenPublishModal,
+    onClose: onClosePublishModal
   } = useDisclosure()
   const {
     isOpen: isSuccessModal,
@@ -49,13 +54,16 @@ export default function Announcement() {
   const { register, handleSubmit, setValue, getValues, reset } = useForm();
   const [avatar, setAvatar] = useState('/asset/img/blank_profile.png')
   const [file, setFile] = useState()
+  const [branchItem, setBranchItem] = useState()
+  const [fileName, setFileName] = useState("Upload Your File")
+  const [isPublish, setIsPublish] = useState()
 
   const getData = async (search, branch, status, limit, page) => {
     console.log("get data")
+    console.log(search)
+    console.log("h")
     await apiAnnouncement.index(search, branch, status, limit, page)
       .then((res) => {
-        console.log("ress")
-        console.log(res.data)
         setDataInstitute(res.data.data)
         setList(res.data.data.data)
         setPage(res.data.data.current_page)
@@ -66,15 +74,23 @@ export default function Announcement() {
       })
   }
   useEffect(() => {
-    console.log("use effect")
     getData(search, branch, status, limit, page)
+    getBranch()
+    getBatch()
   }, [])
 
   const getBranch = async () => {
     await apiBranch.all()
       .then((res) => {
-        console.log(res.data.data)
-        setBranch(res.data.data)
+        console.log(res)
+        setListBranch(res.data.data)
+      })
+  }
+
+  const getBatch = async () => {
+    await apiBatch.all()
+      .then((res) => {
+        setListBatch(res.data.data)
       })
   }
 
@@ -99,30 +115,31 @@ export default function Announcement() {
   }
 
   const onSubmit = async (form) => {
-    if (form.gender === 'Select State') {
-      data.gender = ''
-    }
+    console.log(form)
+    console.log(file)
+    console.log(isPublish)
     var data = new FormData();
-    data.append("name", form.name)
-    data.append("gender", form.gender)
-    data.append("email", form.email)
-    data.append("phone", form.phone)
-    data.append("employee_id", form.employee_id)
-    data.append("password", form.password)
-    data.append("password_confirmation", form.password_confirmation)
-    if (form.branch_id !== 'Select Branch') {
-      data.append("branch_id", form.branch_id)
-    }
+    data.append("title", form.title)
+    data.append("sub_title", form.sub_title)
+    data.append("description", form.description)
+    // if (form.branch_id !== 'Select Branch') {
+    //   data.append("branch_id", form.branch_id)
+    // }
+    data.append("branch_id", 1)
+    data.append("batch_id", 1 )
     if (file) {
-      data.append("avatar", file)
+      data.append("file", file)
     }
+    // data.append("file", "")
+    data.append("status", isPublish)
+    console.log(data)
+    console.log("is Update : " + update)
     update ? await apiAnnouncement.update(selectedData, data)
       .then((res) => {
         reset(res)
         onCloseCreateModal()
         getData(search, branch, status, limit, page)
         onOpenSuccessModal()
-        setAvatar('/asset/img/blank_profile.png')
         setFile(null)
       })
       .catch((err) => {
@@ -130,23 +147,23 @@ export default function Announcement() {
         console.log(err)
       }) : await apiAnnouncement.create(data)
         .then((res) => {
+          console.log("Success ")
           reset(res)
           onCloseCreateModal()
           setUpdate(false)
           getData(search, branch, status, limit, page)
           onOpenSuccessModal()
-          setAvatar('/asset/img/blank_profile.png')
           setFile(null)
         })
         .catch((err) => {
           setErrors(err.response.data.data)
         })
-    getData(search, branch, status, limit, page)
   }
 
   const onDelete = async (id) => {
     await apiAnnouncement.deleted(id)
-      .then(() => {
+      .then((res) => {
+        console.log(res)
         getData(search, branch, status, limit, page)
       })
       .catch((err) => {
@@ -154,9 +171,37 @@ export default function Announcement() {
       })
   }
 
-  const choosePhoto = (e) => {
-    setAvatar(URL.createObjectURL(e.target.files[0]))
-    setFile(e.target.files[0])
+  const chooseFile = (e) => {
+    console.log(e.target)
+    if (e.target) {
+      if (e.target.files[0].type === 'application/pdf') {
+        setFileName(e.target.files[0].name)
+        setFile(e.target.files[0])
+      } else {
+        setFileName("Please upload pdf file")
+      }
+
+    }
+  }
+
+  const onSelectBranch = (list, item) => {
+    setBranchItem(list)
+  }
+  const onRemoveBranch = (list, item) => {
+    setBranchItem(list)
+  }
+
+  const onPublish = async () => {
+    console.log(selectedData)
+    await apiAnnouncement.updateStatus(selectedData)
+      .then(() => {
+        console.log("berhasil publish")
+        console.log(search)
+        getData(search, branch, status, limit, page)
+      })
+      .catch((err) => {
+        console.log(err)
+      })
   }
 
   return (
@@ -166,21 +211,45 @@ export default function Announcement() {
           title="Announcement"
           right={(
             <button className="btn btn-md bg-blue-1 text-white p-3 rounded-lg" onClick={() => {
-              setAvatar('/asset/img/blank_profile.png')
               getBranch()
               setUpdate(false)
               onOpenCreateModal()
               setErrors(null)
               reset()
+              setFileName("Upload Your File")
             }}>
               + Create Announcement
             </button>
           )}
         >
-          <input type="text" className="p-4 border rounded-lg w-1/2 mb-4" placeholder="Search Announcement" onChange={(e) => {
-            setSearch(e.target.value)
-            getData(e.target.value, branch, status, limit, page)
-          }} />
+
+          <div className="flex gap-4 mb-4">
+            <input type="text" className="border rounded-lg w-full p-2 " placeholder="Search Announcement" onChange={(e) => {
+              setSearch(e.target.value)
+              getData(e.target.value, branch, status, limit, page)
+            }} />
+
+            <div className="w-full h-full  ">
+              <Select placeholder='All Branch' className="h-full" size="lg" onChange={(e) => {
+                setBranch(e.target.value)
+                getData(search, e.target.value, status, limit, page)
+              }}>
+                {listBranch.map((item, index) => (
+                  <option key={index} value={item.name}>{item.name}</option>
+                ))}
+              </Select>
+            </div>
+
+            <div className="w-full h-full  ">
+              <Select placeholder='All Status' className="h-full" size="lg" onChange={(e) => {
+                setStatus(e.target.value)
+                getData(search, branch, e.target.value, limit, page)
+              }}>
+                <option value='draft'>Draft</option>
+                <option value='published'>Published</option>
+              </Select>
+            </div>
+          </div>
 
           <div className="flex flex-col">
             <div className="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
@@ -195,8 +264,8 @@ export default function Announcement() {
                       ))}
                     </thead>
                     <tbody className="bg-white divide-y divide-gray-200">
-                      {list.map((item) => (
-                        <tr key={item.id}>
+                      {list.map((item, index) => (
+                        <tr key={index}>
                           <td className="px-6 py-4 whitespace-nowrap">
                             <div className="flex items-center">
                               <div className="ml-4">
@@ -213,15 +282,27 @@ export default function Announcement() {
                             </div>
                           </td>
                           <td className="px-6 py-4 whitespace-nowrap flex text-right gap-2 text-sm font-medium">
-                            <button className="text-indigo-600 hover:text-indigo-900" onClick={() => {
-                              getDetail(item.id)
-                              setSelectedData(item.id)
-                              setUpdate(true)
-                              onOpenCreateModal()
-                              setErrors(null)
-                            }}>
-                              <Image src="/asset/icon/table/fi_edit.png" width={16} height={16} alt="icon edit" />
-                            </button>
+                            {item.status === 'draft' && (
+                              <>
+                                <button className="text-indigo-600 hover:text-indigo-900" onClick={() => {
+                                  getDetail(item.id)
+                                  setSelectedData(item.id)
+                                  setUpdate(true)
+                                  onOpenCreateModal()
+                                  setErrors(null)
+                                  setFileName("Upload Your File")
+                                }}>
+                                  <Image src="/asset/icon/table/fi_edit.png" width={16} height={16} alt="icon edit" />
+                                </button>
+                                <button className="text-indigo-600 hover:text-indigo-900" onClick={() => {
+                                  setSelectedData(item.id)
+                                  onOpenPublishModal()
+                                  setErrors(null)
+                                }}>
+                                  <Image src="/asset/icon/table/ic_publish.png" width={16} height={16} alt="icon publish" />
+                                </button>
+                              </>
+                            )}
                             <button href="#" className="text-indigo-600 hover:text-indigo-900">
                               <Image src="/asset/icon/table/fi_trash-2.png" width={16} height={16} alt="icon deleted" onClick={() => {
                                 setNameDeleted(item.name)
@@ -235,7 +316,7 @@ export default function Announcement() {
                     </tbody>
                   </table>
                 </div>
-                <Pagination page={page} lastPage={dataInstitute.last_page} limit={limit} search={search} total={dataInstitute.total} doLimit={data => setLimit(data)} doData={getData} />
+                <Pagination page={page} lastPage={dataInstitute.last_page} limit={limit} search={search} branch={branch} status={status} total={dataInstitute.total} doLimit={data => setLimit(data)} doData={getData} />
               </div>
             </div>
           </div>
@@ -262,41 +343,97 @@ export default function Announcement() {
                 <p>Sub Title {errors && (
                   <span className="text-red-1 text-sm">{errors.sub_title}</span>
                 )}</p>
-                <input  type="text" className="w-full form border p-4 rounded-lg" placeholder="Input Sub Title" {...register("sub_title")} />
+                <input type="text" className="w-full form border p-4 rounded-lg" placeholder="Input Sub Title" {...register("sub_title")} />
               </div>
-              
+
               <div className="w-full mt-4">
                 <p>Description {errors && (
-                  <span className="text-red-1 text-sm">{errors.sub_title}</span>
+                  <span className="text-red-1 text-sm">{errors.description}</span>
                 )}</p>
-                <textarea  type="text" className="w-full h-24 form border p-4 rounded-lg" placeholder="Input Description" {...register("description")} />
+                <textarea type="text" className="w-full h-24 form border p-4 rounded-lg" placeholder="Input Description" {...register("description")} />
               </div>
-              
-              <div className="flex gap-4 flex-col md:flex-row">
+
+              <div className="flex gap-4 mt-4 flex-col md:flex-row" >
                 <div className="w-full ">
-                  <p className="mt-4">Batch{errors && (
+                  <p>Batch{errors && (
                     <span className="text-red-1 text-sm">{errors.batch}</span>
                   )}</p>
-                  <select className="form border bg-white w-full p-4 rounded-lg" defaultValue="Select Gender" placeholder="Choose Gender"  {...register("gender",)} >
-                    <option disabled>Select Gender</option>
-                    <option value="MALE">Male</option>
-                    <option value="FEMALE">Female</option>
-                  </select>
+                  <Multiselect
+                    className="z-100 "
+                    options={listBatch}
+                    style={{
+                      "multiselectContainer": {
+                        "padding": "12px",
+                        "border-width": "1px",
+                        "border-radius": "5px"
+                      }, "searchBox": {
+                        "border": "none",
+
+                      },
+                    }}
+                    placeholder="Select Batch"
+                    // singleSelect
+                    // options={listTag} // Options to display in the dropdown
+                    // selectedValues={this.state.selectedValue} // Preselected value to persist in dropdown
+                    onSelect={onSelectBranch} // Function will trigger on select event
+                    onRemove={onRemoveBranch} // Function will trigger on remove event
+                    displayValue="name" // Property name to display in the dropdown options
+                  />
                 </div>
                 <div className="w-full ">
-                  <p className="mt-4">Branch{errors && (
-                    <span className="text-red-1 text-sm">{errors.branch}</span>
+                  <p>Branch{errors && (
+                    <span className="text-red-1 text-sm">{errors.batch}</span>
                   )}</p>
-                  <select className="form border bg-white w-full p-4 rounded-lg" defaultValue="Select Gender" placeholder="Choose Gender"  {...register("gender",)} >
-                    <option disabled>Select Gender</option>
-                    <option value="MALE">Male</option>
-                    <option value="FEMALE">Female</option>
-                  </select>
+                  <div>
+                    <Multiselect
+                      className="z-100 "
+                      options={listBranch}
+                      style={{
+                        "multiselectContainer": {
+                          "padding": "12px",
+                          "border-width": "1px",
+                          "border-radius": "5px"
+                        }, "searchBox": {
+                          "border": "none",
+
+                        },
+                      }}
+                      placeholder="Select Branch"
+                      // singleSelect
+                      // options={listTag} // Options to display in the dropdown
+                      // selectedValues={this.state.selectedValue} // Preselected value to persist in dropdown
+                      onSelect={onSelectBranch} // Function will trigger on select event
+                      onRemove={onRemoveBranch} // Function will trigger on remove event
+                      displayValue="name" // Property name to display in the dropdown options
+                    />
+
+                  </div>
+                </div>
+              </div>
+
+              <div className="w-full mt-4">
+                <p>Upload File {errors && (
+                  <span className="text-red-1 text-sm">{errors.file}</span>
+                )}</p>
+                <div className="flex gap-4">
+                  {/* <input type="text" className=" flex-grow form border p-4 rounded-lg" value={fileName} placeholder="Upload Your File" disabled {...register("title")} /> */}
+                  <div className={`border rounded-lg p-4  flex-grow text-black-4 ${fileName === 'Please upload pdf file' && 'text-red-1'}`}>
+                    {fileName.length > 45 ? fileName.substring(0,45) + "..." : fileName }
+                  </div>
+                  <label htmlFor="file-input">
+                    <div className="w-full border inline-flex rounded-lg cursor-pointer p-4 text-blue-1 border-blue-1">
+                      <span>Add File</span>
+                    </div>
+                  </label>
+                </div>
+                <div className="hidden">
+                  <input id="file-input" type="file" accept="application/pdf" className="hidden -z-50"  onChange={chooseFile} />
                 </div>
               </div>
 
               <div className="flex flex-row-reverse gap-4 mt-4">
-                <button type="submit" className="bg-blue-1 p-3 rounded-lg text-white" >Save</button>
+                <button onClick={() =>setIsPublish("draft")} className="bg-blue-1 p-3 rounded-lg text-white" >Save As Draft</button>
+                <button onClick={() =>setIsPublish("published")} className="p-3 rounded-lg text-blue-1" >Publish</button>
                 <button type="button" className="text-black-4 p-3 rounded-lg" onClick={onCloseCreateModal}>Close</button>
               </div>
             </form>
@@ -324,6 +461,25 @@ export default function Announcement() {
         </ModalContent>
       </Modal>
 
+      {/* Published Confirmation */}
+      <Modal isOpen={isPublishModal} onClose={onClosePublishModal} isCentered>
+        <ModalOverlay />
+        <ModalContent>
+          <ModalHeader><center> Publish Announcement</center></ModalHeader>
+          <ModalBody>
+            <center className="mb-8">Are you sure to publish this Announcement ?</center>
+            <div className="flex gap-4 justify-center">
+              <button className="text-black-4 p-3" mr={3} onClick={onClosePublishModal}>
+                Cancel
+              </button>
+              <button className="bg-blue-1 text-white p-3 rounded-lg" onClick={() => {
+                onPublish()
+                onClosePublishModal()
+              }} onClose={onClosePublishModal}>Publish</button>
+            </div>
+          </ModalBody>
+        </ModalContent>
+      </Modal>
       {/* Delete Confirmation */}
       <Modal isOpen={isOpen} onClose={onClose} isCentered>
         <ModalOverlay />

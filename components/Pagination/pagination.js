@@ -9,7 +9,10 @@ function Pagination({ page, lastPage, total, limit, search, status = false, bran
         if (page !== lastPage) {
           if (branch !== false && batch !== false) {
             doData(search, branch, batch, status, limit, lastPage)
-          } else if (status !== false) {
+          } else if (branch !== false && status !== false) {
+            doData(search, branch, status, limit, lastPage)
+          }
+          else if (status !== false) {
             doData(search, status, limit, lastPage)
           } else {
             doData(search, limit, lastPage)
@@ -22,6 +25,8 @@ function Pagination({ page, lastPage, total, limit, search, status = false, bran
         if (page < lastPage) {
           if (branch !== false && batch !== false) {
             doData(search, branch, batch, status, limit, page + 1)
+          } else if (branch !== false && status !== false) {
+            doData(search, branch, status, limit, page + 1)
           } else if (status !== false) {
             doData(search, status, limit, page + 1)
           } else {
@@ -35,7 +40,10 @@ function Pagination({ page, lastPage, total, limit, search, status = false, bran
         if (page > 1) {
           if (branch !== false && batch !== false) {
             doData(search, branch, batch, status, limit, page - 1)
-          } else if (status !== false) {
+          } else if (branch !== false && status !== false) {
+            doData(search, branch, status, limit, page - 1)
+          }
+          else if (status !== false) {
             doData(search, status, limit, page - 1)
           } else {
             doData(search, limit, page - 1)
@@ -48,7 +56,11 @@ function Pagination({ page, lastPage, total, limit, search, status = false, bran
         if (page !== 1) {
           if (branch !== false && batch !== false) {
             doData(search, branch, batch, status, limit, 1)
-          } else if (status !== false) {
+          } else if (branch !== false && status !== false) {
+            doData(search, branch, status, limit, 1)
+          }
+          else if (status !== false) {
+            console.log("do ab")
             doData(search, status, limit, 1)
           } else {
             doData(search, limit, 1)
@@ -62,7 +74,13 @@ function Pagination({ page, lastPage, total, limit, search, status = false, bran
         doLimit(e.target.value)
         if (branch !== false && batch !== false) {
           doData(search, branch, batch, status, e.target.value, page)
-        } else if (status !== false) {
+        } else if (branch !== false && status !== false) {
+          console.log("do it")
+          console.log(search)
+          console.log(branch)
+          doData(search, branch, status, e.target.value, page)
+        }
+        else if (status !== false) {
           doData(search, status, e.target.value, page)
         } else {
           doData(search, e.target.value, page)
