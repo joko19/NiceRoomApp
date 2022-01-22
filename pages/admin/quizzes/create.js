@@ -140,7 +140,7 @@ export default function Create(props) {
   }
   return (
     <div className="md:pt-12 md:pb-28">
-      <Link href="/admin/news">
+      <Link href="/admin/quizzes">
         <a className="flex gap-4 text-blue-1 my-8"><FaAngleLeft /> Back</a>
       </Link>
       <Card

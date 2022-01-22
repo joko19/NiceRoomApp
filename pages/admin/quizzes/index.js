@@ -13,10 +13,10 @@ import {
 } from '@chakra-ui/react'
 import { useForm } from "react-hook-form";
 import Pagination from "../../../components/Pagination/pagination";
-import apiBatch from "../../../action/batch";
 import { region } from "../../../action/India";
 import { Select } from '@chakra-ui/react'
 import apiQuiz from "../../../action/quiz";
+import Link from "next/link";
 
 export default function Create() {
   const [search, setSearch] = useState('')
@@ -24,25 +24,12 @@ export default function Create() {
   const [status, setStatus] = useState('')
   const [limit, setLimit] = useState('5')
   const [page, setPage] = useState('1')
-  const [searchBatch, setSearchBatch] = useState('')
-  const [limitBatch, setLimitBatch] = useState('5')
-  const [pageBatch, setPageBatch] = useState('1')
   const [update, setUpdate] = useState(false)
-  const [updateBatch, setUpdateBatch] = useState(false)
   const { isOpen, onOpen, onClose } = useDisclosure()
-  const [nameDeleted, setNameDeleted] = useState()
-  const [passwd, setpasswd] = useState(true)
-  const [branch, setBranch] = useState([])
-  const [passwdConfirmation, setpasswdConfirmation] = useState(true)
   const {
     isOpen: isCreateModal,
     onOpen: onOpenCreateModal,
     onClose: onCloseCreateModal
-  } = useDisclosure()
-  const {
-    isOpen: isCreateModalBatch,
-    onOpen: onOpenCreateModalBatch,
-    onClose: onCloseCreateModalBatch
   } = useDisclosure()
   const {
     isOpen: isSuccessModal,
@@ -50,16 +37,13 @@ export default function Create() {
     onClose: onCloseSuccessModal
   } = useDisclosure()
   const [selectedData, setSelectedData] = useState(null)
-  const [selectedDataBatch, setSelectedDataBatch] = useState(null)
   const [dataInstitute, setDataInstitute] = useState([])
   const [list, setList] = useState([])
-  const [dataInstituteBatch, setDataInstituteBatch] = useState([])
-  const [listBatch, setListBatch] = useState([])
   const [errors, setErrors] = useState()
   const TableHead = ['Quiz Name', 'Type', 'Status', 'Action']
   const { register, handleSubmit, setValue, getValues, reset } = useForm();
-  const [isBranch, setIsBranch] = useState(true)
   const [cities, setCities] = useState([])
+  const [nameDeleted, setNameDeleted] = useState()
 
   const getData = async (search, type, status, limit, page) => {
     await apiQuiz.index(search, type, status, limit, page)
@@ -86,14 +70,6 @@ export default function Create() {
       })
   }
 
-  const getDetailBatch = async (id) => {
-    await apiBatch.detail(id)
-      .then((result) => {
-        setValue("name", result.data.data.name)
-        setValue("code", result.data.data.code)
-      })
-  }
-
   const getDetail = async (id) => {
     await apiQuiz.detail(id)
       .then((result) => {
@@ -113,69 +89,37 @@ export default function Create() {
   }
 
   const onSubmit = async (data) => {
-    if (isBranch) {
-      update ? await apiQuiz.update(selectedData, data)
+    update ? await apiQuiz.update(selectedData, data)
+      .then((res) => {
+        reset(res)
+        onCloseCreateModal()
+        getData(search, type, status, limit, page)
+        onOpenSuccessModal()
+      })
+      .catch((err) => {
+        setErrors(err.response.data.data)
+        console.log(err)
+      }) : await apiQuiz.create(data)
         .then((res) => {
           reset(res)
           onCloseCreateModal()
-          getData(search, status, limit, page)
+          setUpdate(false)
+          getData(search, type, status, limit, page)
           onOpenSuccessModal()
         })
         .catch((err) => {
           setErrors(err.response.data.data)
-          console.log(err)
-        }) : await apiQuiz.create(data)
-          .then((res) => {
-            reset(res)
-            onCloseCreateModal()
-            setUpdate(false)
-            getData(search, status, limit, page)
-            onOpenSuccessModal()
-          })
-          .catch((err) => {
-            setErrors(err.response.data.data)
-          })
-    } else {
-      updateBatch ? await apiBatch.update(selectedDataBatch, data)
-        .then((res) => {
-          reset(res)
-          getBatch(searchBatch, limitBatch, pageBatch)
-          onCloseCreateModalBatch()
         })
-        .catch((err) => {
-          setErrors(err.response.data.data)
-          console.log(err)
-        }) : await apiBatch.create(data)
-          .then((res) => {
-            reset(res)
-            setUpdateBatch(false)
-            getBatch(searchBatch, limitBatch, pageBatch)
-            onCloseCreateModalBatch()
-          })
-          .catch((err) => {
-            setErrors(err.response.data.data)
-          })
-    }
   }
 
   const onDelete = async (id) => {
-    if (isBranch) {
-      await apiQuiz.deleted(id)
-        .then(() => {
-          getData(search, status, limit, page)
-        })
-        .catch((err) => {
-          console.log(err)
-        })
-    } else {
-      await apiBatch.deleted(id)
-        .then(() => {
-          getBatch(search, limit, page)
-        })
-        .catch((err) => {
-          console.log(err)
-        })
-    }
+    await apiQuiz.deleted(id)
+      .then(() => {
+        getData(search, type, status, limit, page)
+      })
+      .catch((err) => {
+        console.log(err)
+      })
   }
 
   const chooseState = (e) => {
@@ -189,15 +133,9 @@ export default function Create() {
         <Card
           title="Quizzes"
           right={(
-            <button className="btn btn-md bg-blue-1 text-white p-3 rounded-lg" onClick={() => {
-              getBranch()
-              setUpdate(false)
-              onOpenCreateModal()
-              setErrors(null)
-              reset()
-            }}>
-              + Create Quiz
-            </button>
+            <Link href="/admin/quizzes/create">
+              <a className="btn btn-md bg-blue-1 text-white p-3 rounded-lg" > + Create Quiz</a>
+            </Link>
           )}
         >
           <div className="flex gap-4 mb-4">
@@ -366,36 +304,6 @@ export default function Create() {
               <div className="flex flex-row-reverse gap-4 mt-4">
                 <button type="submit" className="bg-blue-1 p-3 rounded-lg text-white" >Save</button>
                 <button type="button" className="text-black-4 p-3 rounded-lg" onClick={onCloseCreateModal}>Close</button>
-              </div>
-            </form>
-          </ModalBody>
-        </ModalContent>
-      </Modal>
-
-
-      <Modal isOpen={isCreateModalBatch} onClose={onCloseCreateModalBatch} size='xl'
-        motionPreset='slideInBottom' isCentered>
-        <ModalOverlay />
-        <ModalContent>
-          <ModalHeader>{updateBatch ? 'Edit' : 'Create'} Batch</ModalHeader>
-          <ModalCloseButton />
-          <ModalBody>
-            <form onSubmit={handleSubmit(onSubmit)} className="pb-4">
-              <div className="w-full">
-                <p>Batch Name {errors && (
-                  <span className="text-red-1 text-sm">{errors.name}</span>
-                )}</p>
-                <input type="text" className="w-full form border p-4 rounded-lg" placeholder="Input Batch Name" {...register("name")} />
-              </div>
-              <div className="w-full mt-4">
-                <p>Batch Code {errors && (
-                  <span className="text-red-1 text-sm">{errors.code}</span>
-                )}</p>
-                <input type="text" className="w-full form border p-4 rounded-lg" placeholder="Input Batch Code" {...register("code")} />
-              </div>
-              <div className="flex flex-row-reverse gap-4 mt-4">
-                <button type="submit" className="bg-blue-1 p-3 rounded-lg text-white" >Save Batch</button>
-                <button type="button" className="text-black-4 p-3 rounded-lg" onClick={onCloseCreateModalBatch}>Close</button>
               </div>
             </form>
           </ModalBody>
