@@ -265,7 +265,7 @@ export default function Create(props) {
           )}
 
           {currentStep === 3 && (
-            <div key={index} className="mt-8">
+            <div className="mt-8">
               <div className="bg-blue-6 p-4">
                 {questions.map((itemQuestion, indexQuestion) => {
 
