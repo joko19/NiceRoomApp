@@ -62,7 +62,20 @@ export default function Create(props) {
   const submitNews = async (req, status) => {
     console.log(req)
     const data = new FormData()
-    data.append("title", req.title)
+    data.append("topic_id", 1)
+    data.append("name", req.name)
+    data.append("type", req.type)
+    data.append("status", "draft")
+    data.append("duration", 90)
+    if (file !== null) {
+      data.append("file", file)
+    }
+    // data.append() //start time
+    // end time
+    data.append("instruction", instruction)
+    for (let i = 0; i < req.consenments.length; i++) {
+      data.append('consenments[]', req.consenments[i])
+    }
     data.append("sub_title", req.subtitle)
     data.append("description", "hello world")
     // const tag = Array.from(tags)
@@ -260,6 +273,7 @@ export default function Create(props) {
                   }} >x</div>
                 </div>
               ))}
+              <button>test</button>
               <div onClick={() => setConsentment([...consenment, consenment[consenment.length - 1] + 1])} className="text-blue-1 cursor-pointer text-center p-4 border-dashed border-2 border-blue-1 mt-4 rounded-lg">+ Add New Consent</div>
             </>
           )}
@@ -268,7 +282,6 @@ export default function Create(props) {
             <div className="mt-8">
               <div className="bg-blue-6 p-4">
                 {questions.map((itemQuestion, indexQuestion) => {
-
                   return (
                     <>
                       <p className="font-bold mt-4 text-lg">Question {indexQuestion + 1}</p>
@@ -277,7 +290,7 @@ export default function Create(props) {
                           <p className="mt-4">Difficulty Level {errors && (
                             <span className="text-red-1 text-sm">{errors.type}</span>
                           )}</p>
-                          <Select bg='white' {...register('diff')} size="lg" variant='outline' iconColor="blue">
+                          <Select bg='white' {...register(`questions[${indexQuestion}].level`)} size="lg" variant='outline' iconColor="blue">
                             <option value="easy">Easy</option>
                             <option value="medium">Medium</option>
                             <option value="Hard">Hard</option>
@@ -287,7 +300,7 @@ export default function Create(props) {
                           <p className="mt-4">Tag {errors && (
                             <span className="text-red-1 text-sm">{errors.type}</span>
                           )}</p>
-                          <Select bg='white' {...register('tag')} size="lg" variant='outline' iconColor="blue">
+                          <Select bg='white' {...register(`questions[${indexQuestion}].tag`)} size="lg" variant='outline' iconColor="blue">
                             <option value="easy">tag 1</option>
                             <option value="medium">tag 2</option>
                             <option value="Hard">tag 3</option>
@@ -299,7 +312,7 @@ export default function Create(props) {
                           <span className="text-red-1 text-sm">{errors.type}</span>
                         )}</p>
                         <div className="w-full  bg-white rounded-lg " style={{ lineHeight: 2 }} >
-                          <Quill className="h-32   border-none rounded-lg" setData={(data) => setInstruction(data)} />
+                          <Quill className="h-32   border-none rounded-lg" setData={(data) => setInstruction(data)} {...register(`questions[${indexQuestion}].question`)}/>
                         </div>
                         <div className="bg-white h-20">
                         </div>
