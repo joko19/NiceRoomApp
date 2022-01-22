@@ -135,7 +135,7 @@ export default function Create(props) {
         title="Create New Quiz " >
         <div className="flex gap-24 m-auto ">
           {step.map((item, index) => (
-            <div>
+            <div key={index}>
               <div className="flex">
                 <div className={` ${index < currentStep ? 'bg-blue-1 text-white' : 'border bg-white text-black-5'} px-4 py-3 m-auto rounded-lg `}>
                   {index + 1}
@@ -252,7 +252,7 @@ export default function Create(props) {
               </div>
               <p className="mt-4">Consentment</p>
               {consenment.map((item, index) => (
-                <div className="flex">
+                <div key={index} className="flex">
                   <input key={index} type="text" className="form border w-full rounded-lg p-4 h-full m-1" placeholder="Input Consentment"  {...register(`consenments[${index}]`)} />
                   <div className="m-auto cursor-pointer text-blue-1 -ml-8" onClick={() => {
                     setConsentment(prevIndex => [...prevIndex.filter(i => i !== item)])
@@ -265,7 +265,7 @@ export default function Create(props) {
           )}
 
           {currentStep === 3 && (
-            <div className="mt-8">
+            <div key={index} className="mt-8">
               <div className="bg-blue-6 p-4">
                 {questions.map((itemQuestion, indexQuestion) => {
 
