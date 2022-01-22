@@ -314,7 +314,7 @@ export default function Create(props) {
                         </Select>
 
                         {questions[indexQuestion].option.map((itemAnswer, indexAnswer) => (
-                          <div className="flex">
+                          <div key={indexAnswer} className="flex">
                             <input key={indexAnswer} type="text" className="form border w-full rounded-lg p-4 h-full m-1" placeholder="Input your answer"  {...register(`consenments[${indexAnswer}]`)} />
                             <div className="m-auto cursor-pointer text-blue-1 -ml-8" onClick={() => {
                               const newOption = {
