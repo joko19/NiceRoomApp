@@ -31,7 +31,7 @@ function Sidebar() {
     name: 'Institute Branch',
     path: '/admin/institute-branch'
   }, {
-    icon: uri + 'ic_operator.png',
+    icon: uri + 'ic_operator_active.png',
     active: uri + 'ic_operator_active.png',
     name: 'Operator Team',
     path: '/admin/operator'

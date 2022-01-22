@@ -25,3 +25,7 @@ tr:nth-child(even) {
 tr:nth-child(odd) {
   background-color: #FFFFFF;
 }
+
+.ck-editor__editable {
+  height: '100%'
+}

@@ -1,12 +1,13 @@
-import Card from "../../components/Cards/Card";
+import Card from "../../../components/Cards/Card";
 import Image from "next/image";
 import { Select } from '@chakra-ui/react'
 import Multiselect from 'multiselect-react-dropdown';
-import Layout from "../../Layout/Layout";
+import Layout from "../../../Layout/Layout";
+import Link from 'next/link'
 
 export default function Quizzes(props) {
   const list = [1, 2, 3, 4]
-  const tableHead = ['Quiz Name', 'Type', 'Action', 'Action']
+  const tableHead = ['Quiz Name', 'Type', 'Status', 'Action']
   return (
     <>
 
@@ -14,12 +15,9 @@ export default function Quizzes(props) {
         <Card
           title="Quizzes"
           right={(
-            <button className="btn btn-md bg-blue-1 text-white p-3 rounded-lg" onClick={() => {
-              setValue("name", "")
-              onOpenCreateModal()
-            }}>
-              + Create Quiz
-            </button>
+            <Link href="/admin/quizzes/create">
+              <a className="btn btn-md bg-blue-1 text-white p-3 rounded-lg" > + Create Quiz</a>
+            </Link>
           )}
         >
           <div className="flex gap-4">
@@ -35,8 +33,8 @@ export default function Quizzes(props) {
                 <div className="shadow overflow-hidden border-b border-gray-200 sm:rounded-lg">
                   <table className="table min-w-full divide-y divide-gray-200">
                     <thead className="bg-black-9" >
-                      {tableHead.map((item) => (
-                        <th key={item} scope="col" className="px-6 py-3 text-left tracking-wider"                        >
+                      {tableHead.map((item, index) => (
+                        <th key={index} scope="col" className="px-6 py-3 text-left tracking-wider"                        >
                           {item}
                         </th>
                       ))}

@@ -1,11 +1,15 @@
 import axios from 'axios'
 import {store} from '../redux/store'
 import { reSetCurrentUser } from "./auth/authAction";
+import baseUrl from '../config'
 
-const noAuth = axios.create({ baseURL: "https://exams.vieproject.xyz/api", withCredentials: true});
+const api = baseUrl + '/api'
+const pathImg = baseUrl + '/storage/images/'
+
+const noAuth = axios.create({ baseURL: api, withCredentials: true});
 
 const auth = axios.create({
-  baseURL: "https://exams.vieproject.xyz/api",
+  baseURL: api,
   headers: {
     'Content_Type': 'application/json',
     authorization: 'Bearer ' + store.getState().auth.user.access_token
@@ -13,14 +17,13 @@ const auth = axios.create({
 })
 
 const authwithFile = axios.create({
-  baseURL: "https://exams.vieproject.xyz/api",
+  baseURL: api,
   headers: {
     'Content_Type': 'multipart/form-data',
     authorization: 'Bearer ' + store.getState().auth.user.access_token
   }
 })
 
-const pathImg = 'https://exams.vieproject.xyz/storage/images/'
 
 auth.interceptors.response.use(function (res) {
   return res;
