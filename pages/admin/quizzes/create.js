@@ -4,7 +4,6 @@ import Image from "next/image";
 import { FaAngleLeft } from "react-icons/fa";
 import Card from "../../../components/Cards/Card";
 import Layout from "../../../Layout/Layout";
-import apiNews from "../../../action/news";
 import { useForm, useFieldArray } from "react-hook-form";
 import {
   Modal,
@@ -14,10 +13,13 @@ import {
   ModalBody,
   ModalCloseButton,
   useDisclosure,
-  Divider
+  Divider,
+  Radio,
+  RadioGroup
 } from '@chakra-ui/react'
 import Quill from "../../../components/Editor/Quill";
 import { Select } from '@chakra-ui/react'
+import apiQuiz from "../../../action/quiz";
 
 export default function Create(props) {
   const [image, setImage] = useState(null)
@@ -39,12 +41,19 @@ export default function Create(props) {
   const editorRef = useRef();
   const { CKEditor, ClassicEditor } = editorRef.current || {};
   const [dateTime, setDateTime] = useState(new Date());
-  const [instruction, setInstruction] = useState()
+  const [instruction, setInstruction] = useState('')
   const [consenment, setConsentment] = useState([0])
+  const [status, setStatus] = useState()
   const [questions, setQuestions] = useState([
     {
       id: 0,
-      option: [1]
+      // option: [1]
+      option: [
+        {
+          id: 0,
+          correct: 0,
+        }
+      ]
     },
   ])
 
@@ -59,14 +68,13 @@ export default function Create(props) {
   }
 
 
-  const submitNews = async (req, status) => {
+  const submitQuiz = async (req) => {
     console.log(req)
     const data = new FormData()
     data.append("topic_id", 1)
     data.append("name", req.name)
     data.append("type", req.type)
-    data.append("status", "draft")
-    data.append("duration", 90)
+    data.append("duration", req.duration)
     if (file !== null) {
       data.append("file", file)
     }
@@ -74,28 +82,39 @@ export default function Create(props) {
     // end time
     data.append("instruction", instruction)
     for (let i = 0; i < req.consenments.length; i++) {
-      data.append('consenments[]', req.consenments[i])
+      const field = `consentments[${i}]`
+      data.append(`${field}`, req.consenments[i])
     }
-    data.append("sub_title", req.subtitle)
-    data.append("description", "hello world")
+    for (let i = 0; i < req.questions.length; i++) {
+      const field = `questions[${i}]`
+      data.append(`${field}[level]`, req.questions[i].level)
+      data.append(`${field}[tag]`, req.questions[i].tag)
+      data.append(`${field}[mark]`, req.questions[i].mark)
+      data.append(`${field}[answer_type]`, req.questions[i].answer_type)
+      data.append(`${field}[negative_mark]`, req.questions[i].negative_mark)
+      data.append(`${field}[question]`, req.questions[i].question)
+      data.append(`${field}[answer_explanation]`, req.questions[i].answer_explanation)
+      for (let j = 0; j < req.questions[i].option.length - 1; j++) {
+        const opt = `${field}[options][${j}]`
+        let isCorrect = 0
+        if(req.questions[i].correct === j){
+          isCorrect = 1
+        }
+        data.append(`${opt}[title]`, req.questions[i].option[j].title)
+        data.append(`${opt}[correct]`, isCorrect)
+      }
+    }
+    console.log(data)
     // const tag = Array.from(tags)
     // tag.forEach((item) => {
     //   data.append("tags"+, item)
     // })
-    for (let i = 0; i < tags.length; i++) {
-      const tag = 'tags[' + i + ']'
-      data.append(tag, tags[i].name)
-    }
-    if (file !== null) {
-      data.append("image", file)
-    }
-    data.append("description", description)
     // for console log
-    // for (var key of data.entries()) {
-    //   console.log(key[0] + ', ' + key[1]);
-    // }
-    data.append("status", isPublish)
-    await apiNews.create(data)
+    for (var key of data.entries()) {
+      console.log(key[0] + ', ' + key[1]);
+    }
+    data.append("status", status)
+    await apiQuiz.create(data)
       .then((res) => {
         onOpenSuccessModal()
       })
@@ -108,36 +127,10 @@ export default function Create(props) {
     onClose: onCloseSuccessModal
   } = useDisclosure()
 
-  const onSelectTags = (list, item) => {
-    setTags(list)
-  }
-
-  const onRemoveTags = (list, item) => {
-    setTags(list)
-  }
-
-
   useEffect(() => {
     setEditorLoaded(true);
   }, []);
 
-
-  const onEditorChange = (value) => {
-    setInstruction(value)
-    console.log(value)
-  }
-
-  const onFilesChange = (files) => {
-    // setFiles(files)
-  }
-  const inputHandler = (event, editor) => {
-    console.log(editor.getData())
-    setValue("questions[0].question", editor.getData());
-  };
-
-  const onInstruction = (e) => {
-    console.log(e.target.value)
-  }
   return (
     <div className="md:pt-12 md:pb-28">
       <Link href="/admin/quizzes">
@@ -165,7 +158,7 @@ export default function Create(props) {
             </div>
           ))}
         </div>
-        <form onSubmit={handleSubmit(submitNews)}>
+        <form onSubmit={handleSubmit(submitQuiz)}>
 
           {currentStep === 1 && (
             <div>
@@ -207,7 +200,7 @@ export default function Create(props) {
                     <span className="text-red-1 text-sm">{errors.name}</span>
                   )}</p>
                   <div>
-                    <input type="text" className="form border w-full rounded-lg p-4 h-full " placeholder="Input Quiz Name"  {...register("title")} />
+                    <input type="text" className="form border w-full rounded-lg p-4 h-full " placeholder="Input Quiz Name"  {...register("name")} />
                   </div>
                 </div>
                 {type === 'Live Quiz' && (
@@ -216,7 +209,7 @@ export default function Create(props) {
                       <span className="text-red-1 text-sm">{errors.topic}</span>
                     )}</p>
                     <div>
-                      <select className="form w-full border bg-white p-4 h-full rounded-lg" placeholder="Choose Type" {...register("type")} >
+                      <select className="form w-full border bg-white p-4 h-full rounded-lg" placeholder="Choose Type" {...register("topic_id")} >
                         <option value="Mixed Quiz">Topic 1</option>
                         <option value="Live Quiz">Topic 2</option>
                       </select>
@@ -232,21 +225,20 @@ export default function Create(props) {
                   )}</p>
                   <div>
                     <select className="form w-full border h-full bg-white p-4 rounded-lg" placeholder="Choose Type" onClick={(e) => {
-                      console.log(e.target.value)
                       setType(e.target.value)
                     }} {...register("type")} >
-                      <option value="Mixed Quiz">Mixed Quiz</option>
-                      <option value="Live Quiz">Live Quiz</option>
+                      <option value="mixed">Mixed Quiz</option>
+                      <option value="live">Live Quiz</option>
                     </select>
                   </div>
                 </div>
                 <div className="w-full">
                   <p className="mt-4">Duration (Can be 0) {errors && (
-                    <span className="text-red-1 text-sm">{errors.sub_title}</span>
+                    <span className="text-red-1 text-sm">{errors.duration}</span>
                   )}</p>
                   <div >
                     <div className="flex h-full">
-                      <input type="number" className="border w-full h-full flex-grow rounded p-4" placeholder="0"  {...register("title")} />
+                      <input type="number" className="border w-full h-full flex-grow rounded p-4" placeholder="0"  {...register("duration")} />
                       <input className="bg-black-9 p-4 w-24 text-center h-full border text-black-4" placeholder="Minute" disabled />
                     </div>
                   </div>
@@ -261,19 +253,20 @@ export default function Create(props) {
             <>
               <p className="mt-4">Description</p>
               <div className="w-full h-64">
-                <Quill className="h-48" setData={(data) => setInstruction(data)} />
+                <Quill className="h-48" data={instruction} setData={(data) => setInstruction(data)} />
               </div>
               <p className="mt-4">Consentment</p>
               {consenment.map((item, index) => (
                 <div key={index} className="flex">
-                  <input key={index} type="text" className="form border w-full rounded-lg p-4 h-full m-1" placeholder="Input Consentment"  {...register(`consenments[${index}]`)} />
+                  <input key={index} type="text" className="form border w-full rounded-lg p-4 h-full m-1" autoComplete="off" placeholder="Input Consentment"  {...register(`consenments[${index}]`)} />
+                  {consenment.length > 1 && (
                   <div className="m-auto cursor-pointer text-blue-1 -ml-8" onClick={() => {
                     setConsentment(prevIndex => [...prevIndex.filter(i => i !== item)])
                     unregister(`consenments[${index}]`)
                   }} >x</div>
+                  )}
                 </div>
               ))}
-              <button>test</button>
               <div onClick={() => setConsentment([...consenment, consenment[consenment.length - 1] + 1])} className="text-blue-1 cursor-pointer text-center p-4 border-dashed border-2 border-blue-1 mt-4 rounded-lg">+ Add New Consent</div>
             </>
           )}
@@ -312,43 +305,55 @@ export default function Create(props) {
                           <span className="text-red-1 text-sm">{errors.type}</span>
                         )}</p>
                         <div className="w-full  bg-white rounded-lg " style={{ lineHeight: 2 }} >
-                          <Quill className="h-32   border-none rounded-lg" setData={(data) => setInstruction(data)} {...register(`questions[${indexQuestion}].question`)}/>
+                          <Quill className="h-32   border-none rounded-lg" data='' register={() => register(`questions[${indexQuestion}].question`)} />
                         </div>
-                        <div className="bg-white h-20">
+                        <div className="bg-white h-12">
                         </div>
                       </div>
                       <div className="mt-4">
                         <p className="mt-4">Answer Type {errors && (
                           <span className="text-red-1 text-sm">{errors.type}</span>
                         )}</p>
-                        <Select bg='white' {...register('answer_type')} size="lg" variant='outline' iconColor="blue">
+                        <Select bg='white' {...register(`questions[${indexQuestion}].answer_type`)} size="lg" variant='outline' iconColor="blue">
                           <option value="single">Single Correct Answer</option>
                           <option value="multiple">Multiple Correct Answer</option>
                         </Select>
 
-                        {questions[indexQuestion].option.map((itemAnswer, indexAnswer) => (
-                          <div key={indexAnswer} className="flex">
-                            <input key={indexAnswer} type="text" className="form border w-full rounded-lg p-4 h-full m-1" placeholder="Input your answer"  {...register(`consenments[${indexAnswer}]`)} />
-                            <div className="m-auto cursor-pointer text-blue-1 -ml-8" onClick={() => {
-                              const newOption = {
-                                id: itemQuestion.id,
-                                option: [...questions[itemQuestion.id].option.filter(i => i !== itemAnswer)]
-                              }
-                              const nQuestions = questions.map((obj) => (obj.id === itemQuestion.id ? newOption : obj))
-                              setQuestions(nQuestions)
-                              // setQuestions(prevIndex => [...prevIndex.filter(i => i !== item)])
-                              unregister(`consenments[${indexAnswer}]`)
-                            }} >
-                              <Image src="/asset/icon/table/fi_trash-2.png" width={16} height={16} alt="icon edit" />
+                        {questions[indexQuestion].option.map((itemAnswer, indexAnswer) => {
+                          const alphabet = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z']
+                          return (
+                            <div key={indexAnswer} className="flex gap-2 bg-white my-2 rounded-lg p-4">
+                              <input className="m-auto" type="radio" id="html" name="correctOption" {...register(`questions[${indexQuestion}].correct`)} value={`${indexAnswer}`}>
+                              </input>
+                              <span className="m-auto">{alphabet[indexAnswer]}</span>
+                              <input {...register(`questions[${indexQuestion}].option[${indexAnswer}].title`)} autoComplete="off" type="text" className="form border w-full rounded-lg p-4 h-full m-1" placeholder="Input your answer" />
+                              {questions[indexQuestion].option.length !== 1 && (<div className="m-auto cursor-pointer text-blue-1 -ml-9" onClick={() => {
+                                const newOption = {
+                                  id: itemQuestion.id,
+                                  option: [...questions[itemQuestion.id].option.filter(i => i !== itemAnswer)]
+                                }
+                                const nQuestions = questions.map((obj) => (obj.id === itemQuestion.id ? newOption : obj))
+                                setQuestions(nQuestions)
+                                console.log(nQuestions)
+                                // setQuestions(prevIndex => [...prevIndex.filter(i => i !== item)])
+                                unregister(`consenments[${indexAnswer}]`)
+                              }} >
+                                <Image src="/asset/icon/table/fi_trash-2.png" width={16} height={16} alt="icon edit" />
+                              </div>
+                              )}
                             </div>
-                          </div>
-                        ))}
+                          )
+                        })}
                         <div onClick={() => {
                           const newOption = {
                             id: itemQuestion.id,
-                            option: [...questions[itemQuestion.id].option, questions[itemQuestion.id].option.push(questions[itemQuestion.id].option[questions[itemQuestion.id].option.length - 1] + 1)]
+                            option: [...questions[itemQuestion.id].option, {
+                              id: questions[indexQuestion].option[questions[indexQuestion].option.length - 1].id + 1,
+                              correct: 0
+                            }]
                           }
                           const nQuestions = questions.map((obj) => (obj.id === itemQuestion.id ? newOption : obj))
+                          console.log(nQuestions)
                           setQuestions(nQuestions)
                         }} className="text-blue-1 cursor-pointer text-center p-4 border-dashed border-2 border-blue-1 mt-4 rounded-lg">+ Add New Answer</div>
 
@@ -358,9 +363,9 @@ export default function Create(props) {
                             <span className="text-red-1 text-sm">{errors.type}</span>
                           )}</p>
                           <div className="w-full  bg-white rounded-lg " style={{ lineHeight: 2 }} >
-                            <Quill className="h-32   border-none rounded-lg" setData={(data) => setInstruction(data)} />
+                            <Quill className="h-32   border-none rounded-lg" data='' register={() => register(`questions[${indexQuestion}].answer_explanation`)} />
                           </div>
-                          <div className="bg-white h-20">
+                          <div className="bg-white h-12">
                           </div>
                         </div>
 
@@ -368,15 +373,15 @@ export default function Create(props) {
                         <div className="flex gap-4 mb-4">
                           <div className="w-full">
                             <p className="mt-4">Marks {errors && (
-                              <span className="text-red-1 text-sm">{errors.establishment_year}</span>
+                              <span className="text-red-1 text-sm">{errors.mark}</span>
                             )}</p>
-                            <input type="number" className=" w-full form border p-4 rounded-lg" placeholder="0" {...register("establishment_year")} />
+                            <input type="number" className=" w-full form border p-4 rounded-lg" placeholder="0" {...register(`questions[${indexQuestion}].mark`)} />
                           </div>
                           <div className="w-full">
                             <p className="mt-4">Negative Marking{errors && (
-                              <span className="text-red-1 text-sm">{errors.pin_code}</span>
+                              <span className="text-red-1 text-sm">{errors.negative_mark}</span>
                             )}</p>
-                            <input type="number" className="w-full form border p-4 rounded-lg" placeholder="0" {...register("pin_code")} />
+                            <input type="number" className="w-full form border p-4 rounded-lg" placeholder="0" {...register(`questions[${indexQuestion}].negative_mark`)} />
                           </div>
                         </div>
                       </div>
@@ -389,12 +394,17 @@ export default function Create(props) {
               <div onClick={() => setQuestions([...questions, { id: questions[questions.length - 1].id + 1, option: [0] }])} className="text-blue-1 cursor-pointer text-center p-4 border-dashed border-2 border-blue-1 mt-4 rounded-lg">+ Add New Question</div>
             </div>
           )}
-
           <div className="flex -z-10 gap-4 flex-row-reverse my-4">
-            <div onClick={() => {
-              // renderEditor()
+            {currentStep < 3 && (<div onClick={() => {
               currentStep < 3 && setCurrentStep(currentStep + 1)
             }} className={`${3 > currentStep ? 'cursor-pointer' : 'cursor-default'} bg-blue-1  text-white p-4 rounded-lg`}>Next Step</div>
+            )}
+            {currentStep === 3 && (
+              <>
+                <button onClick={() => setStatus("published")} className='cursor-pointer bg-blue-1  text-white p-4 rounded-lg'>Save Quiz</button>
+                <button onClick={() => setStatus("draft")} className='cursor-pointer text-blue-1 p-4 rounded-lg'>Save Question</button>
+              </>
+            )}
             <div onClick={() => {
               currentStep > 1 && setCurrentStep(currentStep - 1)
             }} className={`${1 < currentStep ? 'cursor-pointer' : 'cursor-default'}  text-black-4 p-4 rounded-lg`}>Back Step</div>
@@ -412,7 +422,7 @@ export default function Create(props) {
             <div className="flex flex-col text-center ">
               <p> News Created Successfully </p>
               <div className="self-center">
-                <Link href="/admin/news">
+                <Link href="/admin/quizzes">
                   <a className="bg-blue-1 rounded-lg text-white mt-4 block align-center p-3">Okay</a>
                 </Link>
               </div>

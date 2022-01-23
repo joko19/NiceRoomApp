@@ -3,7 +3,7 @@ import { useQuill } from 'react-quilljs';
 import { apiImgUpload } from '../../action/img';
 import instance from '../../action/instance';
 
-export default function Quill({ setData, className }) {
+export default function Quill({data, setData = false, className, register = false }) {
   const { quill, quillRef } = useQuill();
 
   // Insert Image(selected by user) to quill
@@ -40,9 +40,14 @@ export default function Quill({ setData, className }) {
 
   useEffect(() => {
     if (quill) {
+      quill.clipboard.dangerouslyPasteHTML(data)
       quill.on('text-change', (delta, oldDelta, source) => {
-        setData(quill.root.innerHTML)
-        console.log(quill.root.innerHTML)
+        if(setData !== false){
+          setData(quill.root.innerHTML) 
+        }
+        if(register !== false){
+          register(quill.root.innerHTML)
+        }
         quill.getModule('toolbar').addHandler('image', selectLocalImage);
 
         // console.log('Text change!');
