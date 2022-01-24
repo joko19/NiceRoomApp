@@ -193,10 +193,10 @@ export default function Create() {
                           </td>
                           <td className="px-6 py-4 whitespace-nowrap flex text-right gap-2 text-sm font-medium">
                             <button className="text-indigo-600 hover:text-indigo-900" onClick={() => {
-                              getDetail(item.id)
-                              setSelectedData(item.id)
-                              setUpdate(true)
-                              onOpenCreateModal()
+                              // getDetail(item.id)
+                              // setSelectedData(item.id)
+                              // setUpdate(true)
+                              // onOpenCreateModal()
                               setErrors(null)
                             }}>
                               <Image src="/asset/icon/table/fi_edit.png" width={16} height={16} alt="icon edit" />

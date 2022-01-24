@@ -14,13 +14,18 @@ import {
   ModalCloseButton,
   useDisclosure,
   Divider,
-  Radio,
-  RadioGroup
 } from '@chakra-ui/react'
 import Quill from "../../../components/Editor/Quill";
 import { Select } from '@chakra-ui/react'
 import apiQuiz from "../../../action/quiz";
-
+import apiTopic from "../../../action/topics";
+import Datetime from 'react-datetime';
+import moment from 'moment';
+import { MyDTPicker } from "../../../components/DateTime/DateTime";
+var yesterday = moment().subtract(1, 'day');
+var valid = function (current) {
+  return current.isAfter(yesterday);
+};
 export default function Create(props) {
   const [image, setImage] = useState(null)
   const [file, setFile] = useState(null)
@@ -29,19 +34,18 @@ export default function Create(props) {
   // const [tag, setTag] = useState()
   const [listTags, setListTags] = useState([{ name: 'Programming' }, { name: 'Design' }, { name: 'Marketing' }, , { name: 'UI/UX' }, { name: 'Education' }, { name: 'Web' }, { name: 'Android' }, , { name: 'Linux' }])
   const [tags, setTags] = useState([])
-  const [description, setDescription] = useState()
   const [errors, setErrors] = useState()
   const { register, handleSubmit, setValue, getValues, reset, unregister } = useForm();
   const step = ['Quiz Details', 'Instruction', 'Question']
   const [currentStep, setCurrentStep] = useState(1)
-
-  const [editorLoaded, setEditorLoaded] = useState(false);
+  const [topics, setTopics] = useState([])
   const [data, setData] = useState("");
   const [type, setType] = useState()
   const editorRef = useRef();
-  const { CKEditor, ClassicEditor } = editorRef.current || {};
   const [dateTime, setDateTime] = useState(new Date());
   const [instruction, setInstruction] = useState('')
+  const [startTime, setStartTime] = useState()
+  const [endTime, setEndTime] = useState()
   const [consenment, setConsentment] = useState([0])
   const [status, setStatus] = useState()
   const [questions, setQuestions] = useState([
@@ -63,10 +67,10 @@ export default function Create(props) {
     setFile(e.target.files[0])
   }
 
-  const onQuill = (data) => {
-    console.log(data)
+  const getTopics = async () => {
+    await apiTopic.all('', '', '')
+      .then((res) => setTopics(res.data.data.data))
   }
-
 
   const submitQuiz = async (req) => {
     console.log(req)
@@ -74,9 +78,14 @@ export default function Create(props) {
     data.append("topic_id", 1)
     data.append("name", req.name)
     data.append("type", req.type)
+    if (req.type === 'live') {
+      data.append("topic_id", req.topic_id)
+      data.append("start_time", startTime)
+      data.append("end_time", endTime)
+    }
     data.append("duration", req.duration)
     if (file !== null) {
-      data.append("file", file)
+      data.append("image", file)
     }
     // data.append() //start time
     // end time
@@ -97,7 +106,7 @@ export default function Create(props) {
       for (let j = 0; j < req.questions[i].option.length - 1; j++) {
         const opt = `${field}[options][${j}]`
         let isCorrect = 0
-        if(req.questions[i].correct === j){
+        if (req.questions[i].correct === j) {
           isCorrect = 1
         }
         data.append(`${opt}[title]`, req.questions[i].option[j].title)
@@ -128,9 +137,11 @@ export default function Create(props) {
   } = useDisclosure()
 
   useEffect(() => {
-    setEditorLoaded(true);
+    getTopics()
   }, []);
 
+
+  const datetimePlaceholder = { placeholder: "Select Time and Date" };
   return (
     <div className="md:pt-12 md:pb-28">
       <Link href="/admin/quizzes">
@@ -161,8 +172,8 @@ export default function Create(props) {
         <form onSubmit={handleSubmit(submitQuiz)}>
 
           {currentStep === 1 && (
-            <div>
-              {type === 'Live Quiz' && (
+            <div className="mb-8">
+              {type === 'live' && (
                 <div className="flex">
                   {coverName === null && (
                     <div className="flex p-8 border-dashed w-48 border-blue-1 h-48 mt-4 border-4 border-black self-center justify-center">
@@ -203,21 +214,22 @@ export default function Create(props) {
                     <input type="text" className="form border w-full rounded-lg p-4 h-full " placeholder="Input Quiz Name"  {...register("name")} />
                   </div>
                 </div>
-                {type === 'Live Quiz' && (
+                {type === 'live' && (
                   <div className="w-full">
                     <p className="mt-4">Topic {errors && (
                       <span className="text-red-1 text-sm">{errors.topic}</span>
                     )}</p>
                     <div>
                       <select className="form w-full border bg-white p-4 h-full rounded-lg" placeholder="Choose Type" {...register("topic_id")} >
-                        <option value="Mixed Quiz">Topic 1</option>
-                        <option value="Live Quiz">Topic 2</option>
+                        {topics.map((item, index) => (
+                          <option key={index} value={item.id}>{item.name}</option>
+                        ))}
                       </select>
                     </div>
                   </div>
                 )}
-
               </div>
+
               <div className="flex gap-4" >
                 <div className="w-full">
                   <p className="mt-4">Type {errors && (
@@ -245,6 +257,18 @@ export default function Create(props) {
                 </div>
               </div>
 
+              {type === 'live' && (
+                <div className="flex mt-4 gap-4">
+                  <div className="w-full">
+                    <p>Start Time</p>
+                    <MyDTPicker data={startTime} setDate={(data) => setStartTime(data)} />
+                  </div>
+                  <div className="w-full">
+                    <p>End Time</p>
+                    <MyDTPicker data={endTime} setDate={(data) => setEndTime(data)} />
+                  </div>
+                </div>
+              )}
             </div>
           )}
 
@@ -260,10 +284,10 @@ export default function Create(props) {
                 <div key={index} className="flex">
                   <input key={index} type="text" className="form border w-full rounded-lg p-4 h-full m-1" autoComplete="off" placeholder="Input Consentment"  {...register(`consenments[${index}]`)} />
                   {consenment.length > 1 && (
-                  <div className="m-auto cursor-pointer text-blue-1 -ml-8" onClick={() => {
-                    setConsentment(prevIndex => [...prevIndex.filter(i => i !== item)])
-                    unregister(`consenments[${index}]`)
-                  }} >x</div>
+                    <div className="m-auto cursor-pointer text-blue-1 -ml-8" onClick={() => {
+                      setConsentment(prevIndex => [...prevIndex.filter(i => i !== item)])
+                      unregister(`consenments[${index}]`)
+                    }} >x</div>
                   )}
                 </div>
               ))}
