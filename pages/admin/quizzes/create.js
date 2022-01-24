@@ -48,6 +48,7 @@ export default function Create(props) {
   const [endTime, setEndTime] = useState()
   const [consenment, setConsentment] = useState([0])
   const [status, setStatus] = useState()
+  const [stepTo, setStepTo] = useState()
   const [questions, setQuestions] = useState([
     {
       id: 0,
@@ -73,9 +74,11 @@ export default function Create(props) {
   }
 
   const submitQuiz = async (req) => {
-    console.log(req)
+    setErrors("")
     const data = new FormData()
-    data.append("topic_id", 1)
+    if (file !== null) {
+      data.append("image", file)
+    }
     data.append("name", req.name)
     data.append("type", req.type)
     if (req.type === 'live') {
@@ -84,16 +87,44 @@ export default function Create(props) {
       data.append("end_time", endTime)
     }
     data.append("duration", req.duration)
-    if (file !== null) {
-      data.append("image", file)
+    // to step 2
+    if (currentStep === 1) {
+      await apiQuiz.create(data)
+        .then()
+        .catch((err) => {
+          setErrors(err.response.data.data)
+          console.log(err.response.data.data)
+          if (!err.response.data.data.name && !err.response.data.data.duration) {
+            setErrors(null)
+            setCurrentStep(2)
+          }
+          return;
+        })
+      return null
     }
-    // data.append() //start time
-    // end time
+
     data.append("instruction", instruction)
     for (let i = 0; i < req.consenments.length; i++) {
       const field = `consentments[${i}]`
       data.append(`${field}`, req.consenments[i])
     }
+    // to step 3
+    if (currentStep === 2) {
+      await apiQuiz.create(data)
+        .then()
+        .catch((err) => {
+          setErrors(err.response.data.data)
+          console.log(err.response.data.data)
+          
+          if (!err.response.data.data["consentments"] && !err.response.data.data.instruction) {
+            setErrors(null)
+            setCurrentStep(3)
+          }
+          return;
+        })
+      return null
+    }
+
     for (let i = 0; i < req.questions.length; i++) {
       const field = `questions[${i}]`
       data.append(`${field}[level]`, req.questions[i].level)
@@ -127,7 +158,10 @@ export default function Create(props) {
       .then((res) => {
         onOpenSuccessModal()
       })
-      .catch((err) => setErrors(err.response.data.data))
+      .catch((err) => {
+        console.log(err.response.data.data)
+        setErrors(err.response.data.data)
+      })
   }
 
   const {
@@ -139,6 +173,10 @@ export default function Create(props) {
   useEffect(() => {
     getTopics()
   }, []);
+
+  const setDataForm = (identifier, data) => {
+    setValue(identifier, data)
+  }
 
 
   const datetimePlaceholder = { placeholder: "Select Time and Date" };
@@ -211,7 +249,7 @@ export default function Create(props) {
                     <span className="text-red-1 text-sm">{errors.name}</span>
                   )}</p>
                   <div>
-                    <input type="text" className="form border w-full rounded-lg p-4 h-full " placeholder="Input Quiz Name"  {...register("name")} />
+                    <input type="text" className="form border w-full rounded-lg p-4 h-full" placeholder="Input Quiz Name"  {...register("name")} />
                   </div>
                 </div>
                 {type === 'live' && (
@@ -275,21 +313,27 @@ export default function Create(props) {
 
           {currentStep === 2 && (
             <>
-              <p className="mt-4">Description</p>
+              <p className="mt-4">Instruction {errors && (
+                <span className="text-red-1 text-sm">{errors['instruction']}</span>
+              )}</p>
               <div className="w-full h-64">
                 <Quill className="h-48" data={instruction} setData={(data) => setInstruction(data)} />
               </div>
               <p className="mt-4">Consentment</p>
               {consenment.map((item, index) => (
-                <div key={index} className="flex">
-                  <input key={index} type="text" className="form border w-full rounded-lg p-4 h-full m-1" autoComplete="off" placeholder="Input Consentment"  {...register(`consenments[${index}]`)} />
-                  {consenment.length > 1 && (
-                    <div className="m-auto cursor-pointer text-blue-1 -ml-8" onClick={() => {
-                      setConsentment(prevIndex => [...prevIndex.filter(i => i !== item)])
-                      unregister(`consenments[${index}]`)
-                    }} >x</div>
-                  )}
-                </div>
+                <>{errors && (
+                  <span className="text-red-1 text-sm">{errors[`consentments.${index}`]}</span>
+                )}
+                  <div key={index} className="flex">
+                    <input key={index} type="text" className="form border w-full rounded-lg p-4 h-full m-1" autoComplete="off" placeholder="Input Consentment"  {...register(`consenments[${index}]`)} />
+                    {consenment.length > 1 && (
+                      <div className="m-auto cursor-pointer text-blue-1 -ml-8" onClick={() => {
+                        setConsentment(prevIndex => [...prevIndex.filter(i => i !== item)])
+                        unregister(`consenments[${index}]`)
+                      }} >x</div>
+                    )}
+                  </div>
+                </>
               ))}
               <div onClick={() => setConsentment([...consenment, consenment[consenment.length - 1] + 1])} className="text-blue-1 cursor-pointer text-center p-4 border-dashed border-2 border-blue-1 mt-4 rounded-lg">+ Add New Consent</div>
             </>
@@ -314,9 +358,7 @@ export default function Create(props) {
                           </Select>
                         </div>
                         <div className="w-full">
-                          <p className="mt-4">Tag {errors && (
-                            <span className="text-red-1 text-sm">{errors.type}</span>
-                          )}</p>
+                          <p className="mt-4">Tag</p>
                           <Select bg='white' {...register(`questions[${indexQuestion}].tag`)} size="lg" variant='outline' iconColor="blue">
                             <option value="easy">tag 1</option>
                             <option value="medium">tag 2</option>
@@ -326,17 +368,17 @@ export default function Create(props) {
                       </div>
                       <div className="mt-4">
                         <p className="mt-4">Question {errors && (
-                          <span className="text-red-1 text-sm">{errors.type}</span>
+                          <span className="text-red-1 text-sm">{errors[`questions.${indexQuestion}.question`]}</span>
                         )}</p>
                         <div className="w-full  bg-white rounded-lg " style={{ lineHeight: 2 }} >
-                          <Quill className="h-32   border-none rounded-lg" data='' register={() => register(`questions[${indexQuestion}].question`)} />
+                          <Quill className="h-32   border-none rounded-lg" data={questions[`${indexQuestion}`].question} register={(data) => setDataForm(`questions[${indexQuestion}].question`, data)} />
                         </div>
                         <div className="bg-white h-12">
                         </div>
                       </div>
                       <div className="mt-4">
                         <p className="mt-4">Answer Type {errors && (
-                          <span className="text-red-1 text-sm">{errors.type}</span>
+                          <span className="text-red-1 text-sm">{errors[`questions.${indexQuestion}.options`]}</span>
                         )}</p>
                         <Select bg='white' {...register(`questions[${indexQuestion}].answer_type`)} size="lg" variant='outline' iconColor="blue">
                           <option value="single">Single Correct Answer</option>
@@ -358,7 +400,6 @@ export default function Create(props) {
                                 }
                                 const nQuestions = questions.map((obj) => (obj.id === itemQuestion.id ? newOption : obj))
                                 setQuestions(nQuestions)
-                                console.log(nQuestions)
                                 // setQuestions(prevIndex => [...prevIndex.filter(i => i !== item)])
                                 unregister(`consenments[${indexAnswer}]`)
                               }} >
@@ -377,17 +418,16 @@ export default function Create(props) {
                             }]
                           }
                           const nQuestions = questions.map((obj) => (obj.id === itemQuestion.id ? newOption : obj))
-                          console.log(nQuestions)
                           setQuestions(nQuestions)
                         }} className="text-blue-1 cursor-pointer text-center p-4 border-dashed border-2 border-blue-1 mt-4 rounded-lg">+ Add New Answer</div>
 
 
                         <div className="mt-4">
                           <p className="mt-4">Answer Explanation {errors && (
-                            <span className="text-red-1 text-sm">{errors.type}</span>
+                            <span className="text-red-1 text-sm">{errors[`questions.${indexQuestion}.answer_explanation`]}</span>
                           )}</p>
                           <div className="w-full  bg-white rounded-lg " style={{ lineHeight: 2 }} >
-                            <Quill className="h-32   border-none rounded-lg" data='' register={() => register(`questions[${indexQuestion}].answer_explanation`)} />
+                            <Quill className="h-32   border-none rounded-lg" register={(data) => setDataForm(`questions[${indexQuestion}].answer_explanation`, data)} />
                           </div>
                           <div className="bg-white h-12">
                           </div>
@@ -397,13 +437,13 @@ export default function Create(props) {
                         <div className="flex gap-4 mb-4">
                           <div className="w-full">
                             <p className="mt-4">Marks {errors && (
-                              <span className="text-red-1 text-sm">{errors.mark}</span>
+                              <span className="text-red-1 text-sm">{errors[`questions.${indexQuestion}.mark`]}</span>
                             )}</p>
                             <input type="number" className=" w-full form border p-4 rounded-lg" placeholder="0" {...register(`questions[${indexQuestion}].mark`)} />
                           </div>
                           <div className="w-full">
-                            <p className="mt-4">Negative Marking{errors && (
-                              <span className="text-red-1 text-sm">{errors.negative_mark}</span>
+                            <p className="mt-4">Negative Marking {errors && (
+                              <span className="text-red-1 text-sm">{errors[`questions.${indexQuestion}.negative_mark`]}</span>
                             )}</p>
                             <input type="number" className="w-full form border p-4 rounded-lg" placeholder="0" {...register(`questions[${indexQuestion}].negative_mark`)} />
                           </div>
@@ -419,9 +459,7 @@ export default function Create(props) {
             </div>
           )}
           <div className="flex -z-10 gap-4 flex-row-reverse my-4">
-            {currentStep < 3 && (<div onClick={() => {
-              currentStep < 3 && setCurrentStep(currentStep + 1)
-            }} className={`${3 > currentStep ? 'cursor-pointer' : 'cursor-default'} bg-blue-1  text-white p-4 rounded-lg`}>Next Step</div>
+            {currentStep < 3 && (<button className={`${3 > currentStep ? 'cursor-pointer' : 'cursor-default'} bg-blue-1  text-white p-4 rounded-lg`}>Next Step</button>
             )}
             {currentStep === 3 && (
               <>
@@ -444,7 +482,14 @@ export default function Create(props) {
           <ModalCloseButton />
           <ModalBody>
             <div className="flex flex-col text-center ">
-              <p> News Created Successfully </p>
+              {status === 'published' ?
+                (
+                  <p> Quiz has published </p>
+                ) : (
+
+                  <p>Quiz saved as Draft </p>
+                )
+              }
               <div className="self-center">
                 <Link href="/admin/quizzes">
                   <a className="bg-blue-1 rounded-lg text-white mt-4 block align-center p-3">Okay</a>
