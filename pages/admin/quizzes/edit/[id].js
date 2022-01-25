@@ -2,8 +2,8 @@ import { useEffect, useState, useRef } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { FaAngleLeft } from "react-icons/fa";
-import Card from "../../../components/Cards/Card";
-import Layout from "../../../Layout/Layout";
+import Card from "../../../../components/Cards/Card";
+import Layout from "../../../../Layout/Layout";
 import { useForm, useFieldArray } from "react-hook-form";
 import {
   Modal,
@@ -15,12 +15,12 @@ import {
   useDisclosure,
   Divider,
 } from '@chakra-ui/react'
-import Quill from "../../../components/Editor/Quill";
+import Quill from "../../../../components/Editor/Quill";
 import { Select } from '@chakra-ui/react'
-import apiQuiz from "../../../action/quiz";
-import apiTopic from "../../../action/topics";
+import apiQuiz from "../../../../action/quiz";
+import apiTopic from "../../../../action/topics";
 import moment from 'moment';
-import { MyDTPicker } from "../../../components/DateTime/DateTime";
+import { MyDTPicker } from "../../../../components/DateTime/DateTime";
 export default function Create(props) {
   const [file, setFile] = useState(null)
   const [coverName, setCoverName] = useState(null)
