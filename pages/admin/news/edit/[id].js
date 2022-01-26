@@ -5,7 +5,7 @@ import { FaAngleLeft } from "react-icons/fa";
 import Card from "../../../../components/Cards/Card";
 import Layout from "../../../../Layout/Layout";
 import apiNews from "../../../../action/news";
-import { set, useForm } from "react-hook-form";
+import {useForm } from "react-hook-form";
 import {
   Modal,
   ModalOverlay,

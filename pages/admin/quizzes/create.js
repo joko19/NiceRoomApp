@@ -19,13 +19,10 @@ import Quill from "../../../components/Editor/Quill";
 import { Select } from '@chakra-ui/react'
 import apiQuiz from "../../../action/quiz";
 import apiTopic from "../../../action/topics";
-import moment from 'moment';
 import { MyDTPicker } from "../../../components/DateTime/DateTime";
 export default function Create(props) {
   const [file, setFile] = useState(null)
   const [coverName, setCoverName] = useState(null)
-  // const [tag, setTag] = useState()
-  const [listTags, setListTags] = useState([{ name: 'Programming' }, { name: 'Design' }, { name: 'Marketing' }, , { name: 'UI/UX' }, { name: 'Education' }, { name: 'Web' }, { name: 'Android' }, , { name: 'Linux' }])
   const [errors, setErrors] = useState()
   const { register, handleSubmit, setValue, getValues, reset, unregister } = useForm();
   const step = ['Quiz Details', 'Instruction', 'Question']
@@ -129,6 +126,7 @@ export default function Create(props) {
       data.append(`${field}[question]`, req.questions[i].question)
       data.append(`${field}[answer_explanation]`, req.questions[i].answer_explanation)
       let correct = []
+      console.log(typeof req.questions[i].correct)
       for (let j = 0; j < req.questions[i].option.length; j++) {
         const opt = `${field}[options][${j}]`
         let isCorrect = null
@@ -356,15 +354,15 @@ export default function Create(props) {
                           <Select bg='white' {...register(`questions[${indexQuestion}].level`)} size="lg" variant='outline' iconColor="blue">
                             <option value="easy">Easy</option>
                             <option value="medium">Medium</option>
-                            <option value="Hard">Hard</option>
+                            <option value="hard">Hard</option>
                           </Select>
                         </div>
                         <div className="w-full">
                           <p className="mt-4">Tag</p>
                           <Select bg='white' {...register(`questions[${indexQuestion}].tag`)} size="lg" variant='outline' iconColor="blue">
-                            <option value="easy">tag 1</option>
-                            <option value="medium">tag 2</option>
-                            <option value="Hard">tag 3</option>
+                            <option value="tag 1">tag 1</option>
+                            <option value="tag 2">tag 2</option>
+                            <option value="tag 3">tag 3</option>
                           </Select>
                         </div>
                       </div>
@@ -373,7 +371,9 @@ export default function Create(props) {
                           <span className="text-red-1 text-sm">{errors[`questions.${indexQuestion}.question`]}</span>
                         )}</p>
                         <div className="w-full  bg-white rounded-lg " style={{ lineHeight: 2 }} >
-                          <Quill className="h-32   border-none rounded-lg" data={questions[`${indexQuestion}`].question} register={(data) => setDataForm(`questions[${indexQuestion}].question`, data)} />
+
+                         {/* <textarea {...register(`questions[${indexQuestion}].question`)} /> */}
+                          <Quill className="h-32   border-none rounded-lg" data='' register={(data) => setDataForm(`questions[${indexQuestion}].question`, data)} />
                         </div>
                         <div className="bg-white h-12">
                         </div>
@@ -446,7 +446,7 @@ export default function Create(props) {
                             <span className="text-red-1 text-sm">{errors[`questions.${indexQuestion}.answer_explanation`]}</span>
                           )}</p>
                           <div className="w-full  bg-white rounded-lg " style={{ lineHeight: 2 }} >
-                            <Quill className="h-32   border-none rounded-lg" register={(data) => setDataForm(`questions[${indexQuestion}].answer_explanation`, data)} />
+                            <Quill className="h-32   border-none rounded-lg" data='' register={(data) => setDataForm(`questions[${indexQuestion}].answer_explanation`, data)} />
                           </div>
                           <div className="bg-white h-12">
                           </div>

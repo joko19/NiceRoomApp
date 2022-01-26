@@ -14,6 +14,7 @@
     "@hookform/error-message": "^2.0.0",
     "@popperjs/core": "^2.11.0",
     "axios": "^0.24.0",
+    "formik": "^2.2.9",
     "framer-motion": "^4.1.17",
     "is-empty": "^1.2.0",
     "jsonwebtoken": "^8.5.1",
@@ -35,7 +36,8 @@
     "react-select": "^5.2.1",
     "redux": "^4.1.2",
     "redux-persist": "^6.0.0",
-    "redux-thunk": "^2.4.1"
+    "redux-thunk": "^2.4.1",
+    "yup": "^0.32.11"
   },
   "devDependencies": {
     "autoprefixer": "^10.4.0",

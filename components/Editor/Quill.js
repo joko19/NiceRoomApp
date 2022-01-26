@@ -40,7 +40,9 @@ export default function Quill({data, setData = false, className, register = fals
 
   useEffect(() => {
     if (quill) {
-      quill.clipboard.dangerouslyPasteHTML('')
+      console.log(data)
+      console.log(typeof data)
+      quill.clipboard.dangerouslyPasteHTML(data)
       quill.on('text-change', (delta, oldDelta, source) => {
         if(setData !== false){
           setData(quill.root.innerHTML) 
