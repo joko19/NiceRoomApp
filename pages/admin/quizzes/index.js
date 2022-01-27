@@ -128,7 +128,7 @@ export default function Create() {
                             </Link>
                             <button href="#" className="text-indigo-600 hover:text-indigo-900">
                               <Image src="/asset/icon/table/fi_trash-2.png" width={16} height={16} alt="icon deleted" onClick={() => {
-                                setNameDeleted(item.name)
+                                // setNameDeleted(item.name)
                                 setSelectedData(item.id),
                                   onOpen()
                               }} />

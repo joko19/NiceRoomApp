@@ -130,8 +130,8 @@ export default function Create(props) {
       for (let j = 0; j < req.questions[i].option.length; j++) {
         const opt = `${field}[options][${j}]`
         let isCorrect = null
-        console.log(req.questions[i])
-        if (req.questions[i].correct.length === req.questions[i].option.length) {
+        console.log(typeof req.questions[i].correct)
+        if (typeof req.questions[i].correct !== 'string' && req.questions[i].correct.length === req.questions[i].option.length) {
           if (req.questions[i].correct[j] !== null) {
             isCorrect = 1
           } else {
@@ -372,7 +372,7 @@ export default function Create(props) {
                         )}</p>
                         <div className="w-full  bg-white rounded-lg " style={{ lineHeight: 2 }} >
 
-                         {/* <textarea {...register(`questions[${indexQuestion}].question`)} /> */}
+                          {/* <textarea {...register(`questions[${indexQuestion}].question`)} /> */}
                           <Quill className="h-32   border-none rounded-lg" data='' register={(data) => setDataForm(`questions[${indexQuestion}].question`, data)} />
                         </div>
                         <div className="bg-white h-12">
@@ -406,8 +406,8 @@ export default function Create(props) {
                               {errors && (
                                 <span className="text-red-1 text-sm">{errors[`questions.${indexQuestion}.options.${indexAnswer}.title`]}</span>
                               )}
-                              <div key={indexAnswer} className="flex gap-2 ">
-                                <input className="m-auto" type="radio" id="html" {...register(answerType[indexQuestion].isSingle ? `questions[${indexQuestion}].correct` : `questions[${indexQuestion}].correct[${indexAnswer}]`)} value={`${indexAnswer}`}>
+                              <div className="flex gap-2">
+                              <input className="m-auto" type="radio" id="html" {...register(answerType[indexQuestion].isSingle ? `questions[${indexQuestion}].correct` : `questions[${indexQuestion}].correct[${indexAnswer}]`)} value={`${indexAnswer}`}>
                                 </input>
                                 <span className="m-auto">{alphabet[indexAnswer]}</span>
                                 <input {...register(`questions[${indexQuestion}].option[${indexAnswer}].title`)} autoComplete="off" type="text" className="form border w-full rounded-lg p-4 h-full m-1" placeholder="Input your answer" />
@@ -421,7 +421,7 @@ export default function Create(props) {
                                   // setQuestions(prevIndex => [...prevIndex.filter(i => i !== item)])
                                   unregister(`consenments[${indexAnswer}]`)
                                 }} >
-                                  <Image src="/asset/icon/table/fi_trash-2.png" width={16} height={16} alt="icon edit" />
+                                  <Image src="/asset/icon/table/fi_trash-2.png" width={16} height={16} alt="icon delete" />
                                 </div>
                                 )}
                               </div>

@@ -9,9 +9,9 @@ var valid = function (current) {
 
 const datetimePlaceholder = { placeholder: "Select Time and Date" };
 
-export function MyDTPicker({setDate = false}) {
+export function MyDTPicker({setDate = false, data = false}) {
   const [value, setValue] = useState(new Date())
-
+  console.log(data)
   const changeData = () => {
     const format = 'YYYY-MM-DD HH:mm'
     const dateTime = moment(value).format(format)
@@ -21,7 +21,7 @@ export function MyDTPicker({setDate = false}) {
   }
 
   return (
-    <Datetime inputProps={datetimePlaceholder} renderInput={renderInput} isValidDate={valid} value={value} onChange={() => {
+    <Datetime inputProps={datetimePlaceholder} renderInput={renderInput} isValidDate={valid} value={data !== false ? data : value} onChange={() => {
       setValue()
       changeData()
       // set

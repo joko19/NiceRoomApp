@@ -38,22 +38,10 @@ export default function Create(props) {
   const [endTime, setEndTime] = useState()
   const [consenment, setConsentment] = useState([])
   const [status, setStatus] = useState()
-  const [answerExplanation, setAnswerExplanation] = useState('')
   const [answerType, setAnswerType] = useState([{
     isSingle: true
   }])
-  const [questions, setQuestions] = useState([
-    {
-      id: 0,
-      // option: [1]
-      option: [
-        {
-          id: 0,
-          correct: 0,
-        }
-      ]
-    },
-  ])
+  const [questions, setQuestions] = useState([])
 
   const getDetail = async () => {
     console.log("get data detail")
@@ -66,23 +54,25 @@ export default function Create(props) {
           const str = data.consentments.replace(/['"]+/g, '').slice(1)
           const myArr = str.slice(0, str.length - 1).split(", ")
           var arr = []
-          for(let i = 0; i < myArr.length; i++){
-            arr.push(myArr[i])}
-          console.log(arr)
+          for (let i = 0; i < myArr.length; i++) {
+            arr.push(myArr[i])
+          }
           setConsentment(arr)
         }
         setValue("name", data.name)
         setValue("duration", data.duration)
+        setValue("live", data.type)
+        setType(data.type)
         if (data.type === 'live') {
           setValue("topic_id", data.topic_id)
           setValue("start_time", data.start_time)
           setValue("end_time", data.end_time)
+          setStartTime(data.star_time)
+          setEndTime(data.end_time)
+          console.log(data.start_time)
         }
         setInstruction(data.instruction)
-        console.log(data.instruction)
-        const constement = JSON.parse(data.consenments)
-        // console.log(data.consenments)
-        // console.log(constement)
+        console.log(startTime)
         const req = res.data.data
         let dataQuestion = []
         let dataAnswerExplanation = []
@@ -93,11 +83,12 @@ export default function Create(props) {
           dataQuestion.push({
             id: i,
             title: req.questions[i].question,
+            tag: req.questions[i].tag,
             option: req.questions[i].options,
             answer_explanation: req.questions[i].answer_explanation
           })
           dataAnswerType.push({ isSingle: isSingle })
-          dataAnswerExplanation.push({data: req.questions[i].answer_explanation})
+          dataAnswerExplanation.push({ data: req.questions[i].answer_explanation })
 
           console.log(req)
           const field = `questions[${i}]`
@@ -194,7 +185,7 @@ export default function Create(props) {
         const opt = `${field}[options][${j}]`
         let isCorrect = null
         console.log(req.questions[i])
-        if (typeof req.questions[i].correct === 'object' &&  req.questions[i].correct.length === req.questions[i].option.length) {
+        if (typeof req.questions[i].correct !== 'string' && req.questions[i].correct.length === req.questions[i].option.length) {
           if (req.questions[i].correct[j] !== null) {
             isCorrect = 1
           } else {
@@ -389,7 +380,7 @@ export default function Create(props) {
                   <span className="text-red-1 text-sm">{errors[`consentments.${index}`]}</span>
                 )}
                   <div key={index} className="flex">
-                    <input key={index} type="text" className="form border w-full rounded-lg p-4 h-full m-1"  autoComplete="off" placeholder="Input Consentment" defaultValue={item} {...register(`consenments[${index}]`)} />
+                    <input key={index} type="text" className="form border w-full rounded-lg p-4 h-full m-1" autoComplete="off" placeholder="Input Consentment" defaultValue={item} {...register(`consenments[${index}]`)} />
                     {consenment.length > 1 && (
                       <div className="m-auto cursor-pointer text-blue-1 -ml-8" onClick={() => {
                         setConsentment(prevIndex => [...prevIndex.filter(i => i !== item)])
@@ -423,7 +414,7 @@ export default function Create(props) {
                         </div>
                         <div className="w-full">
                           <p className="mt-4">Tag</p>
-                          <Select bg='white' {...register(`questions[${indexQuestion}].tag`)} size="lg" variant='outline' iconColor="blue">
+                          <Select bg='white'  {...register(`questions[${indexQuestion}].tag`)} size="lg" variant='outline' iconColor="blue">
                             <option value="tag 1">tag 1</option>
                             <option value="tag 2">tag 2</option>
                             <option value="tag 2">tag 3</option>
@@ -435,7 +426,7 @@ export default function Create(props) {
                           <span className="text-red-1 text-sm">{errors[`questions.${indexQuestion}.question`]}</span>
                         )}</p>
                         <div className="w-full  bg-white rounded-lg " style={{ lineHeight: 2 }} >
-                          <Quill className="h-32   border-none rounded-lg" data={itemQuestion?.title} register={(data) => setDataForm(`questions[${indexQuestion}].question`, data)} />
+                          <Quill className="h-32   border-none rounded-lg" data={itemQuestion.title} register={(data) => setDataForm(`questions[${indexQuestion}].question`, data)} />
                         </div>
                         <div className="bg-white h-12">
                         </div>
@@ -465,15 +456,15 @@ export default function Create(props) {
                           const alphabet = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z']
                           console.log(itemAnswer)
                           return (
-                            <div className=" bg-white my-2  p-4 rounded-lg" key={indexAnswer}>
+                            <div className={`${itemAnswer.correct === 1 ? 'bg-blue-6 border-2 border-blue-3' : 'bg-white'} my-2  p-4 rounded-lg`} key={indexAnswer}>
                               {errors && (
                                 <span className="text-red-1 text-sm">{errors[`questions.${indexQuestion}.options.${indexAnswer}.title`]}</span>
                               )}
                               <div key={indexAnswer} className="flex gap-2 ">
-                                <input className="m-auto" onClick={(e) => console.log(e.target.value)} type="radio" id="html" defaultValue={itemAnswer.correct}  {...register(answerType[indexQuestion].isSingle ? `questions[${indexQuestion}].correct` : `questions[${indexQuestion}].correct[${indexAnswer}]`)} value={`${indexAnswer}`}>
+                                <input className="m-auto"  onClick={(e) => console.log(e.target.value)} type="radio" id="html" defaultValue={itemAnswer.correct}  {...register(answerType[indexQuestion].isSingle ? `questions[${indexQuestion}].correct` : `questions[${indexQuestion}].correct[${indexAnswer}]`)} value={`${indexAnswer}`}>
                                 </input>
                                 <span className="m-auto">{alphabet[indexAnswer]}</span>
-                                <input {...register(`questions[${indexQuestion}].option[${indexAnswer}].title`)} defaultValue={itemAnswer.title} autoComplete="off" type="text" className="form border w-full rounded-lg p-4 h-full m-1" placeholder="Input your answer" />
+                                <input {...register(`questions[${indexQuestion}].option[${indexAnswer}].title`)} defaultValue={itemAnswer.title} autoComplete="off" type="text" className={`${itemAnswer.correct === 1 ? 'bg-blue-6' : 'bg-white'} form border w-full rounded-lg p-4 h-full m-1`} placeholder="Input your answer" />
                                 {questions[indexQuestion].option.length !== 1 && (<div className="m-auto cursor-pointer text-blue-1 -ml-9" onClick={() => {
                                   const newOption = {
                                     id: itemQuestion.id,
@@ -509,7 +500,7 @@ export default function Create(props) {
                             <span className="text-red-1 text-sm">{errors[`questions.${indexQuestion}.answer_explanation`]}</span>
                           )}</p>
                           <div className="w-full  bg-white rounded-lg " style={{ lineHeight: 2 }} >
-                          <Quill className="h-32   border-none rounded-lg" data={itemQuestion?.answer_explanation} register={(data) => setDataForm(`questions[${indexQuestion}].answer_explanation`, data)} />
+                            <Quill className="h-32   border-none rounded-lg" data={itemQuestion.answer_explanation} register={(data) => setDataForm(`questions[${indexQuestion}].answer_explanation`, data)} />
                           </div>
                           <div className="bg-white h-12">
                           </div>
@@ -538,7 +529,10 @@ export default function Create(props) {
 
               </div>
               <div onClick={() => {
-                setQuestions([...questions, { id: questions[questions.length - 1].id + 1, option: [0] }])
+                setQuestions([...questions, { id: questions[questions.length - 1].id + 1, 
+                  title:'',
+                  answer_explanation:'',
+                  option: [0] }])
                 setAnswerType([...answerType, { isSingle: true }])
               }} className="text-blue-1 cursor-pointer text-center p-4 border-dashed border-2 border-blue-1 mt-4 rounded-lg">+ Add New Question</div>
             </div>
