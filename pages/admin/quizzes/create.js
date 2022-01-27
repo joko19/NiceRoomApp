@@ -402,7 +402,7 @@ export default function Create(props) {
                         {questions[indexQuestion].option.map((itemAnswer, indexAnswer) => {
                           const alphabet = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z']
                           return (
-                            <div className=" bg-white my-2  p-4 rounded-lg">
+                            <div className=" bg-white my-2  p-4 rounded-lg" key={indexAnswer}>
                               {errors && (
                                 <span className="text-red-1 text-sm">{errors[`questions.${indexQuestion}.options.${indexAnswer}.title`]}</span>
                               )}
