@@ -56,11 +56,10 @@ export default function Announcement() {
   const [branchItem, setBranchItem] = useState()
   const [fileName, setFileName] = useState("Upload Your File")
   const [isPublish, setIsPublish] = useState()
+  const [batchItem, setBatchItem] = useState([])
+  const [branchItem, setBranchItem] = useState([])
 
   const getData = async (search, branch, status, limit, page) => {
-    console.log("get data")
-    console.log(search)
-    console.log("h")
     await apiAnnouncement.index(search, branch, status, limit, page)
       .then((res) => {
         setDataInstitute(res.data.data)
@@ -80,7 +79,7 @@ export default function Announcement() {
   const getBranch = async () => {
     await apiBranch.all()
       .then((res) => {
-        console.log(res)
+        // console.log(res)
         setListBranch(res.data.data)
       })
   }
@@ -97,40 +96,42 @@ export default function Announcement() {
       .then((result) => {
         const res = result.data.data
         console.log(res)
-        res.avatar ? setAvatar(instance.pathImg + res.avatar) : setAvatar('/asset/img/blank_profile.png')
-        setValue("name", res.name)
-        setValue("email", res.email)
-        setValue("gender", res.gender)
-        setValue("phone", res.phone)
-        setValue("employee_id", res.email)
-        if (res.branch_id) {
-          getBranch()
-          setValue("branch_id", res.branch_id)
-        } else {
-          setValue("branch_id", "Select Branch")
-        }
+        setValue("title", res.title)
+        setValue("sub_title", res.sub_title)
+        setValue("description", res.description)
+        setBatchItem(res.batches)
+        setBranchItem(res.branches)
+        setFileName(res.file)
       })
   }
 
   const onSubmit = async (form) => {
     console.log(form)
-    console.log(file)
-    console.log(isPublish)
+    console.log(branchItem)
+    console.log(batchItem)
+    // console.log(file)
+    // console.log(isPublish)
     var data = new FormData();
     data.append("title", form.title)
     data.append("sub_title", form.sub_title)
     data.append("description", form.description)
-    // if (form.branch_id !== 'Select Branch') {
-    //   data.append("branch_id", form.branch_id)
-    // }
-    data.append("branch_id", 1)
-    data.append("batch_id", 1 )
+    for (let i = 0; i < branchItem.length; i++) {
+      const field = `branches[${i}]`
+      data.append(field, branchItem[i].id)
+    }
+    for (let i = 0; i < batchItem.length; i++) {
+      const field = `batches[${i}]`
+      data.append(field, batchItem[i].id)
+    }
     if (file) {
       data.append("file", file)
     }
     // data.append("file", "")
     data.append("status", isPublish)
     console.log(data)
+    for (var key of data.entries()) {
+      console.log(key[0] + ', ' + key[1]);
+    }
     console.log("is Update : " + update)
     update ? await apiAnnouncement.update(selectedData, data)
       .then((res) => {
@@ -187,6 +188,14 @@ export default function Announcement() {
   }
   const onRemoveBranch = (list, item) => {
     setBranchItem(list)
+  }
+
+  const onSelectBatch = (list, item) => {
+    setBatchItem(list)
+  }
+
+  const onRemoveBatch = (list, item) => {
+    setBatchItem(list)
   }
 
   const onPublish = async () => {
@@ -272,7 +281,9 @@ export default function Announcement() {
                             </div>
                           </td>
                           <td className="px-6 py-4 whitespace-nowrap">
-                            <div>{item.branch.name}</div>
+                            {item.branches.map((item) => (
+                              <p>{item.name} </p>
+                            ))}
                           </td>
                           <td className="px-6 py-4 whitespace-nowrap">
                             <div className={`${item.status === 'draft' ? 'bg-black-8 text-black-3' : 'bg-green-2 text-green-1'} text-center rounded-lg p-3`}>
@@ -353,8 +364,8 @@ export default function Announcement() {
 
               <div className="flex gap-4 mt-4 flex-col md:flex-row" >
                 <div className="w-full ">
-                  <p>Batch{errors && (
-                    <span className="text-red-1 text-sm">{errors.batch}</span>
+                  <p>Batch {errors && (
+                    <span className="text-red-1 text-sm">{errors.batches}</span>
                   )}</p>
                   <Multiselect
                     className="z-100 "
@@ -372,15 +383,15 @@ export default function Announcement() {
                     placeholder="Select Batch"
                     // singleSelect
                     // options={listTag} // Options to display in the dropdown
-                    // selectedValues={this.state.selectedValue} // Preselected value to persist in dropdown
-                    onSelect={onSelectBranch} // Function will trigger on select event
-                    onRemove={onRemoveBranch} // Function will trigger on remove event
+                    selectedValues={batchItem} // Preselected value to persist in dropdown
+                    onSelect={onSelectBatch} // Function will trigger on select event
+                    onRemove={onRemoveBatch} // Function will trigger on remove event
                     displayValue="name" // Property name to display in the dropdown options
                   />
                 </div>
                 <div className="w-full ">
-                  <p>Branch{errors && (
-                    <span className="text-red-1 text-sm">{errors.batch}</span>
+                  <p>Branch {errors && (
+                    <span className="text-red-1 text-sm">{errors.branches}</span>
                   )}</p>
                   <div>
                     <Multiselect
@@ -399,7 +410,7 @@ export default function Announcement() {
                       placeholder="Select Branch"
                       // singleSelect
                       // options={listTag} // Options to display in the dropdown
-                      // selectedValues={this.state.selectedValue} // Preselected value to persist in dropdown
+                      selectedValues={branchItem} // Preselected value to persist in dropdown
                       onSelect={onSelectBranch} // Function will trigger on select event
                       onRemove={onRemoveBranch} // Function will trigger on remove event
                       displayValue="name" // Property name to display in the dropdown options
@@ -416,7 +427,7 @@ export default function Announcement() {
                 <div className="flex gap-4">
                   {/* <input type="text" className=" flex-grow form border p-4 rounded-lg" value={fileName} placeholder="Upload Your File" disabled {...register("title")} /> */}
                   <div className={`border rounded-lg p-4  flex-grow text-black-4 ${fileName === 'Please upload pdf file' && 'text-red-1'}`}>
-                    {fileName.length > 45 ? fileName.substring(0,45) + "..." : fileName }
+                    {fileName.length > 45 ? fileName.substring(0, 45) + "..." : fileName}
                   </div>
                   <label htmlFor="file-input">
                     <div className="w-full border inline-flex rounded-lg cursor-pointer p-4 text-blue-1 border-blue-1">
@@ -425,13 +436,13 @@ export default function Announcement() {
                   </label>
                 </div>
                 <div className="hidden">
-                  <input id="file-input" type="file" accept="application/pdf" className="hidden -z-50"  onChange={chooseFile} />
+                  <input id="file-input" type="file" accept="application/pdf" className="hidden -z-50" onChange={chooseFile} />
                 </div>
               </div>
 
               <div className="flex flex-row-reverse gap-4 mt-4">
-                <button onClick={() =>setIsPublish("draft")} className="bg-blue-1 p-3 rounded-lg text-white" >Save As Draft</button>
-                <button onClick={() =>setIsPublish("published")} className="p-3 rounded-lg text-blue-1" >Publish</button>
+                <button onClick={() => setIsPublish("draft")} className="bg-blue-1 p-3 rounded-lg text-white" >Save As Draft</button>
+                <button onClick={() => setIsPublish("published")} className="p-3 rounded-lg text-blue-1" >Publish</button>
                 <button type="button" className="text-black-4 p-3 rounded-lg" onClick={onCloseCreateModal}>Close</button>
               </div>
             </form>
