@@ -1,7 +1,6 @@
 import Layout from "../../Layout/Layout";
 import Card from "../../components/Cards/Card";
 import apiAnnouncement from "../../action/announcement";
-import apiBranch from "../../action/branch";
 import { useEffect, useState } from 'react'
 import Image from "next/image";
 import {
@@ -19,6 +18,7 @@ import Pagination from "../../components/Pagination/pagination";
 import instance from "../../action/instance";
 import Multiselect from 'multiselect-react-dropdown';
 import apiBatch from "../../action/batch";
+import apiBranch from "../../action/branch";
 
 export default function Announcement() {
   const [search, setSearch] = useState('')
