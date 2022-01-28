@@ -175,7 +175,8 @@ export default function Create(props) {
     for (let i = 0; i < req.questions.length; i++) {
       console.log(req)
       const field = `questions[${i}]`
-      data.append(`${field}[id]`, req.questions[i].id)
+      console.log(req.questions[i].id)
+      data.append(`${field}[id]`, req.questions[i].id === '' ? -1 : req.questions[i].id)
       data.append(`${field}[level]`, req.questions[i].level)
       data.append(`${field}[tag]`, req.questions[i].tag)
       data.append(`${field}[mark]`, req.questions[i].mark)
@@ -196,7 +197,7 @@ console.log(req.questions[i].option[j].id)
           data.append(`${opt}[correct]`, req.questions[i].option[j].correct === '1' ? 1 : 0)
         }
         data.append(`${opt}[title]`, req.questions[i].option[j].title)
-        data.append(`${opt}[id]`, req.questions[i].option[j].id === "268" ? -1 : req.questions[i].option[j].id)
+        data.append(`${opt}[id]`, req.questions[i].option[j].id === 'NaN' || req.questions[i].option[j].id === '' ? -1 : req.questions[i].option[j].id)
         // data.append(`${opt}[deleted]`, "271")
       }
 
@@ -401,7 +402,7 @@ console.log(req.questions[i].option[j].id)
                 {questions.map((itemQuestion, indexQuestion) => {
                   return (
                     <>
-                    <input hidden type="text" {...register(`questions[${indexQuestion}].id`)} />
+                    <input hidden type="text" defaultValue="1" {...register(`questions[${indexQuestion}].id`)} />
                       <p className="font-bold mt-4 text-lg">Question {indexQuestion + 1}</p>
                       <div className="flex gap-4">
                         <div className="w-full">
