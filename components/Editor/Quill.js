@@ -42,6 +42,9 @@ export default function Quill({data, setData = false, className, register = fals
     if (quill) {
       console.log(data)
       console.log(typeof data)
+      if(typeof data === 'undefined') {
+        data = ''
+      }
       quill.clipboard.dangerouslyPasteHTML(data)
       quill.on('text-change', (delta, oldDelta, source) => {
         if(setData !== false){
