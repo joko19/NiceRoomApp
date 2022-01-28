@@ -114,25 +114,28 @@ export default function Index() {
                           <td className="px-6 py-4 whitespace-nowrap">
                             <div>{item.type}</div>
                           </td>
-                          <td className="px-6 py-4 whitespace-nowrap">
-                            <div className={`${item.status === 'draft' ? 'bg-black-8 text-black-3' : 'bg-green-2 text-green-1'} text-center rounded-lg p-3`}>
+                          <td className="px-6 py-4 whitespace-nowrap ">
+                            <div className={`${item.status === 'draft' ? 'bg-black-8 text-black-3' : 'bg-green-2 text-green-1'} text-center rounded-lg p-3 `}>
                               {item.status}
                             </div>
                           </td>
-                          <td className="px-6 py-4 whitespace-nowrap flex text-right gap-2 text-sm font-medium">
-
-                            <Link href={`quizzes/edit/${item.id}`}>
-                              <a className="text-indigo-600 hover:text-indigo-900">
-                                <Image src="/asset/icon/table/fi_edit.png" width={16} height={16} alt="icon edit" />
-                              </a>
-                            </Link>
-                            <button href="#" className="text-indigo-600 hover:text-indigo-900">
-                              <Image src="/asset/icon/table/fi_trash-2.png" width={16} height={16} alt="icon deleted" onClick={() => {
-                                // setNameDeleted(item.name)
+                          <td className="px-6 py-4 whitespace-nowrap flex text-right gap-2 text-sm font-medium m-auto flex items-center h-full">
+                            <div className="flex gap-3 p-3">
+                              <Link href={`exams/${item.id}`}>
+                                <a className="text-indigo-600 hover:text-indigo-900 m-auto">
+                                  <Image src="/asset/icon/table/fi_edit.png" width={16} height={16} alt="icon edit" />
+                                  <span className="text-blue-1 inline-block align-top">    Edit Exam</span>
+                                </a>
+                              </Link>
+                              <button href="#" className="text-indigo-600 hover:text-indigo-900 m-auto" onClick={() => {
                                 setSelectedData(item.id),
                                   onOpen()
-                              }} />
-                            </button>
+                              }}>
+                                <Image src="/asset/icon/table/fi_trash_red.png" className="inline-block align-baseline " width={16} height={16} alt="icon deleted" />
+                                <span className="text-red-1 inline-block align-top">    Delete</span>
+                              </button>
+                            </div>
+
                           </td>
                         </tr>
                       ))}

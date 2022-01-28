@@ -17,7 +17,7 @@ import {
 } from '@chakra-ui/react'
 import Quill from "../../../components/Editor/Quill";
 import { Select } from '@chakra-ui/react'
-import apiQuiz from "../../../action/quiz";
+import apiExam from "../../../action/exam";
 import apiTopic from "../../../action/topics";
 import { MyDTPicker } from "../../../components/DateTime/DateTime";
 import Multiselect from 'multiselect-react-dropdown';
@@ -30,7 +30,7 @@ export default function Create(props) {
   const [coverName, setCoverName] = useState(null)
   const [errors, setErrors] = useState()
   const { register, handleSubmit, setValue, getValues, reset, unregister } = useForm();
-  const step = ['Quiz Details', 'Instruction', 'Sections', 'Question']
+  const step = ['Quiz Details', 'Instruction', 'Sections']
   const [currentStep, setCurrentStep] = useState(1)
   const [topics, setTopics] = useState([])
   const [type, setType] = useState('standard')
@@ -45,19 +45,9 @@ export default function Create(props) {
   const [topicItem, setTopicItem] = useState([])
   const [batchItem, setBatchItem] = useState([])
   const [branchItem, setBranchItem] = useState([])
-  const [answerType, setAnswerType] = useState([{
-    isSingle: true
-  }])
-  const [questions, setQuestions] = useState([
+  const [sections, setsections] = useState([
     {
       id: 0,
-      // option: [1]
-      option: [
-        {
-          id: 0,
-          correct: 0,
-        }
-      ]
     },
   ])
 
@@ -78,24 +68,54 @@ export default function Create(props) {
 
   const onSelectBranch = (list, item) => {
     setBranchItem(list)
+    let arr = []
+    for(let i = 0; i < list.length; i++){
+      arr.push(list[i].id)
+    }
+    setValue("branches[]", arr)
   }
   const onRemoveBranch = (list, item) => {
     setBranchItem(list)
+    let arr = []
+    for(let i = 0; i < list.length; i++){
+      arr.push(list[i].id)
+    }
+    setValue("branches[]", arr)
   }
 
   const onSelectBatch = (list, item) => {
     setBatchItem(list)
+    let arr = []
+    for(let i = 0; i < list.length; i++){
+      arr.push(list[i].id)
+    }
+    setValue("batches[]", arr)
   }
 
   const onRemoveBatch = (list, item) => {
     setBatchItem(list)
+    let arr = []
+    for(let i = 0; i < list.length; i++){
+      arr.push(list[i].id)
+    }
+    setValue("batches[]", arr)
   }
   const onSelectTopic = (list, item) => {
     setTopicItem(list)
+    let arr = []
+    for(let i = 0; i < list.length; i++){
+      arr.push(list[i].id)
+    }
+    setValue("topics[]", arr)
   }
 
   const onRemoveTopic = (list, item) => {
     setTopicItem(list)
+    let arr = []
+    for(let i = 0; i < list.length; i++){
+      arr.push(list[i].id)
+    }
+    setValue("topics[]", arr)
   }
 
   const getTopics = async () => {
@@ -103,29 +123,14 @@ export default function Create(props) {
       .then((res) => setListTopic(res.data.data.data))
   }
 
-  const submitQuiz = async (req) => {
+  const submitQuiz = async (data) => {
     console.log("submit")
-    console.log(req)
-    setErrors("")
-    const data = new FormData()
-    if (file !== null) {
-      data.append("image", file)
-    }
-    data.append("name", req.name)
-    data.append("type", req.type)
-    if (req.type === 'live') {
-      data.append("topic_id", req.topic_id)
-      data.append("start_time", startTime)
-      data.append("end_time", endTime)
-    }
-    data.append("duration", req.duration)
-    // to step 2
+    console.log(data)
     if (currentStep === 1) {
-      await apiQuiz.create(data)
+      await apiExam.create(data)
         .then()
         .catch((err) => {
           setErrors(err.response.data.data)
-          console.log(err.response.data.data)
           if (!err.response.data.data.name && !err.response.data.data.duration) {
             setErrors(null)
             setCurrentStep(2)
@@ -135,14 +140,9 @@ export default function Create(props) {
       return null
     }
 
-    data.append("instruction", instruction)
-    for (let i = 0; i < req.consenments.length; i++) {
-      const field = `consentments[${i}]`
-      data.append(`${field}`, req.consenments[i])
-    }
-    // to step 3
     if (currentStep === 2) {
-      await apiQuiz.create(data)
+      console.log(data)
+      await apiExam.create(data)
         .then()
         .catch((err) => {
           setErrors(err.response.data.data)
@@ -157,48 +157,8 @@ export default function Create(props) {
       return null
     }
 
-    for (let i = 0; i < req.questions.length; i++) {
-      console.log(req)
-      const field = `questions[${i}]`
-      data.append(`${field}[level]`, req.questions[i].level)
-      data.append(`${field}[tag]`, req.questions[i].tag)
-      data.append(`${field}[mark]`, req.questions[i].mark)
-      data.append(`${field}[answer_type]`, req.questions[i].answer_type)
-      data.append(`${field}[negative_mark]`, req.questions[i].negative_mark)
-      data.append(`${field}[question]`, req.questions[i].question)
-      data.append(`${field}[answer_explanation]`, req.questions[i].answer_explanation)
-      let correct = []
-      console.log(typeof req.questions[i].correct)
-      for (let j = 0; j < req.questions[i].option.length; j++) {
-        const opt = `${field}[options][${j}]`
-        let isCorrect = null
-        console.log(typeof req.questions[i].correct)
-        if (typeof req.questions[i].correct !== 'string' && req.questions[i].correct.length === req.questions[i].option.length) {
-          if (req.questions[i].correct[j] !== null) {
-            isCorrect = 1
-          } else {
-            isCorrect = 0
-          }
-          data.append(`${opt}[correct]`, isCorrect)
-        } else {
-          const correctAnswer = req.questions[i].correct
-          data.append(`${opt}[correct]`, correctAnswer == j ? 1 : 0)
-        }
-        data.append(`${opt}[title]`, req.questions[i].option[j].title)
-      }
-
-    }
-    console.log(data)
-    // const tag = Array.from(tags)
-    // tag.forEach((item) => {
-    //   data.append("tags"+, item)
-    // })
-    // for console log
-    for (var key of data.entries()) {
-      console.log(key[0] + ', ' + key[1]);
-    }
-    data.append("status", status)
-    await apiQuiz.create(data)
+    if (currentStep === 3) {
+    await apiExam.create(data)
       .then((res) => {
         onOpenSuccessModal()
       })
@@ -206,6 +166,7 @@ export default function Create(props) {
         console.log(err.response.data.data)
         setErrors(err.response.data.data)
       })
+    }
   }
 
   const {
@@ -280,7 +241,7 @@ export default function Create(props) {
                   </div>
                 </div>
                 <div className="w-full">
-                  <p className="mt-4">Exam Name{errors && (
+                  <p className="mt-4">Exam Name {errors && (
                     <span className="text-red-1 text-sm">{errors.name}</span>
                   )}</p>
                   <div>
@@ -291,14 +252,14 @@ export default function Create(props) {
 
               <div className="flex gap-4 " >
                 <div className="w-full">
-                  <p className="mt-4">Exam Category {errors && (
+                  <p className="mt-4">Exam Type {errors && (
                     <span className="text-red-1 text-sm">{errors.type}</span>
                   )}</p>
                   <div>
-                    <Select bg='white' size="lg" variant='outline' iconColor="blue">
-                      <option value="easy">Category 1</option>
-                      <option value="medium">Category 2</option>
-                      <option value="hard">Category 3</option>
+                    <Select bg='white' size="lg" variant='outline' iconColor="blue" {...register('exam_type_id')}>
+                      <option value="1">Type 1</option>
+                      <option value="2">Type 2</option>
+                      <option value="3">Type 3</option>
                     </Select>
                   </div>
                 </div><div className="w-full ">
@@ -439,7 +400,7 @@ export default function Create(props) {
                 <span className="text-red-1 text-sm">{errors['instruction']}</span>
               )}</p>
               <div className="w-full h-64">
-                <Quill className="h-48" data={instruction} setData={(data) => setInstruction(data)} />
+                <Quill className="h-48" data={getValues('instruction')} setData={(data) => setValue('instruction',data)} />
               </div>
               <p className="mt-4">Consentment</p>
               {consenment.map((item, index) => (
@@ -447,7 +408,7 @@ export default function Create(props) {
                   <span className="text-red-1 text-sm">{errors[`consentments.${index}`]}</span>
                 )}
                   <div key={index} className="flex">
-                    <input key={index} type="text" className="form border w-full rounded-lg p-4 h-full m-1" autoComplete="off" placeholder="Input Consentment"  {...register(`consenments[${index}]`)} />
+                    <input key={index} type="text" className="form border w-full rounded-lg p-4 h-full m-1" autoComplete="off" placeholder="Input Consentment"  {...register(`consentments[${index}]`)} />
                     {consenment.length > 1 && (
                       <div className="m-auto cursor-pointer text-blue-1 -ml-8" onClick={() => {
                         setConsentment(prevIndex => [...prevIndex.filter(i => i !== item)])
@@ -464,46 +425,44 @@ export default function Create(props) {
           {currentStep === 3 && (
             <div className="mt-8">
               <div className="bg-blue-6 p-4">
-                {questions.map((itemQuestion, indexQuestion) => {
+                {sections.map((itemQuestion, indexQuestion) => {
                   return (
                     <>
                       <p className="font-bold mt-4 text-lg">Section {indexQuestion + 1}</p>
-
-
                       <div className="flex gap-4" >
                         <div className="w-full">
                           <p className="mt-4">Section Name{errors && (
-                            <span className="text-red-1 text-sm">{errors.name}</span>
+                            <span className="text-red-1 text-sm">{errors[`sections.${indexQuestion}.name`]}</span>
                           )}</p>
                           <div>
-                            <input type="text" className="form border w-full rounded-lg p-4 h-full" placeholder="Input Section Name"  {...register("name")} />
+                            <input type="text" className="form border w-full rounded-lg p-4 h-full" placeholder="Input Section Name"  {...register(`sections[${indexQuestion}].name`)} />
                           </div>
                         </div>
                         <div className="w-full">
                           <p className="mt-4">Duration {errors && (
-                            <span className="text-red-1 text-sm">{errors.duration}</span>
+                            <span className="text-red-1 text-sm">{errors[`sections.${indexQuestion}.duration`]}</span>
                           )}</p>
                           <div >
                             <div className="flex h-full">
-                              <input type="number" className="border w-full h-full flex-grow rounded p-4" placeholder="0"  {...register("duration")} />
+                              <input type="number" className="border w-full h-full flex-grow rounded p-4" placeholder="0"  {...register(`sections[${indexQuestion}].duration`)} />
                               <input className="bg-black-9 p-4 w-24 text-center h-full border text-black-4" placeholder="Minute" disabled />
                             </div>
                           </div>
                         </div>
                       </div>
                       <div className="mt-4">
-                        <p className="mt-4">Question {errors && (
-                          <span className="text-red-1 text-sm">{errors[`questions.${indexQuestion}.question`]}</span>
+                        <p className="mt-4">Instruction {errors && (
+                          <span className="text-red-1 text-sm">{errors[`sections.${indexQuestion}.instruction`]}</span>
                         )}</p>
                         <div className="w-full  bg-white rounded-lg " style={{ lineHeight: 2 }} >
 
-                          {/* <textarea {...register(`questions[${indexQuestion}].question`)} /> */}
-                          <Quill className="h-32   border-none rounded-lg" data='' register={(data) => setDataForm(`questions[${indexQuestion}].question`, data)} />
+                          {/* <textarea {...register(`sections[${indexQuestion}].question`)} /> */}
+                          <Quill className="h-32   border-none rounded-lg" data='' register={(data) => setDataForm(`sections[${indexQuestion}].instruction`, data)} />
                         </div>
                         <div className="bg-white h-12">
                         </div>
                       </div>
-                    
+
                     </>
                   )
                 }
@@ -511,9 +470,8 @@ export default function Create(props) {
 
               </div>
               <div onClick={() => {
-                setQuestions([...questions, { id: questions[questions.length - 1].id + 1, option: [0] }])
-                setAnswerType([...answerType, { isSingle: true }])
-              }} className="text-blue-1 cursor-pointer text-center p-4 border-dashed border-2 border-blue-1 mt-4 rounded-lg">+ Add New Question</div>
+                setsections([...sections, { id: sections[sections.length - 1].id + 1, option: [0] }])
+              }} className="text-blue-1 cursor-pointer text-center p-4 border-dashed border-2 border-blue-1 mt-4 rounded-lg">+ Add New Section</div>
             </div>
           )}
           <div className="flex -z-10 gap-4 flex-row-reverse my-4">
@@ -521,8 +479,7 @@ export default function Create(props) {
             )}
             {currentStep === 3 && (
               <>
-                <button onClick={() => setStatus("published")} className='cursor-pointer bg-blue-1  text-white p-4 rounded-lg'>Save Quiz</button>
-                <button onClick={() => setStatus("draft")} className='cursor-pointer text-blue-1 p-4 rounded-lg'>Save Question</button>
+                <button onClick={() => setStatus("published")} className='cursor-pointer bg-blue-1  text-white p-4 rounded-lg'>Save Test</button>
               </>
             )}
             <div onClick={() => {
@@ -540,16 +497,9 @@ export default function Create(props) {
           <ModalCloseButton />
           <ModalBody>
             <div className="flex flex-col text-center ">
-              {status === 'published' ?
-                (
-                  <p> Quiz has published </p>
-                ) : (
-
-                  <p>Quiz saved as Draft </p>
-                )
-              }
+              Section Successfully Created
               <div className="self-center">
-                <Link href="/admin/quizzes">
+                <Link href="/admin/exams">
                   <a className="bg-blue-1 rounded-lg text-white mt-4 block align-center p-3">Okay</a>
                 </Link>
               </div>
