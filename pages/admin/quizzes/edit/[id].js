@@ -92,12 +92,14 @@ export default function Create(props) {
 
           console.log(req)
           const field = `questions[${i}]`
+          setValue(`${field}[id]`, req.questions[i].id)
           setValue(`${field}[level]`, req.questions[i].level)
           setValue(`${field}[tag]`, req.questions[i].tag)
           setValue(`${field}[mark]`, req.questions[i].mark)
           setValue(`${field}[answer_type]`, req.questions[i].answer_type)
           setValue(`${field}[negative_mark]`, req.questions[i].negative_mark)
           setValue(`${field}[question]`, req.questions[i].question)
+          setValue(`${field}[answer_explanation]`, req.questions[i].answer_explanation)
         }
         setQuestions(dataQuestion)
         setAnswerType(dataAnswerType)
@@ -133,7 +135,7 @@ export default function Create(props) {
     data.append("duration", req.duration)
     // to step 2
     if (currentStep === 1) {
-      await apiQuiz.create(data)
+      await apiQuiz.update(id, data)
         .then()
         .catch((err) => {
           setErrors(err.response.data.data)
@@ -154,7 +156,7 @@ export default function Create(props) {
     }
     // to step 3
     if (currentStep === 2) {
-      await apiQuiz.create(data)
+      await apiQuiz.update(id, data)
         .then()
         .catch((err) => {
           setErrors(err.response.data.data)
@@ -168,10 +170,12 @@ export default function Create(props) {
         })
       return null
     }
+    console.log(req.questions.length)
 
     for (let i = 0; i < req.questions.length; i++) {
       console.log(req)
       const field = `questions[${i}]`
+      data.append(`${field}[id]`, req.questions[i].id)
       data.append(`${field}[level]`, req.questions[i].level)
       data.append(`${field}[tag]`, req.questions[i].tag)
       data.append(`${field}[mark]`, req.questions[i].mark)
@@ -181,22 +185,19 @@ export default function Create(props) {
       data.append(`${field}[answer_explanation]`, req.questions[i].answer_explanation)
       let correct = []
       for (let j = 0; j < req.questions[i].option.length; j++) {
-
+console.log(req.questions[i].option[j].id)
         const opt = `${field}[options][${j}]`
         let isCorrect = null
         console.log(req.questions[i])
-        if (typeof req.questions[i].correct !== 'string' && req.questions[i].correct.length === req.questions[i].option.length) {
-          if (req.questions[i].correct[j] !== null) {
-            isCorrect = 1
-          } else {
-            isCorrect = 0
-          }
-          data.append(`${opt}[correct]`, isCorrect)
-        } else {
+        if (typeof req.questions[i].correct === 'string') {
           const correctAnswer = req.questions[i].correct
           data.append(`${opt}[correct]`, correctAnswer == j ? 1 : 0)
+        } else {
+          data.append(`${opt}[correct]`, req.questions[i].option[j].correct === '1' ? 1 : 0)
         }
         data.append(`${opt}[title]`, req.questions[i].option[j].title)
+        data.append(`${opt}[id]`, req.questions[i].option[j].id === "268" ? -1 : req.questions[i].option[j].id)
+        // data.append(`${opt}[deleted]`, "271")
       }
 
     }
@@ -210,7 +211,7 @@ export default function Create(props) {
       console.log(key[0] + ', ' + key[1]);
     }
     data.append("status", status)
-    await apiQuiz.create(data)
+    await apiQuiz.update(id, data)
       .then((res) => {
         onOpenSuccessModal()
       })
@@ -400,6 +401,7 @@ export default function Create(props) {
                 {questions.map((itemQuestion, indexQuestion) => {
                   return (
                     <>
+                    <input hidden type="text" {...register(`questions[${indexQuestion}].id`)} />
                       <p className="font-bold mt-4 text-lg">Question {indexQuestion + 1}</p>
                       <div className="flex gap-4">
                         <div className="w-full">
@@ -413,7 +415,9 @@ export default function Create(props) {
                           </Select>
                         </div>
                         <div className="w-full">
-                          <p className="mt-4">Tag</p>
+                          <p className="mt-4">Tag {errors && (
+                          <span className="text-red-1 text-sm">{errors[`questions.${indexQuestion}.tag`]}</span>
+                        )}</p>
                           <Select bg='white'  {...register(`questions[${indexQuestion}].tag`)} size="lg" variant='outline' iconColor="blue">
                             <option value="tag 1">tag 1</option>
                             <option value="tag 2">tag 2</option>
@@ -436,7 +440,6 @@ export default function Create(props) {
                           <span className="text-red-1 text-sm">{errors[`questions.${indexQuestion}.options`]}</span>
                         )}</p>
                         <Select bg='white' onClick={(e) => {
-                          console.log(answerType[indexQuestion])
                           let isSingle = ''
                           if (e.target.value === 'single')
                             isSingle = true
@@ -454,17 +457,21 @@ export default function Create(props) {
 
                         {questions[indexQuestion].option.map((itemAnswer, indexAnswer) => {
                           const alphabet = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z']
-                          console.log(itemAnswer)
                           return (
-                            <div className={`${itemAnswer.correct === 1 ? 'bg-blue-6 border-2 border-blue-3' : 'bg-white'} my-2  p-4 rounded-lg`} key={indexAnswer}>
+                            <div className={`bg-white my-2  p-4 rounded-lg`} key={indexAnswer}>
+                              <input type="text" hidden defaultValue={itemAnswer.id} {...register(`questions[${indexQuestion}].option[${indexAnswer}].id`)} />
                               {errors && (
                                 <span className="text-red-1 text-sm">{errors[`questions.${indexQuestion}.options.${indexAnswer}.title`]}</span>
                               )}
                               <div key={indexAnswer} className="flex gap-2 ">
-                                <input className="m-auto"  onClick={(e) => console.log(e.target.value)} type="radio" id="html" defaultValue={itemAnswer.correct}  {...register(answerType[indexQuestion].isSingle ? `questions[${indexQuestion}].correct` : `questions[${indexQuestion}].correct[${indexAnswer}]`)} value={`${indexAnswer}`}>
-                                </input>
+                                {answerType[indexQuestion].isSingle ? (
+                                  <input className="m-auto" defaultChecked={itemAnswer.correct === 1 ? true : false} type="radio" id="html" {...register(answerType[indexQuestion].isSingle ? `questions[${indexQuestion}].correct` : `questions[${indexQuestion}].correct[${indexAnswer}]`)} value={`${indexAnswer}`} />
+                                ) : (
+                                  <input className="m-auto" defaultChecked={itemAnswer.correct === 1 ? true : false} type="checkbox" id="html" {...register(`questions[${indexQuestion}].option[${indexAnswer}].correct`)} value="1" />
+                                )}
+
                                 <span className="m-auto">{alphabet[indexAnswer]}</span>
-                                <input {...register(`questions[${indexQuestion}].option[${indexAnswer}].title`)} defaultValue={itemAnswer.title} autoComplete="off" type="text" className={`${itemAnswer.correct === 1 ? 'bg-blue-6' : 'bg-white'} form border w-full rounded-lg p-4 h-full m-1`} placeholder="Input your answer" />
+                                <input {...register(`questions[${indexQuestion}].option[${indexAnswer}].title`)} defaultValue={itemAnswer.title} autoComplete="off" type="text" className={`bg-white form border w-full rounded-lg p-4 h-full m-1`} placeholder="Input your answer" />
                                 {questions[indexQuestion].option.length !== 1 && (<div className="m-auto cursor-pointer text-blue-1 -ml-9" onClick={() => {
                                   const newOption = {
                                     id: itemQuestion.id,
@@ -529,10 +536,12 @@ export default function Create(props) {
 
               </div>
               <div onClick={() => {
-                setQuestions([...questions, { id: questions[questions.length - 1].id + 1, 
-                  title:'',
-                  answer_explanation:'',
-                  option: [0] }])
+                setQuestions([...questions, {
+                  id: questions[questions.length - 1].id + 1,
+                  title: '',
+                  answer_explanation: '',
+                  option: [0]
+                }])
                 setAnswerType([...answerType, { isSingle: true }])
               }} className="text-blue-1 cursor-pointer text-center p-4 border-dashed border-2 border-blue-1 mt-4 rounded-lg">+ Add New Question</div>
             </div>

@@ -53,7 +53,6 @@ export default function Announcement() {
   const TableHead = ['Name', 'Branch', 'Status', 'Action']
   const { register, handleSubmit, setValue, getValues, reset } = useForm();
   const [file, setFile] = useState()
-  const [branchItem, setBranchItem] = useState()
   const [fileName, setFileName] = useState("Upload Your File")
   const [isPublish, setIsPublish] = useState()
   const [batchItem, setBatchItem] = useState([])

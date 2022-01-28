@@ -129,18 +129,11 @@ export default function Create(props) {
       console.log(typeof req.questions[i].correct)
       for (let j = 0; j < req.questions[i].option.length; j++) {
         const opt = `${field}[options][${j}]`
-        let isCorrect = null
-        console.log(typeof req.questions[i].correct)
-        if (typeof req.questions[i].correct !== 'string' && req.questions[i].correct.length === req.questions[i].option.length) {
-          if (req.questions[i].correct[j] !== null) {
-            isCorrect = 1
-          } else {
-            isCorrect = 0
-          }
-          data.append(`${opt}[correct]`, isCorrect)
-        } else {
+        if (typeof req.questions[i].correct === 'string') {
           const correctAnswer = req.questions[i].correct
           data.append(`${opt}[correct]`, correctAnswer == j ? 1 : 0)
+        } else {
+          data.append(`${opt}[correct]`, req.questions[i].option[j].correct === '1' ? 1 : 0)
         }
         data.append(`${opt}[title]`, req.questions[i].option[j].title)
       }
@@ -407,8 +400,11 @@ export default function Create(props) {
                                 <span className="text-red-1 text-sm">{errors[`questions.${indexQuestion}.options.${indexAnswer}.title`]}</span>
                               )}
                               <div className="flex gap-2">
-                              <input className="m-auto" type="radio" id="html" {...register(answerType[indexQuestion].isSingle ? `questions[${indexQuestion}].correct` : `questions[${indexQuestion}].correct[${indexAnswer}]`)} value={`${indexAnswer}`}>
-                                </input>
+                                {answerType[indexQuestion].isSingle ? (
+                                  <input className="m-auto" type="radio" id="html" {...register(answerType[indexQuestion].isSingle ? `questions[${indexQuestion}].correct` : `questions[${indexQuestion}].correct[${indexAnswer}]`)} value={`${indexAnswer}`} />
+                                ) : (
+                                  <input className="m-auto" type="checkbox" id="html" {...register(`questions[${indexQuestion}].option[${indexAnswer}].correct`)} value="1" />
+                                )}
                                 <span className="m-auto">{alphabet[indexAnswer]}</span>
                                 <input {...register(`questions[${indexQuestion}].option[${indexAnswer}].title`)} autoComplete="off" type="text" className="form border w-full rounded-lg p-4 h-full m-1" placeholder="Input your answer" />
                                 {questions[indexQuestion].option.length !== 1 && (<div className="m-auto cursor-pointer text-blue-1 -ml-9" onClick={() => {
