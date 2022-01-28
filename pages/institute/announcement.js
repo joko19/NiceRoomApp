@@ -281,7 +281,7 @@ export default function Announcement() {
                           </td>
                           <td className="px-6 py-4 whitespace-nowrap">
                             {item.branches.map((item) => (
-                              <p>{item.name} </p>
+                              <p key={item}>{item.name} </p>
                             ))}
                           </td>
                           <td className="px-6 py-4 whitespace-nowrap">
