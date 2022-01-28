@@ -68,7 +68,7 @@ export default function Section() {
         <Link href="/admin/exams">
           <a className="flex gap-4 text-blue-1 my-8"><FaAngleLeft /> Back</a>
         </Link>
-        <h1 className="font-bold text-2xl my-4">List of test sessions <span className="text-blue-1">"{dataExams.name}"</span> </h1>
+        <h1 className="font-bold text-2xl my-4">List of test sessions <span className="text-blue-1">{dataExams.name}</span> </h1>
 
       </div>
       {listSection.sections.map((itemSection, index) => (
