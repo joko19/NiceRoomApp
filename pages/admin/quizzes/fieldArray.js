@@ -27,7 +27,7 @@ export default function Fields({ control, register, setValue, getValues }) {
               <button type="button" onClick={() => remove(index)}>
                 Delete
               </button>
-              <NestedArray nestIndex={index} {...{ control, register }} />
+              {/* <NestedArray nestIndex={index} {...{ control, register }} /> */}
             </li>
           );
         })}
