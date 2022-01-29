@@ -100,7 +100,7 @@ export default function Create(props) {
           <input type="text" hidden defaultValue={id}  {...register('section_id')} />
           {questions.map((itemQuestion, indexQuestion) => {
             return (
-              <div className="bg-blue-6 p-4">
+              <div className="bg-blue-6 p-4" key={indexQuestion}>
                 <input type="text" hidden value={itemQuestion.type}  {...register(`questions.${indexQuestion}.type`)} />
                 {itemQuestion.type === 'paragraph' && (
                   <>
@@ -158,7 +158,7 @@ export default function Create(props) {
                 {/* question */}
                 {itemQuestion.question_items.map((eachQuestion, indexEachQuestion) => {
                   return (
-                    <div className="bg-white p-4 mt-8" >
+                    <div className="bg-white p-4 mt-8"  key={indexEachQuestion}>
                       <div className="flex justify-between mt-2">
                         <div className="text-2xl font-bold">Question {indexEachQuestion + 1}</div>
 
