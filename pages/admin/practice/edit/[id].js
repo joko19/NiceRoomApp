@@ -2,8 +2,8 @@ import { useEffect, useState, useRef } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { FaAngleLeft } from "react-icons/fa";
-import Card from "../../../components/Cards/Card";
-import Layout from "../../../Layout/Layout";
+import Card from "../../../../components/Cards/Card";
+import Layout from "../../../../Layout/Layout";
 import { useForm, useFieldArray } from "react-hook-form";
 import {
   Modal,
@@ -15,12 +15,16 @@ import {
   useDisclosure,
   Divider,
 } from '@chakra-ui/react'
-import Quill from "../../../components/Editor/Quill";
+import Quill from "../../../../components/Editor/Quill";
 import { Select } from '@chakra-ui/react'
-import apiQuiz from "../../../action/quiz";
-import apiTopic from "../../../action/topics";
-import { MyDTPicker } from "../../../components/DateTime/DateTime";
+import apiQuiz from "../../../../action/quiz";
+import apiTopic from "../../../../action/topics";
+import { MyDTPicker } from "../../../../components/DateTime/DateTime";
+import { useRouter } from "next/router";
+
 export default function Create(props) {
+  const Router = useRouter()
+  const { id } = Router.query
   const [file, setFile] = useState(null)
   const [coverName, setCoverName] = useState(null)
   const [errors, setErrors] = useState()
@@ -37,23 +41,69 @@ export default function Create(props) {
   const [answerType, setAnswerType] = useState([{
     isSingle: true
   }])
-  const [questions, setQuestions] = useState([
-    {
-      id: 0,
-      // option: [1]
-      option: [
-        {
-          id: 0,
-          correct: 0,
+  const [questions, setQuestions] = useState([])
+
+  const getDetail = async () => {
+    console.log("get data detail")
+    await apiQuiz.detail(id)
+      .then((res) => {
+        const data = res.data.data
+        console.log(data)
+        console.log(data.consentments)
+        if (data.consentments !== 'null') {
+          const str = data.consentments.replace(/['"]+/g, '').slice(1)
+          const myArr = str.slice(0, str.length - 1).split(", ")
+          var arr = []
+          for (let i = 0; i < myArr.length; i++) {
+            arr.push(myArr[i])
+          }
+          setConsentment(arr)
         }
-      ]
-    },
-  ])
-  // const { fields, append, prepend, remove, swap, move, insert } = useFieldArray({
-  //   // control, // control props comes from useForm (optional: if you are using FormContext)
-  //   name: "test", // unique name for your Field Array
-  //   // keyName: "id", default to "id", you can change the key name
-  // });
+        setValue("name", data.name)
+        setValue("duration", data.duration)
+        setValue("live", data.type)
+        setType(data.type)
+        if (data.type === 'live') {
+          setValue("topic_id", data.topic_id)
+          setValue("start_time", data.start_time)
+          setValue("end_time", data.end_time)
+          setStartTime(data.star_time)
+          setEndTime(data.end_time)
+          console.log(data.start_time)
+        }
+        setInstruction(data.instruction)
+        console.log(startTime)
+        const req = res.data.data
+        let dataQuestion = []
+        let dataAnswerExplanation = []
+        let dataAnswerType = []
+        for (let i = 0; i < req.questions.length; i++) {
+          const isSingle = req.questions[i].answer_type === 'single' ? true : false
+          console.log(JSON.stringify(req.questions[i].question))
+          dataQuestion.push({
+            id: i,
+            title: req.questions[i].question,
+            tag: req.questions[i].tag,
+            option: req.questions[i].options,
+            answer_explanation: req.questions[i].answer_explanation
+          })
+          dataAnswerType.push({ isSingle: isSingle })
+          dataAnswerExplanation.push({ data: req.questions[i].answer_explanation })
+
+          console.log(req)
+          const field = `questions[${i}]`
+          setValue(`${field}[level]`, req.questions[i].level)
+          setValue(`${field}[tag]`, req.questions[i].tag)
+          setValue(`${field}[mark]`, req.questions[i].mark)
+          setValue(`${field}[answer_type]`, req.questions[i].answer_type)
+          setValue(`${field}[negative_mark]`, req.questions[i].negative_mark)
+          setValue(`${field}[question]`, req.questions[i].question)
+        }
+        setQuestions(dataQuestion)
+        setAnswerType(dataAnswerType)
+      })
+  }
+
   const chooseImage = (e) => {
     setCoverName(e.target.files[0].name)
     // setImage(URL.createObjectURL(e.target.files[0]))
@@ -130,14 +180,21 @@ export default function Create(props) {
       data.append(`${field}[question]`, req.questions[i].question)
       data.append(`${field}[answer_explanation]`, req.questions[i].answer_explanation)
       let correct = []
-      console.log(typeof req.questions[i].correct)
       for (let j = 0; j < req.questions[i].option.length; j++) {
+
         const opt = `${field}[options][${j}]`
-        if (typeof req.questions[i].correct === 'string') {
+        let isCorrect = null
+        console.log(req.questions[i])
+        if (typeof req.questions[i].correct !== 'string' && req.questions[i].correct.length === req.questions[i].option.length) {
+          if (req.questions[i].correct[j] !== null) {
+            isCorrect = 1
+          } else {
+            isCorrect = 0
+          }
+          data.append(`${opt}[correct]`, isCorrect)
+        } else {
           const correctAnswer = req.questions[i].correct
           data.append(`${opt}[correct]`, correctAnswer == j ? 1 : 0)
-        } else {
-          data.append(`${opt}[correct]`, req.questions[i].option[j].correct === '1' ? 1 : 0)
         }
         data.append(`${opt}[title]`, req.questions[i].option[j].title)
       }
@@ -170,6 +227,7 @@ export default function Create(props) {
   } = useDisclosure()
 
   useEffect(() => {
+    getDetail()
     getTopics()
   }, []);
 
@@ -322,35 +380,17 @@ export default function Create(props) {
                   <span className="text-red-1 text-sm">{errors[`consentments.${index}`]}</span>
                 )}
                   <div key={index} className="flex">
-                    <input key={index} type="text" className="form border w-full rounded-lg p-4 h-full m-1" autoComplete="off" placeholder="Input Consentment"  {...register(`consenments[${index}]`)} />
+                    <input key={index} type="text" className="form border w-full rounded-lg p-4 h-full m-1" autoComplete="off" placeholder="Input Consentment" defaultValue={item} {...register(`consenments[${index}]`)} />
                     {consenment.length > 1 && (
                       <div className="m-auto cursor-pointer text-blue-1 -ml-8" onClick={() => {
-                      let newArr = [...consenment]
-                      console.log(newArr)
-                      const index = newArr.findIndex((element) => element === item)
-                      if (index !== -1) {
-                        newArr.splice(index, 1)
-                      }
-                      console.log(newArr)
-
-                      // console.log(item)
-                      // console.log(consenment)
-                      // const arr = consenment
-                      // arr.filter(i => {
-                      //   console.log(i)
-                      //   console.log(item)
-                      // })
-                      // console.log(arr)
-                      // const abc = [...prevIndex.filter(i => i !== item)]
-                      // console.log(abc)
-                      setConsentment([...newArr])
-                      unregister(`consenments[${index}]`)
-                    }} >x</div>
+                        setConsentment(prevIndex => [...prevIndex.filter(i => i !== item)])
+                        unregister(`consenments[${index}]`)
+                      }} >x</div>
                     )}
                   </div>
                 </>
               ))}
-              <div onClick={() => setConsentment([...consenment, ''])} className="text-blue-1 cursor-pointer text-center p-4 border-dashed border-2 border-blue-1 mt-4 rounded-lg">+ Add New Consentment</div>
+              <div onClick={() => setConsentment([...consenment, ""])} className="text-blue-1 cursor-pointer text-center p-4 border-dashed border-2 border-blue-1 mt-4 rounded-lg">+ Add New Consent</div>
             </>
           )}
 
@@ -374,10 +414,10 @@ export default function Create(props) {
                         </div>
                         <div className="w-full">
                           <p className="mt-4">Tag</p>
-                          <Select bg='white' {...register(`questions[${indexQuestion}].tag`)} size="lg" variant='outline' iconColor="blue">
+                          <Select bg='white'  {...register(`questions[${indexQuestion}].tag`)} size="lg" variant='outline' iconColor="blue">
                             <option value="tag 1">tag 1</option>
                             <option value="tag 2">tag 2</option>
-                            <option value="tag 3">tag 3</option>
+                            <option value="tag 2">tag 3</option>
                           </Select>
                         </div>
                       </div>
@@ -386,9 +426,7 @@ export default function Create(props) {
                           <span className="text-red-1 text-sm">{errors[`questions.${indexQuestion}.question`]}</span>
                         )}</p>
                         <div className="w-full  bg-white rounded-lg " style={{ lineHeight: 2 }} >
-
-                          {/* <textarea {...register(`questions[${indexQuestion}].question`)} /> */}
-                          <Quill className="h-32   border-none rounded-lg" data={getValues(`questions[${indexQuestion}].question`)} register={(data) => setDataForm(`questions[${indexQuestion}].question`, data)} />
+                          <Quill className="h-32   border-none rounded-lg" data={itemQuestion.title} register={(data) => setDataForm(`questions[${indexQuestion}].question`, data)} />
                         </div>
                         <div className="bg-white h-12">
                         </div>
@@ -416,19 +454,17 @@ export default function Create(props) {
 
                         {questions[indexQuestion].option.map((itemAnswer, indexAnswer) => {
                           const alphabet = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z']
+                          console.log(itemAnswer)
                           return (
-                            <div className=" bg-white my-2  p-4 rounded-lg" key={indexAnswer}>
+                            <div className={`${itemAnswer.correct === 1 ? 'bg-blue-6 border-2 border-blue-3' : 'bg-white'} my-2  p-4 rounded-lg`} key={indexAnswer}>
                               {errors && (
                                 <span className="text-red-1 text-sm">{errors[`questions.${indexQuestion}.options.${indexAnswer}.title`]}</span>
                               )}
-                              <div className="flex gap-2">
-                                {answerType[indexQuestion].isSingle ? (
-                                  <input className="m-auto" type="radio" id="html" {...register(answerType[indexQuestion].isSingle ? `questions[${indexQuestion}].correct` : `questions[${indexQuestion}].correct[${indexAnswer}]`)} value={`${indexAnswer}`} />
-                                ) : (
-                                  <input className="m-auto" type="checkbox" id="html" {...register(`questions[${indexQuestion}].option[${indexAnswer}].correct`)} value="1" />
-                                )}
+                              <div key={indexAnswer} className="flex gap-2 ">
+                                <input className="m-auto"  onClick={(e) => console.log(e.target.value)} type="radio" id="html" defaultValue={itemAnswer.correct}  {...register(answerType[indexQuestion].isSingle ? `questions[${indexQuestion}].correct` : `questions[${indexQuestion}].correct[${indexAnswer}]`)} value={`${indexAnswer}`}>
+                                </input>
                                 <span className="m-auto">{alphabet[indexAnswer]}</span>
-                                <input {...register(`questions[${indexQuestion}].option[${indexAnswer}].title`)} autoComplete="off" type="text" className="form border w-full rounded-lg p-4 h-full m-1" placeholder="Input your answer" />
+                                <input {...register(`questions[${indexQuestion}].option[${indexAnswer}].title`)} defaultValue={itemAnswer.title} autoComplete="off" type="text" className={`${itemAnswer.correct === 1 ? 'bg-blue-6' : 'bg-white'} form border w-full rounded-lg p-4 h-full m-1`} placeholder="Input your answer" />
                                 {questions[indexQuestion].option.length !== 1 && (<div className="m-auto cursor-pointer text-blue-1 -ml-9" onClick={() => {
                                   const newOption = {
                                     id: itemQuestion.id,
@@ -439,7 +475,7 @@ export default function Create(props) {
                                   // setQuestions(prevIndex => [...prevIndex.filter(i => i !== item)])
                                   unregister(`consenments[${indexAnswer}]`)
                                 }} >
-                                  <Image src="/asset/icon/table/fi_trash-2.png" width={16} height={16} alt="icon delete" />
+                                  <Image src="/asset/icon/table/fi_trash-2.png" width={16} height={16} alt="icon edit" />
                                 </div>
                                 )}
                               </div>
@@ -464,7 +500,7 @@ export default function Create(props) {
                             <span className="text-red-1 text-sm">{errors[`questions.${indexQuestion}.answer_explanation`]}</span>
                           )}</p>
                           <div className="w-full  bg-white rounded-lg " style={{ lineHeight: 2 }} >
-                            <Quill className="h-32   border-none rounded-lg" data={getValues(`questions[${indexQuestion}].answer_explanation`)} register={(data) => setDataForm(`questions[${indexQuestion}].answer_explanation`, data)} />
+                            <Quill className="h-32   border-none rounded-lg" data={itemQuestion.answer_explanation} register={(data) => setDataForm(`questions[${indexQuestion}].answer_explanation`, data)} />
                           </div>
                           <div className="bg-white h-12">
                           </div>
@@ -493,7 +529,10 @@ export default function Create(props) {
 
               </div>
               <div onClick={() => {
-                setQuestions([...questions, { id: questions[questions.length - 1].id + 1, option: [0] }])
+                setQuestions([...questions, { id: questions[questions.length - 1].id + 1, 
+                  title:'',
+                  answer_explanation:'',
+                  option: [0] }])
                 setAnswerType([...answerType, { isSingle: true }])
               }} className="text-blue-1 cursor-pointer text-center p-4 border-dashed border-2 border-blue-1 mt-4 rounded-lg">+ Add New Question</div>
             </div>

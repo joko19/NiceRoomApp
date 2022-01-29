@@ -33,7 +33,7 @@ function renderInput(props, openCalendar, closeCalendar) {
   return (
     <div className="flex justify-between justify-content border p-4 rounded-lg">
       <input {...props} />
-      <div className="cursor-pointer" onClick={openCalendar}><Image src="/asset/icon/table/fi_calendar.png" height={16} width={16} /></div>
+      <div className="cursor-pointer" onClick={openCalendar}><Image src="/asset/icon/table/fi_clock.png" height={16} width={16} /></div>
     </div>
   );
 }

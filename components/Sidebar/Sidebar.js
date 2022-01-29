@@ -46,6 +46,11 @@ function Sidebar() {
     name: 'Exams',
     path: '/admin/exams'
   }, {
+    icon: uri + 'ic_practice.png',
+    active: uri + 'ic_practice_active.png',
+    name: 'Practice Test',
+    path: '/admin/practice'
+  }, {
     icon: uri + 'ic_quizzes.png',
     active: uri + 'ic_quizzes_active.png',
     name: 'Quizzes',

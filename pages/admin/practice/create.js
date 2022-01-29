@@ -17,7 +17,7 @@ import {
 } from '@chakra-ui/react'
 import Quill from "../../../components/Editor/Quill";
 import { Select } from '@chakra-ui/react'
-import apiExam from "../../../action/exam";
+import apiPractice from "../../../action/practice";
 import apiTopic from "../../../action/topics";
 import { MyDTPicker } from "../../../components/DateTime/DateTime";
 import Multiselect from 'multiselect-react-dropdown';
@@ -30,7 +30,7 @@ export default function Create(props) {
   const [coverName, setCoverName] = useState(null)
   const [errors, setErrors] = useState()
   const { register, handleSubmit, setValue, getValues, reset, unregister } = useForm();
-  const step = ['Exams Details', 'Instruction', 'Sections']
+  const step = ['Practice Details', 'Instruction', 'Sections']
   const [currentStep, setCurrentStep] = useState(1)
   const [topics, setTopics] = useState([])
   const [type, setType] = useState('standard')
@@ -69,7 +69,7 @@ export default function Create(props) {
   const onSelectBranch = (list, item) => {
     setBranchItem(list)
     let arr = []
-    for(let i = 0; i < list.length; i++){
+    for (let i = 0; i < list.length; i++) {
       arr.push(list[i].id)
     }
     setValue("branches[]", arr)
@@ -77,7 +77,7 @@ export default function Create(props) {
   const onRemoveBranch = (list, item) => {
     setBranchItem(list)
     let arr = []
-    for(let i = 0; i < list.length; i++){
+    for (let i = 0; i < list.length; i++) {
       arr.push(list[i].id)
     }
     setValue("branches[]", arr)
@@ -86,7 +86,7 @@ export default function Create(props) {
   const onSelectBatch = (list, item) => {
     setBatchItem(list)
     let arr = []
-    for(let i = 0; i < list.length; i++){
+    for (let i = 0; i < list.length; i++) {
       arr.push(list[i].id)
     }
     setValue("batches[]", arr)
@@ -95,7 +95,7 @@ export default function Create(props) {
   const onRemoveBatch = (list, item) => {
     setBatchItem(list)
     let arr = []
-    for(let i = 0; i < list.length; i++){
+    for (let i = 0; i < list.length; i++) {
       arr.push(list[i].id)
     }
     setValue("batches[]", arr)
@@ -103,7 +103,7 @@ export default function Create(props) {
   const onSelectTopic = (list, item) => {
     setTopicItem(list)
     let arr = []
-    for(let i = 0; i < list.length; i++){
+    for (let i = 0; i < list.length; i++) {
       arr.push(list[i].id)
     }
     setValue("topics[]", arr)
@@ -112,7 +112,7 @@ export default function Create(props) {
   const onRemoveTopic = (list, item) => {
     setTopicItem(list)
     let arr = []
-    for(let i = 0; i < list.length; i++){
+    for (let i = 0; i < list.length; i++) {
       arr.push(list[i].id)
     }
     setValue("topics[]", arr)
@@ -123,11 +123,11 @@ export default function Create(props) {
       .then((res) => setListTopic(res.data.data.data))
   }
 
-  const submitExams = async (data) => {
+  const submitPractice = async (data) => {
     console.log("submit")
     console.log(data)
     if (currentStep === 1) {
-      await apiExam.create(data)
+      await apiPractice.create(data)
         .then()
         .catch((err) => {
           setErrors(err.response.data.data)
@@ -142,7 +142,7 @@ export default function Create(props) {
 
     if (currentStep === 2) {
       console.log(data)
-      await apiExam.create(data)
+      await apiPractice.create(data)
         .then()
         .catch((err) => {
           setErrors(err.response.data.data)
@@ -158,14 +158,14 @@ export default function Create(props) {
     }
 
     if (currentStep === 3) {
-    await apiExam.create(data)
-      .then((res) => {
-        onOpenSuccessModal()
-      })
-      .catch((err) => {
-        console.log(err.response.data.data)
-        setErrors(err.response.data.data)
-      })
+      await apiPractice.create(data)
+        .then((res) => {
+          onOpenSuccessModal()
+        })
+        .catch((err) => {
+          console.log(err.response.data.data)
+          setErrors(err.response.data.data)
+        })
     }
   }
 
@@ -187,12 +187,12 @@ export default function Create(props) {
 
   return (
     <div className="md:pt-12 md:pb-28">
-      <Link href="/admin/exams">
+      <Link href="/admin/practice">
         <a className="flex gap-4 text-blue-1 my-8"><FaAngleLeft /> Back</a>
       </Link>
       <Card
         className="md:mt-8 w-full  bg-white overflow-visible"
-        title="Create New Exam " >
+        title="Create New Practice " >
         <div className="flex gap-24 m-auto ">
           {step.map((item, index) => (
             <div key={index}>
@@ -212,57 +212,20 @@ export default function Create(props) {
             </div>
           ))}
         </div>
-        <form onSubmit={handleSubmit(submitExams)}>
+        <form onSubmit={handleSubmit(submitPractice)}>
 
           {currentStep === 1 && (
             <div className="mb-8">
               <div className="flex gap-4 ">
-                <div className="w-full gap-4">
-                  <p className="mt-4">Held Type</p>
-                  <div className="flex gap-4">
-                    <div className={` ${type === 'live' ? 'bg-blue-6' : 'bg-white'} flex gap-2 w-full p-4 border rounded-lg cursor-pointer`} onClick={() => setType('live')}>
-                      <div  >
-                        <Image src={`${type === 'live' ? "/asset/icon/table/ic_radio_active.png" : "/asset/icon/table/ic_radio.png"}`} height={16} width={16} className="flex align-middle my-auto" />
-                      </div>
-                      <p className={`${type === 'live' ? 'text-blue-1' : 'text-black-5'}`}>
-                        Live Exam
-                      </p>
-                    </div>
-                    <div className={` ${type === 'standard' ? 'bg-blue-6' : 'bg-white'} flex gap-2 w-full p-4 border rounded-lg cursor-pointer`} onClick={() => setType('standard')}>
-                      <div >
-                        <Image src={`${type === 'standard' ? "/asset/icon/table/ic_radio_active.png" : "/asset/icon/table/ic_radio.png"}`} height={16} width={16} className="flex align-middle my-auto" />
-                      </div>
-                      <p className={`${type === 'standard' ? 'text-blue-1' : 'text-black-5'}`}>
-                        Standard Exam
-                      </p>
-                    </div>
-                  </div>
-                  <div>
-                  </div>
-                </div>
                 <div className="w-full">
-                  <p className="mt-4">Exam Name {errors && (
+                  <p className="mt-4">Practice Name {errors && (
                     <span className="text-red-1 text-sm">{errors.name}</span>
                   )}</p>
                   <div>
-                    <input type="text" className="form border w-full rounded-lg p-4 h-full" placeholder="Input Exam Name"  {...register("name")} />
+                    <input type="text" className="form border w-full rounded-lg p-4 h-full" placeholder="Input Practice Name"  {...register("name")} />
                   </div>
                 </div>
-              </div>
-
-              <div className="flex gap-4 " >
-                <div className="w-full">
-                  <p className="mt-4">Exam Type {errors && (
-                    <span className="text-red-1 text-sm">{errors.type}</span>
-                  )}</p>
-                  <div>
-                    <Select bg='white' size="lg" variant='outline' iconColor="blue" {...register('exam_type_id')}>
-                      <option value="1">Type 1</option>
-                      <option value="2">Type 2</option>
-                      <option value="3">Type 3</option>
-                    </Select>
-                  </div>
-                </div><div className="w-full ">
+                <div className="w-full ">
                   <p className="mt-4">Topic {errors && (
                     <span className="text-red-1 text-sm">{errors.topics}</span>
                   )}</p>
@@ -290,88 +253,19 @@ export default function Create(props) {
                 </div>
               </div>
 
+              <div className="flex gap-4 " >
+              </div>
 
-              {type === 'live' && (
-                <>
-                  <div className="flex mt-4 gap-4">
-                    <div className="w-full">
-                      <p>Start Date</p>
 
-                      {/* <Date data={startTime} setDate={(data) => setStartTime(data)} /> */}
-                    </div>
-                    <div className="w-full">
-                      <p>Start Time</p>
-                      <Time data={endTime} setDate={(data) => setEndTime(data)} />
-                    </div>
-                  </div>
-                  <div className="flex mt-4 gap-4">
-                    <div className="w-full">
-                      <p>End Date</p>
-                      <MyDTPicker data={startTime} setDate={(data) => setStartTime(data)} />
-                    </div>
-                    <div className="w-full">
-                      <p>End Time</p>
-                      <MyDTPicker data={endTime} setDate={(data) => setEndTime(data)} />
-                    </div>
-                  </div>
-                </>
-              )}
-
-              <div className="flex gap-4 mt-4 flex-col md:flex-row" >
-                <div className="w-full ">
-                  <p>Batch {errors && (
-                    <span className="text-red-1 text-sm">{errors.batches}</span>
-                  )}</p>
-                  <Multiselect
-                    className="z-100 "
-                    options={listBatch}
-                    style={{
-                      "multiselectContainer": {
-                        "padding": "4px",
-                        "border-width": "1px",
-                        "border-radius": "5px"
-                      }, "searchBox": {
-                        "border": "none",
-
-                      },
-                    }}
-                    placeholder="Select Batch"
-                    // singleSelect
-                    // options={listTag} // Options to display in the dropdown
-                    selectedValues={batchItem} // Preselected value to persist in dropdown
-                    onSelect={onSelectBatch} // Function will trigger on select event
-                    onRemove={onRemoveBatch} // Function will trigger on remove event
-                    displayValue="name" // Property name to display in the dropdown options
-                  />
+              <div className="flex mt-4 gap-4">
+                <div className="w-full">
+                  <p>Start Date</p>
+                    <input type="text" hidden value="2022-12-12" {...register("start_date")} />
+                  {/* <Date data={startTime} setDate={(data) => setStartTime(data)} /> */}
                 </div>
-                <div className="w-full ">
-                  <p>Branch {errors && (
-                    <span className="text-red-1 text-sm">{errors.branches}</span>
-                  )}</p>
-                  <div>
-                    <Multiselect
-                      className="z-100 "
-                      options={listBranch}
-                      style={{
-                        "multiselectContainer": {
-                          "padding": "4px",
-                          "border-width": "1px",
-                          "border-radius": "5px"
-                        }, "searchBox": {
-                          "border": "none",
-
-                        },
-                      }}
-                      placeholder="Select Branch"
-                      // singleSelect
-                      // options={listTag} // Options to display in the dropdown
-                      selectedValues={branchItem} // Preselected value to persist in dropdown
-                      onSelect={onSelectBranch} // Function will trigger on select event
-                      onRemove={onRemoveBranch} // Function will trigger on remove event
-                      displayValue="name" // Property name to display in the dropdown options
-                    />
-
-                  </div>
+                <div className="w-full">
+                  <p>Start Time</p>
+                  <Time data={getValues("start_time")} setDate={(data) => setValue("start_time", data)} />
                 </div>
               </div>
 
@@ -388,7 +282,19 @@ export default function Create(props) {
                     </div>
                   </div>
                 </div>
-                <div className="w-full" />
+
+                <div className="w-full">
+                  <p className="mt-4">Practice Type {errors && (
+                    <span className="text-red-1 text-sm">{errors.type}</span>
+                  )}</p>
+                  <div>
+                    <Select bg='white' size="lg" variant='outline' iconColor="blue" {...register('exam_type_id')}>
+                      <option value="1">Type 1</option>
+                      <option value="2">Type 2</option>
+                      <option value="3">Type 3</option>
+                    </Select>
+                  </div>
+                </div>
               </div>
             </div>
           )}
@@ -400,7 +306,7 @@ export default function Create(props) {
                 <span className="text-red-1 text-sm">{errors['instruction']}</span>
               )}</p>
               <div className="w-full h-64">
-                <Quill className="h-48" data={getValues('instruction')} setData={(data) => setValue('instruction',data)} />
+                <Quill className="h-48" data={getValues('instruction')} setData={(data) => setValue('instruction', data)} />
               </div>
               <p className="mt-4">Consentment</p>
               {consenment.map((item, index) => (
@@ -499,7 +405,7 @@ export default function Create(props) {
             <div className="flex flex-col text-center ">
               Section Successfully Created
               <div className="self-center">
-                <Link href="/admin/exams">
+                <Link href="/admin/practice">
                   <a className="bg-blue-1 rounded-lg text-white mt-4 block align-center p-3">Okay</a>
                 </Link>
               </div>
