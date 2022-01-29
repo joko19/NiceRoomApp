@@ -40,8 +40,6 @@ export default function Quill({data, setData = false, className, register = fals
 
   useEffect(() => {
     if (quill) {
-      console.log(data)
-      console.log(typeof data)
       if(typeof data === 'undefined') {
         data = ''
       }

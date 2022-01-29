@@ -182,20 +182,17 @@ export default function Section() {
           <ModalCloseButton />
           <ModalBody>
             <div className="flex gap-4">
-              <Link href={`/admin/exams/section/${selectedData}`}>
-                <a>
-                  <div className={`${questionType === 'simple' ? 'text-blue-1 bg-blue-6 border-blue-1' : 'text-black-4 bg-black-9'} w-full text-center border py-12 cursor-pointer rounded-lg border`} onClick={() => setQuestionType('simple')}>
-                    Simple Question
-                  </div>
-
-                </a>
-              </Link>
+              <div className={`${questionType === 'simple' ? 'text-blue-1 bg-blue-6 border-blue-1' : 'text-black-4 bg-black-9'} w-full text-center border py-12 cursor-pointer rounded-lg border`} onClick={() => setQuestionType('simple')}>
+                Simple Question
+              </div>
               <div className={`${questionType === 'paragraph' ? 'text-blue-1 bg-blue-6 border-blue-1' : 'text-black-4 bg-black-9'} w-full text-center border py-12 cursor-pointer rounded-lg border`} onClick={() => setQuestionType('paragraph')}>
                 Paragraph Question
               </div>
             </div>
             <div className="flex flex-row-reverse gap-4 mt-4" >
-              <button type="submit" className="bg-blue-1 p-3 rounded-lg text-white" >Select</button>
+              <Link href={`/admin/exams/section/${selectedData}#${questionType}`}>
+                <a className="bg-blue-1 p-3 rounded-lg text-white">Select</a>
+              </Link>
               <button type="button" className="text-black-4 p-3 rounded-lg" onClick={onClose}>Cancel</button>
             </div>
           </ModalBody>
