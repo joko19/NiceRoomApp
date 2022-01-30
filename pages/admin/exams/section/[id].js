@@ -14,6 +14,7 @@ import {
   ModalCloseButton,
   useDisclosure,
   Divider,
+  cookieStorageManager,
 } from '@chakra-ui/react'
 import Quill from "../../../../components/Editor/Quill";
 import { Select } from '@chakra-ui/react'
@@ -30,6 +31,8 @@ export default function Create(props) {
   const { register, handleSubmit, setValue, getValues, reset, unregister } = useForm();
   const [status, setStatus] = useState()
   const [questionType, setQuestionType] = useState()
+  const [idSection, setIdSection] = useState()
+  const [firstNumber, setFirstNumber] = useState(0)
   const [questions, setQuestions] = useState([
     {
       id: 0,
@@ -49,10 +52,29 @@ export default function Create(props) {
   ])
 
   const getDetail = async () => {
+    const idExam = Router.query.id
+    const idSecti = idExam.split("=")
+    const ids = idSecti[1]
     await apiExam.detailSection(id)
       .then((res) => {
-        // setListSection(res.data.data)
-        console.log(res.data.data)
+        const data = res.data.data.sections
+        data.map((item) => {
+          console.log(item)
+          console.log(ids)
+          if (item.id === ids) {
+            setFirstNumber(item.questions_count + 1)
+          }
+        })
+        // console.log(res.data.data)
+        // for(let i=0; i<data.length; i++){
+        // console.log(data[i].id)
+        //   // console.log(idSection)
+        //   if(data[i].id === idSection){
+        //     console.log(res.data.data.sections[i])
+        //     // console.log("benar")
+        //     // setFirstNumber(res.data.data.sections.)
+        //   }
+        // }
       })
 
   }
@@ -77,7 +99,11 @@ export default function Create(props) {
   } = useDisclosure()
 
   useEffect(() => {
-    // getDetail()
+    const idExam = Router.query.id
+    const idSection = idExam.split("=")[1]
+    // console.log(idExam)
+    getDetail(idExam)
+    setIdSection(idSection)
   }, [questions]);
 
   const setDataForm = (identifier, data) => {
@@ -95,19 +121,22 @@ export default function Create(props) {
         <a className="flex gap-4 text-blue-1 my-8"><FaAngleLeft /> Back</a>
       </Link>
       <Card
-        className="md:mt-8 w-full  bg-white overflow-visible"
-        title="Add Question " >
+        className="md:mt-8 w-full  bg-white overflow-visible" >
         <form onSubmit={handleSubmit(submitQuiz)}>
-          <input type="text" hidden defaultValue={id}  {...register('section_id')} />
+          <input type="text" hidden defaultValue={idSection}  {...register('section_id')} />
           {questions.map((itemQuestion, indexQuestion) => {
             return (
               <div className="bg-blue-6 p-4" key={indexQuestion}>
                 <input type="text" hidden value={itemQuestion.type}  {...register(`questions.${indexQuestion}.type`)} />
+                {itemQuestion.type === "simple" && (
+                  <div className="flex justify-between mt-2 bg-white p-4">
+                    <div className="text-2xl font-bold">{firstNumber + indexQuestion + 1}. {itemQuestion.type === 'simple' ? 'Simple' : 'Paragraph'} Question</div>
+                  </div>
+                )}
                 {itemQuestion.type === 'paragraph' && (
                   <>
                     <div className="flex justify-between mt-2">
-                      <div className="text-2xl font-bold">Paragraph</div>
-                      <div className="border-blue-1 text-blue-1 border rounded-lg p-4">Delete Paragraph</div>
+                      <div className="text-2xl font-bold">{firstNumber + indexQuestion + 1}. {itemQuestion.type === 'simple' ? 'Simple' : 'Paragraph'} Question</div>
                     </div>
                     <div className="flex gap-4">
                       <div className="w-full">
@@ -160,31 +189,12 @@ export default function Create(props) {
                 {/* question */}
                 {itemQuestion.question_items.map((eachQuestion, indexEachQuestion) => {
                   return (
-                    <div className="bg-white p-4 mt-8" key={indexEachQuestion}>
-                      <div className="flex justify-between mt-2">
-                        <div className="text-2xl font-bold">Question {indexEachQuestion + 1}</div>
-                        {/* {itemQuestion.question_items.length > 1 && */}
-                        {/* ( */}
-                        <div className="border-blue-1 text-blue-1 border rounded-lg p-4 cursor-pointer"
-                          onClick={() => {
-                            unregister(`questions[${indexQuestion}].question_items[${indexEachQuestion}]`)
-                            const temp = questions
-                            console.log(questions)
-                            temp.map((itemQ) => {
-                              if (itemQ.id === itemQuestion.id) {
-                                itemQ.question_items = itemQ.question_items.filter(i => i.id !== eachQuestion.id)
-                                // itemQ.question_items = itemQ.question_items.splice(indexEachQuestion, 1)
-                              }
-                            })
-                            console.log(temp)
-                            setQuestions([...temp])
-                            console.log(questions)
-                            // setQuestions(...temp)
-                          }}
-                        >Delete Question</div>
-                        {/* )} */}
-
-                      </div>
+                    <div className={`bg-white p-4 ${itemQuestion.type === "paragraph" && 'mt-8'}`} key={indexEachQuestion}>
+                      {itemQuestion.type === "paragraph" && (
+                        <div className="flex justify-between mt-2 bg-white">
+                          <div className="text-2xl ">{indexEachQuestion + 1}. Question</div>
+                        </div>
+                      )}
                       <div className="flex gap-4">
                         <div className="w-full">
                           <p className="mt-4">Difficulty Level {errors && (
@@ -210,8 +220,6 @@ export default function Create(props) {
                           <span className="text-red-1 text-sm">{errors[`questions.${indexQuestion}.question_items.${indexEachQuestion}.question`]}</span>
                         )}</p>
                         <div className="w-full  bg-white rounded-lg " style={{ lineHeight: 2 }} >
-                          <div className="cursor-pointer" onClick={() => onRemoveData(`questions[${indexQuestion}].question_items[${indexEachQuestion}]`)} > remove question </div>
-                          {/* <textarea {...register(`questions[${indexQuestion}].question`)} /> */}
                           <Quill className="h-32   border-none rounded-lg" data={getValues(`questions[${indexQuestion}].question_items[${indexEachQuestion}].question`)} register={(data) => setDataForm(`questions[${indexQuestion}].question_items[${indexEachQuestion}].question`, data)} />
                         </div>
                         <div className="bg-white h-12">
@@ -230,7 +238,7 @@ export default function Create(props) {
                                 if (b.id === eachQuestion.id) {
                                   b.answer_type = e.target.value
                                   const n = b.options.length
-                                  for(let i = 0 ; i < n; i++) {
+                                  for (let i = 0; i < n; i++) {
                                     b.options[i].correct = 0
                                   }
                                 }
@@ -244,7 +252,9 @@ export default function Create(props) {
                           <option value="single">Single Correct Answer</option>
                           <option value="multiple">Multiple Correct Answer</option>
                         </Select>
-
+                        {errors && (
+                          <span className="text-red-1 text-sm">{errors[`questions.${indexQuestion}.question_items.${indexEachQuestion}.options.0.correct`]}</span>
+                        )}
                         {eachQuestion.options.map((itemAnswer, indexAnswer) => {
                           const alphabet = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z']
                           return (
@@ -261,15 +271,21 @@ export default function Create(props) {
                                         itemQ.question_items.map((b) => {
                                           if (b.id === eachQuestion.id) {
                                             b.options.map((optionQ) => {
-                                              console.log(optionQ)
                                               if (optionQ.id === itemAnswer.id) {
                                                 optionQ.correct = 1
                                                 setValue(`questions[${indexQuestion}].question_items[${indexEachQuestion}].options[${indexAnswer}].correct`, 1)
                                               } else {
-                                                optionQ.correct = 0
-                                                setValue(`questions[${indexQuestion}].question_items[${indexEachQuestion}].options[${indexAnswer}].correct`, 0)
+                                                for (let i = 0; i < b.options.length; i++) {
+                                                  if (i !== indexAnswer) {
+                                                    optionQ.correct = 0
+                                                    setValue(`questions[${indexQuestion}].question_items[${indexEachQuestion}].options[${i}].correct`, 0)
+                                                  }
+                                                }
+
                                               }
                                             })
+
+                                            console.log(b.options)
                                           }
                                         })
                                       } else {
@@ -322,25 +338,57 @@ export default function Create(props) {
                                   // <input className="m-auto" type="checkbox" id="html" {...register(`questions[${indexQuestion}].question_items[${indexEachQuestion}].options[${indexAnswer}].correct`)} value="1" />
                                 )}
                                 <span className="m-auto">{alphabet[indexAnswer]}</span>
-                                <input {...register(`questions[${indexQuestion}].question_items[${indexEachQuestion}].options[${indexAnswer}].title`)} autoComplete="off" type="text" className={`${itemAnswer.correct === 1 ? 'bg-blue-6 text-black-5' : 'bg-white'} form border w-full rounded-lg p-4 h-full m-1`} placeholder="Input your answer" />
+                                <input value={itemAnswer.title} onChange={(e) => {
+
+                                  const temp = questions
+                                  temp.map((itemQ) => {
+                                    if (itemQ.id === itemQuestion.id) {
+                                      itemQ.question_items.map((b) => {
+                                        if (b.id === eachQuestion.id) {
+                                          b.options.map((optionQ) => {
+                                            console.log(optionQ)
+                                            if (optionQ.id === itemAnswer.id) {
+                                              const tempCorrect = !optionQ.correct
+                                              optionQ.title = e.target.value
+                                              setValue(`questions[${indexQuestion}].question_items[${indexEachQuestion}].options[${indexAnswer}].title`, e.target.value)
+                                            }
+                                          })
+                                        }
+                                      })
+                                    } else {
+                                      itemQ
+                                    }
+                                  })
+                                  setQuestions([...temp])
+                                }}
+                                  // {...register(`questions[${indexQuestion}].question_items[${indexEachQuestion}].options[${indexAnswer}].title`)} 
+                                  autoComplete="off" type="text" className={`${itemAnswer.correct === 1 ? 'bg-blue-6 text-black-5' : 'bg-white'} form border w-full rounded-lg p-4 h-full m-1`} placeholder="Input your answer" />
                                 {eachQuestion.options.length !== 1 && (
                                   <div className="m-auto cursor-pointer text-blue-1 -ml-9" onClick={() => {
 
-                                    const newQuestion = {
-                                      id: itemQuestion.id,
-                                      question_items: [...questions[itemQuestion.id].question_items.filter(i => i !== eachQuestion)]
+                                    const newOption = {
+                                      id: eachQuestion.options[eachQuestion.options.length - 1].id + 1,
+                                      title: '',
+                                      correct: 0
                                     }
-                                    console.log(newQuestion)
-                                    const nQuestions = questions.map((obj) => (obj.id === itemQuestion.id ? newQuestion : obj))
-                                    setQuestions([...nQuestions])
-                                    // const newOption = {
-                                    //   id: itemQuestion.id,
-                                    //   option: [...questions[itemQuestion.id].option.filter(i => i !== itemAnswer)]
-                                    // }
-                                    // const nQuestions = questions.map((obj) => (obj.id === itemQuestion.id ? newOption : obj))
-                                    // setQuestions(nQuestions)
-                                    // setQuestions(prevIndex => [...prevIndex.filter(i => i !== item)])
-                                    unregister(`consenments[${indexAnswer}]`)
+                                    console.log("before")
+                                    console.log(questions)
+                                    const temp = questions
+                                    temp.map((itemQ) => {
+                                      if (itemQ.id === itemQuestion.id) {
+                                        itemQ.question_items.map((b) => {
+                                          if (b.id === eachQuestion.id) {
+                                            console.log(b.id)
+                                            b.options = [...b.options.filter(i => i !== itemAnswer)]
+                                          }
+                                        })
+                                      } else {
+                                        itemQ
+                                      }
+                                    })
+                                    console.log("after")
+                                    console.log(temp)
+                                    setQuestions([...temp])
                                   }} >
                                     <Image src="/asset/icon/table/fi_trash-2.png" width={16} height={16} alt="icon delete" />
                                   </div>
@@ -353,7 +401,7 @@ export default function Create(props) {
                           const newOption = {
                             id: eachQuestion.options[eachQuestion.options.length - 1].id + 1,
                             title: '',
-                            correct: ''
+                            correct: 0
                           }
                           const temp = questions
                           temp.map((itemQ) => {
@@ -367,6 +415,7 @@ export default function Create(props) {
                               itemQ
                             }
                           })
+                          console.log(temp)
                           setQuestions([...temp])
                         }} className="text-blue-1 cursor-pointer text-center p-4 border-dashed border-2 border-blue-1 mt-4 rounded-lg">+ Add New Answer</div>
                         <div className="mt-4">
@@ -399,8 +448,8 @@ export default function Create(props) {
                     </div>
                   )
                 })}
-                {/* add new question with same type  */}
-                <div className="mt-8">
+
+                {itemQuestion.type === 'paragraph' && (<div className="mt-8">
                   <div onClick={() => {
                     const newQuestionItem = {
                       id: itemQuestion.question_items[itemQuestion.question_items.length - 1].id + 1,
@@ -409,7 +458,7 @@ export default function Create(props) {
                       options: [{
                         id: 0,
                         title: '',
-                        correct: ''
+                        correct: 0
                       }]
                     }
                     const temp = questions
@@ -421,8 +470,11 @@ export default function Create(props) {
                       }
                     })
                     setQuestions([...temp])
-                  }} className="text-blue-1 cursor-pointer text-center p-4 border-dashed border-2 border-blue-1 mt-4 rounded-lg">+ Add New Question</div>
+                  }} className="text-blue-1 cursor-pointer text-center p-4 border-dashed border-2 border-blue-1 mt-4 rounded-lg">+ Add New Question for this paragraph</div>
                 </div>
+
+                )}
+
               </div>
             )
           })}
