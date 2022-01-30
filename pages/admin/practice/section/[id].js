@@ -226,8 +226,6 @@ export default function Create(props) {
                           <option value="single">Single Correct Answer</option>
                           <option value="multiple">Multiple Correct Answer</option>
                         </Select>
-
-                        <Option indexQuestion={indexQuestion} indexEachQuestion={indexEachQuestion} />
                         <div onClick={() => {
                           const newOption = {
                             id: eachQuestion.options[eachQuestion.options.length - 1].id + 1,
