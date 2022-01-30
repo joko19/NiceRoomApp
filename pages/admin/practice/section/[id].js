@@ -21,7 +21,6 @@ import apiQuiz from "../../../../action/quiz";
 import { MyDTPicker } from "../../../../components/DateTime/DateTime";
 import apiPractice from "../../../../action/practice";
 import { useRouter } from "next/router";
-import Option from "../../../../components/options/options";
 
 export default function Create(props) {
   const Router = useRouter()
