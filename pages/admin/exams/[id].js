@@ -33,7 +33,9 @@ export default function Section() {
   const [selectedName, setSelectedName] = useState()
   const TableHead = ['No', 'Type Question', 'Number of Question', '+ Add Question']
   const [questionType, setQuestionType] = useState()
-  const getDetail = async (id) => {
+  const [questionSelectedId, setQuestionSelectedId] = useState()
+
+  const getDetail = async () => {
     await apiExam.detail(id)
       .then((result) => {
         setDataExams(result.data.data)
@@ -48,13 +50,14 @@ export default function Section() {
 
 
   useEffect(() => {
-    getDetail(id)
+    getDetail()
   }, [])
 
-  const onDelete = async (id) => {
-    await apiInstitute.deleted(id)
+  const onDelete = async (idQuestion) => {
+    await apiExam.deleteQuestion(idQuestion)
       .then(() => {
-        getData(search, limit, page)
+        getDetail()
+        onCloseDeleteModal()
       })
       .catch((err) => {
         console.log(err)
@@ -127,17 +130,17 @@ export default function Section() {
                             {itemQuestion.items_count} Question
                           </td>
                           <td className="flex gap-4 px-6 py-4 whitespace-nowrap flex text-right gap-2 text-sm font-medium">
-                            <Link href={`/admin/institution/${itemQuestion.id}`}>
+                            <Link href={`/admin/exams/question/edit/${itemQuestion.id}`}>
                               <a className="text-indigo-600 hover:text-indigo-900">
                                 <Image src="/asset/icon/table/fi_edit.png" width={16} height={16} alt="icon Edit" />
                                 <span className="inline-block align-top">  Edit</span>
                               </a>
                             </Link>
-                            <button href="#" className="text-indigo-600 hover:text-indigo-900">
-                              <Image src="/asset/icon/table/fi_trash-2.png" width={16} height={16} alt="icon deleted" onClick={() => {
-                                // setQuestionDeletedId(itemQuestion.id),
-                                // onOpenDeleteModal()
-                              }} />
+                            <button className="text-indigo-600 hover:text-indigo-900" onClick={() => {
+                                setQuestionSelectedId(itemQuestion.id),
+                                onOpenDeleteModal()
+                              }}>
+                              <Image src="/asset/icon/table/fi_trash-2.png" width={16} height={16} alt="icon deleted"  />
                               <span className="inline-block align-top">  Delete</span>
                             </button>
                           </td>
@@ -152,23 +155,18 @@ export default function Section() {
         </Card>
       ))}
 
-
+      {/* Delete Confirmation */}
       <Modal isOpen={isDeleteModal} onClose={onCloseDeleteModal} isCentered>
         <ModalOverlay />
         <ModalContent>
-          <ModalHeader>Add Question {selectedName}</ModalHeader>
+          <ModalHeader>Delete Confirmation </ModalHeader>
           <ModalCloseButton />
           <ModalBody>
             <div className="flex gap-4">
-              <div className={`${questionType === 'simple' ? 'text-blue-1 bg-blue-6 border-blue-1' : 'text-black-4 bg-black-9'} w-full text-center border py-12 cursor-pointer rounded-lg border`} onClick={() => setQuestionType('simple')}>
-                Simple Question
-              </div>
-              <div className={`${questionType === 'paragraph' ? 'text-blue-1 bg-blue-6 border-blue-1' : 'text-black-4 bg-black-9'} w-full text-center border py-12 cursor-pointer rounded-lg border`} onClick={() => setQuestionType('paragraph')}>
-                Paragraph Question
-              </div>
+              Are you sure to Delete this Question ?
             </div>
             <div className="flex flex-row-reverse gap-4 mt-4" >
-              <button type="submit" className="bg-blue-1 p-3 rounded-lg text-white" >Select</button>
+              <button type="submit" onClick={() => onDelete(questionSelectedId)} className="bg-blue-1 p-3 rounded-lg text-white" >Delete</button>
               <button type="button" className="text-black-4 p-3 rounded-lg" onClick={onCloseDeleteModal}>Cancel</button>
             </div>
           </ModalBody>
