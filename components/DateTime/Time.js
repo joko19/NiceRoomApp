@@ -11,7 +11,6 @@ const datetimePlaceholder = { placeholder: "Select Time and Date" };
 
 export function Time({setDate = false, data = false}) {
   const [value, setValue] = useState(new Date())
-  console.log(data)
   const changeData = () => {
     const format = 'HH:mm'
     const dateTime = moment(value).format(format)

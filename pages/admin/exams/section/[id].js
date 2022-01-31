@@ -16,7 +16,7 @@ import {
   Divider,
   cookieStorageManager,
 } from '@chakra-ui/react'
-import Quill from "../../../../components/Editor/Quill";
+import QuillCreated from "../../../../components/Editor/QuillCreated";
 import { Select } from '@chakra-ui/react'
 import apiQuiz from "../../../../action/quiz";
 import { MyDTPicker } from "../../../../components/DateTime/DateTime";
@@ -164,7 +164,7 @@ export default function Create(props) {
                       <div className="w-full  bg-white rounded-lg " style={{ lineHeight: 2 }} >
 
                         {/* <textarea {...register(`questions[${indexQuestion}].question`)} /> */}
-                        <Quill className="h-32   border-none rounded-lg" data={getValues(`questions[${indexQuestion}].instruction`)} register={(data) => setDataForm(`questions[${indexQuestion}].instruction`, data)} />
+                        <QuillCreated className="h-32   border-none rounded-lg" data={getValues(`questions[${indexQuestion}].instruction`)} register={(data) => setDataForm(`questions[${indexQuestion}].instruction`, data)} />
                       </div>
                       <div className="bg-white h-12">
                       </div>
@@ -175,7 +175,7 @@ export default function Create(props) {
                       )}</p>
                       <div className="w-full  bg-white rounded-lg " style={{ lineHeight: 2 }} >
                         {/* <textarea {...register(`questions[${indexQuestion}].question`)} /> */}
-                        <Quill className="h-32   border-none rounded-lg" data={getValues(`questions[${indexQuestion}].paragraph`)} register={(data) => setDataForm(`questions[${indexQuestion}].paragraph`, data)} />
+                        <QuillCreated className="h-32   border-none rounded-lg" data={getValues(`questions[${indexQuestion}].paragraph`)} register={(data) => setDataForm(`questions[${indexQuestion}].paragraph`, data)} />
                       </div>
                       <div className="bg-white h-12">
                       </div>
@@ -219,7 +219,7 @@ export default function Create(props) {
                           <span className="text-red-1 text-sm">{errors[`questions.${indexQuestion}.question_items.${indexEachQuestion}.question`]}</span>
                         )}</p>
                         <div className="w-full  bg-white rounded-lg " style={{ lineHeight: 2 }} >
-                          <Quill className="h-32   border-none rounded-lg" data={getValues(`questions[${indexQuestion}].question_items[${indexEachQuestion}].question`)} register={(data) => setDataForm(`questions[${indexQuestion}].question_items[${indexEachQuestion}].question`, data)} />
+                          <QuillCreated className="h-32   border-none rounded-lg" data={getValues(`questions[${indexQuestion}].question_items[${indexEachQuestion}].question`)} register={(data) => setDataForm(`questions[${indexQuestion}].question_items[${indexEachQuestion}].question`, data)} />
                         </div>
                         <div className="bg-white h-12">
                         </div>
@@ -257,6 +257,9 @@ export default function Create(props) {
                         )}
                         {eachQuestion.options.map((itemAnswer, indexAnswer) => {
                           const alphabet = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z']
+                          if (itemAnswer.new) {
+                            setValue(`questions[${indexQuestion}].question_items[${indexEachQuestion}].options[${indexAnswer}].correct`, 0)
+                          }
                           return (
                             <div className={`${itemAnswer.correct === 1 ? 'bg-blue-6 border-blue-1' : 'bg-white'} my-2  p-4 border rounded-lg`} key={indexAnswer}>
                               {errors && (
@@ -284,8 +287,6 @@ export default function Create(props) {
 
                                               }
                                             })
-
-                                            console.log(b.options)
                                           }
                                         })
                                       } else {
@@ -365,14 +366,6 @@ export default function Create(props) {
                                   autoComplete="off" type="text" className={`${itemAnswer.correct === 1 ? 'bg-blue-6 text-black-5' : 'bg-white'} form border w-full rounded-lg p-4 h-full m-1`} placeholder="Input your answer" />
                                 {eachQuestion.options.length !== 1 && (
                                   <div className="m-auto cursor-pointer text-blue-1 -ml-9" onClick={() => {
-
-                                    const newOption = {
-                                      id: eachQuestion.options[eachQuestion.options.length - 1].id + 1,
-                                      title: '',
-                                      correct: 0
-                                    }
-                                    console.log("before")
-                                    console.log(questions)
                                     const temp = questions
                                     temp.map((itemQ) => {
                                       if (itemQ.id === itemQuestion.id) {
@@ -386,8 +379,6 @@ export default function Create(props) {
                                         itemQ
                                       }
                                     })
-                                    console.log("after")
-                                    console.log(temp)
                                     setQuestions([...temp])
                                   }} >
                                     <Image src="/asset/icon/table/fi_trash-2.png" width={16} height={16} alt="icon delete" />
@@ -401,7 +392,8 @@ export default function Create(props) {
                           const newOption = {
                             id: eachQuestion.options[eachQuestion.options.length - 1].id + 1,
                             title: '',
-                            correct: 0
+                            correct: 0,
+                            new: true
                           }
                           const temp = questions
                           temp.map((itemQ) => {
@@ -423,7 +415,7 @@ export default function Create(props) {
                             <span className="text-red-1 text-sm">{errors[`questions.${indexQuestion}.question_items.${indexEachQuestion}.answer_explanation`]}</span>
                           )}</p>
                           <div className="w-full  bg-white rounded-lg " style={{ lineHeight: 2 }} >
-                            <Quill className="h-32   border-none rounded-lg" data={getValues(`questions[${indexQuestion}].question_items[${indexEachQuestion}].answer_explanation`)} register={(data) => setDataForm(`questions[${indexQuestion}].question_items[${indexEachQuestion}].answer_explanation`, data)} />
+                            <QuillCreated className="h-32   border-none rounded-lg" data={getValues(`questions[${indexQuestion}].question_items[${indexEachQuestion}].answer_explanation`)} register={(data) => setDataForm(`questions[${indexQuestion}].question_items[${indexEachQuestion}].answer_explanation`, data)} />
                           </div>
                           <div className="bg-white h-12">
                           </div>
@@ -512,7 +504,7 @@ export default function Create(props) {
                   id: questions.length,
                   type: questionType,
                   question_items: [{
-                    id:0,
+                    id: 0,
                     question: '',
                     answer_type: 'single',
                     options: [{

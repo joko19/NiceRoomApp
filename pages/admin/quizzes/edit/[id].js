@@ -21,6 +21,7 @@ import apiQuiz from "../../../../action/quiz";
 import apiTopic from "../../../../action/topics";
 import { MyDTPicker } from "../../../../components/DateTime/DateTime";
 import { useRouter } from "next/router";
+import moment from 'moment';
 
 export default function Create(props) {
   const Router = useRouter()
@@ -77,7 +78,7 @@ export default function Create(props) {
           setValue("topic_id", data.topic_id)
           setValue("start_time", data.start_time)
           setValue("end_time", data.end_time)
-          setStartTime(data.star_time)
+          setStartTime(data.start_time)
           setEndTime(data.end_time)
           console.log(data.start_time)
         }
@@ -144,8 +145,8 @@ export default function Create(props) {
     data.append("type", req.type)
     if (req.type === 'live') {
       data.append("topic_id", req.topic_id)
-      data.append("start_time", startTime)
-      data.append("end_time", endTime)
+      req.start_time.split(":").length === 2 && data.append("start_time", req.start_time)
+      req.end_time.split(":").length === 2 && data.append("end_time", req.end_time)
     }
     data.append("duration", req.duration)
     // to step 2
@@ -155,7 +156,7 @@ export default function Create(props) {
         .catch((err) => {
           setErrors(err.response.data.data)
           console.log(err.response.data.data)
-          if (!err.response.data.data.name && !err.response.data.data.duration) {
+          if (!err.response.data.data.name && !err.response.data.data.duration && !err.response.data.data.start_time && !err.response.data.data.end_time) {
             setErrors(null)
             setCurrentStep(2)
           }
@@ -260,7 +261,7 @@ export default function Create(props) {
       </Link>
       <Card
         className="md:mt-8 w-full  bg-white overflow-visible"
-        title="Create New Quiz " >
+        title="Edit Quiz " >
         <div className="flex gap-24 m-auto ">
           {step.map((item, index) => (
             <div key={index}>
@@ -370,11 +371,15 @@ export default function Create(props) {
               {type === 'live' && (
                 <div className="flex mt-4 gap-4">
                   <div className="w-full">
-                    <p>Start Time</p>
+                    <p>Start Time {errors && (
+                      <span className="text-red-1 text-sm">{errors.start_time}</span>
+                    )}</p>
                     <MyDTPicker data={getValues("start_time")} setDate={(data) => setStartTime(data)} />
                   </div>
                   <div className="w-full">
-                    <p>End Time</p>
+                    <p>End Time {errors && (
+                      <span className="text-red-1 text-sm">{errors.end_time}</span>
+                    )}</p>
                     <MyDTPicker data={getValues("end_time")} setDate={(data) => setEndTime(data)} />
                   </div>
                 </div>

@@ -23,6 +23,8 @@ import { MyDTPicker } from "../../../components/DateTime/DateTime";
 import Multiselect from 'multiselect-react-dropdown';
 import apiBatch from "../../../action/batch";
 import apiBranch from "../../../action/branch";
+import Timekeeper from 'react-timekeeper';
+import DatePicker2 from "../../../components/DateTime/Date";
 // import { Date } from "../../../components/DateTime/Date";
 import { Time } from "../../../components/DateTime/Time";
 export default function Create(props) {
@@ -33,7 +35,7 @@ export default function Create(props) {
   const step = ['Exams Details', 'Instruction', 'Sections']
   const [currentStep, setCurrentStep] = useState(1)
   const [topics, setTopics] = useState([])
-  const [type, setType] = useState('standard')
+  const [type, setType] = useState('live')
   const [instruction, setInstruction] = useState('')
   const [startTime, setStartTime] = useState()
   const [endTime, setEndTime] = useState()
@@ -69,7 +71,7 @@ export default function Create(props) {
   const onSelectBranch = (list, item) => {
     setBranchItem(list)
     let arr = []
-    for(let i = 0; i < list.length; i++){
+    for (let i = 0; i < list.length; i++) {
       arr.push(list[i].id)
     }
     setValue("branches[]", arr)
@@ -77,7 +79,7 @@ export default function Create(props) {
   const onRemoveBranch = (list, item) => {
     setBranchItem(list)
     let arr = []
-    for(let i = 0; i < list.length; i++){
+    for (let i = 0; i < list.length; i++) {
       arr.push(list[i].id)
     }
     setValue("branches[]", arr)
@@ -86,7 +88,7 @@ export default function Create(props) {
   const onSelectBatch = (list, item) => {
     setBatchItem(list)
     let arr = []
-    for(let i = 0; i < list.length; i++){
+    for (let i = 0; i < list.length; i++) {
       arr.push(list[i].id)
     }
     setValue("batches[]", arr)
@@ -95,7 +97,7 @@ export default function Create(props) {
   const onRemoveBatch = (list, item) => {
     setBatchItem(list)
     let arr = []
-    for(let i = 0; i < list.length; i++){
+    for (let i = 0; i < list.length; i++) {
       arr.push(list[i].id)
     }
     setValue("batches[]", arr)
@@ -103,7 +105,7 @@ export default function Create(props) {
   const onSelectTopic = (list, item) => {
     setTopicItem(list)
     let arr = []
-    for(let i = 0; i < list.length; i++){
+    for (let i = 0; i < list.length; i++) {
       arr.push(list[i].id)
     }
     setValue("topics[]", arr)
@@ -112,7 +114,7 @@ export default function Create(props) {
   const onRemoveTopic = (list, item) => {
     setTopicItem(list)
     let arr = []
-    for(let i = 0; i < list.length; i++){
+    for (let i = 0; i < list.length; i++) {
       arr.push(list[i].id)
     }
     setValue("topics[]", arr)
@@ -131,7 +133,7 @@ export default function Create(props) {
         .then()
         .catch((err) => {
           setErrors(err.response.data.data)
-          if (!err.response.data.data.name && !err.response.data.data.duration) {
+          if (!err.response.data.data.name && !err.response.data.data.duration && !err.response.data.data.start_date && !err.response.data.data.end_date && !err.response.data.data.start_time && !err.response.data.data.end_time) {
             setErrors(null)
             setCurrentStep(2)
           }
@@ -158,14 +160,14 @@ export default function Create(props) {
     }
 
     if (currentStep === 3) {
-    await apiExam.create(data)
-      .then((res) => {
-        onOpenSuccessModal()
-      })
-      .catch((err) => {
-        console.log(err.response.data.data)
-        setErrors(err.response.data.data)
-      })
+      await apiExam.create(data)
+        .then((res) => {
+          onOpenSuccessModal()
+        })
+        .catch((err) => {
+          console.log(err.response.data.data)
+          setErrors(err.response.data.data)
+        })
     }
   }
 
@@ -295,23 +297,38 @@ export default function Create(props) {
                 <>
                   <div className="flex mt-4 gap-4">
                     <div className="w-full">
-                      <p>Start Date</p>
-
-                      {/* <Date data={startTime} setDate={(data) => setStartTime(data)} /> */}
+                      <p>Start Date {errors && (
+                        <span className="text-red-1 text-sm">{errors.start_date}</span>
+                      )}</p>
+                      <div className="border p-4 rounded-lg">
+                        <DatePicker2
+                          setData={(data) => setValue("start_date", data)}
+                        />
+                      </div>
                     </div>
                     <div className="w-full">
-                      <p>Start Time</p>
-                      <Time data={endTime} setDate={(data) => setEndTime(data)} />
+                      <p>Start Time {errors && (
+                        <span className="text-red-1 text-sm">{errors.start_time}</span>
+                      )}</p>
+                      <Time data={getValues("end_time")} setDate={(data) => setValue("end_time", data)} />
                     </div>
                   </div>
                   <div className="flex mt-4 gap-4">
                     <div className="w-full">
-                      <p>End Date</p>
-                      <MyDTPicker data={startTime} setDate={(data) => setStartTime(data)} />
+                      <p>End Date {errors && (
+                        <span className="text-red-1 text-sm">{errors.end_date}</span>
+                      )}</p>
+                      <div className="border p-4 rounded-lg">
+                        <DatePicker2
+                          setData={(data) => setValue("end_date", data)}
+                        />
+                      </div>
                     </div>
                     <div className="w-full">
-                      <p>End Time</p>
-                      <MyDTPicker data={endTime} setDate={(data) => setEndTime(data)} />
+                      <p>End Time {errors && (
+                        <span className="text-red-1 text-sm">{errors.end_time}</span>
+                      )}</p>
+                      <Time data={getValues("end_time")} setDate={(data) => setValue("end_time", data)} />
                     </div>
                   </div>
                 </>
@@ -384,7 +401,7 @@ export default function Create(props) {
                 <span className="text-red-1 text-sm">{errors['instruction']}</span>
               )}</p>
               <div className="w-full h-64">
-                <QuillCreated className="h-48" data={getValues('instruction')} setData={(data) => setValue('instruction',data)} />
+                <QuillCreated className="h-48" data={getValues('instruction')} setData={(data) => setValue('instruction', data)} />
               </div>
               <p className="mt-4">Consentment</p>
               {consenment.map((item, index) => (

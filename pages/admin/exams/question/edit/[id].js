@@ -60,7 +60,6 @@ export default function Edit(props) {
         const arr = []
         arr.push(res.data.data)
         setQuestions([...arr])
-        console.log(res.data.data)
         const data = res.data.data
         setValue("section_id", data.id)
         setValue("type", data.type)
@@ -78,7 +77,6 @@ export default function Edit(props) {
           setValue(`${field}[negative_mark]`, data.items[i].negative_mark)
           setValue(`${field}[question]`, data.items[i].question)
           setValue(`${field}[answer_explanation]`, data.items[i].answer_explanation)
-          console.log(data.items[i].options.length)
           for (let j = 0; j < data.items[i].options.length; j++) {
             const fieldOption = `question_items[${i}].options[${j}]`
             const id = data.items[i].options[j].id.toString()
@@ -93,7 +91,7 @@ export default function Edit(props) {
 
   const submitQuiz = async (data) => {
     console.log(data)
-    if(data.type === 'simple'){
+    if (data.type === 'simple') {
       console.log("simple question")
       delete data.paragraph
       delete data.instruction
@@ -102,8 +100,8 @@ export default function Edit(props) {
     }
     await apiExam.updateQuestion(id, data)
       .then((res) => {
-        // console.log(res.data.data)
         onOpenSuccessModal()
+        console.log(res.data.data)
       })
       .catch((err) => {
         console.log(err.response.data.data)
@@ -270,7 +268,10 @@ export default function Edit(props) {
                           const alphabet = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z']
                           if (itemAnswer.new) {
                             setValue(`question_items[${indexEachQuestion}].options[${indexAnswer}].id`, "-1")
-                            setValue(`question_items[${indexEachQuestion}].options[${indexAnswer}].correct`, "0")
+                            console.log(itemAnswer.correct)
+                            if (itemAnswer.correct === null) {
+                              setValue(`question_items[${indexEachQuestion}].options[${indexAnswer}].correct`, "0")
+                            }
                           } else {
                             setValue(`question_items[${indexEachQuestion}].options[${indexAnswer}].id`, itemAnswer.id.toString())
                           }
@@ -301,8 +302,6 @@ export default function Edit(props) {
 
                                               }
                                             })
-
-                                            console.log(b.options)
                                           }
                                         })
                                       } else {
@@ -328,7 +327,6 @@ export default function Edit(props) {
                                         itemQ.items.map((b) => {
                                           if (b.id === eachQuestion.id) {
                                             b.options.map((optionQ) => {
-                                              console.log(optionQ)
                                               if (optionQ.id === itemAnswer.id) {
                                                 const tempCorrect = !optionQ.correct
                                                 optionQ.correct = tempCorrect ? 1 : 0
@@ -363,7 +361,6 @@ export default function Edit(props) {
                                       itemQ.items.map((b) => {
                                         if (b.id === eachQuestion.id) {
                                           b.options.map((optionQ) => {
-                                            console.log(optionQ)
                                             if (optionQ.id === itemAnswer.id) {
                                               const tempCorrect = !optionQ.correct
                                               optionQ.title = e.target.value
@@ -387,7 +384,6 @@ export default function Edit(props) {
                                       if (itemQ.id === itemQuestion.id) {
                                         itemQ.items.map((b) => {
                                           if (b.id === eachQuestion.id) {
-                                            console.log(b.id)
                                             b.options = [...b.options.filter(i => i !== itemAnswer)]
                                           }
                                         })
@@ -409,7 +405,7 @@ export default function Edit(props) {
                           const newOption = {
                             id: eachQuestion.options[eachQuestion.options.length - 1].id + 1,
                             title: '',
-                            correct: 0,
+                            correct: null,
                             new: true
                           }
                           const temp = questions
@@ -424,7 +420,6 @@ export default function Edit(props) {
                               itemQ
                             }
                           })
-                          console.log(temp)
                           setQuestions([...temp])
                         }} className="text-blue-1 cursor-pointer text-center p-4 border-dashed border-2 border-blue-1 mt-4 rounded-lg">+ Add New Answer</div>
                         <div className="mt-4">
@@ -466,7 +461,8 @@ export default function Edit(props) {
                       options: [{
                         id: 0,
                         title: '',
-                        correct: 0
+                        correct: 0,
+                        new: true
                       }]
                     }
                     const temp = questions

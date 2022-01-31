@@ -8,6 +8,7 @@ import { ChakraProvider } from '@chakra-ui/react'
 import 'react-quill/dist/quill.snow.css'
 import 'quill/dist/quill.snow.css';
 import "react-datetime/css/react-datetime.css";
+import "react-datepicker/dist/react-datepicker.css";
 
 function MyApp({ Component, pageProps }) {
   const Layout = Component.layout || (({ children }) => <>{children}</>);
