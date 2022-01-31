@@ -60,7 +60,7 @@ export default function Quill({data, setData = false, className, register = fals
         // console.log(quillRef.current.firstChild.innerHTML); // Get innerHTML using quillRef
       });
     }
-  }, [quill])
+  }, [quill, data])
 
   return (
     <div className={className}>

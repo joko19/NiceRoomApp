@@ -63,6 +63,7 @@ export default function Edit(props) {
         console.log(res.data.data)
         const data = res.data.data
         setValue("section_id", data.id)
+        setValue("type", data.type)
         setValue(`level`, data.level)
         setValue(`tag`, data.tag)
         setValue(`instruction`, data.instruction)
@@ -81,7 +82,7 @@ export default function Edit(props) {
           for (let j = 0; j < data.items[i].options.length; j++) {
             const fieldOption = `question_items[${i}].options[${j}]`
             const id = data.items[i].options[j].id.toString()
-            
+
             setValue(`${fieldOption}[id]`, id)
             setValue(`${fieldOption}[title]`, data.items[i].options[j].title)
             setValue(`${fieldOption}[correct]`, data.items[i].options[j].correct)
@@ -94,7 +95,7 @@ export default function Edit(props) {
     console.log(data)
     await apiExam.updateQuestion(id, data)
       .then((res) => {
-        console.log(res.data.data)
+        // console.log(res.data.data)
         onOpenSuccessModal()
       })
       .catch((err) => {
@@ -136,7 +137,7 @@ export default function Edit(props) {
                 {itemQuestion.type === 'paragraph' && (
                   <>
                     <div className="flex justify-between mt-2">
-                      <div className="text-2xl font-bold">Edit{itemQuestion.type === 'simple' ? 'Simple' : 'Paragraph'} Question</div>
+                      <div className="text-2xl font-bold">Edit {itemQuestion.type === 'simple' ? 'Simple' : 'Paragraph'} Question</div>
                     </div>
                     <div className="flex gap-4">
                       <div className="w-full">
@@ -187,8 +188,11 @@ export default function Edit(props) {
 
                 {/* question */}
                 {itemQuestion.items.map((eachQuestion, indexEachQuestion) => {
+
+                  setValue("id", eachQuestion.id !== -1 ? eachQuestion.id : -1)
                   return (
                     <div className={`bg-white p-4 ${itemQuestion.type === "paragraph" && 'mt-8'}`} key={indexEachQuestion}>
+                      <input defaultValue={eachQuestion.id} hidden {...register(`question_items[${indexEachQuestion}].id`)} />
                       {itemQuestion.type === "paragraph" && (
                         <div className="flex justify-between mt-2 bg-white">
                           <div className="text-2xl ">{indexEachQuestion + 1}. Question</div>
@@ -257,6 +261,11 @@ export default function Edit(props) {
                         )}
                         {eachQuestion.options.map((itemAnswer, indexAnswer) => {
                           const alphabet = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z']
+                          if (itemAnswer.new) {
+                            setValue(`question_items[${indexEachQuestion}].options[${indexAnswer}].id`, "-1")
+                          } else {
+                            setValue(`question_items[${indexEachQuestion}].options[${indexAnswer}].id`, itemAnswer.id.toString())
+                          }
                           return (
                             <div className={`${itemAnswer.correct === 1 ? 'bg-blue-6 border-blue-1' : 'bg-white'} my-2  p-4 border rounded-lg`} key={indexAnswer}>
                               {errors && (
@@ -365,14 +374,6 @@ export default function Edit(props) {
                                   autoComplete="off" type="text" className={`${itemAnswer.correct === 1 ? 'bg-blue-6 text-black-5' : 'bg-white'} form border w-full rounded-lg p-4 h-full m-1`} placeholder="Input your answer" />
                                 {eachQuestion.options.length !== 1 && (
                                   <div className="m-auto cursor-pointer text-blue-1 -ml-9" onClick={() => {
-
-                                    const newOption = {
-                                      id: eachQuestion.options[eachQuestion.options.length - 1].id + 1,
-                                      title: '',
-                                      correct: 0
-                                    }
-                                    console.log("before")
-                                    console.log(questions)
                                     const temp = questions
                                     temp.map((itemQ) => {
                                       if (itemQ.id === itemQuestion.id) {
@@ -386,8 +387,7 @@ export default function Edit(props) {
                                         itemQ
                                       }
                                     })
-                                    console.log("after")
-                                    console.log(temp)
+                                    setValue(`question_items[${indexEachQuestion}].options[${indexAnswer}].deleted`, 1)
                                     setQuestions([...temp])
                                   }} >
                                     <Image src="/asset/icon/table/fi_trash-2.png" width={16} height={16} alt="icon delete" />
@@ -401,7 +401,8 @@ export default function Edit(props) {
                           const newOption = {
                             id: eachQuestion.options[eachQuestion.options.length - 1].id + 1,
                             title: '',
-                            correct: 0
+                            correct: 0,
+                            new: true
                           }
                           const temp = questions
                           temp.map((itemQ) => {
@@ -497,7 +498,7 @@ export default function Edit(props) {
           <ModalCloseButton />
           <ModalBody>
             <div className="flex flex-col text-center ">
-              Question has Published
+              Successfully Update Question
               <div className="self-center">
                 <Link href={`/admin/exams/`}>
                   <a className="bg-blue-1 rounded-lg text-white mt-4 block align-center p-3">Okay</a>

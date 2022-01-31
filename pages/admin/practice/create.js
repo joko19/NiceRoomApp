@@ -260,7 +260,7 @@ export default function Create(props) {
               <div className="flex mt-4 gap-4">
                 <div className="w-full">
                   <p>Start Date</p>
-                    <input type="text" hidden value="2022-12-12" {...register("start_date")} />
+                  <input type="text" hidden value="2022-12-12" {...register("start_date")} />
                   {/* <Date data={startTime} setDate={(data) => setStartTime(data)} /> */}
                 </div>
                 <div className="w-full">
@@ -271,18 +271,6 @@ export default function Create(props) {
 
 
               <div className="flex gap-4" >
-                <div className="w-full">
-                  <p className="mt-4">Duration {errors && (
-                    <span className="text-red-1 text-sm">{errors.duration}</span>
-                  )}</p>
-                  <div >
-                    <div className="flex h-full">
-                      <input type="number" className="border w-full h-full flex-grow rounded p-4" placeholder="0"  {...register("duration")} />
-                      <input className="bg-black-9 p-4 w-24 text-center h-full border text-black-4" placeholder="Minute" disabled />
-                    </div>
-                  </div>
-                </div>
-
                 <div className="w-full">
                   <p className="mt-4">Practice Type {errors && (
                     <span className="text-red-1 text-sm">{errors.type}</span>
@@ -295,6 +283,7 @@ export default function Create(props) {
                     </Select>
                   </div>
                 </div>
+              <div className="w-full"></div>
               </div>
             </div>
           )}

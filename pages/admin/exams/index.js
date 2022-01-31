@@ -96,7 +96,7 @@ export default function Index() {
                   <table className="table md:min-w-full overflow-auto divide-y divide-gray-200">
                     <thead className="bg-black-9" >
                       {TableHead.map((item) => (
-                        <th key={item} scope="col" className="px-6 py-3 text-left tracking-wider">
+                        <th key={item} scope="col" className="px-6 py-3 text-center tracking-wider">
                           {item}
                         </th>
                       ))}
@@ -106,7 +106,7 @@ export default function Index() {
                         <tr key={item.id}>
                           <td className="px-6 py-4 whitespace-nowrap">
                             <div className="flex items-center">
-                              <div className="ml-4">
+                              <div className="m-auto">
                                 <div>{item.name}</div>
                               </div>
                             </div>
@@ -120,7 +120,7 @@ export default function Index() {
                             </div>
                           </td>
                           <td className="px-6 py-4 whitespace-nowrap flex text-right gap-2 text-sm font-medium m-auto flex items-center h-full">
-                            <div className="flex gap-3 p-3">
+                            <div className="flex m-auto gap-3 p-3">
                               <Link href={`exams/${item.id}`}>
                                 <a className="text-indigo-600 hover:text-indigo-900 m-auto">
                                   <Image src="/asset/icon/table/fi_edit.png" width={16} height={16} alt="icon edit" />

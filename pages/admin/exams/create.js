@@ -374,22 +374,6 @@ export default function Create(props) {
                   </div>
                 </div>
               </div>
-
-
-              <div className="flex gap-4" >
-                <div className="w-full">
-                  <p className="mt-4">Duration {errors && (
-                    <span className="text-red-1 text-sm">{errors.duration}</span>
-                  )}</p>
-                  <div >
-                    <div className="flex h-full">
-                      <input type="number" className="border w-full h-full flex-grow rounded p-4" placeholder="0"  {...register("duration")} />
-                      <input className="bg-black-9 p-4 w-24 text-center h-full border text-black-4" placeholder="Minute" disabled />
-                    </div>
-                  </div>
-                </div>
-                <div className="w-full" />
-              </div>
             </div>
           )}
 

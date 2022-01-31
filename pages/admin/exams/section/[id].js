@@ -45,8 +45,7 @@ export default function Create(props) {
           id: 0,
           title: '',
           correct: 0
-        }
-        ]
+        }]
       }]
     },
   ])
@@ -513,6 +512,7 @@ export default function Create(props) {
                   id: questions.length,
                   type: questionType,
                   question_items: [{
+                    id:0,
                     question: '',
                     answer_type: 'single',
                     options: [{
