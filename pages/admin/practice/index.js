@@ -95,18 +95,25 @@ export default function Index() {
                 <div className="shadow overflow-hidden border-b border-gray-200 sm:rounded-lg">
                   <table className="table md:min-w-full overflow-auto divide-y divide-gray-200">
                     <thead className="bg-black-9" >
-                      {TableHead.map((item) => (
-                        <th key={item} scope="col" className="px-6 py-3 text-center tracking-wider">
-                          {item}
-                        </th>
-                      ))}
+                      <th scope="col" className="px-6 py-3 text-left tracking-wider">
+                        Test Name
+                      </th>
+                      <th scope="col" className="px-6 py-3 text-left tracking-wider">
+                        Type
+                      </th>
+                      <th scope="col" className="px-6 py-3 text-center tracking-wider">
+                        Status
+                      </th>
+                      <th scope="col" className="px-6 py-3 text-center tracking-wider">
+                        Action
+                      </th>
                     </thead>
                     <tbody className="bg-white divide-y divide-gray-200">
                       {list.map((item) => (
                         <tr key={item.id}>
                           <td className="py-4">
-                            <div className="flex text-center">
-                              <div className="m-auto text-center">{item.name}</div>
+                            <div className="flex ml-8">
+                              {item.name}
                             </div>
                           </td>
                           <td className="px-6 py-4 whitespace-nowrap">

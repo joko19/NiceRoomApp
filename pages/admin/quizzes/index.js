@@ -95,11 +95,18 @@ export default function Create() {
                 <div className="shadow overflow-hidden border-b border-gray-200 sm:rounded-lg">
                   <table className="table md:min-w-full overflow-auto divide-y divide-gray-200">
                     <thead className="bg-black-9" >
-                      {TableHead.map((item) => (
-                        <th key={item} scope="col" className="px-6 py-3 text-left tracking-wider">
-                          {item}
-                        </th>
-                      ))}
+                      <th scope="col" className="px-6 py-3 text-left tracking-wider">
+                        Quiz Name
+                      </th>
+                      <th scope="col" className="px-6 py-3 text-left tracking-wider">
+                        Type
+                      </th>
+                      <th scope="col" className="px-6 py-3 text-center tracking-wider">
+                        Status
+                      </th>
+                      <th scope="col" className="px-6 py-3 text-center tracking-wider">
+                        Action
+                      </th>
                     </thead>
                     <tbody className="bg-white divide-y divide-gray-200">
                       {list.map((item) => (
@@ -115,24 +122,26 @@ export default function Create() {
                             <div>{item.type}</div>
                           </td>
                           <td className="px-6 py-4 whitespace-nowrap">
-                            <div className={`${item.status === 'draft' ? 'bg-black-8 text-black-3' : 'bg-green-2 text-green-1'} text-center rounded-lg p-4`}>
+                            <div className={`${item.status === 'draft' ? 'bg-black-8 text-black-3' : 'bg-green-2 text-green-1'} text-center rounded-lg p-4 m-auto`}>
                               {item.status}
                             </div>
                           </td>
                           <td className="px-6 py-4 whitespace-nowrap flex text-right gap-2 text-sm font-medium">
+                            <div className="mx-auto flex gap-4">
+                              <Link href={`quizzes/edit/${item.id}`}>
+                                <a className="text-indigo-600 hover:text-indigo-900">
+                                  <Image src="/asset/icon/table/fi_edit.png" width={16} height={16} alt="icon edit" />
+                                </a>
+                              </Link>
+                              <button href="#" className="text-indigo-600 hover:text-indigo-900">
+                                <Image src="/asset/icon/table/fi_trash-2.png" width={16} height={16} alt="icon deleted" onClick={() => {
+                                  // setNameDeleted(item.name)
+                                  setSelectedData(item.id),
+                                    onOpen()
+                                }} />
+                              </button>
 
-                            <Link href={`quizzes/edit/${item.id}`}>
-                              <a className="text-indigo-600 hover:text-indigo-900">
-                                <Image src="/asset/icon/table/fi_edit.png" width={16} height={16} alt="icon edit" />
-                              </a>
-                            </Link>
-                            <button href="#" className="text-indigo-600 hover:text-indigo-900">
-                              <Image src="/asset/icon/table/fi_trash-2.png" width={16} height={16} alt="icon deleted" onClick={() => {
-                                // setNameDeleted(item.name)
-                                setSelectedData(item.id),
-                                  onOpen()
-                              }} />
-                            </button>
+                            </div>
                           </td>
                         </tr>
                       ))}

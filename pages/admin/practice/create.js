@@ -15,7 +15,7 @@ import {
   useDisclosure,
   Divider,
 } from '@chakra-ui/react'
-import Quill from "../../../components/Editor/Quill";
+import QuillCreated from "../../../components/Editor/QuillCreated";
 import { Select } from '@chakra-ui/react'
 import apiPractice from "../../../action/practice";
 import apiTopic from "../../../action/topics";
@@ -295,7 +295,7 @@ export default function Create(props) {
                 <span className="text-red-1 text-sm">{errors['instruction']}</span>
               )}</p>
               <div className="w-full h-64">
-                <Quill className="h-48" data={getValues('instruction')} setData={(data) => setValue('instruction', data)} />
+                <QuillCreated className="h-48" data={getValues('instruction')} setData={(data) => setValue('instruction', data)} />
               </div>
               <p className="mt-4">Consentment</p>
               {consenment.map((item, index) => (
@@ -352,7 +352,7 @@ export default function Create(props) {
                         <div className="w-full  bg-white rounded-lg " style={{ lineHeight: 2 }} >
 
                           {/* <textarea {...register(`sections[${indexQuestion}].question`)} /> */}
-                          <Quill className="h-32   border-none rounded-lg" data='' register={(data) => setDataForm(`sections[${indexQuestion}].instruction`, data)} />
+                          <QuillCreated className="h-32   border-none rounded-lg" data='' register={(data) => setDataForm(`sections[${indexQuestion}].instruction`, data)} />
                         </div>
                         <div className="bg-white h-12">
                         </div>
