@@ -516,4 +516,18 @@ export default function Edit(props) {
   )
 }
 
+
+// This also gets called at build time
+export async function getServerSideProps(context) {
+  // params contains the post `id`.
+  // If the route is like /posts/1, then params.id is 1
+  console.log("ff")
+  console.log(context.query.id)
+  // const res =  await apiExam.detail(6)
+  // const data = await res.json()
+  // console.log(res)
+  // Pass post data to the page via props
+  return { props: {} }
+}
+
 Edit.layout = Layout

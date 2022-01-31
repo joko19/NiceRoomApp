@@ -16,7 +16,7 @@ import {
 import { FaAngleLeft } from "react-icons/fa";
 import { useRouter } from "next/router";
 
-export default function Section() {
+export default function Section({ data }) {
   const Router = useRouter()
   const { id } = Router.query
   const [dataExams, setDataExams] = useState({})
@@ -51,6 +51,7 @@ export default function Section() {
 
   useEffect(() => {
     getDetail()
+    console.log(data)
   }, [])
 
   const onDelete = async (idQuestion) => {
@@ -137,10 +138,10 @@ export default function Section() {
                               </a>
                             </Link>
                             <button className="text-indigo-600 hover:text-indigo-900" onClick={() => {
-                                setQuestionSelectedId(itemQuestion.id),
+                              setQuestionSelectedId(itemQuestion.id),
                                 onOpenDeleteModal()
-                              }}>
-                              <Image src="/asset/icon/table/fi_trash-2.png" width={16} height={16} alt="icon deleted"  />
+                            }}>
+                              <Image src="/asset/icon/table/fi_trash-2.png" width={16} height={16} alt="icon deleted" />
                               <span className="inline-block align-top">  Delete</span>
                             </button>
                           </td>
@@ -199,4 +200,19 @@ export default function Section() {
     </>
   )
 }
+
+
+// This also gets called at build time
+export async function getServerSideProps(context) {
+  // params contains the post `id`.
+  // If the route is like /posts/1, then params.id is 1
+  console.log("ff")
+  console.log(context.query.id)
+  // const res =  await apiExam.detail(6)
+  // const data = await res.json()
+  // console.log(res)
+  // Pass post data to the page via props
+  return { props: {} }
+}
+
 Section.layout = Layout
