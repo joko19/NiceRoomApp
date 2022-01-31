@@ -9,22 +9,12 @@ var valid = function (current) {
 
 const datetimePlaceholder = { placeholder: "Select Time and Date" };
 
-export function MyDTPicker({setDate = false, data = false}) {
-  const [value, setValue] = useState(new Date())
-  console.log(data)
-  const changeData = () => {
-    const format = 'YYYY-MM-DD HH:mm'
-    const dateTime = moment(value).format(format)
-    if(setDate !== false){
-      setDate(dateTime)
-    }
-  }
-
+export function MyDTPicker({ setDate = false, data = false }) {
   return (
-    <Datetime inputProps={datetimePlaceholder} renderInput={renderInput} isValidDate={valid} value={data !== false ? data : value} onChange={() => {
-      setValue()
-      changeData()
-      // set
+    <Datetime inputProps={data !== false ? {placeholder: data }: datetimePlaceholder} dateFormat="YYYY-MM-DD HH:mm" defaultValue={data} renderInput={renderInput} isValidDate={valid} onChange={(e) => {
+      if (setDate !== false) {
+        setDate(e.format("YYYY-MM-DD HH:mm"))
+      }
     }} />
   )
 }

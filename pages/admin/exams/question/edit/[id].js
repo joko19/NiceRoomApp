@@ -270,6 +270,7 @@ export default function Edit(props) {
                           const alphabet = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z']
                           if (itemAnswer.new) {
                             setValue(`question_items[${indexEachQuestion}].options[${indexAnswer}].id`, "-1")
+                            setValue(`question_items[${indexEachQuestion}].options[${indexAnswer}].correct`, "0")
                           } else {
                             setValue(`question_items[${indexEachQuestion}].options[${indexAnswer}].id`, itemAnswer.id.toString())
                           }

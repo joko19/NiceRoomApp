@@ -71,7 +71,7 @@ export default function Create(props) {
         }
         setValue("name", data.name)
         setValue("duration", data.duration)
-        setValue("live", data.type)
+        setValue("type", data.type)
         setType(data.type)
         if (data.type === 'live') {
           setValue("topic_id", data.topic_id)
@@ -371,11 +371,11 @@ export default function Create(props) {
                 <div className="flex mt-4 gap-4">
                   <div className="w-full">
                     <p>Start Time</p>
-                    <MyDTPicker data={startTime} setDate={(data) => setStartTime(data)} />
+                    <MyDTPicker data={getValues("start_time")} setDate={(data) => setStartTime(data)} />
                   </div>
                   <div className="w-full">
                     <p>End Time</p>
-                    <MyDTPicker data={endTime} setDate={(data) => setEndTime(data)} />
+                    <MyDTPicker data={getValues("end_time")} setDate={(data) => setEndTime(data)} />
                   </div>
                 </div>
               )}

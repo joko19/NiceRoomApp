@@ -71,8 +71,8 @@ export default function Create(props) {
     data.append("type", req.type)
     if (req.type === 'live') {
       data.append("topic_id", req.topic_id)
-      data.append("start_time", startTime)
-      data.append("end_time", endTime)
+      data.append("start_time", req.start_time)
+      data.append("end_time", req.end_time)
     }
     data.append("duration", req.duration)
     // to step 2
@@ -82,7 +82,7 @@ export default function Create(props) {
         .catch((err) => {
           setErrors(err.response.data.data)
           console.log(err.response.data.data)
-          if (!err.response.data.data.name && !err.response.data.data.duration) {
+          if (!err.response.data.data.name && !err.response.data.data.duration && !err.response.data.data.start_time && !err.response.data.data.end_time) {
             setErrors(null)
             setCurrentStep(2)
           }
@@ -125,10 +125,12 @@ export default function Create(props) {
       data.append(`${field}[answer_explanation]`, req.questions[i].answer_explanation)
       let correct = []
       console.log(typeof req.questions[i].correct)
-      for (let j = 0; j < req.questions[i].options.length; j++) {
-        const opt = `${field}[options][${j}]`
-        data.append(`${opt}[correct]`, req.questions[i].options[j].correct)
-        data.append(`${opt}[title]`, req.questions[i].options[j].title)
+      if (req.questions[i].options) {
+        for (let j = 0; j < req.questions[i].options.length; j++) {
+          const opt = `${field}[options][${j}]`
+          data.append(`${opt}[correct]`, req.questions[i].options[j].correct)
+          data.append(`${opt}[title]`, req.questions[i].options[j].title)
+        }
       }
     }
     console.log(data)
@@ -141,6 +143,7 @@ export default function Create(props) {
       console.log(key[0] + ', ' + key[1]);
     }
     data.append("status", status)
+    console.log(data)
     await apiQuiz.create(data)
       .then((res) => {
         onOpenSuccessModal()
@@ -283,12 +286,24 @@ export default function Create(props) {
               {type === 'live' && (
                 <div className="flex mt-4 gap-4">
                   <div className="w-full">
-                    <p>Start Time</p>
-                    <MyDTPicker data={startTime} setDate={(data) => setStartTime(data)} />
+                    <p>Start Time {errors && (
+                      <span className="text-red-1 text-sm">{errors.start_time}</span>
+                    )}</p>
+                    <MyDTPicker data={startTime} setDate={(data) => {
+                      console.log(data)
+                      setStartTime(data)
+                      setValue("start_time", data)
+                    }} />
                   </div>
                   <div className="w-full">
-                    <p>End Time</p>
-                    <MyDTPicker data={endTime} setDate={(data) => setEndTime(data)} />
+                    <p>End Time {errors && (
+                      <span className="text-red-1 text-sm">{errors.end_time}</span>
+                    )}</p>
+                    <MyDTPicker data={endTime} setDate={(data) => {
+                      console.log(data)
+                      setEndTime(data)
+                      setValue("end_time", data)
+                    }} />
                   </div>
                 </div>
               )}
@@ -371,7 +386,7 @@ export default function Create(props) {
                       </div>
                       <div className="mt-4">
                         <p className="mt-4">Question {errors && (
-                          <span className="text-red-1 text-sm">{errors[`questions.${indexQuestion}.question_items.${indexEachQuestion}.question`]}</span>
+                          <span className="text-red-1 text-sm">{errors[`questions.${indexEachQuestion}.question`]}</span>
                         )}</p>
                         <div className="w-full  bg-white rounded-lg " style={{ lineHeight: 2 }} >
                           <Quill className="h-32   border-none rounded-lg" data={getValues(`questions[${indexEachQuestion}].question`)} register={(data) => setDataForm(`questions[${indexEachQuestion}].question`, data)} />
@@ -381,7 +396,7 @@ export default function Create(props) {
                       </div>
                       <div className="mt-4">
                         <p className="mt-4">Answer Type {errors && (
-                          <span className="text-red-1 text-sm">{errors[`questions.${indexQuestion}.options`]}</span>
+                          <span className="text-red-1 text-sm">{errors[`questions.${indexEachQuestion}.options`]}</span>
                         )}</p>
                         <Select bg='white' onClick={(e) => {
 
@@ -402,14 +417,14 @@ export default function Create(props) {
                           <option value="multiple">Multiple Correct Answer</option>
                         </Select>
                         {errors && (
-                          <span className="text-red-1 text-sm">{errors[`questions.${indexQuestion}.question_items.${indexEachQuestion}.options.0.correct`]}</span>
+                          <span className="text-red-1 text-sm">{errors[`questions.${indexEachQuestion}.options.0.correct`]}</span>
                         )}
                         {eachQuestion.options.map((itemAnswer, indexAnswer) => {
                           const alphabet = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z']
                           return (
                             <div className={`${itemAnswer.correct === 1 ? 'bg-blue-6 border-blue-1' : 'bg-white'} my-2  p-4 border rounded-lg`} key={indexAnswer}>
                               {errors && (
-                                <span className="text-red-1 text-sm">{errors[`questions.${indexQuestion}.question_items.${indexEachQuestion}.options.${indexAnswer}.title`]}</span>
+                                <span className="text-red-1 text-sm">{errors[`questions.${indexEachQuestion}.options.${indexAnswer}.title`]}</span>
                               )}
                               <div className='flex gap-2'>
                                 {eachQuestion.answer_type === 'single' ? (
@@ -538,7 +553,7 @@ export default function Create(props) {
                         }} className="text-blue-1 cursor-pointer text-center p-4 border-dashed border-2 border-blue-1 mt-4 rounded-lg">+ Add New Answer</div>
                         <div className="mt-4">
                           <p className="mt-4">Answer Explanation {errors && (
-                            <span className="text-red-1 text-sm">{errors[`questions.${indexQuestion}.question_items.${indexEachQuestion}.answer_explanation`]}</span>
+                            <span className="text-red-1 text-sm">{errors[`questions.${indexEachQuestion}.answer_explanation`]}</span>
                           )}</p>
                           <div className="w-full  bg-white rounded-lg " style={{ lineHeight: 2 }} >
                             <Quill className="h-32   border-none rounded-lg" data={getValues(`questions[${indexEachQuestion}].answer_explanation`)} register={(data) => setDataForm(`questions[${indexEachQuestion}].answer_explanation`, data)} />
@@ -551,13 +566,13 @@ export default function Create(props) {
                         <div className="flex gap-4 mb-4">
                           <div className="w-full">
                             <p className="mt-4">Marks {errors && (
-                              <span className="text-red-1 text-sm">{errors[`questions.${indexQuestion}.question_items.${indexEachQuestion}.mark`]}</span>
+                              <span className="text-red-1 text-sm">{errors[`questions.${indexEachQuestion}.mark`]}</span>
                             )}</p>
                             <input type="number" className=" w-full form border p-4 rounded-lg" placeholder="0" {...register(`questions[${indexEachQuestion}].mark`)} />
                           </div>
                           <div className="w-full">
                             <p className="mt-4">Negative Marking {errors && (
-                              <span className="text-red-1 text-sm">{errors[`questions.${indexQuestion}.question_items.${indexEachQuestion}.negative_mark`]}</span>
+                              <span className="text-red-1 text-sm">{errors[`questions.${indexEachQuestion}.negative_mark`]}</span>
                             )}</p>
                             <input type="number" className="w-full form border p-4 rounded-lg" placeholder="0" {...register(`questions[${indexEachQuestion}].negative_mark`)} />
                           </div>
