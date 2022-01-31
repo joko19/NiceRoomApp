@@ -93,6 +93,13 @@ export default function Edit(props) {
 
   const submitQuiz = async (data) => {
     console.log(data)
+    if(data.type === 'simple'){
+      console.log("simple question")
+      delete data.paragraph
+      delete data.instruction
+      delete data.tag
+      delete data.level
+    }
     await apiExam.updateQuestion(id, data)
       .then((res) => {
         // console.log(res.data.data)
