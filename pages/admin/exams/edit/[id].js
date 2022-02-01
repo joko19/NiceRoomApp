@@ -367,7 +367,7 @@ export default function Create(props) {
                       <p>Start Time {errors && (
                         <span className="text-red-1 text-sm">{errors.start_time}</span>
                       )}</p>
-                      <Time data={getValues("end_time")} setDate={(data) => setValue("end_time", data)} />
+                      <Time data={getValues("end_time")} setDate={(data) => setValue("start_time", data)} />
                     </div>
                   </div>
                   <div className="flex mt-4 gap-4">
