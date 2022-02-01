@@ -474,7 +474,7 @@ export default function Create(props) {
                                           if (optionQ.id === itemAnswer.id) {
                                             const tempCorrect = !optionQ.correct
                                             optionQ.correct = tempCorrect ? 1 : 0
-                                            setValue(`questions[${indexEachQuestion}].options[${indexAnswer}].correct`, 1)
+                                            setValue(`questions[${indexEachQuestion}].options[${indexAnswer}].correct`, tempCorrect ? 1 : 0)
                                           }
                                         })
                                       }

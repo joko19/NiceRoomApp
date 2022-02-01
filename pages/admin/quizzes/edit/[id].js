@@ -514,7 +514,7 @@ export default function Create(props) {
                                           if (optionQ.id === itemAnswer.id) {
                                             const tempCorrect = !optionQ.correct
                                             optionQ.correct = tempCorrect ? 1 : 0
-                                            setValue(`questions[${indexEachQuestion}].options[${indexAnswer}].correct`, 1)
+                                            setValue(`questions[${indexEachQuestion}].options[${indexAnswer}].correct`, tempCorrect ? 1 : 0)
                                           }
                                         })
                                       }
@@ -554,14 +554,6 @@ export default function Create(props) {
                                   autoComplete="off" type="text" className={`${itemAnswer.correct === 1 ? 'bg-blue-6 text-black-5' : 'bg-white'} form border w-full rounded-lg p-4 h-full m-1`} placeholder="Input your answer" />
                                 {eachQuestion.options.length !== 1 && (
                                   <div className="m-auto cursor-pointer text-blue-1 -ml-9" onClick={() => {
-
-                                    const newOption = {
-                                      id: eachQuestion.options[eachQuestion.options.length - 1].id + 1,
-                                      title: '',
-                                      correct: 0
-                                    }
-                                    console.log("before")
-                                    console.log(questions)
                                     const temp = questions
                                     temp.map((b) => {
                                       if (b.id === eachQuestion.id) {
@@ -569,8 +561,6 @@ export default function Create(props) {
                                         b.options = [...b.options.filter(i => i !== itemAnswer)]
                                       }
                                     })
-                                    console.log("after")
-                                    console.log(temp)
                                     setQuestions([...temp])
                                   }} >
                                     <Image src="/asset/icon/table/fi_trash-2.png" width={16} height={16} alt="icon delete" />
