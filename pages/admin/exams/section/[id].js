@@ -258,7 +258,9 @@ export default function Create(props) {
                         {eachQuestion.options.map((itemAnswer, indexAnswer) => {
                           const alphabet = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z']
                           if (itemAnswer.new) {
-                            setValue(`questions[${indexQuestion}].question_items[${indexEachQuestion}].options[${indexAnswer}].correct`, 0)
+                            if (itemAnswer.correct === null) {
+                              setValue(`questions[${indexQuestion}].question_items[${indexEachQuestion}].options[${indexAnswer}].correct`, 0)
+                            }
                           }
                           return (
                             <div className={`${itemAnswer.correct === 1 ? 'bg-blue-6 border-blue-1' : 'bg-white'} my-2  p-4 border rounded-lg`} key={indexAnswer}>
@@ -312,11 +314,12 @@ export default function Create(props) {
                                         itemQ.question_items.map((b) => {
                                           if (b.id === eachQuestion.id) {
                                             b.options.map((optionQ) => {
-                                              console.log(optionQ)
                                               if (optionQ.id === itemAnswer.id) {
                                                 const tempCorrect = !optionQ.correct
+                                                console.log(tempCorrect)
                                                 optionQ.correct = tempCorrect ? 1 : 0
-                                                setValue(`questions[${indexQuestion}].question_items[${indexEachQuestion}].options[${indexAnswer}].correct`, 1)
+                                                setValue(`questions[${indexQuestion}].question_items[${indexEachQuestion}].options[${indexAnswer}].correct`, tempCorrect ? 1 : 0)
+                                                console.log(optionQ.correct)
                                               }
                                             })
                                           }
@@ -349,7 +352,6 @@ export default function Create(props) {
                                           b.options.map((optionQ) => {
                                             console.log(optionQ)
                                             if (optionQ.id === itemAnswer.id) {
-                                              const tempCorrect = !optionQ.correct
                                               optionQ.title = e.target.value
                                               setValue(`questions[${indexQuestion}].question_items[${indexEachQuestion}].options[${indexAnswer}].title`, e.target.value)
                                             }
@@ -562,6 +564,6 @@ export async function getServerSideProps(context) {
   // const data = await res.json()
   // console.log(res)
   // Pass post data to the page via props
-  return { props: {id_section: num} }
+  return { props: { id_section: num } }
 }
 Create.layout = Layout

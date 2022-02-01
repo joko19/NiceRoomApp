@@ -48,8 +48,7 @@ export default function Edit(props) {
           id: 0,
           title: '',
           correct: 0
-        }
-        ]
+        }]
       }]
     },
   ])
@@ -60,6 +59,7 @@ export default function Edit(props) {
         const arr = []
         arr.push(res.data.data)
         setQuestions([...arr])
+        console.log(res.data.data)
         const data = res.data.data
         setValue("section_id", data.id)
         setValue("type", data.type)
@@ -330,7 +330,7 @@ export default function Edit(props) {
                                               if (optionQ.id === itemAnswer.id) {
                                                 const tempCorrect = !optionQ.correct
                                                 optionQ.correct = tempCorrect ? 1 : 0
-                                                setValue(`question_items[${indexEachQuestion}].options[${indexAnswer}].correct`, 1)
+                                                setValue(`question_items[${indexEachQuestion}].options[${indexAnswer}].correct`, tempCorrect ? 1 : 0)
                                               }
                                             })
                                           }

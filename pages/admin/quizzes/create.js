@@ -123,11 +123,10 @@ export default function Create(props) {
       data.append(`${field}[negative_mark]`, req.questions[i].negative_mark)
       data.append(`${field}[question]`, req.questions[i].question)
       data.append(`${field}[answer_explanation]`, req.questions[i].answer_explanation)
-      let correct = []
-      console.log(typeof req.questions[i].correct)
       if (req.questions[i].options) {
         for (let j = 0; j < req.questions[i].options.length; j++) {
           const opt = `${field}[options][${j}]`
+          console.log(req.questions[i].options[j].correct)
           data.append(`${opt}[correct]`, req.questions[i].options[j].correct)
           data.append(`${opt}[title]`, req.questions[i].options[j].title)
         }
@@ -421,7 +420,11 @@ export default function Create(props) {
                         )}
                         {eachQuestion.options.map((itemAnswer, indexAnswer) => {
                           const alphabet = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z']
-                          setValue(`questions[${indexEachQuestion}].options[${indexAnswer}].correct`, 0)
+                          if (itemAnswer.new) {
+                            if (itemAnswer.correct === null) {
+                              setValue(`questions[${indexQuestion}].question_items[${indexEachQuestion}].options[${indexAnswer}].correct`, 0)
+                            }
+                          }
                           return (
                             <div className={`${itemAnswer.correct === 1 ? 'bg-blue-6 border-blue-1' : 'bg-white'} my-2  p-4 border rounded-lg`} key={indexAnswer}>
                               {errors && (
