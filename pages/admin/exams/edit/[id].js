@@ -63,7 +63,6 @@ export default function Create(props) {
         const data = res.data.data
         setType(res.data.data.type)
         setValue("name", data.name)
-        setValue("duration", data.duration)
         setValue("type", data.type)
         setValue("exam_type_id", data.exam_type_id)
         setType(data.type)
@@ -92,6 +91,7 @@ export default function Create(props) {
         setsections([...data.sections])
         for (let i = 0; i < data.sections.length; i++) {
           const field = `sections[${i}]`
+          setValue(`${field}[id]`, data.sections[i].id)
           setValue(`${field}[name]`, data.sections[i].name)
           setValue(`${field}[duration]`, data.sections[i].duration)
           setValue(`${field}[instruction]`, data.sections[i].instruction)
@@ -216,7 +216,7 @@ export default function Create(props) {
     }
 
     if (currentStep === 3) {
-      await apiExam.create(data)
+      await apiExam.update(id, data)
         .then((res) => {
           onOpenSuccessModal()
         })
@@ -316,7 +316,8 @@ export default function Create(props) {
                     <span className="text-red-1 text-sm">{errors.type}</span>
                   )}</p>
                   <div>
-                    <Select bg='white' size="lg" variant='outline' iconColor="blue" {...register('exam_type_id')}>
+                    <Select bg='white' size="lg" defaultValue="1" variant='outline' iconColor="blue" {...register('exam_type_id')}>
+                      <option disabled>Choose Exam Type</option>
                       {examType.map((item) => (
                         <option key={item.id} value={item.id}>{item.name}</option>
                       ))}
@@ -484,6 +485,9 @@ export default function Create(props) {
             <div className="mt-8">
               <div className="bg-blue-6 p-4">
                 {sections.map((itemQuestion, indexQuestion) => {
+                  if(itemQuestion.new){
+                    setValue(`sections[${indexQuestion}].id`, -1)
+                  }
                   return (
                     <>
                       <p className="font-bold mt-4 text-lg">Section {indexQuestion + 1}</p>
@@ -528,7 +532,10 @@ export default function Create(props) {
 
               </div>
               <div onClick={() => {
-                setsections([...sections, { id: sections[sections.length - 1].id + 1, option: [0] }])
+                setsections([...sections, { 
+                  id: sections[sections.length - 1].id + 1, option: [0],
+                  new:true
+                }])
               }} className="text-blue-1 cursor-pointer text-center p-4 border-dashed border-2 border-blue-1 mt-4 rounded-lg">+ Add New Section</div>
             </div>
           )}

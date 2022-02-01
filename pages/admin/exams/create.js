@@ -140,7 +140,7 @@ export default function Create(props) {
         .then()
         .catch((err) => {
           setErrors(err.response.data.data)
-          if (!err.response.data.data.name && !err.response.data.data.duration && !err.response.data.data.start_date && !err.response.data.data.end_date && !err.response.data.data.start_time && !err.response.data.data.end_time) {
+          if (!err.response.data.data.name && !err.response.data.data.duration && !err.response.data.data.exam_type_id && !err.response.data.data.start_date && !err.response.data.data.end_date && !err.response.data.data.start_time && !err.response.data.data.end_time) {
             setErrors(null)
             setCurrentStep(2)
           }
@@ -269,10 +269,11 @@ export default function Create(props) {
               <div className="flex gap-4 " >
                 <div className="w-full">
                   <p className="mt-4">Exam Type {errors && (
-                    <span className="text-red-1 text-sm">{errors.type}</span>
+                    <span className="text-red-1 text-sm">{errors.exam_type_id}</span>
                   )}</p>
                   <div>
-                    <Select bg='white' size="lg" variant='outline' iconColor="blue" {...register('exam_type_id')}>
+                    <Select bg='white' size="lg" defaultValue="1" variant='outline' iconColor="blue" {...register('exam_type_id')}>
+                      <option value="" >Choose Exam type</option>
                       {examType.map((item) => (
                         <option key={item.id} value={item.id}>{item.name}</option>
                       ))}

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import DatePicker from "react-datepicker";
 
 function convert(str) {
@@ -10,6 +10,9 @@ function convert(str) {
 
 export default function DatePicker2({setData = false }) {
   const [date, setDate] = useState(new Date());
+  useEffect(() => {
+    setData(convert(date))
+  }, [])
   return (
     <DatePicker dateFormat="yyyy/MM/dd" selected={date} onChange={date => {
       setDate(date)

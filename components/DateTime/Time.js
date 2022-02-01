@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Datetime from 'react-datetime'
 import Image from "next/image";
 import moment from 'moment';
@@ -18,6 +18,13 @@ export function Time({setDate = false, data = false}) {
       setDate(dateTime)
     }
   }
+  useEffect(() => {
+    const format = 'HH:mm'
+    const dateTime = moment(value).format(format)
+    if(setDate !== false){
+      setDate(dateTime)
+    }
+  }, [])
 
   return (
     <Datetime inputProps={datetimePlaceholder}  dateFormat={false}  renderInput={renderInput} isValidDate={valid} value={data !== false ? data : value} onChange={() => {
