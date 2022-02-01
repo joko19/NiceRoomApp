@@ -318,7 +318,7 @@ export default function Create(props) {
                   <div>
                     <Select bg='white' size="lg" variant='outline' iconColor="blue" {...register('exam_type_id')}>
                       {examType.map((item) => (
-                        <option value={item.id}>{item.name}</option>
+                        <option key={item.id} value={item.id}>{item.name}</option>
                       ))}
                     </Select>
                   </div>
