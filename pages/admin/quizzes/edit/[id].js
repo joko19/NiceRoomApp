@@ -116,9 +116,6 @@ export default function Create(props) {
           setValue(`${field}[question]`, req.questions[i].question)
           setValue(`${field}[answer_explanation]`, req.questions[i].answer_explanation)
         }
-        // setQuestions(dataQuestion)
-        // setAnswerType(dataAnswerType)
-
       })
   }, [])
 
@@ -209,12 +206,6 @@ export default function Create(props) {
         }
       }
     }
-    console.log(data)
-    // const tag = Array.from(tags)
-    // tag.forEach((item) => {
-    //   data.append("tags"+, item)
-    // })
-    // for console log
     for (var key of data.entries()) {
       console.log(key[0] + ', ' + key[1]);
     }

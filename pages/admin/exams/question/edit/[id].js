@@ -4,7 +4,7 @@ import Image from "next/image";
 import { FaAngleLeft } from "react-icons/fa";
 import Card from "../../../../../components/Cards/Card";
 import Layout from "../../../../../Layout/Layout";
-import { set, useForm } from "react-hook-form";
+import {useForm } from "react-hook-form";
 import {
   Modal,
   ModalOverlay,
@@ -13,13 +13,9 @@ import {
   ModalBody,
   ModalCloseButton,
   useDisclosure,
-  Divider,
-  cookieStorageManager,
 } from '@chakra-ui/react'
 import Quill from "../../../../../components/Editor/Quill";
 import { Select } from '@chakra-ui/react'
-import apiQuiz from "../../../../../action/quiz";
-import { MyDTPicker } from "../../../../../components/DateTime/DateTime";
 import apiExam from "../../../../../action/exam";
 import { useRouter } from "next/router";
 

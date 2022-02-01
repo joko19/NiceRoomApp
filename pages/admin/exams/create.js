@@ -35,7 +35,7 @@ export default function Create(props) {
   const step = ['Exams Details', 'Instruction', 'Sections']
   const [currentStep, setCurrentStep] = useState(1)
   const [topics, setTopics] = useState([])
-  const [type, setType] = useState('live')
+  const [type, setType] = useState('standard')
   const [instruction, setInstruction] = useState('')
   const [startTime, setStartTime] = useState()
   const [endTime, setEndTime] = useState()
@@ -47,6 +47,7 @@ export default function Create(props) {
   const [topicItem, setTopicItem] = useState([])
   const [batchItem, setBatchItem] = useState([])
   const [branchItem, setBranchItem] = useState([])
+  const [examType, setExamType] = useState([])
   const [sections, setsections] = useState([
     {
       id: 0,
@@ -65,6 +66,12 @@ export default function Create(props) {
     await apiBatch.all()
       .then((res) => {
         setListBatch(res.data.data)
+      })
+  }
+  const getExamType = async () => {
+    await apiExam.allType()
+      .then((res) => {
+        setExamType(res.data.data)
       })
   }
 
@@ -181,6 +188,7 @@ export default function Create(props) {
     getTopics()
     getBatch()
     getBranch()
+    getExamType()
   }, []);
 
   const setDataForm = (identifier, data) => {
@@ -215,14 +223,17 @@ export default function Create(props) {
           ))}
         </div>
         <form onSubmit={handleSubmit(submitExams)}>
-
           {currentStep === 1 && (
             <div className="mb-8">
+              <input hidden type="text" value={type} {...register("type")} />
               <div className="flex gap-4 ">
                 <div className="w-full gap-4">
                   <p className="mt-4">Held Type</p>
                   <div className="flex gap-4">
-                    <div className={` ${type === 'live' ? 'bg-blue-6' : 'bg-white'} flex gap-2 w-full p-4 border rounded-lg cursor-pointer`} onClick={() => setType('live')}>
+                    <div className={` ${type === 'live' ? 'bg-blue-6' : 'bg-white'} flex gap-2 w-full p-4 border rounded-lg cursor-pointer`} onClick={() => {
+                      setValue("type", "live")
+                      setType('live')
+                    }}>
                       <div  >
                         <Image src={`${type === 'live' ? "/asset/icon/table/ic_radio_active.png" : "/asset/icon/table/ic_radio.png"}`} height={16} width={16} className="flex align-middle my-auto" />
                       </div>
@@ -230,7 +241,10 @@ export default function Create(props) {
                         Live Exam
                       </p>
                     </div>
-                    <div className={` ${type === 'standard' ? 'bg-blue-6' : 'bg-white'} flex gap-2 w-full p-4 border rounded-lg cursor-pointer`} onClick={() => setType('standard')}>
+                    <div className={` ${type === 'standard' ? 'bg-blue-6' : 'bg-white'} flex gap-2 w-full p-4 border rounded-lg cursor-pointer`} onClick={() => {
+                      setValue("type", "standard")
+                      setType('standard')
+                    }}>
                       <div >
                         <Image src={`${type === 'standard' ? "/asset/icon/table/ic_radio_active.png" : "/asset/icon/table/ic_radio.png"}`} height={16} width={16} className="flex align-middle my-auto" />
                       </div>
@@ -259,9 +273,9 @@ export default function Create(props) {
                   )}</p>
                   <div>
                     <Select bg='white' size="lg" variant='outline' iconColor="blue" {...register('exam_type_id')}>
-                      <option value="1">Type 1</option>
-                      <option value="2">Type 2</option>
-                      <option value="3">Type 3</option>
+                      {examType.map((item) => (
+                        <option key={item.id} value={item.id}>{item.name}</option>
+                      ))}
                     </Select>
                   </div>
                 </div><div className="w-full ">
@@ -310,7 +324,7 @@ export default function Create(props) {
                       <p>Start Time {errors && (
                         <span className="text-red-1 text-sm">{errors.start_time}</span>
                       )}</p>
-                      <Time data={getValues("end_time")} setDate={(data) => setValue("end_time", data)} />
+                      <Time data={getValues("start_time")} setDate={(data) => setValue("start_time", data)} />
                     </div>
                   </div>
                   <div className="flex mt-4 gap-4">

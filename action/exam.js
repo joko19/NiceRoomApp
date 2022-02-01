@@ -1,6 +1,7 @@
 import instance from './instance'
 
 const AllCategory = () => instance.noAuth.get('/exam-category')
+const allType = () => instance.noAuth.get('/exam-type')
 const create = (data) => instance.auth.post('/exam', data)
 const index = (search, type, status, limit, page) => instance.auth.get('/exam?search=' + search + '&type=' + type +  '&status=' + status + '&limit=' + limit + '&page=' + page)
 const deleted = (id) => instance.auth.delete('/exam/' + id)
@@ -16,6 +17,7 @@ const updateQuestion = (id, data) => instance.auth.post('/exam-question/' + id +
 
 const apiExam = {
   AllCategory,
+  allType,
   create,
   index,
   detail,
