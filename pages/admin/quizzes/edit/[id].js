@@ -72,6 +72,7 @@ export default function Create(props) {
           }
           setConsentment(arr)
         }
+        console.log(consenment)
         setValue("name", data.name)
         setValue("duration", data.duration)
         setValue("type", data.type)
@@ -85,13 +86,20 @@ export default function Create(props) {
           console.log(data.start_time)
         }
         setInstruction(data.instruction)
-        console.log(startTime)
         const req = res.data.data
         let dataQuestion = []
         let dataAnswerExplanation = []
         let dataAnswerType = []
 
-        console.log(arr)
+        for (let i = 0; i < req.questions.length; i++) {
+          for (let j = 0; j < req.questions[i].options.length; j++) {
+            const field = `questions[${i}].options[${j}]`
+            console.log(req.questions[i])
+            setValue(`${field}[id]`, req.questions[i].options[j].id)
+            setValue(`${field}[title]`, req.questions[i].options[j].title)
+            setValue(`${field}[correct]`, req.questions[i].options[j].correct)
+          }
+        }
         for (let i = 0; i < req.questions.length; i++) {
           const isSingle = req.questions[i].answer_type === 'single' ? true : false
           console.log(JSON.stringify(req.questions[i].question))
@@ -104,7 +112,6 @@ export default function Create(props) {
           })
           dataAnswerType.push({ isSingle: isSingle })
           dataAnswerExplanation.push({ data: req.questions[i].answer_explanation })
-
           console.log(req)
           const field = `questions[${i}]`
           setValue(`${field}[id]`, req.questions[i].id)
@@ -164,9 +171,11 @@ export default function Create(props) {
 
     data.append("instruction", instruction)
     console.log(req.consentments)
-    for (let i = 0; i < req.consenments.length; i++) {
-      const field = `consentments[${i}]`
-      data.append(`${field}`, req.consenments[i])
+    if (req.consenments) {
+      for (let i = 0; i < req.consenments.length; i++) {
+        const field = `consentments[${i}]`
+        data.append(`${field}`, req.consenments[i])
+      }
     }
     // to step 3
     if (currentStep === 2) {
@@ -201,6 +210,7 @@ export default function Create(props) {
       if (req.questions[i].options) {
         for (let j = 0; j < req.questions[i].options.length; j++) {
           const opt = `${field}[options][${j}]`
+          data.append(`${opt}[id]`, req.questions[i].options[j].id)
           data.append(`${opt}[correct]`, req.questions[i].options[j].correct)
           data.append(`${opt}[title]`, req.questions[i].options[j].title)
         }
@@ -403,6 +413,9 @@ export default function Create(props) {
               <div className="bg-blue-6 p-4">
 
                 {questions.map((eachQuestion, indexEachQuestion) => {
+                  if (eachQuestion.new) {
+                    setValue(`questions[${indexEachQuestion}].id`, -1)
+                  }
                   return (
                     <div className={`bg-white p-4 mt-8`} key={indexEachQuestion}>
                       <div className="font-bold text-xl">    Question {indexEachQuestion + 1}</div>
@@ -461,9 +474,12 @@ export default function Create(props) {
                         {eachQuestion.options.map((itemAnswer, indexAnswer) => {
                           const alphabet = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z']
                           if (itemAnswer.new) {
+                            setValue(`questions[${indexEachQuestion}].options[${indexAnswer}].id`, -1)
                             if (itemAnswer.correct === null) {
-                              setValue(`questions[${indexQuestion}].question_items[${indexEachQuestion}].options[${indexAnswer}].correct`, 0)
+                              setValue(`questions[${indexEachQuestion}].options[${indexAnswer}].correct`, 0)
                             }
+                          } else {
+                            setValue(`questions[${indexEachQuestion}].options[${indexAnswer}].id`, itemAnswer.id)
                           }
                           return (
                             <div className={`${itemAnswer.correct === 1 ? 'bg-blue-6 border-blue-1' : 'bg-white'} my-2  p-4 border rounded-lg`} key={indexAnswer}>
@@ -574,7 +590,8 @@ export default function Create(props) {
                           const newOption = {
                             id: eachQuestion.options[eachQuestion.options.length - 1].id + 1,
                             title: '',
-                            correct: 0
+                            correct: null,
+                            new: true
                           }
                           const temp = questions
                           temp.map((b) => {
@@ -625,11 +642,11 @@ export default function Create(props) {
                   options: [{
                     id: 0,
                     title: '',
-                    correct: 0,
+                    correct: null,
                     new: true
                   }]
                 }
-                // setQuestions([...questions, newQuestionItem])
+                setQuestions([...questions, newQuestionItem])
               }} className="text-blue-1 cursor-pointer text-center p-4 border-dashed border-2 border-blue-1 mt-4 rounded-lg">+ Add New Question</div>
             </div>
           )}

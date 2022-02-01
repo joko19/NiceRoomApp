@@ -32,7 +32,7 @@ export default function Create(props) {
   const [instruction, setInstruction] = useState('')
   const [startTime, setStartTime] = useState()
   const [endTime, setEndTime] = useState()
-  const [consenment, setConsentment] = useState([])
+  const [consenment, setConsentment] = useState([''])
   const [status, setStatus] = useState()
   const [answerType, setAnswerType] = useState([{
     isSingle: true
@@ -92,9 +92,12 @@ export default function Create(props) {
     }
 
     data.append("instruction", instruction)
-    for (let i = 0; i < req.consenments.length; i++) {
-      const field = `consentments[${i}]`
-      data.append(`${field}`, req.consenments[i])
+    if (req.consenments) {
+      for (let i = 0; i < req.consenments.length; i++) {
+        const field = `consentments[${i}]`
+        data.append(`${field}`, req.consenments[i])
+      }
+
     }
     // to step 3
     if (currentStep === 2) {
@@ -103,14 +106,15 @@ export default function Create(props) {
         .catch((err) => {
           setErrors(err.response.data.data)
           console.log(err.response.data.data)
-
+          console.log(currentStep)
           if (!err.response.data.data["consentments"] && !err.response.data.data.instruction) {
             setErrors(null)
             setCurrentStep(3)
+            // setCurrentStep(3)
           }
           return;
         })
-      return null
+        return null
     }
 
     for (let i = 0; i < req.questions.length; i++) {
@@ -325,7 +329,7 @@ export default function Create(props) {
                 )}
                   <div key={index} className="flex">
                     <input key={index} type="text" className="form border w-full rounded-lg p-4 h-full m-1" autoComplete="off" placeholder="Input Consentment"  {...register(`consenments[${index}]`)} />
-                    {consenment.length > 1 && (
+                    {index === consenment.length -1 && (
                       <div className="m-auto cursor-pointer text-blue-1 -ml-8" onClick={() => {
                         let newArr = consenment
                         console.log(newArr)
@@ -345,6 +349,7 @@ export default function Create(props) {
                         // console.log(arr)
                         // const abc = [...prevIndex.filter(i => i !== item)]
                         // console.log(abc)
+                        unregister(`consentments[${index}]`)
                         setConsentment([...newArr])
                       }} >x</div>
                     )}
@@ -398,7 +403,6 @@ export default function Create(props) {
                           <span className="text-red-1 text-sm">{errors[`questions.${indexEachQuestion}.options`]}</span>
                         )}</p>
                         <Select bg='white' onClick={(e) => {
-
                           const temp = questions
                           temp.map((b) => {
                             if (b.id === eachQuestion.id) {
@@ -422,7 +426,7 @@ export default function Create(props) {
                           const alphabet = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z']
                           if (itemAnswer.new) {
                             if (itemAnswer.correct === null) {
-                              setValue(`questions[${indexQuestion}].question_items[${indexEachQuestion}].options[${indexAnswer}].correct`, 0)
+                              setValue(`questions[${indexEachQuestion}].options[${indexAnswer}].correct`, 0)
                             }
                           }
                           return (
@@ -544,7 +548,8 @@ export default function Create(props) {
                           const newOption = {
                             id: eachQuestion.options[eachQuestion.options.length - 1].id + 1,
                             title: '',
-                            correct: 0
+                            correct: null,
+                            new: true
                           }
                           const temp = questions
                           temp.map((b) => {
@@ -552,7 +557,6 @@ export default function Create(props) {
                               b.options = [...b.options, newOption]
                             }
                           })
-                          console.log(temp)
                           setQuestions([...temp])
                         }} className="text-blue-1 cursor-pointer text-center p-4 border-dashed border-2 border-blue-1 mt-4 rounded-lg">+ Add New Answer</div>
                         <div className="mt-4">
@@ -594,7 +598,8 @@ export default function Create(props) {
                   options: [{
                     id: 0,
                     title: '',
-                    correct: 0
+                    new: true,
+                    correct: null
                   }]
                 }
                 setQuestions([...questions, newQuestionItem])
