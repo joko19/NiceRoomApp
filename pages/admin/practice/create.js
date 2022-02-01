@@ -23,7 +23,8 @@ import { MyDTPicker } from "../../../components/DateTime/DateTime";
 import Multiselect from 'multiselect-react-dropdown';
 import apiBatch from "../../../action/batch";
 import apiBranch from "../../../action/branch";
-// import { Date } from "../../../components/DateTime/Date";
+import DatePicker2 from "../../../components/DateTime/Date";
+
 import { Time } from "../../../components/DateTime/Time";
 export default function Create(props) {
   const [file, setFile] = useState(null)
@@ -128,7 +129,8 @@ export default function Create(props) {
     console.log(data)
     if (currentStep === 1) {
       await apiPractice.create(data)
-        .then()
+        .then(() =>
+          setCurrentStep(2))
         .catch((err) => {
           setErrors(err.response.data.data)
           if (!err.response.data.data.name && !err.response.data.data.duration) {
@@ -143,7 +145,8 @@ export default function Create(props) {
     if (currentStep === 2) {
       console.log(data)
       await apiPractice.create(data)
-        .then()
+        .then(() =>
+          setCurrentStep(3))
         .catch((err) => {
           setErrors(err.response.data.data)
           console.log(err.response.data.data)
@@ -260,8 +263,11 @@ export default function Create(props) {
               <div className="flex mt-4 gap-4">
                 <div className="w-full">
                   <p>Start Date</p>
-                  <input type="text" hidden value="2022-12-12" {...register("start_date")} />
-                  {/* <Date data={startTime} setDate={(data) => setStartTime(data)} /> */}
+                  <div className="border p-4 rounded-lg">
+                    <DatePicker2
+                      setData={(data) => setValue("start_date", data)}
+                    />
+                  </div>
                 </div>
                 <div className="w-full">
                   <p>Start Time</p>
@@ -283,7 +289,7 @@ export default function Create(props) {
                     </Select>
                   </div>
                 </div>
-              <div className="w-full"></div>
+                <div className="w-full"></div>
               </div>
             </div>
           )}

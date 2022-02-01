@@ -11,8 +11,7 @@ const deleteQuestion = (id) => instance.auth.delete("/practice-question/" + id)
 const detailQuestion = (id) => instance.auth.get('/practice-question/' + id)
 const detailSection = (id) => instance.auth.get("/practice-section/" + id)
 const createQuestion = (data) => instance.auth.post('/practice-question', data)
-const updateQuestionSimple = (id, data) => instance.auth.post('/practice-question/' + id + '?_method=PUT', data)
-const updateQuestionParagraph = (id, data) => instance.auth.post('/practice-question/' + id + '?_method=PUT', data)
+const updateQuestion = (id, data) => instance.auth.post('/practice-question/' + id + '?_method=PUT', data)
 
 const apiPractice = {
   create,
@@ -26,8 +25,7 @@ const apiPractice = {
   detailQuestion,
   detailSection,
   createQuestion,
-  updateQuestionSimple,
-  updateQuestionParagraph
+  updateQuestion
 }
 
 export default apiPractice

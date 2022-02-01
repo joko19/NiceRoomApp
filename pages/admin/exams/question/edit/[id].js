@@ -16,7 +16,7 @@ import {
 } from '@chakra-ui/react'
 import Quill from "../../../../../components/Editor/Quill";
 import { Select } from '@chakra-ui/react'
-import apiExam from "../../../../../action/exam";
+import apiExam from "../../../../../action/practice";
 import { useRouter } from "next/router";
 
 export default function Edit(props) {
