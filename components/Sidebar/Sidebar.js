@@ -94,7 +94,7 @@ function Sidebar() {
     path: '/institute/announcement'
   },
   ]
-  const instituteAdmin = [{
+  const staff = [{
     icon: uri + 'ic_home.png',
     active: uri + 'ic_home_active.png',
     name: 'Home',
@@ -151,7 +151,7 @@ function Sidebar() {
     if (router.pathname.startsWith("/operator") && roleStore === role.operator)
       setItemList(operator)
     if (router.pathname.startsWith("/staff") && roleStore === role.staff)
-      setItemList(operator)
+      setItemList(staff)
   }, [])
   return (
     <div className="py-24 bg-white h-full">
