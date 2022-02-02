@@ -29,8 +29,6 @@ import { Time } from "../../../../components/DateTime/Time";
 export default function Create(props) {
   const Router = useRouter()
   const { id } = Router.query
-  const [file, setFile] = useState(null)
-  const [coverName, setCoverName] = useState(null)
   const [errors, setErrors] = useState()
   const { register, handleSubmit, setValue, getValues, reset, unregister } = useForm();
   const step = ['Exams Details', 'Instruction', 'Sections']
@@ -66,9 +64,9 @@ export default function Create(props) {
         setValue("type", data.type)
         setValue("exam_type_id", data.exam_type_id)
         setType(data.type)
-        setTopicItem(res.data.data.topics)
-        setBranchItem(res.data.data.branches)
-        setBatchItem(res.data.data.batches)
+        onSelectBatch(res.data.data.batches, '')
+        onSelectBranch(res.data.data.batches, '')
+        onSelectTopic(res.data.data.batches, '')
         if (data.type === 'live') {
           setValue("topic_id", data.topic_id)
           setValue("start_time", data.start_time)
@@ -77,6 +75,7 @@ export default function Create(props) {
           setEndTime(data.end_time)
         }
         setValue("instruction", data.instruction)
+
         if (data.consentments !== 'null') {
           const str = data.consentments.replace(/['"]+/g, '').slice(1)
           const myArr = str.slice(0, str.length - 1).split(", ")
@@ -84,9 +83,12 @@ export default function Create(props) {
           for (let i = 0; i < myArr.length; i++) {
             arr.push(myArr[i])
           }
-          setConsentments([...arr])
           console.log(arr)
-          console.log(consentments)
+          setConsentments(arr)
+          for (let i = 0; i < arr.length; i++) {
+            // setValue(`consentments[${i}]`, arr[i])
+            console.log(arr[i])
+          }
         }
         setsections([...data.sections])
         for (let i = 0; i < data.sections.length; i++) {
@@ -180,14 +182,13 @@ export default function Create(props) {
   }
 
   const submitExams = async (data) => {
-    console.log("submit")
-    console.log(data)
     if (currentStep === 1) {
-      await apiExam.create(data)
+      await apiExam.update(id, data)
         .then(() =>
           setCurrentStep(2))
         .catch((err) => {
           setErrors(err.response.data.data)
+          console.log(err.response)
           if (!err.response.data.data.name && !err.response.data.data.duration && !err.response.data.data.start_date && !err.response.data.data.end_date && !err.response.data.data.start_time && !err.response.data.data.end_time) {
             setErrors(null)
             setCurrentStep(2)
@@ -199,16 +200,27 @@ export default function Create(props) {
 
     if (currentStep === 2) {
       console.log(data)
-      await apiExam.create(data)
+      delete data.consentments
+      const arr = []
+      if (consentments) {
+        for (let i = 0; i < consentments.length; i++) {
+          arr.push(consentments[i])
+          const field = `consentments[${i}]`
+          setValue(`${field}`, consentments[i])
+        }
+      }
+      data.consentments = arr
+      console.log(data)
+      await apiExam.update(id, data)
         .then(() =>
           setCurrentStep(3))
         .catch((err) => {
           setErrors(err.response.data.data)
           console.log(err.response.data.data)
-
           if (!err.response.data.data["consentments"] && !err.response.data.data.instruction) {
             setErrors(null)
             setCurrentStep(3)
+            getDetail(id)
           }
           return;
         })
@@ -216,6 +228,7 @@ export default function Create(props) {
     }
 
     if (currentStep === 3) {
+      console.log(data)
       await apiExam.update(id, data)
         .then((res) => {
           onOpenSuccessModal()
@@ -239,7 +252,7 @@ export default function Create(props) {
     getBatch()
     getBranch()
     getExamType()
-  }, []);
+  }, [currentStep]);
 
   const setDataForm = (identifier, data) => {
     setValue(identifier, data)
@@ -462,22 +475,30 @@ export default function Create(props) {
                 <Quill className="h-48" data={getValues('instruction')} setData={(data) => setValue('instruction', data)} />
               </div>
               <p className="mt-4">Consentment</p>
-              {consentments.map((item, index) => (
-                <>{errors && (
-                  <span className="text-red-1 text-sm">{errors[`consentments.${index}`]}</span>
-                )}
-                  <div key={index} className="flex">
-                    <input key={index} type="text" className="form border w-full rounded-lg p-4 h-full m-1" value="consentments 1" autoComplete="off" placeholder="Input Consentment"  {...register(`consentments[${index}]`)} />
-                    {consentments.length > 1 && (
-                      <div className="m-auto cursor-pointer text-blue-1 -ml-8" onClick={() => {
-                        setConsentment(prevIndex => [...prevIndex.filter(i => i !== item)])
-                        unregister(`consentments[${index}]`)
-                      }} >x</div>
-                    )}
-                  </div>
-                </>
-              ))}
-              <div onClick={() => setConsentment([...consentments, consentments[consentments.length - 1] + 1])} className="text-blue-1 cursor-pointer text-center p-4 border-dashed border-2 border-blue-1 mt-4 rounded-lg">+ Add New Consent</div>
+              {consentments.map((item, index) => {
+                return (
+                  <>{errors && (
+                    <span className="text-red-1 text-sm">{errors[`consentments.${index}`]}</span>
+                  )}
+                    <div key={index} className="flex">
+                      <input key={index} type="text" value={item} onChange={(e) => {
+                        const arr = consentments
+                        arr[index] = e.target.value
+                        setConsentments([...arr])
+                        setValue(`consentments[${index}]`, e.target.value)
+                      }} className="form border w-full rounded-lg p-4 h-full m-1" autoComplete="off" placeholder="Input Consentment" />
+                      {consentments.length !== 1 && (
+                        <div className="m-auto cursor-pointer text-blue-1 -ml-8" onClick={() => {
+                          let newArr = consentments
+                          newArr.splice(index, 1)
+                          setConsentments([...newArr])
+                        }} >x</div>
+                      )}
+                    </div>
+                  </>
+                )
+              })}
+              <div onClick={() => setConsentments([...consentments, ''])} className="text-blue-1 cursor-pointer text-center p-4 border-dashed border-2 border-blue-1 mt-4 rounded-lg">+ Add New Consentment</div>
             </>
           )}
 
@@ -485,7 +506,7 @@ export default function Create(props) {
             <div className="mt-8">
               <div className="bg-blue-6 p-4">
                 {sections.map((itemQuestion, indexQuestion) => {
-                  if(itemQuestion.new){
+                  if (itemQuestion.new) {
                     setValue(`sections[${indexQuestion}].id`, -1)
                   }
                   return (
@@ -532,9 +553,9 @@ export default function Create(props) {
 
               </div>
               <div onClick={() => {
-                setsections([...sections, { 
+                setsections([...sections, {
                   id: sections[sections.length - 1].id + 1, option: [0],
-                  new:true
+                  new: true
                 }])
               }} className="text-blue-1 cursor-pointer text-center p-4 border-dashed border-2 border-blue-1 mt-4 rounded-lg">+ Add New Section</div>
             </div>

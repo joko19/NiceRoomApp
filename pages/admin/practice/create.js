@@ -27,80 +27,23 @@ import DatePicker2 from "../../../components/DateTime/Date";
 
 import { Time } from "../../../components/DateTime/Time";
 export default function Create(props) {
-  const [file, setFile] = useState(null)
-  const [coverName, setCoverName] = useState(null)
   const [errors, setErrors] = useState()
   const { register, handleSubmit, setValue, getValues, reset, unregister } = useForm();
   const step = ['Practice Details', 'Instruction', 'Sections']
   const [currentStep, setCurrentStep] = useState(1)
   const [topics, setTopics] = useState([])
-  const [type, setType] = useState('standard')
   const [instruction, setInstruction] = useState('')
   const [startTime, setStartTime] = useState()
   const [endTime, setEndTime] = useState()
   const [consenment, setConsentment] = useState([0])
   const [status, setStatus] = useState()
-  const [listBranch, setListBranch] = useState([])
-  const [listBatch, setListBatch] = useState([])
   const [listTopic, setListTopic] = useState([])
   const [topicItem, setTopicItem] = useState([])
-  const [batchItem, setBatchItem] = useState([])
-  const [branchItem, setBranchItem] = useState([])
   const [sections, setsections] = useState([
     {
       id: 0,
     },
   ])
-
-  const getBranch = async () => {
-    await apiBranch.all()
-      .then((res) => {
-        // console.log(res)
-        setListBranch(res.data.data)
-      })
-  }
-
-  const getBatch = async () => {
-    await apiBatch.all()
-      .then((res) => {
-        setListBatch(res.data.data)
-      })
-  }
-
-  const onSelectBranch = (list, item) => {
-    setBranchItem(list)
-    let arr = []
-    for (let i = 0; i < list.length; i++) {
-      arr.push(list[i].id)
-    }
-    setValue("branches[]", arr)
-  }
-  const onRemoveBranch = (list, item) => {
-    setBranchItem(list)
-    let arr = []
-    for (let i = 0; i < list.length; i++) {
-      arr.push(list[i].id)
-    }
-    setValue("branches[]", arr)
-  }
-
-  const onSelectBatch = (list, item) => {
-    setBatchItem(list)
-    let arr = []
-    for (let i = 0; i < list.length; i++) {
-      arr.push(list[i].id)
-    }
-    setValue("batches[]", arr)
-  }
-
-  const onRemoveBatch = (list, item) => {
-    setBatchItem(list)
-    let arr = []
-    for (let i = 0; i < list.length; i++) {
-      arr.push(list[i].id)
-    }
-    setValue("batches[]", arr)
-  }
   const onSelectTopic = (list, item) => {
     setTopicItem(list)
     let arr = []
@@ -180,8 +123,6 @@ export default function Create(props) {
 
   useEffect(() => {
     getTopics()
-    getBatch()
-    getBranch()
   }, []);
 
   const setDataForm = (identifier, data) => {

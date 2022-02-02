@@ -183,8 +183,6 @@ export default function Create(props) {
                   </>
                 )}
 
-
-
                 {/* question */}
                 {itemQuestion.question_items.map((eachQuestion, indexEachQuestion) => {
                   return (

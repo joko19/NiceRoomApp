@@ -74,7 +74,7 @@ export default function Section({ data }) {
         </Link>
         <div className="flex justify-between">
           <h1 className="font-bold text-2xl my-4">List of test sessions <span className="text-blue-1">{dataExams.name}</span> </h1>
-          {/* <Link href={`edit/${id}`}>
+          <Link href={`edit/${id}`}>
             <a className="border border-blue-1 rounded-lg  p-4 ">
               <div className="flex mt-1">
                 <div className="m-auto text-blue-1">
@@ -85,7 +85,7 @@ export default function Section({ data }) {
                 </div>
               </div>
             </a>
-          </Link> */}
+          </Link>
         </div>
       </div>
       {listSection.sections.map((itemSection, index) => (

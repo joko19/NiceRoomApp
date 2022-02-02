@@ -19,27 +19,19 @@ import QuillCreated from "../../../components/Editor/QuillCreated";
 import { Select } from '@chakra-ui/react'
 import apiExam from "../../../action/exam";
 import apiTopic from "../../../action/topics";
-import { MyDTPicker } from "../../../components/DateTime/DateTime";
 import Multiselect from 'multiselect-react-dropdown';
 import apiBatch from "../../../action/batch";
 import apiBranch from "../../../action/branch";
-import Timekeeper from 'react-timekeeper';
 import DatePicker2 from "../../../components/DateTime/Date";
-// import { Date } from "../../../components/DateTime/Date";
 import { Time } from "../../../components/DateTime/Time";
+
 export default function Create(props) {
-  const [file, setFile] = useState(null)
-  const [coverName, setCoverName] = useState(null)
   const [errors, setErrors] = useState()
   const { register, handleSubmit, setValue, getValues, reset, unregister } = useForm();
   const step = ['Exams Details', 'Instruction', 'Sections']
   const [currentStep, setCurrentStep] = useState(1)
-  const [topics, setTopics] = useState([])
   const [type, setType] = useState('standard')
-  const [instruction, setInstruction] = useState('')
-  const [startTime, setStartTime] = useState()
-  const [endTime, setEndTime] = useState()
-  const [consenment, setConsentment] = useState([0])
+  const [consentments, setConsentments] = useState([''])
   const [status, setStatus] = useState()
   const [listBranch, setListBranch] = useState([])
   const [listBatch, setListBatch] = useState([])
@@ -418,23 +410,30 @@ export default function Create(props) {
               <div className="w-full h-64">
                 <QuillCreated className="h-48" data={getValues('instruction')} setData={(data) => setValue('instruction', data)} />
               </div>
+
               <p className="mt-4">Consentment</p>
-              {consenment.map((item, index) => (
+              {consentments.map((item, index) => (
                 <>{errors && (
                   <span className="text-red-1 text-sm">{errors[`consentments.${index}`]}</span>
                 )}
                   <div key={index} className="flex">
-                    <input key={index} type="text" className="form border w-full rounded-lg p-4 h-full m-1" autoComplete="off" placeholder="Input Consentment"  {...register(`consentments[${index}]`)} />
-                    {consenment.length > 1 && (
+                    <input key={index} type="text" value={item} onChange={(e) => {
+                      const arr = consentments
+                      arr[index] = e.target.value
+                      setConsentments([...arr])
+                      setValue(`consentments[${index}]`, e.target.value)
+                    }} className="form border w-full rounded-lg p-4 h-full m-1" autoComplete="off" placeholder="Input Consentment" />
+                    {consentments.length !== 1 && (
                       <div className="m-auto cursor-pointer text-blue-1 -ml-8" onClick={() => {
-                        setConsentment(prevIndex => [...prevIndex.filter(i => i !== item)])
-                        unregister(`consenments[${index}]`)
+                        let newArr = consentments
+                        newArr.splice(index, 1)
+                        setConsentments([...newArr])
                       }} >x</div>
                     )}
                   </div>
                 </>
               ))}
-              <div onClick={() => setConsentment([...consenment, consenment[consenment.length - 1] + 1])} className="text-blue-1 cursor-pointer text-center p-4 border-dashed border-2 border-blue-1 mt-4 rounded-lg">+ Add New Consent</div>
+              <div onClick={() => setConsentments([...consentments, ''])} className="text-blue-1 cursor-pointer text-center p-4 border-dashed border-2 border-blue-1 mt-4 rounded-lg">+ Add New Consentment</div>
             </>
           )}
 

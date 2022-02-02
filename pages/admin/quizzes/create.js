@@ -92,12 +92,11 @@ export default function Create(props) {
     }
 
     data.append("instruction", instruction)
-    if (req.consenments) {
-      for (let i = 0; i < req.consenments.length; i++) {
+    if (req.consentments) {
+      for (let i = 0; i < req.consentments.length; i++) {
         const field = `consentments[${i}]`
-        data.append(`${field}`, req.consenments[i])
+        data.append(`${field}`, req.consentments[i])
       }
-
     }
     // to step 3
     if (currentStep === 2) {
@@ -328,28 +327,16 @@ export default function Create(props) {
                   <span className="text-red-1 text-sm">{errors[`consentments.${index}`]}</span>
                 )}
                   <div key={index} className="flex">
-                    <input key={index} type="text" className="form border w-full rounded-lg p-4 h-full m-1" autoComplete="off" placeholder="Input Consentment"  {...register(`consenments[${index}]`)} />
-                    {index === consenment.length -1 && (
+                    <input key={index} type="text" value={item}  onChange={(e) => {
+                      const arr = consenment
+                      arr[index] = e.target.value
+                      setConsentment([...arr])
+                      setValue(`consentments[${index}]`, e.target.value)
+                    }} className="form border w-full rounded-lg p-4 h-full m-1" autoComplete="off" placeholder="Input Consentment" />
+                    {consenment.length !== 1 && (
                       <div className="m-auto cursor-pointer text-blue-1 -ml-8" onClick={() => {
                         let newArr = consenment
-                        console.log(newArr)
-                        const index = newArr.findIndex((element) => element === item)
-                        if (index !== -1) {
-                          newArr.splice(index, 1)
-                        }
-                        console.log(newArr)
-
-                        // console.log(item)
-                        // console.log(consenment)
-                        // const arr = consenment
-                        // arr.filter(i => {
-                        //   console.log(i)
-                        //   console.log(item)
-                        // })
-                        // console.log(arr)
-                        // const abc = [...prevIndex.filter(i => i !== item)]
-                        // console.log(abc)
-                        unregister(`consentments[${index}]`)
+                        newArr.splice(index, 1)
                         setConsentment([...newArr])
                       }} >x</div>
                     )}
@@ -514,7 +501,6 @@ export default function Create(props) {
                                   })
                                   setQuestions([...temp])
                                 }}
-                                  // {...register(`questions[${indexEachQuestion}].options[${indexAnswer}].title`)} 
                                   autoComplete="off" type="text" className={`${itemAnswer.correct === 1 ? 'bg-blue-6 text-black-5' : 'bg-white'} form border w-full rounded-lg p-4 h-full m-1`} placeholder="Input your answer" />
                                 {eachQuestion.options.length !== 1 && (
                                   <div className="m-auto cursor-pointer text-blue-1 -ml-9" onClick={() => {
