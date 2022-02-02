@@ -39,7 +39,7 @@ export const loginUser = (result) => (dispatch) => {
     else if (roleUser === role.operator)
       window.location.href = '/operator/home'
     else if (roleUser === role.staff)
-      window.location.href = '/staff'
+      window.location.href = '/staff/home'
     else if (roleUser === role.student)
       window.location.href = '/student'
   }

@@ -12,10 +12,10 @@ import {
 } from '@chakra-ui/react'
 import Pagination from "../../../components/Pagination/pagination";
 import { Select } from '@chakra-ui/react'
-import apiQuiz from "../../../action/quiz";
+import apiExam from "../../../action/exam";
 import Link from "next/link";
 
-export default function Create() {
+export default function Index() {
   const [search, setSearch] = useState('')
   const [type, setType] = useState('')
   const [status, setStatus] = useState('')
@@ -25,10 +25,10 @@ export default function Create() {
   const [selectedData, setSelectedData] = useState(null)
   const [dataInstitute, setDataInstitute] = useState([])
   const [list, setList] = useState([])
-  const TableHead = ['Quiz Name', 'Type', 'Status', 'Action']
+  const TableHead = ['Exam Name', 'Type', 'Status', 'Action']
 
   const getData = async (search, type, status, limit, page) => {
-    await apiQuiz.index(search, type, status, limit, page)
+    await apiExam.index(search, type, status, limit, page)
       .then((res) => {
         console.log(res.data.data)
         setDataInstitute(res.data.data)
@@ -46,7 +46,7 @@ export default function Create() {
 
 
   const onDelete = async (id) => {
-    await apiQuiz.deleted(id)
+    await apiExam.deleted(id)
       .then(() => {
         getData(search, type, status, limit, page)
       })
@@ -59,15 +59,15 @@ export default function Create() {
     <>
       <div className="md:py-24 mt-24 md:mt-12">
         <Card
-          title="Quizzes"
+          title="Exams"
           right={(
-            <Link href="/operator/quizzes/create">
-              <a className="btn btn-md bg-blue-1 text-white p-3 rounded-lg" > + Create Quiz</a>
+            <Link href="/institute/exams/create">
+              <a className="btn btn-md bg-blue-1 text-white p-3 rounded-lg" > + Create Exam</a>
             </Link>
           )}
         >
           <div className="flex gap-4 mb-4">
-            <input type="text" className=" border rounded-lg w-1/2 p-2" value={search} placeholder="Search Quiz" onChange={(e) => {
+            <input type="text" className=" border rounded-lg w-1/2 p-2" value={search} placeholder="Search Exam" onChange={(e) => {
               setSearch(e.target.value)
               getData(e.target.value, type, status, limit, page)
             }} />
@@ -95,25 +95,18 @@ export default function Create() {
                 <div className="shadow overflow-hidden border-b border-gray-200 sm:rounded-lg">
                   <table className="table md:min-w-full overflow-auto divide-y divide-gray-200">
                     <thead className="bg-black-9" >
-                      <th scope="col" className="px-6 py-3 text-left tracking-wider">
-                        Quiz Name
-                      </th>
-                      <th scope="col" className="px-6 py-3 text-left tracking-wider">
-                        Type
-                      </th>
-                      <th scope="col" className="px-6 py-3 text-center tracking-wider">
-                        Status
-                      </th>
-                      <th scope="col" className="px-6 py-3 text-center tracking-wider">
-                        Action
-                      </th>
+                      {TableHead.map((item) => (
+                        <th key={item} scope="col" className="px-6 py-3 text-center tracking-wider">
+                          {item}
+                        </th>
+                      ))}
                     </thead>
                     <tbody className="bg-white divide-y divide-gray-200">
                       {list.map((item) => (
                         <tr key={item.id}>
                           <td className="px-6 py-4 whitespace-nowrap">
                             <div className="flex items-center">
-                              <div className="ml-4">
+                              <div className="m-auto">
                                 <div>{item.name}</div>
                               </div>
                             </div>
@@ -121,27 +114,28 @@ export default function Create() {
                           <td className="px-6 py-4 whitespace-nowrap">
                             <div>{item.type}</div>
                           </td>
-                          <td className="px-6 py-4 whitespace-nowrap">
-                            <div className={`${item.status === 'draft' ? 'bg-black-8 text-black-3' : 'bg-green-2 text-green-1'} text-center rounded-lg p-4 m-auto`}>
+                          <td className="px-6 py-4 whitespace-nowrap ">
+                            <div className={`${item.status === 'draft' ? 'bg-black-8 text-black-3' : 'bg-green-2 text-green-1'} text-center rounded-lg p-3 `}>
                               {item.status}
                             </div>
                           </td>
-                          <td className="px-6 py-4 whitespace-nowrap flex text-right gap-2 text-sm font-medium">
-                            <div className="mx-auto flex gap-4">
-                              <Link href={`quizzes/edit/${item.id}`}>
-                                <a className="text-indigo-600 hover:text-indigo-900">
+                          <td className="px-6 py-4 whitespace-nowrap flex text-right gap-2 text-sm font-medium m-auto flex items-center h-full">
+                            <div className="flex m-auto gap-3 p-3">
+                              <Link href={`exams/${item.id}`}>
+                                <a className="text-indigo-600 hover:text-indigo-900 m-auto">
                                   <Image src="/asset/icon/table/fi_edit.png" width={16} height={16} alt="icon edit" />
+                                  <span className="text-blue-1 inline-block align-top">    Edit Exam</span>
                                 </a>
                               </Link>
-                              <button href="#" className="text-indigo-600 hover:text-indigo-900">
-                                <Image src="/asset/icon/table/fi_trash-2.png" width={16} height={16} alt="icon deleted" onClick={() => {
-                                  // setNameDeleted(item.name)
-                                  setSelectedData(item.id),
-                                    onOpen()
-                                }} />
+                              <button href="#" className="text-indigo-600 hover:text-indigo-900 m-auto" onClick={() => {
+                                setSelectedData(item.id),
+                                  onOpen()
+                              }}>
+                                <Image src="/asset/icon/table/fi_trash_red.png" className="inline-block align-baseline " width={16} height={16} alt="icon deleted" />
+                                <span className="text-red-1 inline-block align-top">    Delete</span>
                               </button>
-
                             </div>
+
                           </td>
                         </tr>
                       ))}
@@ -177,4 +171,4 @@ export default function Create() {
     </>
   )
 }
-Create.layout = Layout
+Index.layout = Layout

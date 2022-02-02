@@ -94,6 +94,33 @@ function Sidebar() {
     path: '/institute/announcement'
   },
   ]
+  const instituteAdmin = [{
+    icon: uri + 'ic_home.png',
+    active: uri + 'ic_home_active.png',
+    name: 'Home',
+    path: '/institute/home'
+  }, {
+    icon: uri + 'ic_institute_branch.png',
+    active: uri + 'ic_institute_branch_active.png',
+    name: 'Institute Branch',
+    path: '/institute/branch'
+  }, {
+    icon: uri + 'ic_student.png',
+    active: uri + 'ic_student_active.png',
+    name: 'Students',
+    path: '/institute/student'
+  }, {
+    icon: uri + 'ic_exams.png',
+    active: uri + 'ic_exams_active.png',
+    name: 'Exams',
+    path: '/institute/exams'
+  }, {
+    icon: uri + 'ic_announcement.png',
+    active: uri + 'ic_announcement_active.png',
+    name: 'Announcement',
+    path: '/institute/announcement'
+  },
+  ]
   const operator = [{
     icon: uri + 'ic_home.png',
     active: uri + 'ic_home_active.png',
@@ -123,11 +150,18 @@ function Sidebar() {
       setItemList(instituteAdmin)
     if (router.pathname.startsWith("/operator") && roleStore === role.operator)
       setItemList(operator)
-
+    if (router.pathname.startsWith("/staff") && roleStore === role.staff)
+      setItemList(operator)
   }, [])
   return (
     <div className="py-24 bg-white h-full">
       {router.pathname.startsWith("/institute") && roleStore === role.instituteAdmin && (
+        <div className="bg-black-9 m-2 rounded-lg p-4 flex gap-4 mb-8">
+          <Image src="/asset/icon/sidebar/ic_college.png" height="48" width="48" alt="icon campus" />
+          <span className="text-black-1 m-auto">Hardvard Campus</span>
+        </div>
+      )}
+      {router.pathname.startsWith("/staff") && roleStore === role.staff && (
         <div className="bg-black-9 m-2 rounded-lg p-4 flex gap-4 mb-8">
           <Image src="/asset/icon/sidebar/ic_college.png" height="48" width="48" alt="icon campus" />
           <span className="text-black-1 m-auto">Hardvard Campus</span>
