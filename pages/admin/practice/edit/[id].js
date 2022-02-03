@@ -185,7 +185,7 @@ export default function Create(props) {
       </Link>
       <Card
         className="md:mt-8 w-full  bg-white overflow-visible"
-        title="Create New Practice " >
+        title="Edit Practice " >
         <div className="flex gap-24 m-auto ">
           {step.map((item, index) => (
             <div key={index}>
@@ -294,7 +294,7 @@ export default function Create(props) {
                 <Quill className="h-48" data={getValues('instruction')} setData={(data) => setValue('instruction', data)} />
               </div>
               <p className="mt-4">Consentment</p>
-            
+
               {consentments.map((item, index) => {
                 return (
                   <>{errors && (
@@ -326,6 +326,9 @@ export default function Create(props) {
             <div className="mt-8">
               <div className="bg-blue-6 p-4">
                 {sections.map((itemQuestion, indexQuestion) => {
+                  if (itemQuestion.new) {
+                    setValue(`sections[${indexQuestion}].id`, -1)
+                  }
                   return (
                     <>
                       <p className="font-bold mt-4 text-lg">Section {indexQuestion + 1}</p>
@@ -370,7 +373,10 @@ export default function Create(props) {
 
               </div>
               <div onClick={() => {
-                setsections([...sections, { id: sections[sections.length - 1].id + 1, option: [0] }])
+                setsections([...sections, {
+                  id: sections[sections.length - 1].id + 1, option: [0],
+                  new: true
+                }])
               }} className="text-blue-1 cursor-pointer text-center p-4 border-dashed border-2 border-blue-1 mt-4 rounded-lg">+ Add New Section</div>
             </div>
           )}
