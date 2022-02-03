@@ -4,7 +4,7 @@ import Image from "next/image";
 import { FaAngleLeft } from "react-icons/fa";
 import Card from "../../../../../components/Cards/Card";
 import Layout from "../../../../../Layout/Layout";
-import {useForm } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import {
   Modal,
   ModalOverlay,
@@ -30,6 +30,8 @@ export default function Edit(props) {
   const [idSection, setIdSection] = useState()
   const [number, setNumber] = useState([1, 2, 3])
   const [firstNumber, setFirstNumber] = useState(0)
+  const [lastIdOption, setLastIdOption] = useState()
+  const [listDeleteOption, setListDeleteOption] = useState([])
 
   const [questions, setQuestions] = useState([
     {
@@ -75,12 +77,17 @@ export default function Edit(props) {
           setValue(`${field}[answer_explanation]`, data.items[i].answer_explanation)
           for (let j = 0; j < data.items[i].options.length; j++) {
             const fieldOption = `question_items[${i}].options[${j}]`
+            const oldField = `question_items[${i}].oldOptions[${j}]`
             const id = data.items[i].options[j].id.toString()
 
             setValue(`${fieldOption}[id]`, id)
             setValue(`${fieldOption}[title]`, data.items[i].options[j].title)
             setValue(`${fieldOption}[correct]`, data.items[i].options[j].correct)
+            setValue(`${oldField}[id]`, id)
+            setValue(`${oldField}[title]`, data.items[i].options[j].title)
+            setValue(`${oldField}[correct]`, data.items[i].options[j].correct)
           }
+          setLastIdOption(data.items[i].options[data.items[i].options.length - 1].id)
         }
       })
   }, [])
@@ -94,6 +101,71 @@ export default function Edit(props) {
       delete data.tag
       delete data.level
     }
+
+    for (let i = 0; i < data.question_items.length; i++) {
+      const deleteOption = []
+      if (data.question_items[i].oldOptions) {
+        const oldOption = [...data.question_items[i].oldOptions]
+        for (let i = 0; i < oldOption.length; i++) {
+          console.log("old option " + i)
+          for (let j = 0; j < listDeleteOption.length; j++) {
+            // console.log(typeof listDeleteOption[j])
+            // console.log(typeof oldOption[i].id)
+
+            if (parseInt(oldOption[i].id) === listDeleteOption[j]) {
+              // console.log("data dihapus")
+              oldOption[i].deleted = "1"
+              deleteOption.push(oldOption[i])
+            }
+          }
+        }
+        // console.log("old options")
+        // console.log(oldOption)
+      }
+      // console.log("list deleted")
+      // console.log(listDeleteOption)
+      // console.log("pilihan yg dihapus")
+      // console.log(deleteOption)
+      const currentOption = [...data.question_items[i].options]
+      const newOptions = []
+      const oldsOption = []
+      for (let b = 0; b < currentOption.length; b++) {
+        console.log(currentOption[b].new)
+        if (currentOption[b].new) {
+          newOptions.push(currentOption[b])
+        } else {
+          oldsOption.push(currentOption[b])
+        }
+      }
+      // console.log("pilihan baru")
+      // console.log(newOptions)
+      // console.log("pilihan lama")
+      // console.log(oldsOption)
+      const mergeOption = [...oldsOption, ...deleteOption]
+
+      // console.log("pilihan lama + yg dihapus")
+      // console.log(mergeOption)
+      const finalOption = Object.values(mergeOption.reduce((acc, cur) => Object.assign(acc, { [cur.id]: cur }), {}))
+
+      // console.log("hapus")
+      // console.log(finalOption)
+      const resultOption = [...finalOption, ...newOptions]
+      // console.log("menggabungkan")
+      console.log(resultOption)
+
+      for (let j = 0; j < resultOption.length; j++) {
+        if (typeof resultOption[j].deleteNew === "undefined") {
+          if (typeof resultOption[j].title !== "undefined") {
+            if (resultOption[j].new) {
+              resultOption[j].id = "-1"
+            }
+          }
+        }
+      }
+      data.question_items[i].options = resultOption
+    }
+    console.log(data)
+
     await apiPractice.updateQuestion(id, data)
       .then((res) => {
         onOpenSuccessModal()
@@ -119,14 +191,9 @@ export default function Edit(props) {
     setValue(identifier, data)
   }
 
-  const onRemoveData = (identifier) => {
-    unregister(identifier)
-    setValue(identifier, "")
-  }
-
   return (
     <div className="md:pt-12 md:pb-28">
-      <Link href="/admin/practice">
+      <Link href="/admin/practices">
         <a className="flex gap-4 text-blue-1 my-8"><FaAngleLeft /> Back</a>
       </Link>
       <Card
@@ -263,14 +330,13 @@ export default function Edit(props) {
                         {eachQuestion.options.map((itemAnswer, indexAnswer) => {
                           const alphabet = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z']
                           if (itemAnswer.new) {
-                            setValue(`question_items[${indexEachQuestion}].options[${indexAnswer}].id`, "-1")
-                            console.log(itemAnswer.correct)
+                            setValue(`question_items[${indexEachQuestion}].options[${indexAnswer}].new`, true)
+                            // console.log(itemAnswer.correct)
                             if (itemAnswer.correct === null) {
-                              setValue(`question_items[${indexEachQuestion}].options[${indexAnswer}].correct`, "0")
+                              setValue(`question_items[${indexEachQuestion}].options[${indexAnswer}].correct`, 0)
                             }
-                          } else {
-                            setValue(`question_items[${indexEachQuestion}].options[${indexAnswer}].id`, itemAnswer.id.toString())
                           }
+
                           return (
                             <div className={`${itemAnswer.correct === 1 ? 'bg-blue-6 border-blue-1' : 'bg-white'} my-2  p-4 border rounded-lg`} key={indexAnswer}>
                               {errors && (
@@ -387,7 +453,17 @@ export default function Edit(props) {
                                         itemQ
                                       }
                                     })
-                                    setValue(`question_items[${indexEachQuestion}].options[${indexAnswer}].deleted`, 1)
+                                    if (typeof itemAnswer.new === "undefined") {
+
+                                      setListDeleteOption([...listDeleteOption, itemAnswer.id])
+                                      // setValue(`deleted[${itemAnswer.id}]`, itemAnswer.id)
+                                      // unregister(`questions[${indexEachQuestion}].options[${indexAnswer}].title`)
+                                      // setValue(`questions[${indexEachQuestion}].options[${indexAnswer}].delete`, 1)
+                                      // setValue()
+                                    } else {
+                                      setValue(`question_items[${indexEachQuestion}].options[${indexAnswer}].deleteNew`, true)
+                                    }
+                                    // setValue(`question_items[${indexEachQuestion}].options[${indexAnswer}].deleted`, 1)
                                     setQuestions([...temp])
                                   }} >
                                     <Image src="/asset/icon/table/fi_trash-2.png" width={16} height={16} alt="icon delete" />
@@ -399,7 +475,8 @@ export default function Edit(props) {
                         })}
                         <div onClick={() => {
                           const newOption = {
-                            id: eachQuestion.options[eachQuestion.options.length - 1].id + 1,
+                            // id: eachQuestion.options[eachQuestion.options.length - 1].id + 1,
+                            id: lastIdOption + 1,
                             title: '',
                             correct: null,
                             new: true
@@ -417,6 +494,7 @@ export default function Edit(props) {
                             }
                           })
                           setQuestions([...temp])
+                          setLastIdOption(lastIdOption + 1)
                         }} className="text-blue-1 cursor-pointer text-center p-4 border-dashed border-2 border-blue-1 mt-4 rounded-lg">+ Add New Answer</div>
                         <div className="mt-4">
                           <p className="mt-4">Answer Explanation {errors && (
@@ -481,7 +559,7 @@ export default function Edit(props) {
           <div className="flex -z-10 gap-4 flex-row-reverse my-4">
             <button className='cursor-pointer bg-blue-1  text-white p-4 rounded-lg'>Save Question</button>
 
-            <Link href="/admin/practice">
+            <Link href="/admin/practices">
               <a className="flex gap-4 text-blue-1">
                 <div onClick={() => setStatus("draft")} className='cursor-pointer text-blue-1 p-4 rounded-lg'>Cancel</div>
               </a>
@@ -500,7 +578,7 @@ export default function Edit(props) {
             <div className="flex flex-col text-center ">
               Successfully Update Question
               <div className="self-center">
-                <Link href={`/admin/practice/`}>
+                <Link href={`/admin/practices/`}>
                   <a className="bg-blue-1 rounded-lg text-white mt-4 block align-center p-3">Okay</a>
                 </Link>
               </div>

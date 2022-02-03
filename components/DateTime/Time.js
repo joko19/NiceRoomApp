@@ -9,25 +9,28 @@ var valid = function (current) {
 
 const datetimePlaceholder = { placeholder: "Select Time and Date" };
 
-export function Time({setDate = false, data = false}) {
+export function Time({ setDate = false, data = false }) {
   const [value, setValue] = useState(new Date())
   const changeData = () => {
+    console.log(value)
     const format = 'HH:mm'
     const dateTime = moment(value).format(format)
-    if(setDate !== false){
+    if (setDate !== false) {
       setDate(dateTime)
     }
   }
   useEffect(() => {
     const format = 'HH:mm'
-    const dateTime = moment(value).format(format)
-    if(setDate !== false){
-      setDate(dateTime)
+    if (data !== false) {
+      const dateTime = moment(data).format(format)
+      if (setDate !== false) {
+        setDate(dateTime)
+      }
     }
   }, [])
 
   return (
-    <Datetime inputProps={datetimePlaceholder}  dateFormat={false}  renderInput={renderInput} isValidDate={valid} value={data !== false ? data : value} onChange={() => {
+    <Datetime inputProps={datetimePlaceholder} dateFormat={false} renderInput={renderInput} isValidDate={valid} value={data !== false ? data : value} onChange={() => {
       setValue()
       changeData()
       // set
