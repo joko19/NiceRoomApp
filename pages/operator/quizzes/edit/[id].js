@@ -40,6 +40,8 @@ export default function Create(props) {
   const [endTime, setEndTime] = useState()
   const [consenment, setConsentment] = useState([])
   const [status, setStatus] = useState()
+  const [lastIdOption, setLastIdOption] = useState()
+  const [listDeleteOption, setListDeleteOption] = useState([])
   const [answerType, setAnswerType] = useState([{
     isSingle: true
   }])
@@ -71,7 +73,7 @@ export default function Create(props) {
             arr.push(myArr[i])
           }
           setConsentment(arr)
-          for(let i=0; i<arr; i++){
+          for (let i = 0; i < arr; i++) {
             setValue(`consentments[${i}]`, arr[i])
           }
         }
@@ -97,11 +99,16 @@ export default function Create(props) {
         for (let i = 0; i < req.questions.length; i++) {
           for (let j = 0; j < req.questions[i].options.length; j++) {
             const field = `questions[${i}].options[${j}]`
+            const oldField = `questions[${i}].oldOptions[${j}]`
             console.log(req.questions[i])
             setValue(`${field}[id]`, req.questions[i].options[j].id)
             setValue(`${field}[title]`, req.questions[i].options[j].title)
             setValue(`${field}[correct]`, req.questions[i].options[j].correct)
+            setValue(`${oldField}[id]`, req.questions[i].options[j].id)
+            setValue(`${oldField}[title]`, req.questions[i].options[j].title)
+            setValue(`${oldField}[correct]`, req.questions[i].options[j].correct)
           }
+          setLastIdOption(req.questions[i].options[req.questions[i].options.length - 1].id)
         }
         for (let i = 0; i < req.questions.length; i++) {
           const isSingle = req.questions[i].answer_type === 'single' ? true : false
@@ -209,14 +216,61 @@ export default function Create(props) {
       data.append(`${field}[negative_mark]`, req.questions[i].negative_mark)
       data.append(`${field}[question]`, req.questions[i].question)
       data.append(`${field}[answer_explanation]`, req.questions[i].answer_explanation)
-      if (req.questions[i].options) {
-        for (let j = 0; j < req.questions[i].options.length; j++) {
-          const opt = `${field}[options][${j}]`
-          data.append(`${opt}[id]`, req.questions[i].options[j].id)
-          data.append(`${opt}[correct]`, req.questions[i].options[j].correct)
-          data.append(`${opt}[title]`, req.questions[i].options[j].title)
+      console.log(req.questions[i].options)
+
+      const deleteOption = []
+      if (req.questions[i].oldOptions) {
+        const oldOption = [...req.questions[i].oldOptions]
+        for (let i = 0; i < oldOption.length; i++) {
+          for (let j = 0; j < listDeleteOption.length; j++) {
+            if (oldOption[i].id === listDeleteOption[j]) {
+              oldOption[i].delete = 1
+              deleteOption.push(oldOption[i])
+            }
+          }
         }
       }
+      const currentOption = [...req.questions[i].options]
+      const newOptions = []
+      const oldsOption = []
+      for (let b = 0; b < currentOption.length; b++) {
+        console.log(currentOption[b].new)
+        if (currentOption[b].new) {
+          newOptions.push(currentOption[b])
+        } else {
+          oldsOption.push(currentOption[b])
+        }
+      }
+      const mergeOption = [...oldsOption, ...deleteOption]
+
+      const finalOption = Object.values(mergeOption.reduce((acc, cur) => Object.assign(acc, { [cur.id]: cur }), {}))
+
+      const resultOption = [...finalOption, ...newOptions]
+
+      for (let j = 0; j < resultOption.length; j++) {
+        if (typeof resultOption[j].deleteNew === "undefined") {
+          if (typeof resultOption[j].title !== "undefined") {
+            console.log("hello world")
+            const opt = `${field}[options][${j}]`
+            if (resultOption[j].new) {
+              data.append(`${opt}[id]`, -1)
+            }
+            else {
+              data.append(`${opt}[id]`, resultOption[j].id)
+            }
+            // data.append(`${opt}[id]`,  req.questions[i].options[j].id)11
+            data.append(`${opt}[correct]`, resultOption[j].correct)
+            data.append(`${opt}[title]`, resultOption[j].title)
+            if (typeof resultOption[j].new === "undefined") {
+              console.log("option lama")
+              console.log(resultOption[j].delete)
+              if (resultOption[j].delete === 1)
+                data.append(`${opt}[deleted]`, 1)
+            }
+          }
+        }
+      }
+
     }
     for (var key of data.entries()) {
       console.log(key[0] + ', ' + key[1]);
@@ -277,7 +331,6 @@ export default function Create(props) {
         <form onSubmit={handleSubmit(submitQuiz)}>
           {currentStep === 1 && (
             <div className="mb-8">
-
               {type === 'live' && (
                 <div className="flex">
                   {coverName === null && (
@@ -391,30 +444,31 @@ export default function Create(props) {
                 <Quill className="h-48" data={instruction} setData={(data) => setInstruction(data)} />
               </div>
               <p className="mt-4">Consentment</p>
-              {consenment.map((item, index) => { 
+              {consenment.map((item, index) => {
                 setValue(`consentments[${index}]`, item)
-                return(
-                <>{errors && (
-                  <span className="text-red-1 text-sm">{errors[`consentments.${index}`]}</span>
-                )}
-                  <div key={index} className="flex">
-                    <input key={index} type="text" value={item} onChange={(e) => {
-                      const arr = consenment
-                      arr[index] = e.target.value
-                      setConsentment([...arr])
-                      // setValue(`consentments[${index}]`, e.target.value)
-                    }} className="form border w-full rounded-lg p-4 h-full m-1" autoComplete="off" placeholder="Input Consentment" />
-                    {consenment.length !== 1 && (
-                      <div className="m-auto cursor-pointer text-blue-1 -ml-8" onClick={() => {
-                        let newArr = consenment
-                        newArr.splice(index, 1)
-                        console.log(newArr)
-                        setConsentment([...newArr])
-                      }} >x</div>
-                    )}
-                  </div>
-                </>
-              )})}
+                return (
+                  <>{errors && (
+                    <span className="text-red-1 text-sm">{errors[`consentments.${index}`]}</span>
+                  )}
+                    <div key={index} className="flex">
+                      <input key={index} type="text" value={item} onChange={(e) => {
+                        const arr = consenment
+                        arr[index] = e.target.value
+                        setConsentment([...arr])
+                        // setValue(`consentments[${index}]`, e.target.value)
+                      }} className="form border w-full rounded-lg p-4 h-full m-1" autoComplete="off" placeholder="Input Consentment" />
+                      {consenment.length !== 1 && (
+                        <div className="m-auto cursor-pointer text-blue-1 -ml-8" onClick={() => {
+                          let newArr = consenment
+                          newArr.splice(index, 1)
+                          console.log(newArr)
+                          setConsentment([...newArr])
+                        }} >x</div>
+                      )}
+                    </div>
+                  </>
+                )
+              })}
               <div onClick={() => setConsentment([...consenment, ""])} className="text-blue-1 cursor-pointer text-center p-4 border-dashed border-2 border-blue-1 mt-4 rounded-lg">+ Add New Consent</div>
             </>
           )}
@@ -485,12 +539,11 @@ export default function Create(props) {
                         {eachQuestion.options.map((itemAnswer, indexAnswer) => {
                           const alphabet = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z']
                           if (itemAnswer.new) {
-                            setValue(`questions[${indexEachQuestion}].options[${indexAnswer}].id`, -1)
+                            setValue(`questions[${indexEachQuestion}].options[${indexAnswer}].new`, true)
+                            // setValue(`questions[${indexEachQuestion}].options[${indexAnswer}].id`, itemAnswer.id)
                             if (itemAnswer.correct === null) {
                               setValue(`questions[${indexEachQuestion}].options[${indexAnswer}].correct`, 0)
                             }
-                          } else {
-                            setValue(`questions[${indexEachQuestion}].options[${indexAnswer}].id`, itemAnswer.id)
                           }
                           return (
                             <div className={`${itemAnswer.correct === 1 ? 'bg-blue-6 border-blue-1' : 'bg-white'} my-2  p-4 border rounded-lg`} key={indexAnswer}>
@@ -584,10 +637,20 @@ export default function Create(props) {
                                     const temp = questions
                                     temp.map((b) => {
                                       if (b.id === eachQuestion.id) {
-                                        console.log(b.id)
                                         b.options = [...b.options.filter(i => i !== itemAnswer)]
                                       }
                                     })
+                                    console.log(lastIdOption)
+                                    if (typeof itemAnswer.new === "undefined") {
+
+                                      setListDeleteOption([...listDeleteOption, itemAnswer.id])
+                                      // setValue(`deleted[${itemAnswer.id}]`, itemAnswer.id)
+                                      // unregister(`questions[${indexEachQuestion}].options[${indexAnswer}].title`)
+                                      // setValue(`questions[${indexEachQuestion}].options[${indexAnswer}].delete`, 1)
+                                      // setValue()
+                                    } else {
+                                      setValue(`questions[${indexEachQuestion}].options[${indexAnswer}].deleteNew`, true)
+                                    }
                                     setQuestions([...temp])
                                   }} >
                                     <Image src="/asset/icon/table/fi_trash-2.png" width={16} height={16} alt="icon delete" />
@@ -598,12 +661,15 @@ export default function Create(props) {
                           )
                         })}
                         <div onClick={() => {
+                          console.log(lastIdOption)
                           const newOption = {
-                            id: eachQuestion.options[eachQuestion.options.length - 1].id + 1,
+                            // id: eachQuestion.options[eachQuestion.options.length - 1].id + 1,
+                            id: lastIdOption + 1,
                             title: '',
                             correct: null,
                             new: true
                           }
+
                           const temp = questions
                           temp.map((b) => {
                             if (b.id === eachQuestion.id) {
@@ -612,6 +678,7 @@ export default function Create(props) {
                           })
                           console.log(temp)
                           setQuestions([...temp])
+                          setLastIdOption(lastIdOption + 1)
                         }} className="text-blue-1 cursor-pointer text-center p-4 border-dashed border-2 border-blue-1 mt-4 rounded-lg">+ Add New Answer</div>
                         <div className="mt-4">
                           <p className="mt-4">Answer Explanation {errors && (

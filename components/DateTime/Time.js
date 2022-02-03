@@ -7,7 +7,7 @@ var valid = function (current) {
   return current.isAfter(yesterday);
 };
 
-const datetimePlaceholder = { placeholder: "Select Time and Date" };
+const datetimePlaceholder = { placeholder: "Select Time " };
 
 export function Time({ setDate = false, data = false }) {
   const [value, setValue] = useState(new Date())
@@ -23,18 +23,24 @@ export function Time({ setDate = false, data = false }) {
     const format = 'HH:mm'
     if (data !== false) {
       const dateTime = moment(data).format(format)
-      if (setDate !== false) {
-        setDate(dateTime)
-      }
+      setDate(dateTime)
+    } else {
+      const dateTime = moment(value).format(format)
+      setDate(dateTime)
     }
   }, [])
 
   return (
-    <Datetime inputProps={datetimePlaceholder} dateFormat={false} renderInput={renderInput} isValidDate={valid} value={data !== false ? data : value} onChange={() => {
-      setValue()
-      changeData()
-      // set
+    <Datetime inputProps={data !== false ? {placeholder: data }: datetimePlaceholder} dateFormat={false} defaultValue={data} renderInput={renderInput} isValidDate={valid} onChange={(e) => {
+      if (setDate !== false) {
+        setDate(e.format("HH:mm"))
+      }
     }} />
+    // <Datetime inputProps={datetimePlaceholder} dateFormat={false} renderInput={renderInput} isValidDate={valid} value={data !== false ? data : value} onChange={() => {
+    //   setValue()
+    //   changeData()
+    //   // set
+    // }} />
   )
 }
 

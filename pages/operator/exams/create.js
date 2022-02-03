@@ -126,6 +126,12 @@ export default function Create(props) {
 
   const submitExams = async (data) => {
     console.log("submit")
+    if(data.type === 'standard'){
+      delete data.start_time
+      delete data.end_time
+      delete data.start_date
+      delete data.end_date
+    }
     console.log(data)
     if (currentStep === 1) {
       await apiExam.create(data)
@@ -141,8 +147,8 @@ export default function Create(props) {
       return null
     }
 
+    data.consentments = consentments
     if (currentStep === 2) {
-      console.log(data)
       await apiExam.create(data)
         .then()
         .catch((err) => {
@@ -427,6 +433,7 @@ export default function Create(props) {
                       <div className="m-auto cursor-pointer text-blue-1 -ml-8" onClick={() => {
                         let newArr = consentments
                         newArr.splice(index, 1)
+                        console.log(newArr)
                         setConsentments([...newArr])
                       }} >x</div>
                     )}

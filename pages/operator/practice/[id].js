@@ -80,7 +80,7 @@ export default function Section({ data }) {
                 <div className="m-auto text-blue-1">
                   <Image src="/asset/icon/table/fi_edit.png" className="mr-4 my-auto" height={16} width={16} />
                   <span className="ml-2">
-                    Edit Exams
+                    Edit Practice
                   </span>
                 </div>
               </div>
