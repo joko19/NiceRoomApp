@@ -35,7 +35,7 @@ export default function Create(props) {
   const [instruction, setInstruction] = useState('')
   const [startTime, setStartTime] = useState()
   const [endTime, setEndTime] = useState()
-  const [consenment, setConsentment] = useState([0])
+  const [consentments, setConsentments] = useState([''])
   const [status, setStatus] = useState()
   const [listTopic, setListTopic] = useState([])
   const [topicItem, setTopicItem] = useState([])
@@ -94,7 +94,7 @@ export default function Create(props) {
           setErrors(err.response.data.data)
           console.log(err.response.data.data)
 
-          if (!err.response.data.data["consentments"] && !err.response.data.data.instruction) {
+          if (!err.response.data.data["consentments"] && !err.response.data.data.instruction && !err.response.data.data.start_time) {
             setErrors(null)
             setCurrentStep(3)
           }
@@ -245,23 +245,30 @@ export default function Create(props) {
                 <QuillCreated className="h-48" data={getValues('instruction')} setData={(data) => setValue('instruction', data)} />
               </div>
               <p className="mt-4">Consentment</p>
-              {consenment.map((item, index) => (
+              {consentments.map((item, index) => (
                 <>{errors && (
                   <span className="text-red-1 text-sm">{errors[`consentments.${index}`]}</span>
                 )}
                   <div key={index} className="flex">
-                    <input key={index} type="text" className="form border w-full rounded-lg p-4 h-full m-1" autoComplete="off" placeholder="Input Consentment"  {...register(`consentments[${index}]`)} />
-                    {consenment.length > 1 && (
+                    <input key={index} type="text" value={item} onChange={(e) => {
+                      const arr = consentments
+                      arr[index] = e.target.value
+                      setConsentments([...arr])
+                      setValue(`consentments[${index}]`, e.target.value)
+                    }} className="form border w-full rounded-lg p-4 h-full m-1" autoComplete="off" placeholder="Input Consentment" />
+                    {consentments.length !== 1 && (
                       <div className="m-auto cursor-pointer text-blue-1 -ml-8" onClick={() => {
-                        setConsentment(prevIndex => [...prevIndex.filter(i => i !== item)])
-                        unregister(`consenments[${index}]`)
+                        let newArr = consentments
+                        newArr.splice(index, 1)
+                        console.log(newArr)
+                        setConsentments([...newArr])
                       }} >x</div>
                     )}
                   </div>
                 </>
               ))}
-              <div onClick={() => setConsentment([...consenment, consenment[consenment.length - 1] + 1])} className="text-blue-1 cursor-pointer text-center p-4 border-dashed border-2 border-blue-1 mt-4 rounded-lg">+ Add New Consent</div>
-            </>
+              <div onClick={() => setConsentments([...consentments, ''])} className="text-blue-1 cursor-pointer text-center p-4 border-dashed border-2 border-blue-1 mt-4 rounded-lg">+ Add New Consentment</div>
+           </>
           )}
 
           {currentStep === 3 && (
