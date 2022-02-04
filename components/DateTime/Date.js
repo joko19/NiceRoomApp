@@ -8,13 +8,16 @@ function convert(str) {
   return [date.getFullYear(), mnth, day].join("-");
 }
 
-export default function DatePicker2({setData = false }) {
+export default function DatePicker2({data = false, setData = false }) {
   const [date, setDate] = useState(new Date());
+  const [updateData, setUpdateData] = useState()
   useEffect(() => {
-    setData(convert(date))
-  }, [])
+    setData(convert(data))
+    data !== false && setUpdateData(data)
+  }, [data])
   return (
-    <DatePicker dateFormat="yyyy/MM/dd" selected={date} onChange={date => {
+    <DatePicker dateFormat="yyyy/MM/dd" placeholderText={updateData !== '' ? updateData : data !== false && data} selected={data === false && date} onChange={date => {
+      setUpdateData(convert(date))
       setDate(date)
       setData(convert(date))
     }} />

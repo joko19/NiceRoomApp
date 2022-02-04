@@ -82,6 +82,8 @@ export default function Create(props) {
         }
       })
   }
+
+
   const onSelectTopic = (list, item) => {
     setTopicItem(list)
     let arr = []

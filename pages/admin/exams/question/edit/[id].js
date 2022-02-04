@@ -104,6 +104,10 @@ export default function Edit(props) {
 
     for (let i = 0; i < data.question_items.length; i++) {
       const deleteOption = []
+      if(data.question_items[i].new){
+        data.question_items[i].id = -1
+      }
+      console.log(data)
       if (data.question_items[i].oldOptions) {
         const oldOption = [...data.question_items[i].oldOptions]
         for (let i = 0; i < oldOption.length; i++) {
@@ -131,10 +135,12 @@ export default function Edit(props) {
       const oldsOption = []
       for (let b = 0; b < currentOption.length; b++) {
         console.log(currentOption[b].new)
-        if (currentOption[b].new) {
-          newOptions.push(currentOption[b])
-        } else {
-          oldsOption.push(currentOption[b])
+        if (typeof currentOption[b].deleteNew === "undefined") {
+          if (currentOption[b].new) {
+            newOptions.push(currentOption[b])
+          } else {
+            oldsOption.push(currentOption[b])
+          }
         }
       }
       // console.log("pilihan baru")
@@ -257,7 +263,7 @@ export default function Edit(props) {
                 {/* question */}
                 {itemQuestion.items.map((eachQuestion, indexEachQuestion) => {
 
-                  setValue("id", eachQuestion.id !== -1 ? eachQuestion.id : -1)
+                  setValue(`question_items[${indexEachQuestion}].new`, eachQuestion.new && true)
                   return (
                     <div className={`bg-white p-4 ${itemQuestion.type === "paragraph" && 'mt-8'}`} key={indexEachQuestion}>
                       <input defaultValue={eachQuestion.id} hidden {...register(`question_items[${indexEachQuestion}].id`)} />
@@ -529,9 +535,11 @@ export default function Edit(props) {
                 {itemQuestion.type === 'paragraph' && (<div className="mt-8">
                   <div onClick={() => {
                     const newQuestionItem = {
-                      id: -1,
+                      id: itemQuestion.items[itemQuestion.items.length - 1].id + 1,
                       question: '',
                       answer_type: 'single',
+                      new: true,
+                      level:'easy',
                       options: [{
                         id: 0,
                         title: '',

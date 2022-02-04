@@ -91,11 +91,13 @@ export default function Create(props) {
       return null
     }
 
+    console.log(req.consentments)
     data.append("instruction", instruction)
     if (req.consentments) {
-      for (let i = 0; i < req.consentments.length; i++) {
+      for (let i = 0; i < consenment.length; i++) {
         const field = `consentments[${i}]`
-        data.append(`${field}`, req.consentments[i])
+        console.log(consenment[i])
+        data.append(`${field}`, consenment[i])
       }
     }
     // to step 3
@@ -331,12 +333,14 @@ export default function Create(props) {
                       const arr = consenment
                       arr[index] = e.target.value
                       setConsentment([...arr])
+
                       setValue(`consentments[${index}]`, e.target.value)
                     }} className="form border w-full rounded-lg p-4 h-full m-1" autoComplete="off" placeholder="Input Consentment" />
                     {consenment.length !== 1 && (
                       <div className="m-auto cursor-pointer text-blue-1 -ml-8" onClick={() => {
                         let newArr = consenment
                         newArr.splice(index, 1)
+                        console.log(newArr)
                         setConsentment([...newArr])
                       }} >x</div>
                     )}

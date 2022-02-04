@@ -56,6 +56,7 @@ export default function Create(props) {
         const start = data.start_time.split(":")
         setStartTime(start[0] + ":" + start[1])
         setValue("start_time", start[0] + ":" + start[1])
+        setValue("start_date", data.start_date)
         setValue("instruction", data.instruction)
 
         if (data.consentments !== 'null') {
@@ -108,7 +109,16 @@ export default function Create(props) {
   const submitPractice = async (data) => {
     console.log("submit")
     console.log(data)
-    if (currentStep === 1) {
+    if (currentStep === 1) { 
+      const arr = []
+      if (consentments) {
+        for (let i = 0; i < consentments.length; i++) {
+          arr.push(consentments[i])
+          const field = `consentments[${i}]`
+          setValue(`${field}`, consentments[i])
+        }
+      }
+      data.consentments = arr
       await apiPractice.update(id, data)
         .then(() =>
           setCurrentStep(2))
@@ -255,6 +265,7 @@ export default function Create(props) {
                   <p>Start Date</p>
                   <div className="border p-4 rounded-lg">
                     <DatePicker2
+                    data={getValues("start_date")}
                       setData={(data) => setValue("start_date", data)}
                     />
                   </div>
