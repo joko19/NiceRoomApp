@@ -4,7 +4,7 @@ import Image from "next/image";
 import { FaAngleLeft } from "react-icons/fa";
 import Card from "../../../../components/Cards/Card";
 import Layout from "../../../../Layout/Layout";
-import { set, useForm } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import {
   Modal,
   ModalOverlay,
@@ -13,13 +13,9 @@ import {
   ModalBody,
   ModalCloseButton,
   useDisclosure,
-  Divider,
-  cookieStorageManager,
 } from '@chakra-ui/react'
 import QuillCreated from "../../../../components/Editor/QuillCreated";
 import { Select } from '@chakra-ui/react'
-import apiQuiz from "../../../../action/quiz";
-import { MyDTPicker } from "../../../../components/DateTime/DateTime";
 import apiExam from "../../../../action/exam";
 import { useRouter } from "next/router";
 
@@ -58,35 +54,32 @@ export default function Create(props) {
       .then((res) => {
         const data = res.data.data.sections
         data.map((item) => {
-          console.log(item)
-          console.log(ids)
           if (item.id === ids) {
             setFirstNumber(item.questions_count + 1)
           }
         })
-        // console.log(res.data.data)
-        // for(let i=0; i<data.length; i++){
-        // console.log(data[i].id)
-        //   // console.log(idSection)
-        //   if(data[i].id === idSection){
-        //     console.log(res.data.data.sections[i])
-        //     // console.log("benar")
-        //     // setFirstNumber(res.data.data.sections.)
-        //   }
-        // }
       })
 
   }
 
   const submitQuiz = async (data) => {
-    console.log(data)
+    for (let h = 0; h < data.questions.length; h++) {
+      for (let i = 0; i < data.questions[h].question_items.length; i++) {
+        const currentOption = [...data.questions[h].question_items[i].options]
+        const finalOptions = []
+        for (let b = 0; b < currentOption.length; b++) {
+          if (typeof currentOption[b].deleteNew === "undefined") {
+            finalOptions.push(currentOption[b])
+          }
+        }
+        data.questions[h].question_items[i].options = finalOptions
+      }
+    }
     await apiExam.createQuestion(data)
       .then((res) => {
-        console.log(res.data.data)
         onOpenSuccessModal()
       })
       .catch((err) => {
-        console.log(err.response.data.data)
         setErrors(err.response.data.data)
       })
   }
@@ -314,10 +307,8 @@ export default function Create(props) {
                                             b.options.map((optionQ) => {
                                               if (optionQ.id === itemAnswer.id) {
                                                 const tempCorrect = !optionQ.correct
-                                                console.log(tempCorrect)
                                                 optionQ.correct = tempCorrect ? 1 : 0
                                                 setValue(`questions[${indexQuestion}].question_items[${indexEachQuestion}].options[${indexAnswer}].correct`, tempCorrect ? 1 : 0)
-                                                console.log(optionQ.correct)
                                               }
                                             })
                                           }
@@ -348,7 +339,6 @@ export default function Create(props) {
                                       itemQ.question_items.map((b) => {
                                         if (b.id === eachQuestion.id) {
                                           b.options.map((optionQ) => {
-                                            console.log(optionQ)
                                             if (optionQ.id === itemAnswer.id) {
                                               optionQ.title = e.target.value
                                               setValue(`questions[${indexQuestion}].question_items[${indexEachQuestion}].options[${indexAnswer}].title`, e.target.value)
@@ -371,7 +361,6 @@ export default function Create(props) {
                                       if (itemQ.id === itemQuestion.id) {
                                         itemQ.question_items.map((b) => {
                                           if (b.id === eachQuestion.id) {
-                                            console.log(b.id)
                                             b.options = [...b.options.filter(i => i !== itemAnswer)]
                                           }
                                         })
@@ -379,6 +368,7 @@ export default function Create(props) {
                                         itemQ
                                       }
                                     })
+                                    setValue(`questions[${indexQuestion}].question_items[${indexEachQuestion}].options[${indexAnswer}].deleteNew`, true)
                                     setQuestions([...temp])
                                   }} >
                                     <Image src="/asset/icon/table/fi_trash-2.png" width={16} height={16} alt="icon delete" />
@@ -407,7 +397,6 @@ export default function Create(props) {
                               itemQ
                             }
                           })
-                          console.log(temp)
                           setQuestions([...temp])
                         }} className="text-blue-1 cursor-pointer text-center p-4 border-dashed border-2 border-blue-1 mt-4 rounded-lg">+ Add New Answer</div>
                         <div className="mt-4">
@@ -547,21 +536,10 @@ export default function Create(props) {
 
 // This also gets called at build time
 export async function getServerSideProps(context) {
-  // params contains the post `id`.
-  // If the route is like /posts/1, then params.id is 1
-  console.log("ff")
-  console.log(context.query.id)
   const idExam = context.query.id
   // getDetail(idExam)
   const idSection = idExam.split('=')[1]
   const num = idSection.split('#')[0]
-  // setIdSection(num)
-  console.log(num)
-  // setValue("section_id", num)
-  // const res =  await apiExam.detail(6)
-  // const data = await res.json()
-  // console.log(res)
-  // Pass post data to the page via props
   return { props: { id_section: num } }
 }
 Create.layout = Layout

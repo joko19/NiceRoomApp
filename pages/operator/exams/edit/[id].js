@@ -59,23 +59,27 @@ export default function Create(props) {
       .then((res) => {
         console.log(res.data.data)
         const data = res.data.data
-        setType(res.data.data.type)
+        setType(data.type)
         setValue("name", data.name)
         setValue("type", data.type)
         setValue("exam_type_id", data.exam_type_id)
         setType(data.type)
-        onSelectBatch(res.data.data.batches, '')
-        onSelectBranch(res.data.data.batches, '')
-        onSelectTopic(res.data.data.batches, '')
+        onSelectBatch(data.batches, '')
+        onSelectBranch(data.branches, '')
+        onSelectTopic(data.topics, '')
         if (data.type === 'live') {
+          const start = data.start_time.slice(0, -3)
+          const end = data.end_time.slice(0, -3)
           setValue("topic_id", data.topic_id)
-          setValue("start_time", data.start_time)
-          setValue("end_time", data.end_time)
-          setStartTime(data.start_time)
-          setEndTime(data.end_time)
+          setValue("start_time", start)
+          setValue("end_time", end)
+          setValue("start_date", data.start_date)
+          setValue("end_date", data.end_date)
+          setStartTime(start)
+          setEndTime(end)
         }
         setValue("instruction", data.instruction)
-
+        console.log(data.consentments)
         if (data.consentments !== 'null') {
           const str = data.consentments.replace(/['"]+/g, '').slice(1)
           const myArr = str.slice(0, str.length - 1).split(", ")
@@ -182,7 +186,25 @@ export default function Create(props) {
   }
 
   const submitExams = async (data) => {
+    console.log(data)
+    if (data.type === 'standard') {
+      delete data.start_time
+      delete data.end_time
+      delete data.start_date
+      delete data.end_date
+    }
     if (currentStep === 1) {
+      console.log(data)
+      delete data.consentments
+      const arr = []
+      if (consentments) {
+        for (let i = 0; i < consentments.length; i++) {
+          arr.push(consentments[i])
+          const field = `consentments[${i}]`
+          setValue(`${field}`, consentments[i])
+        }
+      }
+      data.consentments = arr
       await apiExam.update(id, data)
         .then(() =>
           setCurrentStep(2))
@@ -229,6 +251,16 @@ export default function Create(props) {
 
     if (currentStep === 3) {
       console.log(data)
+      delete data.consentments
+      const arr = []
+      if (consentments) {
+        for (let i = 0; i < consentments.length; i++) {
+          arr.push(consentments[i])
+          const field = `consentments[${i}]`
+          setValue(`${field}`, consentments[i])
+        }
+      }
+      data.consentments = arr
       await apiExam.update(id, data)
         .then((res) => {
           onOpenSuccessModal()
@@ -293,7 +325,10 @@ export default function Create(props) {
                 <div className="w-full gap-4">
                   <p className="mt-4">Held Type</p>
                   <div className="flex gap-4">
-                    <div className={` ${type === 'live' ? 'bg-blue-6' : 'bg-white'} flex gap-2 w-full p-4 border rounded-lg cursor-pointer`} onClick={() => setType('live')}>
+                    <div className={` ${type === 'live' ? 'bg-blue-6' : 'bg-white'} flex gap-2 w-full p-4 border rounded-lg cursor-pointer`} onClick={() => {
+                      setType('live')
+                      setValue("type", "live")
+                    }}>
                       <div  >
                         <Image src={`${type === 'live' ? "/asset/icon/table/ic_radio_active.png" : "/asset/icon/table/ic_radio.png"}`} height={16} width={16} className="flex align-middle my-auto" />
                       </div>
@@ -301,7 +336,10 @@ export default function Create(props) {
                         Live Exam
                       </p>
                     </div>
-                    <div className={` ${type === 'standard' ? 'bg-blue-6' : 'bg-white'} flex gap-2 w-full p-4 border rounded-lg cursor-pointer`} onClick={() => setType('standard')}>
+                    <div className={` ${type === 'standard' ? 'bg-blue-6' : 'bg-white'} flex gap-2 w-full p-4 border rounded-lg cursor-pointer`} onClick={() => {
+                      setType('standard')
+                      setValue("type", "standard")
+                    }}>
                       <div >
                         <Image src={`${type === 'standard' ? "/asset/icon/table/ic_radio_active.png" : "/asset/icon/table/ic_radio.png"}`} height={16} width={16} className="flex align-middle my-auto" />
                       </div>
@@ -373,6 +411,7 @@ export default function Create(props) {
                       )}</p>
                       <div className="border p-4 rounded-lg">
                         <DatePicker2
+                          data={getValues('start_date')}
                           setData={(data) => setValue("start_date", data)}
                         />
                       </div>
@@ -381,7 +420,7 @@ export default function Create(props) {
                       <p>Start Time {errors && (
                         <span className="text-red-1 text-sm">{errors.start_time}</span>
                       )}</p>
-                      <Time data={getValues("end_time")} setDate={(data) => setValue("start_time", data)} />
+                      <Time data={getValues("start_time")} setDate={(data) => setValue("start_time", data)} />
                     </div>
                   </div>
                   <div className="flex mt-4 gap-4">
@@ -391,6 +430,7 @@ export default function Create(props) {
                       )}</p>
                       <div className="border p-4 rounded-lg">
                         <DatePicker2
+                          data={getValues('end_date')}
                           setData={(data) => setValue("end_date", data)}
                         />
                       </div>

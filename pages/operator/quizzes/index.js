@@ -25,19 +25,17 @@ export default function Create() {
   const [selectedData, setSelectedData] = useState(null)
   const [dataInstitute, setDataInstitute] = useState([])
   const [list, setList] = useState([])
-  const TableHead = ['Quiz Name', 'Type', 'Status', 'Action']
 
   const getData = async (search, type, status, limit, page) => {
     await apiQuiz.index(search, type, status, limit, page)
       .then((res) => {
-        console.log(res.data.data)
         setDataInstitute(res.data.data)
         setList(res.data.data.data)
         setPage(res.data.data.current_page)
 
       })
       .catch((err) => {
-        console.log(err)
+        // console.log(err)
       })
   }
   useEffect(() => {
@@ -51,7 +49,7 @@ export default function Create() {
         getData(search, type, status, limit, page)
       })
       .catch((err) => {
-        console.log(err)
+        // console.log(err)
       })
   }
 

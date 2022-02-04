@@ -30,14 +30,13 @@ export default function Index() {
   const getData = async (search, type, status, limit, page) => {
     await apiPractice.index(search, type, status, limit, page)
       .then((res) => {
-        console.log(res.data.data)
         setDataInstitute(res.data.data)
         setList(res.data.data.data)
         setPage(res.data.data.current_page)
 
       })
       .catch((err) => {
-        console.log(err)
+        // console.log(err)
       })
   }
   useEffect(() => {
@@ -51,7 +50,7 @@ export default function Index() {
         getData(search, type, status, limit, page)
       })
       .catch((err) => {
-        console.log(err)
+        // console.log(err)
       })
   }
 
@@ -117,7 +116,7 @@ export default function Index() {
                             </div>
                           </td>
                           <td className="px-6 py-4 whitespace-nowrap">
-                            <div>{item.type}</div>
+                            <div>{item.exam_type.name}</div>
                           </td>
                           <td className="px-6 py-4 whitespace-nowrap ">
                             <div className={`${item.status === 'draft' ? 'bg-black-8 text-black-3' : 'bg-green-2 text-green-1'} text-center rounded-lg p-4 `}>

@@ -46,7 +46,6 @@ export default function Create(props) {
   const getDetails = async (id) => {
     await apiPractice.detail(id)
       .then((res) => {
-        console.log(res.data.data)
         const data = res.data.data
         setType(res.data.data.type)
         setValue("name", data.name)
@@ -56,6 +55,7 @@ export default function Create(props) {
         const start = data.start_time.split(":")
         setStartTime(start[0] + ":" + start[1])
         setValue("start_time", start[0] + ":" + start[1])
+        setValue("start_date", data.start_date)
         setValue("instruction", data.instruction)
 
         if (data.consentments !== 'null') {
@@ -65,11 +65,8 @@ export default function Create(props) {
           for (let i = 0; i < myArr.length; i++) {
             arr.push(myArr[i])
           }
-          console.log(arr)
           setConsentments(arr)
           for (let i = 0; i < arr.length; i++) {
-            // setValue(`consentments[${i}]`, arr[i])
-            console.log(arr[i])
           }
         }
         setsections([...data.sections])
@@ -82,8 +79,6 @@ export default function Create(props) {
         }
       })
   }
-
-
   const onSelectTopic = (list, item) => {
     setTopicItem(list)
     let arr = []
@@ -108,9 +103,16 @@ export default function Create(props) {
   }
 
   const submitPractice = async (data) => {
-    console.log("submit")
-    console.log(data)
-    if (currentStep === 1) {
+    if (currentStep === 1) { 
+      const arr = []
+      if (consentments) {
+        for (let i = 0; i < consentments.length; i++) {
+          arr.push(consentments[i])
+          const field = `consentments[${i}]`
+          setValue(`${field}`, consentments[i])
+        }
+      }
+      data.consentments = arr
       await apiPractice.update(id, data)
         .then(() =>
           setCurrentStep(2))
@@ -126,7 +128,6 @@ export default function Create(props) {
     }
 
     if (currentStep === 2) {
-      console.log(data)
       delete data.consentments
       const arr = []
       if (consentments) {
@@ -142,8 +143,6 @@ export default function Create(props) {
           setCurrentStep(3))
         .catch((err) => {
           setErrors(err.response.data.data)
-          console.log(err.response.data.data)
-
           if (!err.response.data.data["consentments"] && !err.response.data.data.instruction) {
             setErrors(null)
             setCurrentStep(3)
@@ -154,12 +153,20 @@ export default function Create(props) {
     }
 
     if (currentStep === 3) {
+      const arr = []
+      if (consentments) {
+        for (let i = 0; i < consentments.length; i++) {
+          arr.push(consentments[i])
+          const field = `consentments[${i}]`
+          setValue(`${field}`, consentments[i])
+        }
+      }
+      data.consentments = arr
       await apiPractice.update(id, data)
         .then((res) => {
           onOpenSuccessModal()
         })
         .catch((err) => {
-          console.log(err.response.data.data)
           setErrors(err.response.data.data)
         })
     }
@@ -257,6 +264,7 @@ export default function Create(props) {
                   <p>Start Date</p>
                   <div className="border p-4 rounded-lg">
                     <DatePicker2
+                    data={getValues("start_date")}
                       setData={(data) => setValue("start_date", data)}
                     />
                   </div>
@@ -360,8 +368,6 @@ export default function Create(props) {
                           <span className="text-red-1 text-sm">{errors[`sections.${indexQuestion}.instruction`]}</span>
                         )}</p>
                         <div className="w-full  bg-white rounded-lg " style={{ lineHeight: 2 }} >
-
-                          {/* <textarea {...register(`sections[${indexQuestion}].question`)} /> */}
                           <Quill className="h-32   border-none rounded-lg" data={getValues(`sections[${indexQuestion}].instruction`)} register={(data) => setDataForm(`sections[${indexQuestion}].instruction`, data)} />
                         </div>
                         <div className="bg-white h-12">
