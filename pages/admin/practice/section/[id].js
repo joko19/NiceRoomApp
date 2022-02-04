@@ -4,7 +4,7 @@ import Image from "next/image";
 import { FaAngleLeft } from "react-icons/fa";
 import Card from "../../../../components/Cards/Card";
 import Layout from "../../../../Layout/Layout";
-import { set, useForm } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import {
   Modal,
   ModalOverlay,
@@ -13,13 +13,9 @@ import {
   ModalBody,
   ModalCloseButton,
   useDisclosure,
-  Divider,
-  cookieStorageManager,
 } from '@chakra-ui/react'
 import QuillCreated from "../../../../components/Editor/QuillCreated";
 import { Select } from '@chakra-ui/react'
-import apiQuiz from "../../../../action/quiz";
-import { MyDTPicker } from "../../../../components/DateTime/DateTime";
 import apiPractice from "../../../../action/practice";
 import { useRouter } from "next/router";
 
@@ -28,7 +24,7 @@ export default function Create(props) {
   const { id } = Router.query
   const { isOpen, onOpen, onClose } = useDisclosure()
   const [errors, setErrors] = useState()
-  const { register, handleSubmit, setValue, getValues, reset, unregister } = useForm();
+  const { register, handleSubmit, setValue, getValues, unregister } = useForm();
   const [status, setStatus] = useState()
   const [questionType, setQuestionType] = useState()
   const [idSection, setIdSection] = useState()
@@ -58,22 +54,10 @@ export default function Create(props) {
       .then((res) => {
         const data = res.data.data.sections
         data.map((item) => {
-          console.log(item)
-          console.log(ids)
           if (item.id === ids) {
             setFirstNumber(item.questions_count + 1)
           }
         })
-        // console.log(res.data.data)
-        // for(let i=0; i<data.length; i++){
-        // console.log(data[i].id)
-        //   // console.log(idSection)
-        //   if(data[i].id === idSection){
-        //     console.log(res.data.data.sections[i])
-        //     // console.log("benar")
-        //     // setFirstNumber(res.data.data.sections.)
-        //   }
-        // }
       })
 
   }
@@ -96,7 +80,6 @@ export default function Create(props) {
         onOpenSuccessModal()
       })
       .catch((err) => {
-        console.log(err.response.data.data)
         setErrors(err.response.data.data)
       })
   }
@@ -184,7 +167,6 @@ export default function Create(props) {
                         <span className="text-red-1 text-sm">{errors[`questions.${indexQuestion}.paragraph`]}</span>
                       )}</p>
                       <div className="w-full  bg-white rounded-lg " style={{ lineHeight: 2 }} >
-                        {/* <textarea {...register(`questions[${indexQuestion}].question`)} /> */}
                         <QuillCreated className="h-32   border-none rounded-lg" data={getValues(`questions[${indexQuestion}].paragraph`)} register={(data) => setDataForm(`questions[${indexQuestion}].paragraph`, data)} />
                       </div>
                       <div className="bg-white h-12">
@@ -296,7 +278,6 @@ export default function Create(props) {
                                                     setValue(`questions[${indexQuestion}].question_items[${indexEachQuestion}].options[${i}].correct`, 0)
                                                   }
                                                 }
-
                                               }
                                             })
                                           }
@@ -326,10 +307,8 @@ export default function Create(props) {
                                             b.options.map((optionQ) => {
                                               if (optionQ.id === itemAnswer.id) {
                                                 const tempCorrect = !optionQ.correct
-                                                console.log(tempCorrect)
                                                 optionQ.correct = tempCorrect ? 1 : 0
                                                 setValue(`questions[${indexQuestion}].question_items[${indexEachQuestion}].options[${indexAnswer}].correct`, tempCorrect ? 1 : 0)
-                                                console.log(optionQ.correct)
                                               }
                                             })
                                           }
@@ -347,10 +326,7 @@ export default function Create(props) {
                                         <div className="border w-4 rounded h-4" />
                                       )}
                                     </div>
-                                  </div>
-
-                                  // <input className="m-auto" type="checkbox" id="html" {...register(`questions[${indexQuestion}].question_items[${indexEachQuestion}].options[${indexAnswer}].correct`)} value="1" />
-                                )}
+                                  </div>)}
                                 <span className="m-auto">{alphabet[indexAnswer]}</span>
                                 <input value={itemAnswer.title} onChange={(e) => {
 
@@ -360,7 +336,6 @@ export default function Create(props) {
                                       itemQ.question_items.map((b) => {
                                         if (b.id === eachQuestion.id) {
                                           b.options.map((optionQ) => {
-                                            console.log(optionQ)
                                             if (optionQ.id === itemAnswer.id) {
                                               optionQ.title = e.target.value
                                               setValue(`questions[${indexQuestion}].question_items[${indexEachQuestion}].options[${indexAnswer}].title`, e.target.value)
@@ -374,7 +349,6 @@ export default function Create(props) {
                                   })
                                   setQuestions([...temp])
                                 }}
-                                  // {...register(`questions[${indexQuestion}].question_items[${indexEachQuestion}].options[${indexAnswer}].title`)} 
                                   autoComplete="off" type="text" className={`${itemAnswer.correct === 1 ? 'bg-blue-6 text-black-5' : 'bg-white'} form border w-full rounded-lg p-4 h-full m-1`} placeholder="Input your answer" />
                                 {eachQuestion.options.length !== 1 && (
                                   <div className="m-auto cursor-pointer text-blue-1 -ml-9" onClick={() => {
@@ -383,7 +357,6 @@ export default function Create(props) {
                                       if (itemQ.id === itemQuestion.id) {
                                         itemQ.question_items.map((b) => {
                                           if (b.id === eachQuestion.id) {
-                                            console.log(b.id)
                                             b.options = [...b.options.filter(i => i !== itemAnswer)]
                                           }
                                         })
@@ -420,7 +393,6 @@ export default function Create(props) {
                               itemQ
                             }
                           })
-                          console.log(temp)
                           setQuestions([...temp])
                         }} className="text-blue-1 cursor-pointer text-center p-4 border-dashed border-2 border-blue-1 mt-4 rounded-lg">+ Add New Answer</div>
                         <div className="mt-4">

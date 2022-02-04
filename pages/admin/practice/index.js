@@ -30,14 +30,13 @@ export default function Index() {
   const getData = async (search, type, status, limit, page) => {
     await apiPractice.index(search, type, status, limit, page)
       .then((res) => {
-        console.log(res.data.data)
         setDataInstitute(res.data.data)
         setList(res.data.data.data)
         setPage(res.data.data.current_page)
 
       })
       .catch((err) => {
-        console.log(err)
+        // console.log(err)
       })
   }
   useEffect(() => {
@@ -51,7 +50,7 @@ export default function Index() {
         getData(search, type, status, limit, page)
       })
       .catch((err) => {
-        console.log(err)
+        // console.log(err)
       })
   }
 

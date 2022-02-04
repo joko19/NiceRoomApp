@@ -22,14 +22,9 @@ import { useRouter } from "next/router";
 export default function Edit(props) {
   const Router = useRouter()
   const { id } = Router.query
-  const { isOpen, onOpen, onClose } = useDisclosure()
   const [errors, setErrors] = useState()
   const { register, handleSubmit, setValue, getValues, reset, unregister } = useForm();
   const [status, setStatus] = useState()
-  const [questionType, setQuestionType] = useState()
-  const [idSection, setIdSection] = useState()
-  const [number, setNumber] = useState([1, 2, 3])
-  const [firstNumber, setFirstNumber] = useState(0)
   const [lastIdOption, setLastIdOption] = useState()
   const [listDeleteOption, setListDeleteOption] = useState([])
 
@@ -93,9 +88,7 @@ export default function Edit(props) {
   }, [])
 
   const submitQuiz = async (data) => {
-    console.log(data)
     if (data.type === 'simple') {
-      console.log("simple question")
       delete data.paragraph
       delete data.instruction
       delete data.tag
@@ -107,34 +100,21 @@ export default function Edit(props) {
       if (data.question_items[i].new) {
         data.question_items[i].id = -1
       }
-      console.log(data)
       if (data.question_items[i].oldOptions) {
         const oldOption = [...data.question_items[i].oldOptions]
         for (let i = 0; i < oldOption.length; i++) {
-          console.log("old option " + i)
           for (let j = 0; j < listDeleteOption.length; j++) {
-            // console.log(typeof listDeleteOption[j])
-            // console.log(typeof oldOption[i].id)
-
             if (parseInt(oldOption[i].id) === listDeleteOption[j]) {
-              // console.log("data dihapus")
               oldOption[i].deleted = "1"
               deleteOption.push(oldOption[i])
             }
           }
         }
-        // console.log("old options")
-        // console.log(oldOption)
       }
-      // console.log("list deleted")
-      // console.log(listDeleteOption)
-      // console.log("pilihan yg dihapus")
-      // console.log(deleteOption)
       const currentOption = [...data.question_items[i].options]
       const newOptions = []
       const oldsOption = []
       for (let b = 0; b < currentOption.length; b++) {
-        console.log(currentOption[b].new)
         if (typeof currentOption[b].deleteNew === "undefined") {
           if (currentOption[b].new) {
             newOptions.push(currentOption[b])
@@ -143,22 +123,9 @@ export default function Edit(props) {
           }
         }
       }
-      // console.log("pilihan baru")
-      // console.log(newOptions)
-      // console.log("pilihan lama")
-      // console.log(oldsOption)
       const mergeOption = [...oldsOption, ...deleteOption]
-
-      // console.log("pilihan lama + yg dihapus")
-      // console.log(mergeOption)
       const finalOption = Object.values(mergeOption.reduce((acc, cur) => Object.assign(acc, { [cur.id]: cur }), {}))
-
-      // console.log("hapus")
-      // console.log(finalOption)
       const resultOption = [...finalOption, ...newOptions]
-      // console.log("menggabungkan")
-      console.log(resultOption)
-
       for (let j = 0; j < resultOption.length; j++) {
         if (typeof resultOption[j].deleteNew === "undefined") {
           if (typeof resultOption[j].title !== "undefined") {
@@ -170,15 +137,11 @@ export default function Edit(props) {
       }
       data.question_items[i].options = resultOption
     }
-    console.log(data)
-
     await apiExam.updateQuestion(id, data)
       .then((res) => {
         onOpenSuccessModal()
-        console.log(res.data.data)
       })
       .catch((err) => {
-        console.log(err.response.data.data)
         setErrors(err.response.data.data)
       })
   }
@@ -337,7 +300,6 @@ export default function Edit(props) {
                           const alphabet = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z']
                           if (itemAnswer.new) {
                             setValue(`question_items[${indexEachQuestion}].options[${indexAnswer}].new`, true)
-                            // console.log(itemAnswer.correct)
                             if (itemAnswer.correct === null) {
                               setValue(`question_items[${indexEachQuestion}].options[${indexAnswer}].correct`, 0)
                             }
@@ -595,14 +557,6 @@ export default function Edit(props) {
 
 // This also gets called at build time
 export async function getServerSideProps(context) {
-  // params contains the post `id`.
-  // If the route is like /posts/1, then params.id is 1
-  console.log("ff")
-  console.log(context.query.id)
-  // const res =  await apiExam.detail(6)
-  // const data = await res.json()
-  // console.log(res)
-  // Pass post data to the page via props
   return { props: {} }
 }
 

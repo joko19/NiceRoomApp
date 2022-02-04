@@ -54,8 +54,6 @@ export default function Create(props) {
       .then((res) => {
         const data = res.data.data.sections
         data.map((item) => {
-          console.log(item)
-          console.log(ids)
           if (item.id === ids) {
             setFirstNumber(item.questions_count + 1)
           }
@@ -65,7 +63,6 @@ export default function Create(props) {
   }
 
   const submitQuiz = async (data) => {
-    console.log(data)
     for (let h = 0; h < data.questions.length; h++) {
       for (let i = 0; i < data.questions[h].question_items.length; i++) {
         const currentOption = [...data.questions[h].question_items[i].options]
@@ -78,14 +75,11 @@ export default function Create(props) {
         data.questions[h].question_items[i].options = finalOptions
       }
     }
-    console.log(data)
     await apiExam.createQuestion(data)
       .then((res) => {
-        console.log(res.data.data)
         onOpenSuccessModal()
       })
       .catch((err) => {
-        console.log(err.response.data.data)
         setErrors(err.response.data.data)
       })
   }
@@ -313,10 +307,8 @@ export default function Create(props) {
                                             b.options.map((optionQ) => {
                                               if (optionQ.id === itemAnswer.id) {
                                                 const tempCorrect = !optionQ.correct
-                                                console.log(tempCorrect)
                                                 optionQ.correct = tempCorrect ? 1 : 0
                                                 setValue(`questions[${indexQuestion}].question_items[${indexEachQuestion}].options[${indexAnswer}].correct`, tempCorrect ? 1 : 0)
-                                                console.log(optionQ.correct)
                                               }
                                             })
                                           }
@@ -347,7 +339,6 @@ export default function Create(props) {
                                       itemQ.question_items.map((b) => {
                                         if (b.id === eachQuestion.id) {
                                           b.options.map((optionQ) => {
-                                            console.log(optionQ)
                                             if (optionQ.id === itemAnswer.id) {
                                               optionQ.title = e.target.value
                                               setValue(`questions[${indexQuestion}].question_items[${indexEachQuestion}].options[${indexAnswer}].title`, e.target.value)
@@ -370,7 +361,6 @@ export default function Create(props) {
                                       if (itemQ.id === itemQuestion.id) {
                                         itemQ.question_items.map((b) => {
                                           if (b.id === eachQuestion.id) {
-                                            console.log(b.id)
                                             b.options = [...b.options.filter(i => i !== itemAnswer)]
                                           }
                                         })
@@ -407,7 +397,6 @@ export default function Create(props) {
                               itemQ
                             }
                           })
-                          console.log(temp)
                           setQuestions([...temp])
                         }} className="text-blue-1 cursor-pointer text-center p-4 border-dashed border-2 border-blue-1 mt-4 rounded-lg">+ Add New Answer</div>
                         <div className="mt-4">

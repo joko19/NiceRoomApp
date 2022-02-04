@@ -31,7 +31,6 @@ export default function Section({ data }) {
   })
   const [selectedData, setSelectedData] = useState()
   const [selectedName, setSelectedName] = useState()
-  const TableHead = ['No', 'Type Question', 'Number of Question', '+ Add Question']
   const [questionType, setQuestionType] = useState()
   const [questionSelectedId, setQuestionSelectedId] = useState()
 
@@ -43,7 +42,6 @@ export default function Section({ data }) {
     await apiExam.detailSection(id)
       .then((res) => {
         setListSection(res.data.data)
-        console.log(res.data.data)
       })
 
   }
@@ -51,7 +49,6 @@ export default function Section({ data }) {
 
   useEffect(() => {
     getDetail()
-    console.log(data)
   }, [])
 
   const onDelete = async (idQuestion) => {
@@ -61,7 +58,7 @@ export default function Section({ data }) {
         onCloseDeleteModal()
       })
       .catch((err) => {
-        console.log(err)
+        // console.log(err)
       })
   }
 
@@ -225,14 +222,6 @@ export default function Section({ data }) {
 
 // This also gets called at build time
 export async function getServerSideProps(context) {
-  // params contains the post `id`.
-  // If the route is like /posts/1, then params.id is 1
-  console.log("ff")
-  console.log(context.query.id)
-  // const res =  await apiExam.detail(6)
-  // const data = await res.json()
-  // console.log(res)
-  // Pass post data to the page via props
   return { props: {} }
 }
 

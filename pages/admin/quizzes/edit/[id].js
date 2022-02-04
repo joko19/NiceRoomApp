@@ -21,8 +21,6 @@ import apiQuiz from "../../../../action/quiz";
 import apiTopic from "../../../../action/topics";
 import { MyDTPicker } from "../../../../components/DateTime/DateTime";
 import { useRouter } from "next/router";
-import moment from 'moment';
-import apiExam from "../../../../action/exam";
 
 export default function Create(props) {
   const Router = useRouter()
@@ -42,9 +40,6 @@ export default function Create(props) {
   const [status, setStatus] = useState()
   const [lastIdOption, setLastIdOption] = useState()
   const [listDeleteOption, setListDeleteOption] = useState([])
-  const [answerType, setAnswerType] = useState([{
-    isSingle: true
-  }])
   const [questions, setQuestions] = useState([{
     id: '',
     question: '',
@@ -148,8 +143,6 @@ export default function Create(props) {
   }
 
   const submitQuiz = async (req) => {
-    console.log("submit")
-    console.log(req)
     setErrors("")
     const data = new FormData()
     if (file !== null) {
@@ -169,7 +162,6 @@ export default function Create(props) {
         .then()
         .catch((err) => {
           setErrors(err.response.data.data)
-          console.log(err.response.data.data)
           if (!err.response.data.data.name && !err.response.data.data.duration && !err.response.data.data.start_time && !err.response.data.data.end_time) {
             setErrors(null)
             setCurrentStep(2)
@@ -192,8 +184,6 @@ export default function Create(props) {
         .then()
         .catch((err) => {
           setErrors(err.response.data.data)
-          console.log(err.response.data.data)
-
           if (!err.response.data.data["consentments"] && !err.response.data.data.instruction) {
             setErrors(null)
             setCurrentStep(3)
@@ -202,12 +192,9 @@ export default function Create(props) {
         })
       return null
     }
-    console.log(req.questions.length)
 
     for (let i = 0; i < req.questions.length; i++) {
-      console.log(req)
       const field = `questions[${i}]`
-      console.log(req.questions[i].id)
       data.append(`${field}[id]`, req.questions[i].id === '' ? -1 : req.questions[i].id)
       data.append(`${field}[level]`, req.questions[i].level)
       data.append(`${field}[tag]`, req.questions[i].tag)
@@ -216,7 +203,6 @@ export default function Create(props) {
       data.append(`${field}[negative_mark]`, req.questions[i].negative_mark)
       data.append(`${field}[question]`, req.questions[i].question)
       data.append(`${field}[answer_explanation]`, req.questions[i].answer_explanation)
-      console.log(req.questions[i].options)
 
       const deleteOption = []
       if (req.questions[i].oldOptions) {
@@ -234,7 +220,6 @@ export default function Create(props) {
       const newOptions = []
       const oldsOption = []
       for (let b = 0; b < currentOption.length; b++) {
-        console.log(currentOption[b].new)
         if (currentOption[b].new) {
           newOptions.push(currentOption[b])
         } else {
@@ -250,7 +235,6 @@ export default function Create(props) {
       for (let j = 0; j < resultOption.length; j++) {
         if (typeof resultOption[j].deleteNew === "undefined") {
           if (typeof resultOption[j].title !== "undefined") {
-            console.log("hello world")
             const opt = `${field}[options][${j}]`
             if (resultOption[j].new) {
               data.append(`${opt}[id]`, -1)
@@ -262,8 +246,6 @@ export default function Create(props) {
             data.append(`${opt}[correct]`, resultOption[j].correct)
             data.append(`${opt}[title]`, resultOption[j].title)
             if (typeof resultOption[j].new === "undefined") {
-              console.log("option lama")
-              console.log(resultOption[j].delete)
               if (resultOption[j].delete === 1)
                 data.append(`${opt}[deleted]`, 1)
             }
@@ -272,16 +254,15 @@ export default function Create(props) {
       }
 
     }
-    for (var key of data.entries()) {
-      console.log(key[0] + ', ' + key[1]);
-    }
+    // for (var key of data.entries()) {
+    //   console.log(key[0] + ', ' + key[1]);
+    // }
     data.append("status", status)
     await apiQuiz.update(id, data)
       .then((res) => {
         onOpenSuccessModal()
       })
       .catch((err) => {
-        console.log(err.response.data.data)
         setErrors(err.response.data.data)
       })
   }
@@ -350,11 +331,7 @@ export default function Create(props) {
                     <div className="p-8 border-dashed border-4 border-black self-center justify-center">
                       <center>
                         <span>{coverName}</span> <span className="text-red-1 rounded border p-1 border-red-1 hover:cursor-pointer" onClick={() => setCoverName(null)}>x</span>
-                        {/* <label htmlFor="file-input">
-         <Image src="/asset/icon/ic_upload.png" alt="icon upload" htmlFor="" width={24} height={24} className="mx-auto cursor-pointer" />
-         <p className="text-center text-blue-1">Upload Image</p>
-       </label> */}
-                      </center>
+                       </center>
                     </div>
                   )}
                   <div className="my-auto ml-4">
@@ -461,7 +438,6 @@ export default function Create(props) {
                         <div className="m-auto cursor-pointer text-blue-1 -ml-8" onClick={() => {
                           let newArr = consenment
                           newArr.splice(index, 1)
-                          console.log(newArr)
                           setConsentment([...newArr])
                         }} >x</div>
                       )}
@@ -570,7 +546,6 @@ export default function Create(props) {
 
                                           }
                                         })
-                                        console.log(b.options)
                                       }
                                     })
                                     setQuestions([...temp])
@@ -590,7 +565,6 @@ export default function Create(props) {
                                     temp.map((b) => {
                                       if (b.id === eachQuestion.id) {
                                         b.options.map((optionQ) => {
-                                          console.log(optionQ)
                                           if (optionQ.id === itemAnswer.id) {
                                             const tempCorrect = !optionQ.correct
                                             optionQ.correct = tempCorrect ? 1 : 0
@@ -619,7 +593,6 @@ export default function Create(props) {
                                   temp.map((b) => {
                                     if (b.id === eachQuestion.id) {
                                       b.options.map((optionQ) => {
-                                        console.log(optionQ)
                                         if (optionQ.id === itemAnswer.id) {
                                           const tempCorrect = !optionQ.correct
                                           optionQ.title = e.target.value
@@ -640,7 +613,6 @@ export default function Create(props) {
                                         b.options = [...b.options.filter(i => i !== itemAnswer)]
                                       }
                                     })
-                                    console.log(lastIdOption)
                                     if (typeof itemAnswer.new === "undefined") {
 
                                       setListDeleteOption([...listDeleteOption, itemAnswer.id])
@@ -661,9 +633,7 @@ export default function Create(props) {
                           )
                         })}
                         <div onClick={() => {
-                          console.log(lastIdOption)
                           const newOption = {
-                            // id: eachQuestion.options[eachQuestion.options.length - 1].id + 1,
                             id: lastIdOption + 1,
                             title: '',
                             correct: null,
@@ -676,7 +646,6 @@ export default function Create(props) {
                               b.options = [...b.options, newOption]
                             }
                           })
-                          console.log(temp)
                           setQuestions([...temp])
                           setLastIdOption(lastIdOption + 1)
                         }} className="text-blue-1 cursor-pointer text-center p-4 border-dashed border-2 border-blue-1 mt-4 rounded-lg">+ Add New Answer</div>
@@ -776,14 +745,6 @@ export default function Create(props) {
 
 // This also gets called at build time
 export async function getServerSideProps(context) {
-  // params contains the post `id`.
-  // If the route is like /posts/1, then params.id is 1
-  console.log("ff")
-  console.log(context.query.id)
-  // const res =  await apiExam.detail(6)
-  // const data = await res.json()
-  // console.log(res)
-  // Pass post data to the page via props
   return { props: {} }
 }
 

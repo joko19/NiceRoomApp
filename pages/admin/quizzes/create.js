@@ -4,7 +4,7 @@ import Image from "next/image";
 import { FaAngleLeft } from "react-icons/fa";
 import Card from "../../../components/Cards/Card";
 import Layout from "../../../Layout/Layout";
-import { useForm, useFieldArray } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import {
   Modal,
   ModalOverlay,
@@ -34,9 +34,6 @@ export default function Create(props) {
   const [endTime, setEndTime] = useState()
   const [consenment, setConsentment] = useState([''])
   const [status, setStatus] = useState()
-  const [answerType, setAnswerType] = useState([{
-    isSingle: true
-  }])
   const [questions, setQuestions] = useState([{
     id: 0,
     question: '',
@@ -60,8 +57,6 @@ export default function Create(props) {
   }
 
   const submitQuiz = async (req) => {
-    console.log("submit")
-    console.log(req)
     setErrors("")
     const data = new FormData()
     if (file !== null) {
@@ -81,7 +76,6 @@ export default function Create(props) {
         .then()
         .catch((err) => {
           setErrors(err.response.data.data)
-          console.log(err.response.data.data)
           if (!err.response.data.data.name && !err.response.data.data.duration && !err.response.data.data.start_time && !err.response.data.data.end_time) {
             setErrors(null)
             setCurrentStep(2)
@@ -91,12 +85,10 @@ export default function Create(props) {
       return null
     }
 
-    console.log(req.consentments)
     data.append("instruction", instruction)
     if (req.consentments) {
       for (let i = 0; i < consenment.length; i++) {
         const field = `consentments[${i}]`
-        console.log(consenment[i])
         data.append(`${field}`, consenment[i])
       }
     }
@@ -106,8 +98,6 @@ export default function Create(props) {
         .then()
         .catch((err) => {
           setErrors(err.response.data.data)
-          console.log(err.response.data.data)
-          console.log(currentStep)
           if (!err.response.data.data["consentments"] && !err.response.data.data.instruction) {
             setErrors(null)
             setCurrentStep(3)
@@ -115,11 +105,10 @@ export default function Create(props) {
           }
           return;
         })
-        return null
+      return null
     }
 
     for (let i = 0; i < req.questions.length; i++) {
-      console.log(req)
       const field = `questions[${i}]`
       data.append(`${field}[level]`, req.questions[i].level)
       data.append(`${field}[tag]`, req.questions[i].tag)
@@ -128,40 +117,24 @@ export default function Create(props) {
       data.append(`${field}[negative_mark]`, req.questions[i].negative_mark)
       data.append(`${field}[question]`, req.questions[i].question)
       data.append(`${field}[answer_explanation]`, req.questions[i].answer_explanation)
-      if(questions[i].options){
+      if (questions[i].options) {
         for (let j = 0; j < questions[i].options.length; j++) {
-              const opt = `${field}[options][${j}]`
-              data.append(`${opt}[correct]`, questions[i].options[j].correct)
-              data.append(`${opt}[title]`, questions[i].options[j].title)
-            }
+          const opt = `${field}[options][${j}]`
+          data.append(`${opt}[correct]`, questions[i].options[j].correct === null ? 0 : questions[i].options[j].correct)
+          data.append(`${opt}[title]`, questions[i].options[j].title)
+        }
 
       }
-      // if (req.questions[i].options) {
-      //   for (let j = 0; j < req.questions[i].options.length; j++) {
-      //     const opt = `${field}[options][${j}]`
-      //     console.log(req.questions[i].options[j].correct)
-      //     data.append(`${opt}[correct]`, req.questions[i].options[j].correct)
-      //     data.append(`${opt}[title]`, req.questions[i].options[j].title)
-      //   }
-      // }
     }
-    console.log(data)
-    // const tag = Array.from(tags)
-    // tag.forEach((item) => {
-    //   data.append("tags"+, item)
-    // })
-    // for console log
-    for (var key of data.entries()) {
-      console.log(key[0] + ', ' + key[1]);
-    }
+    // for (var key of data.entries()) {
+    //   console.log(key[0] + ', ' + key[1]);
+    // }
     data.append("status", status)
-    console.log(data)
     await apiQuiz.create(data)
       .then((res) => {
         onOpenSuccessModal()
       })
       .catch((err) => {
-        console.log(err.response.data.data)
         setErrors(err.response.data.data)
       })
   }
@@ -230,10 +203,6 @@ export default function Create(props) {
                     <div className="p-8 border-dashed border-4 border-black self-center justify-center">
                       <center>
                         <span>{coverName}</span> <span className="text-red-1 rounded border p-1 border-red-1 hover:cursor-pointer" onClick={() => setCoverName(null)}>x</span>
-                        {/* <label htmlFor="file-input">
-         <Image src="/asset/icon/ic_upload.png" alt="icon upload" htmlFor="" width={24} height={24} className="mx-auto cursor-pointer" />
-         <p className="text-center text-blue-1">Upload Image</p>
-       </label> */}
                       </center>
                     </div>
                   )}
@@ -302,7 +271,6 @@ export default function Create(props) {
                       <span className="text-red-1 text-sm">{errors.start_time}</span>
                     )}</p>
                     <MyDTPicker data={startTime} setDate={(data) => {
-                      console.log(data)
                       setStartTime(data)
                       setValue("start_time", data)
                     }} />
@@ -312,7 +280,6 @@ export default function Create(props) {
                       <span className="text-red-1 text-sm">{errors.end_time}</span>
                     )}</p>
                     <MyDTPicker data={endTime} setDate={(data) => {
-                      console.log(data)
                       setEndTime(data)
                       setValue("end_time", data)
                     }} />
@@ -336,7 +303,7 @@ export default function Create(props) {
                   <span className="text-red-1 text-sm">{errors[`consentments.${index}`]}</span>
                 )}
                   <div key={index} className="flex">
-                    <input key={index} type="text" value={item}  onChange={(e) => {
+                    <input key={index} type="text" value={item} onChange={(e) => {
                       const arr = consenment
                       arr[index] = e.target.value
                       setConsentment([...arr])
@@ -347,7 +314,6 @@ export default function Create(props) {
                       <div className="m-auto cursor-pointer text-blue-1 -ml-8" onClick={() => {
                         let newArr = consenment
                         newArr.splice(index, 1)
-                        console.log(newArr)
                         setConsentment([...newArr])
                       }} >x</div>
                     )}
@@ -422,10 +388,8 @@ export default function Create(props) {
                         )}
                         {eachQuestion.options.map((itemAnswer, indexAnswer) => {
                           const alphabet = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z']
-                          if (itemAnswer.new) {
-                            if (itemAnswer.correct === null) {
-                              setValue(`questions[${indexEachQuestion}].options[${indexAnswer}].correct`, 0)
-                            }
+                          if (itemAnswer.correct === null) {
+                            setValue(`questions[${indexEachQuestion}].options[${indexAnswer}].correct`, 0)
                           }
                           return (
                             <div className={`${itemAnswer.correct === 1 ? 'bg-blue-6 border-blue-1' : 'bg-white'} my-2  p-4 border rounded-lg`} key={indexAnswer}>
@@ -452,7 +416,6 @@ export default function Create(props) {
 
                                           }
                                         })
-                                        console.log(b.options)
                                       }
                                     })
                                     setQuestions([...temp])
@@ -472,7 +435,6 @@ export default function Create(props) {
                                     temp.map((b) => {
                                       if (b.id === eachQuestion.id) {
                                         b.options.map((optionQ) => {
-                                          console.log(optionQ)
                                           if (optionQ.id === itemAnswer.id) {
                                             const tempCorrect = !optionQ.correct
                                             optionQ.correct = tempCorrect ? 1 : 0
@@ -501,7 +463,6 @@ export default function Create(props) {
                                   temp.map((b) => {
                                     if (b.id === eachQuestion.id) {
                                       b.options.map((optionQ) => {
-                                        console.log(optionQ)
                                         if (optionQ.id === itemAnswer.id) {
                                           const tempCorrect = !optionQ.correct
                                           optionQ.title = e.target.value
@@ -521,17 +482,12 @@ export default function Create(props) {
                                       title: '',
                                       correct: 0
                                     }
-                                    console.log("before")
-                                    console.log(questions)
                                     const temp = questions
                                     temp.map((b) => {
                                       if (b.id === eachQuestion.id) {
-                                        console.log(b.id)
                                         b.options = [...b.options.filter(i => i !== itemAnswer)]
                                       }
                                     })
-                                    console.log("after")
-                                    console.log(temp)
                                     setQuestions([...temp])
                                   }} >
                                     <Image src="/asset/icon/table/fi_trash-2.png" width={16} height={16} alt="icon delete" />

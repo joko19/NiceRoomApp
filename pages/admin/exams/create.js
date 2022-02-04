@@ -49,7 +49,6 @@ export default function Create(props) {
   const getBranch = async () => {
     await apiBranch.all()
       .then((res) => {
-        // console.log(res)
         setListBranch(res.data.data)
       })
   }
@@ -125,14 +124,12 @@ export default function Create(props) {
   }
 
   const submitExams = async (data) => {
-    console.log("submit")
     if(data.type === 'standard'){
       delete data.start_time
       delete data.end_time
       delete data.start_date
       delete data.end_date
     }
-    console.log(data)
     if (currentStep === 1) {
       await apiExam.create(data)
         .then()
@@ -153,8 +150,6 @@ export default function Create(props) {
         .then()
         .catch((err) => {
           setErrors(err.response.data.data)
-          console.log(err.response.data.data)
-
           if (!err.response.data.data["consentments"] && !err.response.data.data.instruction) {
             setErrors(null)
             setCurrentStep(3)
@@ -170,7 +165,6 @@ export default function Create(props) {
           onOpenSuccessModal()
         })
         .catch((err) => {
-          console.log(err.response.data.data)
           setErrors(err.response.data.data)
         })
     }
@@ -433,7 +427,6 @@ export default function Create(props) {
                       <div className="m-auto cursor-pointer text-blue-1 -ml-8" onClick={() => {
                         let newArr = consentments
                         newArr.splice(index, 1)
-                        console.log(newArr)
                         setConsentments([...newArr])
                       }} >x</div>
                     )}

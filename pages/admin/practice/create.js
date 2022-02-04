@@ -68,8 +68,6 @@ export default function Create(props) {
   }
 
   const submitPractice = async (data) => {
-    console.log("submit")
-    console.log(data)
     if (currentStep === 1) {
       await apiPractice.create(data)
         .then(() =>
@@ -87,13 +85,11 @@ export default function Create(props) {
 
     data.consentments = consentments
     if (currentStep === 2) {
-      console.log(data)
       await apiPractice.create(data)
         .then(() =>
           setCurrentStep(3))
         .catch((err) => {
           setErrors(err.response.data.data)
-          console.log(err.response.data.data)
 
           if (!err.response.data.data["consentments"] && !err.response.data.data.instruction && !err.response.data.data.start_time) {
             setErrors(null)
@@ -110,7 +106,6 @@ export default function Create(props) {
           onOpenSuccessModal()
         })
         .catch((err) => {
-          console.log(err.response.data.data)
           setErrors(err.response.data.data)
         })
     }
@@ -261,7 +256,6 @@ export default function Create(props) {
                       <div className="m-auto cursor-pointer text-blue-1 -ml-8" onClick={() => {
                         let newArr = consentments
                         newArr.splice(index, 1)
-                        console.log(newArr)
                         setConsentments([...newArr])
                       }} >x</div>
                     )}
