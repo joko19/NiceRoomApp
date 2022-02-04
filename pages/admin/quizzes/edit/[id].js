@@ -39,6 +39,7 @@ export default function Create(props) {
   const [consenment, setConsentment] = useState([])
   const [status, setStatus] = useState()
   const [lastIdOption, setLastIdOption] = useState()
+  const [oldType, setOldType] = useState()
   const [listDeleteOption, setListDeleteOption] = useState([])
   const [questions, setQuestions] = useState([{
     id: '',
@@ -77,6 +78,7 @@ export default function Create(props) {
         setValue("duration", data.duration)
         setValue("type", data.type)
         setType(data.type)
+        setOldType(data.type)
         if (data.type === 'live') {
           setValue("topic_id", data.topic_id)
           setValue("start_time", data.start_time)
@@ -150,10 +152,17 @@ export default function Create(props) {
     }
     data.append("name", req.name)
     data.append("type", req.type)
-    if (req.type === 'live') {
+    if (req.type === 'live' && oldType === 'live') {
       data.append("topic_id", req.topic_id)
       req.start_time.split(":").length === 2 && data.append("start_time", req.start_time)
       req.end_time.split(":").length === 2 && data.append("end_time", req.end_time)
+    }
+    
+    if (req.type === 'live' && oldType === 'mixed') {
+      console.log(req.start_time)
+      data.append("topic_id", req.topic_id)
+      data.append("start_time", startTime)
+      data.append("end_time", endTime)
     }
     data.append("duration", req.duration)
     // to step 2
@@ -331,7 +340,7 @@ export default function Create(props) {
                     <div className="p-8 border-dashed border-4 border-black self-center justify-center">
                       <center>
                         <span>{coverName}</span> <span className="text-red-1 rounded border p-1 border-red-1 hover:cursor-pointer" onClick={() => setCoverName(null)}>x</span>
-                       </center>
+                      </center>
                     </div>
                   )}
                   <div className="my-auto ml-4">
