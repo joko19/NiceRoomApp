@@ -111,8 +111,8 @@ export default function Index() {
                               </div>
                             </div>
                           </td>
-                          <td className="px-6 py-4 whitespace-nowrap">
-                            <div>{item.type}</div>
+                          <td className="px-6 py-4 whitespace-nowrap text-center">
+                            <div>{item.exam_type.name}</div>
                           </td>
                           <td className="px-6 py-4 whitespace-nowrap ">
                             <div className={`${item.status === 'draft' ? 'bg-black-8 text-black-3' : 'bg-green-2 text-green-1'} text-center rounded-lg p-3 `}>

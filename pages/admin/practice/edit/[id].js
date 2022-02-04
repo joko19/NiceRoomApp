@@ -162,6 +162,15 @@ export default function Create(props) {
     }
 
     if (currentStep === 3) {
+      const arr = []
+      if (consentments) {
+        for (let i = 0; i < consentments.length; i++) {
+          arr.push(consentments[i])
+          const field = `consentments[${i}]`
+          setValue(`${field}`, consentments[i])
+        }
+      }
+      data.consentments = arr
       await apiPractice.update(id, data)
         .then((res) => {
           onOpenSuccessModal()

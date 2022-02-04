@@ -128,14 +128,22 @@ export default function Create(props) {
       data.append(`${field}[negative_mark]`, req.questions[i].negative_mark)
       data.append(`${field}[question]`, req.questions[i].question)
       data.append(`${field}[answer_explanation]`, req.questions[i].answer_explanation)
-      if (req.questions[i].options) {
-        for (let j = 0; j < req.questions[i].options.length; j++) {
-          const opt = `${field}[options][${j}]`
-          console.log(req.questions[i].options[j].correct)
-          data.append(`${opt}[correct]`, req.questions[i].options[j].correct)
-          data.append(`${opt}[title]`, req.questions[i].options[j].title)
-        }
+      if(questions[i].options){
+        for (let j = 0; j < questions[i].options.length; j++) {
+              const opt = `${field}[options][${j}]`
+              data.append(`${opt}[correct]`, questions[i].options[j].correct)
+              data.append(`${opt}[title]`, questions[i].options[j].title)
+            }
+
       }
+      // if (req.questions[i].options) {
+      //   for (let j = 0; j < req.questions[i].options.length; j++) {
+      //     const opt = `${field}[options][${j}]`
+      //     console.log(req.questions[i].options[j].correct)
+      //     data.append(`${opt}[correct]`, req.questions[i].options[j].correct)
+      //     data.append(`${opt}[title]`, req.questions[i].options[j].title)
+      //   }
+      // }
     }
     console.log(data)
     // const tag = Array.from(tags)
@@ -313,7 +321,6 @@ export default function Create(props) {
               )}
             </div>
           )}
-
 
           {currentStep === 2 && (
             <>

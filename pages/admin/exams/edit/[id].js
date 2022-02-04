@@ -79,7 +79,7 @@ export default function Create(props) {
           setEndTime(end)
         }
         setValue("instruction", data.instruction)
-
+        console.log(data.consentments)
         if (data.consentments !== 'null') {
           const str = data.consentments.replace(/['"]+/g, '').slice(1)
           const myArr = str.slice(0, str.length - 1).split(", ")
@@ -251,6 +251,16 @@ export default function Create(props) {
 
     if (currentStep === 3) {
       console.log(data)
+      delete data.consentments
+      const arr = []
+      if (consentments) {
+        for (let i = 0; i < consentments.length; i++) {
+          arr.push(consentments[i])
+          const field = `consentments[${i}]`
+          setValue(`${field}`, consentments[i])
+        }
+      }
+      data.consentments = arr
       await apiExam.update(id, data)
         .then((res) => {
           onOpenSuccessModal()

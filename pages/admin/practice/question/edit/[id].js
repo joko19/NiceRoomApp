@@ -199,7 +199,7 @@ export default function Edit(props) {
 
   return (
     <div className="md:pt-12 md:pb-28">
-      <Link href="/admin/exams">
+      <Link href="/admin/practice">
         <a className="flex gap-4 text-blue-1 my-8"><FaAngleLeft /> Back</a>
       </Link>
       <Card
@@ -567,7 +567,7 @@ export default function Edit(props) {
           <div className="flex -z-10 gap-4 flex-row-reverse my-4">
             <button className='cursor-pointer bg-blue-1  text-white p-4 rounded-lg'>Save Question</button>
 
-            <Link href="/admin/exams">
+            <Link href="/admin/practice">
               <a className="flex gap-4 text-blue-1">
                 <div onClick={() => setStatus("draft")} className='cursor-pointer text-blue-1 p-4 rounded-lg'>Cancel</div>
               </a>
@@ -586,7 +586,7 @@ export default function Edit(props) {
             <div className="flex flex-col text-center ">
               Successfully Update Question
               <div className="self-center">
-                <Link href={`/admin/exams/`}>
+                <Link href={`/admin/practice/`}>
                   <a className="bg-blue-1 rounded-lg text-white mt-4 block align-center p-3">Okay</a>
                 </Link>
               </div>

@@ -12,14 +12,31 @@ export default function DatePicker2({data = false, setData = false }) {
   const [date, setDate] = useState(new Date());
   const [updateData, setUpdateData] = useState()
   useEffect(() => {
-    setData(convert(data))
+    console.log(date)
+    if(!data){
+      setData(convert(date))
+    } else {
+      setData(convert(data))
+    }
+    console.log(date)
     data !== false && setUpdateData(data)
   }, [data])
-  return (
-    <DatePicker dateFormat="yyyy/MM/dd" placeholderText={updateData !== '' ? updateData : data !== false && data} selected={data === false && date} onChange={date => {
-      setUpdateData(convert(date))
-      setDate(date)
+
+  useEffect(() => {
+    console.log(date)
+    if(!data){
       setData(convert(date))
+    } else {
+      setData(convert(data))
+    }
+    console.log(date)
+    data !== false && setUpdateData(data)
+  }, [])
+  return (
+    <DatePicker dateFormat="yyyy/MM/dd" placeholderText={updateData !== '' ? updateData : data !== false && data} selected={data === false && date} onChange={e => {
+      setUpdateData(convert(e))
+      setDate(e)
+      setData(convert(e))
     }} />
   );
 }

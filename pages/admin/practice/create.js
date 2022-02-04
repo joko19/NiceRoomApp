@@ -85,6 +85,7 @@ export default function Create(props) {
       return null
     }
 
+    data.consentments = consentments
     if (currentStep === 2) {
       console.log(data)
       await apiPractice.create(data)

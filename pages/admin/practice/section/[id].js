@@ -79,10 +79,20 @@ export default function Create(props) {
   }
 
   const submitQuiz = async (data) => {
-    console.log(data)
+    for (let h = 0; h < data.questions.length; h++) {
+      for (let i = 0; i < data.questions[h].question_items.length; i++) {
+        const currentOption = [...data.questions[h].question_items[i].options]
+        const finalOptions = []
+        for (let b = 0; b < currentOption.length; b++) {
+          if (typeof currentOption[b].deleteNew === "undefined") {
+            finalOptions.push(currentOption[b])
+          }
+        }
+        data.questions[h].question_items[i].options = finalOptions
+      }
+    }
     await apiPractice.createQuestion(data)
       .then((res) => {
-        console.log(res.data.data)
         onOpenSuccessModal()
       })
       .catch((err) => {
@@ -381,6 +391,7 @@ export default function Create(props) {
                                         itemQ
                                       }
                                     })
+                                    setValue(`questions[${indexQuestion}].question_items[${indexEachQuestion}].options[${indexAnswer}].deleteNew`, true)
                                     setQuestions([...temp])
                                   }} >
                                     <Image src="/asset/icon/table/fi_trash-2.png" width={16} height={16} alt="icon delete" />
@@ -549,21 +560,9 @@ export default function Create(props) {
 
 // This also gets called at build time
 export async function getServerSideProps(context) {
-  // params contains the post `id`.
-  // If the route is like /posts/1, then params.id is 1
-  console.log("ff")
-  console.log(context.query.id)
   const idExam = context.query.id
-  // getDetail(idExam)
   const idSection = idExam.split('=')[1]
   const num = idSection.split('#')[0]
-  // setIdSection(num)
-  console.log(num)
-  // setValue("section_id", num)
-  // const res =  await apiPractice.detail(6)
-  // const data = await res.json()
-  // console.log(res)
-  // Pass post data to the page via props
   return { props: { id_section: num } }
 }
 Create.layout = Layout

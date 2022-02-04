@@ -104,7 +104,7 @@ export default function Edit(props) {
 
     for (let i = 0; i < data.question_items.length; i++) {
       const deleteOption = []
-      if(data.question_items[i].new){
+      if (data.question_items[i].new) {
         data.question_items[i].id = -1
       }
       console.log(data)
@@ -460,16 +460,10 @@ export default function Edit(props) {
                                       }
                                     })
                                     if (typeof itemAnswer.new === "undefined") {
-
                                       setListDeleteOption([...listDeleteOption, itemAnswer.id])
-                                      // setValue(`deleted[${itemAnswer.id}]`, itemAnswer.id)
-                                      // unregister(`questions[${indexEachQuestion}].options[${indexAnswer}].title`)
-                                      // setValue(`questions[${indexEachQuestion}].options[${indexAnswer}].delete`, 1)
-                                      // setValue()
                                     } else {
                                       setValue(`question_items[${indexEachQuestion}].options[${indexAnswer}].deleteNew`, true)
                                     }
-                                    // setValue(`question_items[${indexEachQuestion}].options[${indexAnswer}].deleted`, 1)
                                     setQuestions([...temp])
                                   }} >
                                     <Image src="/asset/icon/table/fi_trash-2.png" width={16} height={16} alt="icon delete" />
@@ -539,7 +533,7 @@ export default function Edit(props) {
                       question: '',
                       answer_type: 'single',
                       new: true,
-                      level:'easy',
+                      level: 'easy',
                       options: [{
                         id: 0,
                         title: '',
