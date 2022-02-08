@@ -3,7 +3,6 @@ import Card from "../../components/Cards/Card";
 import Image from "next/image";
 import apiTopic from "../../action/topics";
 import {
-  Button,
   Modal,
   ModalOverlay,
   ModalContent,
@@ -16,7 +15,7 @@ import {
 import { useForm } from "react-hook-form";
 import Pagination from "../../components/Pagination/pagination";
 import Layout from "../../Layout/Layout";
-
+import Button from "../../components/Button/button";
 
 export default function Topics() {
   const [search, setSearch] = useState('')
@@ -47,7 +46,7 @@ export default function Topics() {
         console.log(err)
       })
   }
-  useEffect(async() => {
+  useEffect(async () => {
     getData(search, limit, page)
   }, [])
 
@@ -71,19 +70,20 @@ export default function Topics() {
   }
   return (
     <>
-      <div className="pt-24 md:py-24">
+      <div className="md:mt-8 md:py-8">
         <Card
           title="Topics"
           right={(
-            <button className="btn btn-md bg-blue-1 text-white p-3 rounded-lg" onClick={() => {
+            <div onClick={() => {
               setValue("name", "")
               onOpenCreateModal()
             }}>
-              + Create Topic
-            </button>
+
+              <Button title="+ Create Topic" />
+            </div>
           )}
         >
-          <input type="text" className="p-4 border rounded-lg w-1/2 mb-4" placeholder="Search Topic" onChange={(e) => {
+          <input type="text" className="p-2 border rounded w-1/2 mb-4" placeholder="Search Topic" onChange={(e) => {
             setSearch(e.target.value)
             getData(e.target.value, limit, page)
           }} />
@@ -133,7 +133,7 @@ export default function Topics() {
                     </tbody>
                   </table>
                 </div>
-                <Pagination page={page} lastPage={topics.last_page} limit={limit} search={search} total={topics.total} doLimit={data => setLimit(data)} doData={getData}/>
+                <Pagination page={page} lastPage={topics.last_page} limit={limit} search={search} total={topics.total} doLimit={data => setLimit(data)} doData={getData} />
               </div>
             </div>
           </div>
@@ -148,13 +148,13 @@ export default function Topics() {
           <ModalHeader>{update ? 'Update' : 'Create'} Topic</ModalHeader>
           <ModalCloseButton />
           <ModalBody>
-            <form onSubmit={handleSubmit(onSubmit)}  className="pb-4">
+            <form onSubmit={handleSubmit(onSubmit)} className="pb-4">
               <div>
                 <p>Topic Name</p>
-                <input type="text" className="form border w-full p-4 rounded-lg" placeholder="Input Topic Name" {...register("name", { required: true })} />
+                <input type="text" className="form border w-full p-2 rounded" placeholder="Input Topic Name" {...register("name", { required: true })} />
               </div>
               <div className="flex flex-row-reverse gap-4 mt-4">
-                <button type="submit" className="bg-blue-1 p-3 rounded-lg text-white" >Save Topic</button>
+                <Button title="Save Topic" />
                 <button type="button" className="text-black-4 p-3 rounded-lg" onClick={onCloseCreateModal}>Close</button>
               </div>
             </form>
@@ -163,8 +163,8 @@ export default function Topics() {
       </Modal>
 
       {/* Delete Confirmation */}
-      <Modal isOpen={isOpen} onClose={onClose}>
-        <ModalOverlay />
+      <Modal isOpen={isOpen} onClose={onClose} isCentered>
+        <ModalOverlay /> 
         <ModalContent>
           <ModalHeader>Confirmation</ModalHeader>
           <ModalCloseButton />
@@ -172,14 +172,16 @@ export default function Topics() {
             Are you sure to Delete it ?
           </ModalBody>
           <ModalFooter>
-            <Button colorScheme='blue' mr={3} onClick={onClose}>
+            <div className="cursor-pointer text-black-4" onClick={onClose}>
               Cancel
-            </Button>
-            <Button colorScheme='red' onClick={() => {
+            </div>
+            <div onClick={() => {
               onDelete(selectedData)
               getData(search, limit, page)
               onClose()
-            }} onClose={onClose}>Deleted</Button>
+            }}>
+              <Button title="Delete" />
+            </div>
           </ModalFooter>
         </ModalContent>
       </Modal>

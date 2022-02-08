@@ -18,6 +18,7 @@ import {
 import { useQuill } from 'react-quilljs';
 import instance from "../../../action/instance";
 import Multiselect from 'multiselect-react-dropdown';
+import Button from "../../../components/Button/button";
 
 export default function Create(props) {
   const { quill, quillRef } = useQuill();
@@ -79,7 +80,7 @@ export default function Create(props) {
   }, [quill])
 
 
-  const submitNews = async (req,status) => {
+  const submitNews = async (req, status) => {
     const data = new FormData()
     data.append("title", req.title)
     data.append("sub_title", req.subtitle)
@@ -125,10 +126,10 @@ export default function Create(props) {
   return (
     <div className="md:pt-12 md:pb-28">
       <Link href="/admin/news">
-        <a className="flex gap-4 text-blue-1 my-8"><FaAngleLeft /> Back</a>
+        <a className="flex gap-4 text-blue-1 my-4"><FaAngleLeft /> Back</a>
       </Link>
       <Card
-        className="md:mt-8 w-full  bg-white overflow-visible"
+        className="md:mt-4 w-full  bg-white overflow-visible"
         title="Create News" >
         <form onSubmit={handleSubmit(submitNews)}>
           {coverName === null && (
@@ -145,31 +146,18 @@ export default function Create(props) {
             <div className="p-8 border-dashed border-4 border-black self-center justify-center">
               <center>
                 <span>{coverName}</span> <span className="text-red-1 rounded border p-1 border-red-1 hover:cursor-pointer" onClick={() => setCoverName(null)}>x</span>
-                {/* <label htmlFor="file-input">
-                  <Image src="/asset/icon/ic_upload.png" alt="icon upload" htmlFor="" width={24} height={24} className="mx-auto cursor-pointer" />
-                  <p className="text-center text-blue-1">Upload Image</p>
-                </label> */}
               </center>
             </div>
           )}
-          {/* {image !== null && (
-            <center>
-              <img src={image} alt="image preview" className="object-cover w-1/2" />
-              <label htmlFor="file-input">
-                <Image src="/asset/icon/ic_upload.png" alt="icon upload" htmlFor="" width={24} height={24} className="mx-auto cursor-pointer" />
-                <p className="text-center text-blue-1">Change Image</p>
-              </label>
-            </center>
-          )} */}
           <input type="file" accept="image/*" className="hidden" id="file-input" onChange={chooseImage} />
           <p className="mt-4">News Title {errors && (
             <span className="text-red-1 text-sm">{errors.sub_title}</span>
           )}</p>
-          <input type="text" className="border w-full rounded p-4" placeholder="Input News Title"  {...register("title")} />
+          <input type="text" className="border w-full rounded p-2" placeholder="Input News Title"  {...register("title")} />
           <p className="mt-4" >Sub-Title {errors && (
             <span className="text-red-1 text-sm">{errors.sub_title}</span>
           )}</p>
-          <input type="text" className="border w-full rounded p-4" placeholder="Input News Sub-Title" {...register("subtitle")} />
+          <input type="text" className="border w-full rounded p-2" placeholder="Input News Sub-Title" {...register("subtitle")} />
           <p className="mt-4">Description</p>
           <div className="w-full h-96 mb-16">
             <div ref={quillRef} />
@@ -187,8 +175,13 @@ export default function Create(props) {
             />
           </div>
           <div className="flex -z-10 gap-4 flex-row-reverse my-4">
-            <button onClick={() =>setIsPublish("published")} className="bg-blue-1 text-white p-4 rounded-lg">Publish News</button>
-            <button onClick={() => setIsPublish("draft")} className="bg-yellow-1 text-white p-4 rounded-lg">Save as Draft</button>
+            <div onClick={() => setIsPublish("published")}>
+              <Button title="Publish" /></div>
+            <div>
+              <div onClick={() => setIsPublish("draft")}>
+              <button className={`bg-yellow-1 text-white p-2 rounded  hover:filter hover:drop-shadow-xl m-2`} >Save as Draft</button>
+            </div>
+          </div>
           </div>
         </form>
       </Card>
@@ -204,7 +197,7 @@ export default function Create(props) {
               <p> News Created Successfully </p>
               <div className="self-center">
                 <Link href="/admin/news">
-                  <a className="bg-blue-1 rounded-lg text-white mt-4 block align-center p-3">Okay</a>
+                  <a className="bg-blue-1 rounded-lg text-white mt-4 block align-center p-3"><Button title="Okay"/></a>
                 </Link>
               </div>
             </div>

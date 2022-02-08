@@ -3,6 +3,7 @@ import Link from 'next/link'
 import { useRouter } from 'next/router';
 import apiExam from "../../action/exam";
 import { Select } from '@chakra-ui/react'
+import Button from "../Button/button";
 
 function Header(props) {
   const [active, setActive] = useState(false);
@@ -46,7 +47,7 @@ function Header(props) {
   return (
     <>
       <div className="flex hidden md:flex bg-blue-1 md:px-12 py-4 gap-8 md:justify-between fixed w-full top-0 z-50">
-        <h1 className="text-white text-4xl mx-4"><Link href="/landing"><a> Examz.</a></Link></h1>
+        <h1 className="text-white text-3xl mx-4"><Link href="/landing"><a> Examz.</a></Link></h1>
 
         <div>
           <ul className="pt-4 hidden md:flex text-white flex md:flex-row flex-col gap-5">
@@ -62,18 +63,12 @@ function Header(props) {
         </div>
 
         <div className="md:flex hidden md:flex-row flex-col gap-4 justify-center">
-          <Select defaultValue="Select Category" placeholder="Select Category" bg='white' className="text-blue-1" size="lg" variant='outline' iconColor="blue">
+          <Select defaultValue="Select Category" placeholder="Select Category" bg='white' className="text-blue-1" size="md" variant='outline' iconColor="blue">
             {category.map((item) => (
               <option key={item.id}>{item.name}</option>
             ))}
           </Select>
-          <Link href="landing#register">
-            <a className="flex text-white border-2 rounded-lg h-full px-4">
-              <span className="m-auto">
-                Register
-              </span>
-            </a>
-          </Link>
+          <Button title="Register" href="landing#register" />
         </div>
       </div >
 

@@ -17,6 +17,7 @@ import { useForm } from "react-hook-form";
 import Pagination from "../../components/Pagination/pagination";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import instance from "../../action/instance";
+import Button from "../../components/Button/button";
 
 export default function Operator() {
   const [search, setSearch] = useState('')
@@ -153,11 +154,11 @@ export default function Operator() {
 
   return (
     <>
-      <div className="md:py-24 mt-24 md:mt-12">
+      <div className="md:py-8 mt-24 md:mt-8">
         <Card
           title="Operator"
           right={(
-            <button className="btn btn-md bg-blue-1 text-white p-3 rounded-lg" onClick={() => {
+            <div onClick={() => {
               setAvatar('/asset/img/blank_profile.png')
               getBranch()
               setUpdate(false)
@@ -165,11 +166,11 @@ export default function Operator() {
               setErrors(null)
               reset()
             }}>
-              + Add Operator
-            </button>
+              <Button title="+ Add Operator" />
+            </div>
           )}
         >
-          <input type="text" className="p-4 border rounded-lg w-1/2 mb-4" placeholder="Search Operator" onChange={(e) => {
+          <input type="text" className="p-2 border rounded w-1/2 mb-4" placeholder="Search Operator" onChange={(e) => {
             setSearch(e.target.value)
             getData(e.target.value, limit, page)
           }} />
@@ -261,7 +262,7 @@ export default function Operator() {
                 <p>Full Name {errors && (
                   <span className="text-red-1 text-sm">{errors.name}</span>
                 )}</p>
-                <input type="text" className="w-full form border p-4 rounded-lg" placeholder="Input Full Name" {...register("name")} />
+                <input type="text" className="w-full form border p-2 rounded" placeholder="Input Full Name" {...register("name")} />
               </div>
 
               <div className="flex gap-4 flex-col md:flex-row mt-4">
@@ -269,13 +270,13 @@ export default function Operator() {
                   <p>Email {errors && (
                     <span className="text-red-1 text-sm">{errors.email}</span>
                   )}</p>
-                  <input type="text" className="form border w-full p-4 rounded-lg" placeholder="Input Email Address" {...register("email")} />
+                  <input type="text" className="form border w-full p-2 rounded" placeholder="Input Email Address" {...register("email")} />
                 </div>
                 <div className="w-full">
                   <p>Phone{errors && (
                     <span className="text-red-1 text-sm">{errors.phone}</span>
                   )}</p>
-                  <input type="number" className="form border p-4 w-full rounded-lg" placeholder="Input Phone Number" {...register("phone")} />
+                  <input type="number" className="form border w-full  p-2 rounded" placeholder="Input Phone Number" {...register("phone")} />
                 </div>
               </div>
 
@@ -285,7 +286,7 @@ export default function Operator() {
                     <span className="text-red-1 text-sm">{errors.password}</span>
                   )}</p>
                   <div className="relative">
-                    <input type={`${passwd ? 'password' : 'text'}`} {...register("password")} className="form w-full border p-4 rounded-lg" placeholder="Input New Password" />
+                    <input type={`${passwd ? 'password' : 'text'}`} {...register("password")} className="form w-full border p-2 rounded" placeholder="Input New Password" />
                     <span className="absolute inset-y-0 cursor-pointer right-0 pr-3 flex items-center text-sm leading-5" onClick={() => {
                       passwd ? setpasswd(false) : setpasswd(true)
                     }}>
@@ -301,7 +302,7 @@ export default function Operator() {
                     <span className="text-red-1 text-sm">{errors.password}</span>
                   )}</p>
                   <div className="relative">
-                    <input type={`${passwdConfirmation ? 'password' : 'text'}`} {...register("password_confirmation")} className="form w-full border p-4 rounded-lg" placeholder="Input New Password" />
+                    <input type={`${passwdConfirmation ? 'password' : 'text'}`} {...register("password_confirmation")} className="form w-full border p-2 rounded" placeholder="Input New Password" />
                     <span className="absolute inset-y-0 cursor-pointer right-0 pr-3 flex items-center text-sm leading-5" onClick={() => {
                       passwdConfirmation ? setpasswdConfirmation(false) : setpasswd(true)
                     }}>
@@ -314,7 +315,7 @@ export default function Operator() {
                 </div>
               </div>
               <div className="flex flex-row-reverse gap-4 mt-4">
-                <button type="submit" className="bg-blue-1 p-3 rounded-lg text-white" >Save</button>
+                <Button title="Save" />
                 <button type="button" className="text-black-4 p-3 rounded-lg" onClick={onCloseCreateModal}>Close</button>
               </div>
             </form>
@@ -332,10 +333,12 @@ export default function Operator() {
             <div className="flex flex-col text-center ">
               <p>{getValues('name')} {update ? 'Update' : 'Create'} Successfully </p>
               <div className="self-center">
-                <button className="bg-blue-1 rounded-lg text-white mt-4 block align-center p-3" onClick={() => {
+                <div onClick={() => {
                   onCloseSuccessModal()
                   setUpdate(false)
-                }}>Okay</button>
+                }}>
+                  <Button title="Okay" />
+                </div>
               </div>
             </div>
           </ModalBody>
@@ -353,10 +356,11 @@ export default function Operator() {
               <button className="text-black-4 p-3" mr={3} onClick={onClose}>
                 Cancel
               </button>
-              <button className="bg-red-1 text-white p-3 rounded-lg" onClick={() => {
+              <div onClick={() => {
                 onDelete(selectedData)
                 onClose()
-              }} onClose={onClose}>Delete</button>
+              }}>
+                <Button title="Delete" /></div>
             </div>
           </ModalBody>
         </ModalContent>

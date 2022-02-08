@@ -5,7 +5,6 @@ import { useEffect, useState } from 'react'
 import Image from "next/image";
 import Link from "next/link";
 import {
-  Button,
   Modal,
   ModalOverlay,
   ModalContent,
@@ -18,6 +17,7 @@ import {
 import { useForm } from "react-hook-form";
 import Pagination from "../../../components/Pagination/pagination";
 import { region } from "../../../action/India";
+import Button from "../../../components/Button/button";
 
 export default function Institute() {
   const [search, setSearch] = useState('')
@@ -118,20 +118,20 @@ export default function Institute() {
 
   return (
     <>
-      <div className="md:py-24 mt-24 md:mt-12">
+      <div className="md:py-8 mt-24 md:mt-8">
         <Card
           title="Institution"
           right={(
-            <button className="btn btn-md bg-blue-1 text-white p-3 rounded-lg" onClick={() => {
+            <div onClick={() => {
               onOpenCreateModal()
               setErrors(null)
               reset()
             }}>
-              + Create Institute
-            </button>
+              <Button title="+ Create Institute" />
+            </div>
           )}
         >
-          <input type="text" className="p-4 border rounded-lg w-1/2 mb-4" placeholder="Search Institute" onChange={(e) => {
+          <input type="text" className="p-2 border rounded w-1/2 mb-4" placeholder="Search Institute" onChange={(e) => {
             setSearch(e.target.value)
             getData(e.target.value, limit, page)
           }} />
@@ -215,13 +215,13 @@ export default function Institute() {
                   <p>Institute Name {errors && (
                     <span className="text-red-1 text-sm">{errors.name}</span>
                   )}</p>
-                  <input type="text" className="w-full form border p-4 rounded-lg" placeholder="Input Institute Name" {...register("name")} />
+                  <input type="text" className="w-full form border p-2 rounded" placeholder="Input Institute Name" {...register("name")} />
                 </div>
                 <div className="w-full">
                   <p>Address {errors && (
                     <span className="text-red-1 text-sm">{errors.address}</span>
                   )}</p>
-                  <input type="text" className="form border w-full p-4 rounded-lg" placeholder="Input Institute Address" {...register("address")} />
+                  <input type="text" className="form border w-full p-2 rounded" placeholder="Input Institute Address" {...register("address")} />
                 </div>
               </div>
               <div className="flex gap-4">
@@ -229,7 +229,7 @@ export default function Institute() {
                   <p className="mt-4">State {errors && (
                     <span className="text-red-1 text-sm">{errors.state}</span>
                   )}</p>
-                  <select id="state" className="form border bg-white w-full p-4 rounded-lg" defaultValue="Select State" placeholder="Choose State" {...register("state")} onChange={chooseState}>
+                  <select id="state" className="form border bg-white w-full p-2 rounded" defaultValue="Select State" placeholder="Choose State" {...register("state")} onChange={chooseState}>
                     <option disabled>Select State</option>
                     {region.map((item) => {
                       return (
@@ -242,7 +242,7 @@ export default function Institute() {
                   <p className="mt-4">City {errors && (
                     <span className="text-red-1 text-sm">{errors.city}</span>
                   )}</p>
-                  <select className="form border bg-white w-full p-4 rounded-lg" defaultValue="Select City"  {...register("city")} >
+                  <select className="form border bg-white w-full p-2 rounded" defaultValue="Select City"  {...register("city")} >
                     <option disabled>Select City</option>
                     {cities.map((item) => (
                       <option key={item.id} value={item.name}>{item.name}</option>
@@ -255,17 +255,17 @@ export default function Institute() {
                   <p className="mt-4">Establishment Year {errors && (
                     <span className="text-red-1 text-sm">{errors.establishment_year}</span>
                   )}</p>
-                  <input type="text" className=" w-full form border p-4 rounded-lg" placeholder="Input Establishment Year" {...register("establishment_year")} />
+                  <input type="text" className=" w-full form border p-2 rounded" placeholder="Input Establishment Year" {...register("establishment_year")} />
                 </div>
                 <div className="w-full">
                   <p className="mt-4">Pin Code{errors && (
                     <span className="text-red-1 text-sm">{errors.pin_code}</span>
                   )}</p>
-                  <input type="number" className="w-full form border p-4 rounded-lg" placeholder="Input 6-Digits Code Number" {...register("pin_code")} />
+                  <input type="number" className="w-full form border p-2 rounded" placeholder="Input 6-Digits Code Number" {...register("pin_code")} />
                 </div>
               </div>
               <div className="flex flex-row-reverse gap-4 mt-4">
-                <button type="submit" className="bg-blue-1 p-3 rounded-lg text-white" >Save Institute</button>
+                <Button title="Save Institute" />
                 <button type="button" className="text-black-4 p-3 rounded-lg" onClick={onCloseCreateModal}>Close</button>
               </div>
             </form>
@@ -294,7 +294,7 @@ export default function Institute() {
       </Modal>
 
       {/* Delete Confirmation */}
-      <Modal isOpen={isOpen} onClose={onClose}>
+      <Modal isOpen={isOpen} onClose={onClose} isCentered>
         <ModalOverlay />
         <ModalContent>
           <ModalHeader>Confirmation</ModalHeader>
@@ -303,13 +303,16 @@ export default function Institute() {
             Are you sure to Delete it ?
           </ModalBody>
           <ModalFooter>
-            <Button colorScheme='blue' mr={3} onClick={onClose}>
+            <div className="cursor-pointer" mr={3} onClick={onClose}>
               Cancel
-            </Button>
-            <Button colorScheme='red' onClick={() => {
+            </div>
+            <div onClick={() => {
               onDelete(selectedData)
               onClose()
-            }} onClose={onClose}>Deleted</Button>
+            }} >
+
+              <Button title="Delete" />
+            </div>
           </ModalFooter>
         </ModalContent>
       </Modal>

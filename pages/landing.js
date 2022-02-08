@@ -1,19 +1,17 @@
-import Head from 'next/head'
-import Image from 'next/image'
 import { useState, useEffect } from 'react'
 import PropTypes from "prop-types";
-import { connect, useDispatch } from "react-redux";
+import { connect } from "react-redux";
 import Footer from '../components/footer/footer'
 import Header from '../components/Navbar/header';
-import { set, useForm } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import { loginUser, registerUser } from '../action/auth/authAction'
 import { FaEye, FaEyeSlash } from "react-icons/fa";
-import { data } from 'autoprefixer';
-import store from './../redux/store'
 import Auth from '../action/auth/authAction';
 import apiAuth from './api/auth';
 import { useToast } from '@chakra-ui/react'
 import { useRouter } from "next/router";
+import Button from '../components/Button/button'
+import Image from 'next/image';
 
 function Landing(props) {
   const Router = useRouter()
@@ -29,7 +27,7 @@ function Landing(props) {
 
   useEffect(() => {
     const uri = Router.asPath.split('#')
-    if(uri[1] === 'register'){
+    if (uri[1] === 'register') {
       setFormStatus('register')
     }
   }, [])
@@ -45,17 +43,17 @@ function Landing(props) {
     await Auth.register(data)
       .then((res) => {
         props.registerUser(res)
-        if(res.status === 201){
-        toast({
-          title: 'Account created.',
-          description: "We've created your account for you. Please Login to Continue",
-          status: 'success',
-          position: 'top-right',
-          duration: 9000,
-          isClosable: true,
-        })
-        reset()
-        setFormStatus('login')
+        if (res.status === 201) {
+          toast({
+            title: 'Account created.',
+            description: "We've created your account for you. Please Login to Continue",
+            status: 'success',
+            position: 'top-right',
+            duration: 9000,
+            isClosable: true,
+          })
+          reset()
+          setFormStatus('login')
         }
       })
       .catch((err) => {
@@ -79,13 +77,6 @@ function Landing(props) {
 
   const onLoginGoogle = async () => {
     await apiAuth.loginGoogle()
-      .then((res) => {
-        window.location.href = res.data.data.url
-      })
-  }
-
-  const onLoginFacebook = async () => {
-    await apiAuth.loginFacebook()
       .then((res) => {
         window.location.href = res.data.data.url
       })
@@ -128,12 +119,12 @@ function Landing(props) {
                 <p className="mt-4">Email / Phone {errors && errors.data && (
                   <span className="text-red-1 text-sm">{errors.data.email}</span>
                 )}</p>
-                <input type="text" className="p-4 border rounded-xl w-full"  placeholder="Input Email or Phone" {...register("email")} />
+                <input type="text" className="p-2 border rounded w-full" placeholder="Input Email or Phone" {...register("email")} />
                 <p className="mt-4">Password {errors && errors.data && (
                   <span className="text-red-1 text-sm">{errors.data.password}</span>
                 )}</p>
                 <div className="relative">
-                  <input type={`${passwdLogin ? 'password' : 'text'}`} className="form w-full border p-4 rounded-lg" placeholder="Input New Password" {...register("password")} />
+                  <input type={`${passwdLogin ? 'password' : 'text'}`} className="form w-full border p-2 rounded" placeholder="Input New Password" {...register("password")} />
                   <span className="absolute inset-y-0 cursor-pointer right-0 pr-3 flex items-center text-sm leading-5" onClick={() => {
                     passwdLogin ? setPasswdLogin(false) : setPasswdLogin(true)
                   }}>
@@ -150,11 +141,10 @@ function Landing(props) {
                 {errors && errors.message === 'Unauthorized' && (
                   <p className="text-red-1 text-sm">Check your email or password</p>
                 )}
-                <button type="submit" className="w-full bg-yellow-1 text-white p-3 mt-4 rounded-xl" onClick={() => onLogin()}>Login</button>
+                <button type="submit" className="w-full bg-yellow-1 text-white p-3 mt-4 rounded" onClick={() => onLogin()}>Login</button>
               </form>
               <p className="text-center m-4 text-black-4">or continue with</p>
               <div className="flex flex-col md:flex-row gap-4">
-                <button className="flex w-full justify-center gap-4 border px-6 py-3 border-yellow-1 rounded-lg" onClick={() => onLoginFacebook()}><img src="/asset/icon/ic_facebook.png" alt="login with facebook" /> Facebook</button>
                 <button className="flex w-full  gap-4 justify-center border px-6 py-3 border-yellow-1 rounded-lg" onClick={() => onLoginGoogle()}><img src="/asset/icon/ic_google.png" alt="login with google" /> Google</button>
               </div>
               <p className="text-right mt-2 text-black-3">Dont you have account ?  <button className='text-blue-1 font-bold' onClick={() => {
@@ -171,20 +161,20 @@ function Landing(props) {
               <p className="mt-4">Full Name {errors && errors.data && (
                 <span className="text-red-1 text-sm">{errors.data.name}</span>
               )}</p>
-              <input type="text" className="p-4 border rounded-xl w-full" placeholder="Input Your Fullname"{...register("name")} />
+              <input type="text" className="p-2 border rounded w-full" placeholder="Input Your Fullname"{...register("name")} />
               <p className="mt-4">Email {errors && errors.data && (
                 <span className="text-red-1 text-sm">{errors.data.email}</span>
               )}</p>
-              <input type="text" className="p-4 border rounded-xl w-full" placeholder="Input Your Email" {...register("email")} />
+              <input type="text" className="p-2 border rounded w-full" placeholder="Input Your Email" {...register("email")} />
               <p className="mt-4">Phone {errors && errors.data && (
                 <span className="text-red-1 text-sm">{errors.data.phone}</span>
               )}</p>
-              <input type="number" className="p-4 border rounded-xl w-full" placeholder="Input Your Phone Number"{...register("phone")} />
+              <input type="number" className="p-2 border rounded w-full" placeholder="Input Your Phone Number"{...register("phone")} />
               <div className='flex gap-4'>
                 <div className='w-full'>
                   <p className="mt-4">Password</p>
                   <div className="relative">
-                    <input type={`${passwdRegister ? 'password' : 'text'}`} className="form w-full border p-4 rounded-lg" placeholder="Input Your Password" {...register("password")} />
+                    <input type={`${passwdRegister ? 'password' : 'text'}`} className="form w-full border p-2 rounded-lg" placeholder="Input Your Password" {...register("password")} />
                     <span className="absolute inset-y-0 cursor-pointer right-0 pr-3 flex items-center text-sm leading-5" onClick={() => {
                       passwdRegister ? setPasswdRegister(false) : setPasswdRegister(true)
                     }}>
@@ -198,7 +188,7 @@ function Landing(props) {
                 <div className='w-full'>
                   <p className="mt-4">Password Confirmation</p>
                   <div className="relative">
-                    <input type={`${confirm ? 'password' : 'text'}`} className="form w-full border p-4 rounded-lg" placeholder="Confirmation Password" {...register("password_confirmation")} />
+                    <input type={`${confirm ? 'password' : 'text'}`} className="form w-full border p-2 rounded" placeholder="Confirmation Password" {...register("password_confirmation")} />
                     <span className="absolute inset-y-0 cursor-pointer right-0 pr-3 flex items-center text-sm leading-5" onClick={() => {
                       confirm ? setConfirm(false) : setConfirm(true)
                     }}>
@@ -215,7 +205,7 @@ function Landing(props) {
                 <p className="text-red-1 text-sm">{errors.data.password}</p>
               )}
 
-              <button className="w-full bg-yellow-1 text-white p-2 mt-4 rounded-xl" >Register</button>
+              <button className="w-full bg-yellow-1 text-white p-2 mt-4 rounded" >Register</button>
               <p className="text-right mt-2 text-black-1">Do you have account ? <button className='font-bold text-blue-1' onClick={() => {
                 onChangeForm('login')
                 setErrors(null)
@@ -230,9 +220,9 @@ function Landing(props) {
               <p className="mt-4">Email {errors && (
                 <span className="text-red-1 text-sm">{errors.message}</span>
               )}</p>
-              <input type="text" className="p-4 border rounded-xl w-full" placeholder="Input Your Email" {...register("email", { required: true })} />
+              <input type="text" className="p-2 border rounded w-full" placeholder="Input Your Email" {...register("email", { required: true })} />
               <p className="text-blue-1 text-xs">{infoReset}</p>
-              <button className="w-full bg-yellow-1 text-white p-2 mt-4 rounded-xl">Submit</button>
+              <button className="w-full bg-yellow-1 text-white p-2 mt-4 rounded">Submit</button>
               <p className="text-right mt-2 text-black-3 text-center">Remember Password ? &nbsp;
                 <button className="text-blue-1" onClick={() => {
                   onChangeForm('login')
@@ -248,28 +238,28 @@ function Landing(props) {
       </section>
 
       <section className="grid xl:grid-cols-3 md:mx-16 my-20">
-        <div className="m-2">
-          <img src="/asset/icon/ic_question.png" />
-          <h1 className="font-bold text-2xl mt-4">Top Quality Questions</h1>
+        <div className="m-2 ">
+          <Image src="/asset/icon/ic_question.png" height="48" width="48" alt='icon question' />
+          <h1 className="font-semibold text-2xl mt-4">Top Quality Questions</h1>
           <p className="mt-4">All questions and solutions, designed by top exam experts, based on latest patterns and actual exam level</p>
         </div>
 
-        <div className="m-2">
-          <img src="/asset/icon/ic_live.png" />
-          <h1 className="font-bold text-2xl mt-4">Live Tests for Real Experience</h1>
+        <div className="m-2 filter">
+          <Image src="/asset/icon/ic_live.png" height="48" width="48" alt='icon live' />
+          <h1 className="font-semibold text-2xl mt-4">Live Tests for Real Experience</h1>
           <p className="mt-4">Get your All-India Rank and feel the thrill of a real-exam. Groom your pressure handling and time management skills.</p>
         </div>
 
         <div className="m-2">
-          <img src="/asset/icon/ic_diagram.png" />
-          <h1 className="font-bold text-2xl mt-4">Personalized, detailed Analysis</h1>
+          <Image src="/asset/icon/ic_diagram.png" height="48" width="48" alt='icon diagram' />
+          <h1 className="font-semibold text-2xl mt-4">Personalized, detailed Analysis</h1>
           <p className="mt-4">Know your weaknesses, strengths and everything else that you need to know to improve your score and rank.</p>
         </div>
       </section>
 
       <section className="bg-black-9 grid grid-cols-1 md:grid-cols-2 xl:grid-cols-2 py-20 md:px-20 px-4">
         <div className="self-center mr-4">
-          <h1 className="font-bold text-blue-1 text-3xl mb-4">Real number can be trusted</h1>
+          <h1 className="font-bold text-blue-1 text-2xl mb-4">Real number can be trusted</h1>
           <p className="text-black-3">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Venenatis scelerisque at quam congue posuere libero in sit quam. Consequat, scelerisque non tincidunt sit lectus senectus. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Venenatis scelerisque at quam congue posuere libero in sit quam. Consequat, scelerisque non tincidunt sit lectus senectus. Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
         </div>
         <div className="grid  md:grid-cols-1 lg:grid-cols-2 ">
@@ -398,9 +388,9 @@ function Landing(props) {
       </section>
 
       <section className="py-20 bg-blue-6 flex-row items-center text-center">
-        <h1 className="text-4xl text-center  font-bold text-blue-1 p-1">Start your preparation for now</h1>
-        <p className="text-black-3 mx-4 mt-3 text-center">Makes your exam preparation more simplified with Examz</p>
-        <button className="mt-8 bg-blue-1 p-4 rounded-lg text-white">Get Started For Free</button>
+        <h1 className="text-2xl text-center  font-bold text-blue-1 p-1">Start your preparation for now</h1>
+        <p className="text-black-3 mx-4 text-center">Makes your exam preparation more simplified with Examz</p>
+        <Button title="Get Started For Free" />
       </section>
 
       <section>

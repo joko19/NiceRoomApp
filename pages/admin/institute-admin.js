@@ -1,10 +1,8 @@
 import Card from "../../components/Cards/Card";
-import Icon from "../../components/Button/Icon";
 import { useState, useEffect } from "react";
 import apiAdmin from "../../action/admin";
 import Image from "next/image";
 import {
-  Button,
   Modal,
   ModalOverlay,
   ModalContent,
@@ -19,6 +17,7 @@ import { FaEye, FaEyeSlash } from "react-icons/fa";
 import apiInstitute from "../../action/institute";
 import Pagination from "../../components/Pagination/pagination";
 import Layout from "../../Layout/Layout";
+import Button from "../../components/Button/button";
 
 export default function InstituteAdmin(props) {
   const [search, setSearch] = useState('')
@@ -138,21 +137,21 @@ export default function InstituteAdmin(props) {
 
   return (
     <>
-      <div className="pt-32 md:py-24">
+      <div className="pt-24 md:py-16">
         <Card
           title="Institute Admin"
           right={(
-            <button className="btn btn-md bg-blue-1 text-white p-3 rounded-lg" onClick={() => {
+            <div onClick={() => {
               setUpdate(false)
               reset()
               setErrors(null)
               onOpenCreateModal()
             }}>
-              + Create Admin
-            </button>
+              <Button title="+ Create Admin" />
+            </div>
           )}
         >
-          <input type="text" className="p-4 border rounded-lg w-1/2 mb-4" placeholder="Search Admin" onChange={(e) => {
+          <input type="text" className="p-2 border rounded w-1/2 mb-4" placeholder="Search Admin" onChange={(e) => {
             setSearch(e.target.value)
             getData(e.target.value, limit, page)
           }} />
@@ -242,7 +241,7 @@ export default function InstituteAdmin(props) {
                   <p>Full Name {errors && (
                     <span className="text-red-1 text-sm">{errors.name}</span>
                   )}</p>
-                  <input type="text" className="form w-full border p-4 rounded-lg" placeholder="Input Admin Full Name" {...register("name")} />
+                  <input type="text" className="form w-full border p-2 rounded" placeholder="Input Admin Full Name" {...register("name")} />
                 </div>
 
                 <div className="flex gap-4 flex-col md:flex-row">
@@ -250,7 +249,7 @@ export default function InstituteAdmin(props) {
                     <p className="mt-4">Institute {errors && (
                       <span className="text-red-1 text-sm">{errors.institute}</span>
                     )}</p>
-                    <select className="form border bg-white w-full p-4 rounded-lg" placeholder="Choose Institute"  {...register("institute_id",)} >
+                    <select className="form border bg-white w-full p-2 rounded" placeholder="Choose Institute"  {...register("institute_id",)} >
                       <option disabled>Select Institute</option>
                       {allInstitute.map((item) => (
                         <option key={item.id} value={item.id}>{item.name}</option>
@@ -261,7 +260,7 @@ export default function InstituteAdmin(props) {
                     <p className="mt-4">Employee ID{errors && (
                       <span className="text-red-1 text-sm">{errors.employee_id}</span>
                     )}</p>
-                    <input type="text" className="form  w-full border p-4 rounded-lg" placeholder="Input Employee ID" {...register("employee_id",)} />
+                    <input type="text" className="form  w-full border p-2 rounded" placeholder="Input Employee ID" {...register("employee_id",)} />
                   </div>
                 </div>
 
@@ -270,7 +269,7 @@ export default function InstituteAdmin(props) {
                     <p className="mt-4">Gender{errors && (
                       <span className="text-red-1 text-sm">{errors.gender}</span>
                     )}</p>
-                    <select className="form border bg-white w-full p-4 rounded-lg" placeholder="Choose Gender"  {...register("gender",)} >
+                    <select className="form border bg-white w-full p-2 rounded" placeholder="Choose Gender"  {...register("gender",)} >
                       <option disabled>Select Gender</option>
                       <option value="MALE">Male</option>
                       <option value="FEMALE">Female</option>
@@ -280,7 +279,7 @@ export default function InstituteAdmin(props) {
                     <p className="mt-4">Phone Number {errors && (
                       <span className="text-red-1 text-sm">{errors.phone}</span>
                     )}</p>
-                    <input type="number" className="form border p-4 w-full rounded-lg" placeholder="Input Phone Number" {...register("phone")} />
+                    <input type="number" className="form border p-2 w-full rounded" placeholder="Input Phone Number" {...register("phone")} />
                   </div>
                 </div>
 
@@ -289,14 +288,14 @@ export default function InstituteAdmin(props) {
                     <p className="mt-4">Email {errors && (
                       <span className="text-red-1 text-sm">{errors.email}</span>
                     )} </p>
-                    <input type="text" className="form w-full border p-4 rounded-lg" placeholder="Input Email Address" {...register("email",)} />
+                    <input type="text" className="form w-full border p-2 rounded" placeholder="Input Email Address" {...register("email",)} />
                   </div>
                   <div className="w-full">
                     <p className="mt-4">Password  {errors && (
                       <span className="text-red-1 text-sm">{errors.password}</span>
                     )}</p>
                     <div className="relative">
-                      <input type={`${passwdLogin ? 'password' : 'text'}`} {...register("password")} className="form w-full border p-4 rounded-lg" placeholder="Input New Password" />
+                      <input type={`${passwdLogin ? 'password' : 'text'}`} {...register("password")} className="form w-full border p-2 rounded" placeholder="Input New Password" />
                       <span className="absolute inset-y-0 cursor-pointer right-0 pr-3 flex items-center text-sm leading-5" onClick={() => {
                         passwdLogin ? setPasswdLogin(false) : setPasswdLogin(true)
                       }}>
@@ -309,25 +308,25 @@ export default function InstituteAdmin(props) {
                   </div>
                 </div>
                 <div className="flex flex-row-reverse gap-4 mt-4">
-                  <button type="submit" className="bg-blue-1 p-3 rounded-lg text-white" >Save Institute Admin</button>
+                  <Button title="Save Institute Admin" />
                   <button type="button" className="text-black-4 p-3 rounded-lg" onClick={onCloseCreateModal}>Close</button>
                 </div>
               </form>
             ) : (
 
-              <form onSubmit={handleSubmit(onUpdate)}  className="pb-4">
+              <form onSubmit={handleSubmit(onUpdate)} className="pb-4">
                 <div className="flex gap-4 flex-col md:flex-row">
                   <div className="w-full mt-4">
                     <p>Full Name {errors && (
                       <span className="text-red-1 text-sm">{errors.name}</span>
                     )}</p>
-                    <input type="text" className="form w-full border p-4 rounded-lg" placeholder="Input Admin Full Name" {...register("name")} />
+                    <input type="text" className="form w-full border p-2 rounded" placeholder="Input Admin Full Name" {...register("name")} />
                   </div>
                   <div className="w-full">
                     <p className="mt-4">Employee ID {errors && (
                       <span className="text-red-1 text-sm">{errors.employee_id}</span>
                     )}</p>
-                    <input type="text" className="form  w-full border p-4 rounded-lg" placeholder="Input Employee ID" {...register("employee_id",)} />
+                    <input type="text" className="form  w-full border p-2 rounded" placeholder="Input Employee ID" {...register("employee_id",)} />
                   </div>
                 </div>
 
@@ -336,7 +335,7 @@ export default function InstituteAdmin(props) {
                     <p className="mt-4">Institute {errors && (
                       <span className="text-red-1 text-sm">{errors.institute}</span>
                     )}</p>
-                    <select className="form border bg-white w-full p-4 rounded-lg" placeholder="Choose Institute"  {...register("institute_id",)} >
+                    <select className="form border bg-white w-full p-2 rounded" placeholder="Choose Institute"  {...register("institute_id",)} >
                       <option disabled>Select Institute</option>
                       {allInstitute.map((item) => (
                         <option key={item.id} value={item.id}>{item.name}</option>
@@ -347,7 +346,7 @@ export default function InstituteAdmin(props) {
                     <p className="mt-4">Gender {errors && (
                       <span className="text-red-1 text-sm">{errors.gender}</span>
                     )}</p>
-                    <select className="form border bg-white w-full p-4 rounded-lg" placeholder="Choose Gender"  {...register("gender",)} >
+                    <select className="form border bg-white w-full p-2 rounded" placeholder="Choose Gender"  {...register("gender",)} >
                       <option disabled>Select Gender</option>
                       <option value="MALE">Male</option>
                       <option value="FEMALE">Female</option>
@@ -360,17 +359,17 @@ export default function InstituteAdmin(props) {
                     <p className="mt-4">Email {errors && (
                       <span className="text-red-1 text-sm">{errors.email}</span>
                     )}</p>
-                    <input type="text" className="form w-full border p-4 rounded-lg" placeholder="Input Email Address" {...register("email",)} />
+                    <input type="text" className="form w-full border p-2 rounded" placeholder="Input Email Address" {...register("email",)} />
                   </div>
                   <div className="w-full">
                     <p className="mt-4">Phone Number {errors && (
                       <span className="text-red-1 text-sm">{errors.phone}</span>
                     )}</p>
-                    <input type="number" className="form border p-4 w-full rounded-lg" placeholder="Input Phone Number" {...register("phone",)} />
+                    <input type="number" className="form border p-2 w-full rounded" placeholder="Input Phone Number" {...register("phone",)} />
                   </div>
                 </div>
                 <div className="flex flex-row-reverse gap-4 mt-4">
-                  <button type="submit" className="bg-blue-1 p-3 rounded-lg text-white" >Save Institute Admin</button>
+                  <Button title="Save Institute Admin" />
                   <button type="button" className="text-black-4 p-3 rounded-lg" onClick={onCloseCreateModal}>Close</button>
                 </div>
               </form>
@@ -456,11 +455,13 @@ export default function InstituteAdmin(props) {
             <div className="flex flex-col text-center ">
               <p>{update ? 'Update' : 'Create'} Admin Institute Successfully </p>
               <div className="self-center">
-                <button className="bg-blue-1 rounded-lg text-white mt-4 block align-center p-3" onClick={() => {
+                <div onClick={() => {
                   onCloseSuccessModal()
                   setUpdate(false)
                   setErrors(null)
-                }}>Okay</button>
+                }}>
+                <Button title="Okay" />
+                  </div>
               </div>
             </div>
           </ModalBody>
@@ -468,7 +469,7 @@ export default function InstituteAdmin(props) {
       </Modal>
 
       {/* Delete Modal */}
-      <Modal isOpen={isOpen} onClose={onClose}>
+      <Modal isOpen={isOpen} onClose={onClose} isCentered>
         <ModalOverlay />
         <ModalContent>
           <ModalHeader>Confirmation</ModalHeader>
@@ -477,13 +478,15 @@ export default function InstituteAdmin(props) {
             Are you sure to Delete it ?
           </ModalBody>
           <ModalFooter>
-            <Button colorScheme='blue' mr={3} onClick={onClose}>
+            <div className="cursor-pointer text-black-4" onClick={onClose}>
               Cancel
-            </Button>
-            <Button colorScheme='red' onClick={() => {
+            </div>
+            <div onClick={() => {
               onDelete(selectedData)
               onClose()
-            }} onClose={onClose}>Deleted</Button>
+            }}>
+              <Button title="Delete" />
+            </div>
           </ModalFooter>
         </ModalContent>
       </Modal>

@@ -5,7 +5,7 @@ import { FaAngleLeft } from "react-icons/fa";
 import Card from "../../../../components/Cards/Card";
 import Layout from "../../../../Layout/Layout";
 import apiNews from "../../../../action/news";
-import {useForm } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import {
   Modal,
   ModalOverlay,
@@ -19,6 +19,7 @@ import { useQuill } from 'react-quilljs';
 import instance from "../../../../action/instance";
 import { useRouter } from "next/router";
 import Multiselect from 'multiselect-react-dropdown';
+import Button from "../../../../components/Button/button";
 
 export default function Create(props) {
   const Router = useRouter()
@@ -28,7 +29,7 @@ export default function Create(props) {
   const [coverName, setCoverName] = useState()
   const [file, setFile] = useState(null)
   const [tags, setTags] = useState([])
-  const [listTags, setListTags] = useState([{ name: 'Programming'}, { name: 'Design'}, { name: 'Marketing'}, , { name: 'UI/UX'}, { name: 'Education'}, { name: 'Web'}, { name: 'Android'}, , { name: 'Linux'}])
+  const [listTags, setListTags] = useState([{ name: 'Programming' }, { name: 'Design' }, { name: 'Marketing' }, , { name: 'UI/UX' }, { name: 'Education' }, { name: 'Web' }, { name: 'Android' }, , { name: 'Linux' }])
   const [chooseTags, setChooseTags] = useState([])
   const [description, setDescription] = useState()
   const [errors, setErrors] = useState()
@@ -76,7 +77,7 @@ export default function Create(props) {
           const str = data.tags.replace(/['"]+/g, '').slice(1)
           const myArr = str.slice(0, str.length - 1).split(", ")
           var arr = []
-          for(let i = 0; i < myArr.length; i++){
+          for (let i = 0; i < myArr.length; i++) {
             arr.push({
               name: myArr[i]
             })
@@ -100,14 +101,7 @@ export default function Create(props) {
     if (quill) {
       quill.on('text-change', (delta, oldDelta, source) => {
         setDescription(quill.root.innerHTML)
-
         quill.getModule('toolbar').addHandler('image', selectLocalImage);
-
-        // console.log('Text change!');
-        // console.log(quill.getText()); // Get text only
-        // console.log(quill.getContents()); // Get delta contents
-        // console.log(quill.root.innerHTML); // Get innerHTML using quill
-        // console.log(quillRef.current.firstChild.innerHTML); // Get innerHTML using quillRef
       });
     }
   }, [quill])
@@ -117,25 +111,18 @@ export default function Create(props) {
     const data = new FormData()
     data.append("title", req.title)
     data.append("sub_title", req.subtitle)
-    // for (let i = 0; i < tags; i++) {
-    //   data.append("tags", tags[i])
-    // }
-
     for (let i = 0; i < tags.length; i++) {
-      const tag = 'tags['+i+']'
+      const tag = 'tags[' + i + ']'
       data.append(tag, tags[i].name)
     }
     if (file !== null) {
       data.append("image", file)
     }
     data.append("description", description)
-    // for console log
-    // for (var key of data.entries()) {
-    //   console.log(key[0] + ', ' + key[1]);
-    // }
+
     data.append("status", isPublish)
     await apiNews.update(id, data)
-      .then((res) => {
+      .then(() => {
         onOpenSuccessModal()
       })
       .catch((err) => setErrors(err.response.data.data))
@@ -159,10 +146,10 @@ export default function Create(props) {
   return (
     <div className="md:pt-12 md:mb-28">
       <Link href="/admin/news">
-        <a className="flex gap-4 text-blue-1 my-8"><FaAngleLeft /> Back</a>
+        <a className="flex gap-4 text-blue-1 my-4"><FaAngleLeft /> Back</a>
       </Link>
       <Card
-        className="md:mt-8 w-full  bg-white overflow-visible"
+        className="md:mt-4 w-full  bg-white overflow-visible"
         title="Edit News" >
         <form onSubmit={handleSubmit(submitNews)}>
           {coverName === null && (
@@ -186,11 +173,11 @@ export default function Create(props) {
           <p className="mt-4">News Title {errors && (
             <span className="text-red-1 text-sm">{errors.title}</span>
           )}</p>
-          <input type="text" className="border w-full rounded p-4" placeholder="Input News Title"  {...register("title")} />
+          <input type="text" className="border w-full rounded p-2" placeholder="Input News Title"  {...register("title")} />
           <p className="mt-4" >Sub-Title {errors && (
             <span className="text-red-1 text-sm">{errors.sub_title}</span>
           )}</p>
-          <input type="text" className="border w-full rounded p-4" placeholder="Input News Sub-Title" {...register("subtitle")} />
+          <input type="text" className="border w-full rounded p-2" placeholder="Input News Sub-Title" {...register("subtitle")} />
           <p className="mt-4">Description {errors && (
             <span className="text-red-1 text-sm">{errors.description}</span>
           )}</p>
@@ -211,8 +198,9 @@ export default function Create(props) {
             />
           </div>
           <div className="flex flex-row-reverse gap-4 my-4">
-            <button onClick={() =>setIsPublish("published")} className="bg-blue-1 text-white p-4 rounded-lg">Publish News</button>
-            <button onClick={() => setIsPublish("draft")} className="bg-yellow-1 text-white p-4 rounded-lg">Save as Draft</button>
+            <div onClick={() => setIsPublish("published")}>
+              <Button title="Publish News" /></div>
+            <button className={`bg-yellow-1 text-white p-2 rounded  hover:filter hover:drop-shadow-xl m-2`} >Save as Draft</button>
           </div>
         </form>
       </Card>
@@ -228,11 +216,9 @@ export default function Create(props) {
               <p> Update News Successfully </p>
               <div className="self-center">
                 <Link href="/admin/news">
-                  <a className="bg-blue-1 rounded-lg text-white mt-4 block align-center p-3">Okay</a>
+                  <a>
+                    <Button title="Okay" /></a>
                 </Link>
-                {/* <button className="bg-blue-1 rounded-lg text-white mt-4 block align-center p-3" onClick={() => {
-                  onCloseSuccessModal()
-                }}>Okay</button> */}
               </div>
             </div>
           </ModalBody>

@@ -1,12 +1,10 @@
 import { useState, useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import Icon from "../../../components/Button/Icon";
 import Card from "../../../components/Cards/Card";
 import Layout from "../../../Layout/Layout";
 import apiNews from "../../../action/news";
 import {
-  Button,
   Modal,
   ModalOverlay,
   ModalContent,
@@ -17,6 +15,7 @@ import {
   useDisclosure
 } from '@chakra-ui/react'
 import Pagination from "../../../components/Pagination/pagination";
+import Button from "../../../components/Button/button";
 
 export default function News(props) {
   const [search, setSearch] = useState('')
@@ -28,7 +27,6 @@ export default function News(props) {
   const [selectedData, setSelectedData] = useState(null)
   const [isPublish, setIsPublish] = useState()
   const [title, setTitle] = useState()
-  const [news, setNews] = useState([])
   const tableHead = ['Title', 'Sub-Title', 'Date', 'Status', 'Action']
   const {
     isOpen: isConfirmModal,
@@ -71,16 +69,17 @@ export default function News(props) {
 
   return (
     <>
-      <div className="md:py-24">
+      <div className="md:py-16">
         <Card
           title="News"
           right={(
             <Link href="/admin/news/create">
-              <a className="btn btn-md bg-blue-1 text-white p-3 rounded-lg" > + Create News</a>
+              <a className="btn btn-md bg-blue-1 text-white p-3 rounded-lg" > 
+              <Button title="+ Create News" /></a>
             </Link>
           )}
         >
-          <input type="text" className="p-4 border rounded-lg w-1/2 mb-4" placeholder="Search News" onChange={(e) => {
+          <input type="text" className="p-2 border rounded w-1/2 mb-4" placeholder="Search News" onChange={(e) => {
             setSearch(e.target.value)
             getData(e.target.value, limit, page)
           }} />
@@ -193,7 +192,7 @@ export default function News(props) {
       </Modal>
 
       {/* Deleted Modal */}
-      <Modal isOpen={isOpen} onClose={onClose}>
+      <Modal isOpen={isOpen} onClose={onClose} isCentered>
         <ModalOverlay />
         <ModalContent>
           <ModalHeader>Confirmation</ModalHeader>
@@ -202,13 +201,13 @@ export default function News(props) {
             Are you sure to Delete it ?
           </ModalBody>
           <ModalFooter>
-            <Button colorScheme='blue' mr={3} onClick={onClose}>
+            <div mr={3} onClick={onClose}>
               Cancel
-            </Button>
-            <Button colorScheme='red' onClick={() => {
+            </div>
+            <div onClick={() => {
               onDelete(selectedData)
               onClose()
-            }} onClose={onClose}>Deleted</Button>
+            }}><Button title="Delete" /></div>
           </ModalFooter>
         </ModalContent>
       </Modal>

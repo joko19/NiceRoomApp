@@ -18,7 +18,7 @@ import Pagination from "../../components/Pagination/pagination";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import instance from "../../action/instance";
 import apiInstitute from "../../action/institute";
-
+import Button from "../../components/Button/button";
 
 export default function Index(props) {
   const TableHead = ['Name', 'Email', 'Phone', 'Action']
@@ -171,7 +171,7 @@ export default function Index(props) {
   }
 
   return (
-    <div className="mt-16 w-full mb-16">
+    <div className="mt-12 w-full mb-16">
       <div className="flex">
         <div className=" w-full">
           <div className="flex gap-2">
@@ -199,7 +199,7 @@ export default function Index(props) {
               className="w-full  bg-white"
               title="Operator Team"
               right={(
-                <button className="btn btn-md bg-blue-1 text-white p-3 rounded-lg" onClick={() => {
+                <div onClick={() => {
                   setAvatar('/asset/img/blank_profile.png')
                   getBranch()
                   setUpdate(false)
@@ -207,11 +207,22 @@ export default function Index(props) {
                   setErrors(null)
                   reset()
                 }}>
-                  + Add Operator
-                </button>
+                  <Button title="+ Add Operator" />
+                </div>
+                // <button className="btn btn-md bg-blue-1 text-white p-3 rounded-lg" 
+                // onClick={() => {
+                //   setAvatar('/asset/img/blank_profile.png')
+                //   getBranch()
+                //   setUpdate(false)
+                //   onOpenCreateModal()
+                //   setErrors(null)
+                //   reset()
+                // }}>
+                //   + Add Operator
+                // </button>
               )}>
 
-              <input type="text" className="p-4 border rounded-lg w-1/2 mb-4" placeholder="Search Operator" onChange={(e) => {
+              <input type="text" className="p-2 border rounded w-1/2 mb-4" placeholder="Search Operator" onChange={(e) => {
                 setSearch(e.target.value)
                 getData(e.target.value, limit, page)
               }} />
@@ -278,7 +289,7 @@ export default function Index(props) {
         </div>
         <div className="md:flex flex-col p-4 m-4 hidden sm:w-1/3 md:w-1/3 bg-white rounded-lg">
           <h1 className="p-4 font-bold">List Institute</h1>
-          <input type="text" className="p-4 border rounded-lg w-full mb-4" placeholder="Search Institute" onChange={(e) => {
+          <input type="text" className="p-2 border rounded w-full mb-4" placeholder="Search Institute" onChange={(e) => {
             onSearchInstitute(e.target.value)
           }} />
           {listInstitute.map((item, index) => (
@@ -300,48 +311,52 @@ export default function Index(props) {
           <ModalBody>
             <form onSubmit={handleSubmit(onSubmit)} className="pb-4">
 
-              <div className="flex justify-center">
-                <div className="m-4 relative">
-                  <Image className="rounded-full object-cover" src={avatar} alt="photo profile" height={160} width={160} />
-                  <div className="absolute bottom-5 right-0">
-                    <label htmlFor="file-input">
-                      <Image src="/asset/icon/ic_edit.png" alt="icon update" width={48} height={48} className="ml-6 cursor-pointer" />
-                    </label>
-                  </div>
-                </div>
-                <div className="hidden">
-                  <input id="file-input" type="file" className="hidden -z-50" accept="image/*" onChange={choosePhoto} />
-                </div>
-              </div>
-              <div className="w-full">
-                <p>Full Name {errors && (
-                  <span className="text-red-1 text-sm">{errors.name}</span>
-                )}</p>
-                <input type="text" className="w-full form border p-4 rounded-lg" placeholder="Input Full Name" {...register("name")} />
-              </div>
-
               <div className="flex gap-4 flex-col md:flex-row mt-4">
                 <div className="w-full">
+                  <div className="w-full">
+                    <p>Full Name {errors && (
+                      <span className="text-red-1 text-sm">{errors.name}</span>
+                    )}</p>
+                    <input type="text" className="w-full form border p-2 rounded" placeholder="Input Full Name" {...register("name")} />
+                  </div>
                   <p>Email {errors && (
                     <span className="text-red-1 text-sm">{errors.email}</span>
                   )}</p>
-                  <input type="text" className="form border w-full p-4 rounded-lg" placeholder="Input Email Address" {...register("email")} />
+                  <input type="text" className="form border w-full p-2 rounded" placeholder="Input Email Address" {...register("email")} />
                 </div>
+                <div className="w-full">
+                  <div className="flex justify-center">
+                    <div className="m-4 relative">
+                      <Image className="rounded-full object-cover" src={avatar} alt="photo profile" height={100} width={100} />
+                      <div className="absolute bottom-5 right-0">
+                        <label htmlFor="file-input">
+                          <Image src="/asset/icon/ic_edit.png" alt="icon update" width={48} height={48} className="ml-6 cursor-pointer" />
+                        </label>
+                      </div>
+                    </div>
+                    <div className="hidden">
+                      <input id="file-input" type="file" className="hidden -z-50" accept="image/*" onChange={choosePhoto} />
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div className="flex gap-4 flex-col md:flex-row ">
                 <div className="w-full">
                   <p>Phone{errors && (
                     <span className="text-red-1 text-sm">{errors.phone}</span>
                   )}</p>
-                  <input type="number" className="form border p-4 w-full rounded-lg" placeholder="Input Phone Number" {...register("phone")} />
+                  <input type="number" className="form border p-2 w-full rounded-lg" placeholder="Input Phone Number" {...register("phone")} />
                 </div>
               </div>
 
               <div className="flex gap-4 flex-col md:flex-row">
                 <div className="w-full">
-                  <p className="mt-4">Password  {errors && (
+                  <p>Password  {errors && (
                     <span className="text-red-1 text-sm">{errors.password}</span>
                   )}</p>
                   <div className="relative">
-                    <input type={`${passwd ? 'password' : 'text'}`} {...register("password")} className="form w-full border p-4 rounded-lg" placeholder="Input New Password" />
+                    <input type={`${passwd ? 'password' : 'text'}`} {...register("password")} className="form w-full border p-2 rounded" placeholder="Input New Password" />
                     <span className="absolute inset-y-0 cursor-pointer right-0 pr-3 flex items-center text-sm leading-5" onClick={() => {
                       passwd ? setpasswd(false) : setpasswd(true)
                     }}>
@@ -353,11 +368,11 @@ export default function Index(props) {
                   </div>
                 </div>
                 <div className="w-full">
-                  <p className="mt-4">Confirm Password  {errors && (
+                  <p>Confirm Password  {errors && (
                     <span className="text-red-1 text-sm">{errors.password}</span>
                   )}</p>
                   <div className="relative">
-                    <input type={`${passwdConfirmation ? 'password' : 'text'}`} {...register("password_confirmation")} className="form w-full border p-4 rounded-lg" placeholder="Input New Password" />
+                    <input type={`${passwdConfirmation ? 'password' : 'text'}`} {...register("password_confirmation")} className="form w-full border p-2 rounded" placeholder="Input New Password" />
                     <span className="absolute inset-y-0 cursor-pointer right-0 pr-3 flex items-center text-sm leading-5" onClick={() => {
                       passwdConfirmation ? setpasswdConfirmation(false) : setpasswd(true)
                     }}>
@@ -370,7 +385,7 @@ export default function Index(props) {
                 </div>
               </div>
               <div className="flex flex-row-reverse gap-4 mt-4">
-                <button type="submit" className="bg-blue-1 p-3 rounded-lg text-white" >Save</button>
+                <Button title="Save" />
                 <button type="button" className="text-black-4 p-3 rounded-lg" onClick={onCloseCreateModal}>Close</button>
               </div>
             </form>
