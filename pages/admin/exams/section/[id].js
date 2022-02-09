@@ -109,7 +109,7 @@ export default function Create(props) {
   }
 
   return (
-    <div className="md:pt-12 md:pb-28">
+    <div className="mt-12">
       <Link href="/admin/exams">
         <a className="flex gap-4 text-blue-1 my-8"><FaAngleLeft /> Back</a>
       </Link>
@@ -118,11 +118,11 @@ export default function Create(props) {
         <form onSubmit={handleSubmit(submitQuiz)}>
           {questions.map((itemQuestion, indexQuestion) => {
             return (
-              <div className="bg-blue-6 p-4" key={indexQuestion}>
+              <div className="bg-blue-6 p-4 text-sm" key={indexQuestion}>
                 <input type="text" hidden value={itemQuestion.type}  {...register(`questions.${indexQuestion}.type`)} />
                 {itemQuestion.type === "simple" && (
                   <div className="flex justify-between mt-2 bg-white p-4">
-                    <div className="text-2xl font-bold">{firstNumber + indexQuestion + 1}. {itemQuestion.type === 'simple' ? 'Simple' : 'Paragraph'} Question</div>
+                    <div className="text-sm font-bold">{firstNumber + indexQuestion + 1}. {itemQuestion.type === 'simple' ? 'Simple' : 'Paragraph'} Question</div>
                   </div>
                 )}
                 {itemQuestion.type === 'paragraph' && (
@@ -135,7 +135,7 @@ export default function Create(props) {
                         <p className="mt-4">Difficulty Level {errors && (
                           <span className="text-red-1 text-sm">{errors[`questions.${indexQuestion}.level`]}</span>
                         )}</p>
-                        <Select bg='white' {...register(`questions[${indexQuestion}].level`)} size="lg" variant='outline' iconColor="blue">
+                        <Select bg='white' {...register(`questions[${indexQuestion}].level`)} size="sm" variant='outline' iconColor="blue">
                           <option value="easy">Easy</option>
                           <option value="medium">Medium</option>
                           <option value="hard">Hard</option>
@@ -143,7 +143,7 @@ export default function Create(props) {
                       </div>
                       <div className="w-full">
                         <p className="mt-4">Tag</p>
-                        <Select bg='white' {...register(`questions[${indexQuestion}].tag`)} size="lg" variant='outline' iconColor="blue">
+                        <Select bg='white' {...register(`questions[${indexQuestion}].tag`)} size="sm" variant='outline' iconColor="blue">
                           <option value="tag 1">tag 1</option>
                           <option value="tag 2">tag 2</option>
                           <option value="tag 3">tag 3</option>
@@ -190,7 +190,7 @@ export default function Create(props) {
                           <p className="mt-4">Difficulty Level {errors && (
                             <span className="text-red-1 text-sm">{errors.type}</span>
                           )}</p>
-                          <Select bg='white' {...register(`questions[${indexQuestion}].question_items[${indexEachQuestion}].level`)} size="lg" variant='outline' iconColor="blue">
+                          <Select bg='white' {...register(`questions[${indexQuestion}].question_items[${indexEachQuestion}].level`)} size="sm" variant='outline' iconColor="blue">
                             <option value="easy">Easy</option>
                             <option value="medium">Medium</option>
                             <option value="hard">Hard</option>
@@ -198,7 +198,7 @@ export default function Create(props) {
                         </div>
                         <div className="w-full">
                           <p className="mt-4">Tag</p>
-                          <Select bg='white' {...register(`questions[${indexQuestion}].question_items[${indexEachQuestion}].tag`)} size="lg" variant='outline' iconColor="blue">
+                          <Select bg='white' {...register(`questions[${indexQuestion}].question_items[${indexEachQuestion}].tag`)} size="sm" variant='outline' iconColor="blue">
                             <option value="tag 1">tag 1</option>
                             <option value="tag 2">tag 2</option>
                             <option value="tag 3">tag 3</option>
@@ -239,7 +239,7 @@ export default function Create(props) {
                             }
                           })
                           setQuestions([...temp])
-                        }} {...register(`questions[${indexQuestion}].question_items[${indexEachQuestion}].answer_type`)} size="lg" variant='outline' iconColor="blue">
+                        }} {...register(`questions[${indexQuestion}].question_items[${indexEachQuestion}].answer_type`)} size="sm" variant='outline' iconColor="blue">
                           <option value="single">Single Correct Answer</option>
                           <option value="multiple">Multiple Correct Answer</option>
                         </Select>
@@ -353,7 +353,7 @@ export default function Create(props) {
                                   setQuestions([...temp])
                                 }}
                                   // {...register(`questions[${indexQuestion}].question_items[${indexEachQuestion}].options[${indexAnswer}].title`)} 
-                                  autoComplete="off" type="text" className={`${itemAnswer.correct === 1 ? 'bg-blue-6 text-black-5' : 'bg-white'} form border w-full rounded-lg p-4 h-full m-1`} placeholder="Input your answer" />
+                                  autoComplete="off" type="text" className={`${itemAnswer.correct === 1 ? 'bg-blue-6 text-black-5' : 'bg-white'} form border w-full rounded p-2 h-full m-1`} placeholder="Input your answer" />
                                 {eachQuestion.options.length !== 1 && (
                                   <div className="m-auto cursor-pointer text-blue-1 -ml-9" onClick={() => {
                                     const temp = questions
@@ -398,7 +398,7 @@ export default function Create(props) {
                             }
                           })
                           setQuestions([...temp])
-                        }} className="text-blue-1 cursor-pointer text-center p-4 border-dashed border-2 border-blue-1 mt-4 rounded-lg">+ Add New Answer</div>
+                        }} className="text-blue-1 cursor-pointer text-center p-2 border-dashed border-2 border-blue-1 mt-4 rounded-lg">+ Add New Answer</div>
                         <div className="mt-4">
                           <p className="mt-4">Answer Explanation {errors && (
                             <span className="text-red-1 text-sm">{errors[`questions.${indexQuestion}.question_items.${indexEachQuestion}.answer_explanation`]}</span>
@@ -416,13 +416,13 @@ export default function Create(props) {
                             <p className="mt-4">Marks {errors && (
                               <span className="text-red-1 text-sm">{errors[`questions.${indexQuestion}.question_items.${indexEachQuestion}.mark`]}</span>
                             )}</p>
-                            <input type="number" className=" w-full form border p-4 rounded-lg" placeholder="0" {...register(`questions[${indexQuestion}].question_items[${indexEachQuestion}].mark`)} />
+                            <input type="number" className=" w-full form border rounded p-2" placeholder="0" {...register(`questions[${indexQuestion}].question_items[${indexEachQuestion}].mark`)} />
                           </div>
                           <div className="w-full">
                             <p className="mt-4">Negative Marking {errors && (
                               <span className="text-red-1 text-sm">{errors[`questions.${indexQuestion}.question_items.${indexEachQuestion}.negative_mark`]}</span>
                             )}</p>
-                            <input type="number" className="w-full form border p-4 rounded-lg" placeholder="0" {...register(`questions[${indexQuestion}].question_items[${indexEachQuestion}].negative_mark`)} />
+                            <input type="number" className="w-full form border rounded p-2" placeholder="0" {...register(`questions[${indexQuestion}].question_items[${indexEachQuestion}].negative_mark`)} />
                           </div>
                         </div>
                       </div>
@@ -451,7 +451,7 @@ export default function Create(props) {
                       }
                     })
                     setQuestions([...temp])
-                  }} className="text-blue-1 cursor-pointer text-center p-4 border-dashed border-2 border-blue-1 mt-4 rounded-lg">+ Add New Question for this paragraph</div>
+                  }} className="text-blue-1 cursor-pointer text-center p-2 border-dashed border-2 border-blue-1 mt-4 rounded-lg">+ Add New Question for this paragraph</div>
                 </div>
 
                 )}
@@ -463,11 +463,11 @@ export default function Create(props) {
           <div className="mt-8">
             <div onClick={() => {
               onOpen()
-            }} className="text-blue-1 cursor-pointer text-center p-4 border-dashed border-2 border-blue-1 mt-4 rounded-lg">+ Add New Question</div>
+            }} className="text-blue-1 cursor-pointer text-center p-2 border-dashed border-2 border-blue-1 mt-4 rounded-lg">+ Add New Question</div>
           </div>
           <div className="flex -z-10 gap-4 flex-row-reverse my-4">
-            <button onClick={() => setStatus("published")} className='cursor-pointer bg-blue-1  text-white p-4 rounded-lg'>Save Question</button>
-            <button onClick={() => setStatus("draft")} className='cursor-pointer text-blue-1 p-4 rounded-lg'>Cancel</button>
+            <button onClick={() => setStatus("published")} className='cursor-pointer bg-blue-1  text-white rounded p-2'>Save Question</button>
+            <button onClick={() => setStatus("draft")} className='cursor-pointer text-blue-1 rounded p-2'>Cancel</button>
           </div>
         </form>
       </Card>

@@ -68,14 +68,14 @@ export default function Index() {
             }} />
 
             <div className="flex gap-4 w-1/2 h-full text-sm ">
-              <Select placeholder='All Type' className="h-full" size="lg" onChange={(e) => {
+              <Select placeholder='All Type' className="h-full" size="md" onChange={(e) => {
                 setType(e.target.value)
                 getData(search, e.target.value, status, limit, page)
               }}>
                 <option value='live'>Live</option>
                 <option value='mixed'>Mixed</option>
               </Select>
-              <Select placeholder='All Status' className="h-full" size="lg" onChange={(e) => {
+              <Select placeholder='All Status' className="h-full" size="md" onChange={(e) => {
                 setStatus(e.target.value)
                 getData(search, type, e.target.value, limit, page)
               }}>

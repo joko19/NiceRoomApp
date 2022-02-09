@@ -367,7 +367,7 @@ export default function Create(props) {
                     <span className="text-red-1 text-sm">{errors.type}</span>
                   )}</p>
                   <div>
-                    <Select bg='white' size="lg" defaultValue="1" variant='outline' iconColor="blue" {...register('exam_type_id')}>
+                    <Select bg='white' size="md" defaultValue="1" variant='outline' iconColor="blue" {...register('exam_type_id')}>
                       <option disabled>Choose Exam Type</option>
                       {examType.map((item) => (
                         <option key={item.id} value={item.id}>{item.name}</option>
@@ -383,7 +383,7 @@ export default function Create(props) {
                     options={listTopic}
                     style={{
                       "multiselectContainer": {
-                        "padding": "4px",
+                        "padding": "2px",
                         "border-width": "1px",
                         "border-radius": "5px"
                       }, "searchBox": {
@@ -409,7 +409,7 @@ export default function Create(props) {
                       <p>Start Date {errors && (
                         <span className="text-red-1 text-sm">{errors.start_date}</span>
                       )}</p>
-                      <div className="border p-4 rounded-lg">
+                      <div className="border p-2 rounded">
                         <DatePicker2
                           data={getValues('start_date')}
                           setData={(data) => setValue("start_date", data)}
@@ -428,7 +428,7 @@ export default function Create(props) {
                       <p>End Date {errors && (
                         <span className="text-red-1 text-sm">{errors.end_date}</span>
                       )}</p>
-                      <div className="border p-4 rounded-lg">
+                      <div className="border p-2 rounded">
                         <DatePicker2
                           data={getValues('end_date')}
                           setData={(data) => setValue("end_date", data)}
@@ -602,17 +602,17 @@ export default function Create(props) {
           )}
           <div className="flex -z-10 gap-4 flex-row-reverse my-4">
             {currentStep < 3 && (
-              <button className={`${3 > currentStep ? 'cursor-pointer' : 'cursor-default'} bg-blue-1  text-white p-4 rounded-lg`}>Next Step</button>
+              <button className={`${3 > currentStep ? 'cursor-pointer' : 'cursor-default'} bg-blue-1  text-white p-2 rounded`}>Next Step</button>
             )}
             {currentStep === 3 && (
               <>
-                <button onClick={() => setStatus("published")} className='cursor-pointer bg-blue-1  text-white p-4 rounded-lg'>Save Test</button>
+                <button onClick={() => setStatus("published")} className='cursor-pointer bg-blue-1  text-white p-2 rounded'>Save Test</button>
               </>
             )}
             <div onClick={() => {
               currentStep > 1 && setCurrentStep(currentStep - 1)
               console.log(currentStep)
-            }} className={`${1 < currentStep ? 'cursor-pointer' : 'cursor-default'}  text-black-4 p-4 rounded-lg`}>Back Step</div>
+            }} className={`${1 < currentStep ? 'cursor-pointer' : 'cursor-default'}  text-black-4 p-2 rounded`}>Back Step</div>
           </div>
         </form>
       </Card>

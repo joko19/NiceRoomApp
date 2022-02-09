@@ -474,7 +474,7 @@ export default function Create(props) {
                           <p className="mt-4">Difficulty Level {errors && (
                             <span className="text-red-1 text-sm">{errors.type}</span>
                           )}</p>
-                          <Select bg='white' {...register(`questions[${indexEachQuestion}].level`)} size="lg" variant='outline' iconColor="blue">
+                          <Select bg='white' {...register(`questions[${indexEachQuestion}].level`)} size="sm" variant='outline' iconColor="blue">
                             <option value="easy">Easy</option>
                             <option value="medium">Medium</option>
                             <option value="hard">Hard</option>
@@ -482,7 +482,7 @@ export default function Create(props) {
                         </div>
                         <div className="w-full">
                           <p className="mt-4">Tag</p>
-                          <Select bg='white' {...register(`questions[${indexEachQuestion}].tag`)} size="lg" variant='outline' iconColor="blue">
+                          <Select bg='white' {...register(`questions[${indexEachQuestion}].tag`)} size="sm" variant='outline' iconColor="blue">
                             <option value="tag 1">tag 1</option>
                             <option value="tag 2">tag 2</option>
                             <option value="tag 3">tag 3</option>
@@ -517,7 +517,7 @@ export default function Create(props) {
                             }
                           })
                           setQuestions([...temp])
-                        }} {...register(`questions[${indexEachQuestion}].answer_type`)} size="lg" variant='outline' iconColor="blue">
+                        }} {...register(`questions[${indexEachQuestion}].answer_type`)} size="sm" variant='outline' iconColor="blue">
                           <option value="single">Single Correct Answer</option>
                           <option value="multiple">Multiple Correct Answer</option>
                         </Select>

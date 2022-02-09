@@ -16,6 +16,7 @@ import {
 import { FaAngleLeft } from "react-icons/fa";
 import { useRouter } from "next/router";
 import { ModalDelete } from "../../../components/Modal/ModalDelete";
+import { HeaderInstruction } from "../../../components/Section/HeaderInstruction";
 
 export default function Section({ data }) {
   const Router = useRouter()
@@ -66,15 +67,15 @@ export default function Section({ data }) {
 
   return (
     <>
-      <div className="md:py-12 mt-16 md:mt-12">
+      <div className="mt-12 text-sm">
         <Link href="/admin/exams">
-          <a className="flex gap-4 text-blue-1 my-8"><FaAngleLeft /> Back</a>
+          <a className="flex gap-4 text-blue-1 my-4"><FaAngleLeft /> Back</a>
         </Link>
         <div className="flex justify-between">
-          <h1 className="font-bold text-2xl my-4">List of test sessions <span className="text-blue-1">{dataExams.name}</span> </h1>
+          <h1 className="font-bold text-2xl ">List of test sessions <span className="text-blue-1">{dataExams.name}</span> </h1>
           <Link href={`edit/${id}`}>
-            <a className="border border-blue-1 rounded-lg  p-4 ">
-              <div className="flex mt-1">
+            <a className=" p-4">
+              <div className="flex  border border-blue-1 rounded p-2">
                 <div className="m-auto text-blue-1">
                   <Image src="/asset/icon/table/fi_edit.png" className="mr-4 my-auto" height={16} width={16} />
                   <span className="ml-2">
@@ -88,28 +89,12 @@ export default function Section({ data }) {
       </div>
       {listSection.sections.map((itemSection, index) => (
         <Card key={index} className="my-4">
-          <div className="flex flex-col bg-black-8 rounded-lg mb-4 p-4">
-            <div className="flex">
-              <div className="w-full">
-                Section {index + 1}
-                <p className="font-bold">  <Image src="/asset/icon/table/ic_section.png" width={16} height={16} />   {itemSection.name}</p>
-
-              </div>
-              <div className="w-full">
-                Duration
-                <p className="font-bold">  <Image src="/asset/icon/table/ic_timer.png" width={16} height={16} />   {itemSection.duration} Minute</p>
-              </div>
-            </div>
-            <div className="mt-8">
-              Instruction
-              <div className="text-container" dangerouslySetInnerHTML={{ __html: itemSection.instruction }} />
-            </div>
-          </div>
+        <HeaderInstruction itemSection={itemSection} index={index}/>
           <div className="flex flex-col">
             <div className="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
               <div className="py-2 align-middle inline-block min-w-full sm:px-6 lg:px-8">
                 <div className="shadow overflow-hidden border-b border-gray-200 sm:rounded-lg">
-                  <table className="table md:min-w-full overflow-auto divide-y divide-gray-200">
+                  <table className="table md:min-w-full overflow-auto divide-y divide-gray-200 text-sm">
                     <thead className="bg-blue-6" >
                       <th scope="col" className="px-6 py-3 text-left tracking-wider">
                         No.

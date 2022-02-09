@@ -20,6 +20,8 @@ import { Select } from '@chakra-ui/react'
 import apiQuiz from "../../../action/quiz";
 import apiTopic from "../../../action/topics";
 import { MyDTPicker } from "../../../components/DateTime/DateTime";
+import Button from "../../../components/Button/button";
+
 export default function Create(props) {
   const [file, setFile] = useState(null)
   const [coverName, setCoverName] = useState(null)
@@ -154,12 +156,12 @@ export default function Create(props) {
   }
 
   return (
-    <div className="md:pt-12 md:pb-28">
+    <div className="mt-12 mb-48">
       <Link href="/admin/quizzes">
         <a className="flex gap-4 text-blue-1 my-8"><FaAngleLeft /> Back</a>
       </Link>
       <Card
-        className="md:mt-8 w-full  bg-white overflow-visible"
+        className="md:mt-4 w-full  bg-white overflow-visible"
         title="Create New Quiz " >
         <div className="flex gap-24 m-auto ">
           {step.map((item, index) => (
@@ -183,7 +185,7 @@ export default function Create(props) {
         <form onSubmit={handleSubmit(submitQuiz)}>
 
           {currentStep === 1 && (
-            <div className="mb-8">
+            <div className="mb-8 test-sm">
               {type === 'live' && (
                 <div className="flex">
                   {coverName === null && (
@@ -218,7 +220,7 @@ export default function Create(props) {
                     <span className="text-red-1 text-sm">{errors.name}</span>
                   )}</p>
                   <div>
-                    <input type="text" className="form border w-full rounded-lg p-4 h-full" placeholder="Input Quiz Name"  {...register("name")} />
+                    <input type="text" className="form border w-full rounded p-2 h-full text-sm" placeholder="Input Quiz Name"  {...register("name")} />
                   </div>
                 </div>
                 {type === 'live' && (
@@ -227,7 +229,7 @@ export default function Create(props) {
                       <span className="text-red-1 text-sm">{errors.topic}</span>
                     )}</p>
                     <div>
-                      <select className="form w-full border bg-white p-4 h-full rounded-lg" placeholder="Choose Type" {...register("topic_id")} >
+                      <select className="form w-full border bg-white p-2 text-sm rounded" placeholder="Choose Type" {...register("topic_id")} >
                         {topics.map((item, index) => (
                           <option key={index} value={item.id}>{item.name}</option>
                         ))}
@@ -243,7 +245,7 @@ export default function Create(props) {
                     <span className="text-red-1 text-sm">{errors.type}</span>
                   )}</p>
                   <div>
-                    <select className="form w-full border h-full bg-white p-4 rounded-lg" placeholder="Choose Type" onClick={(e) => {
+                    <select className="form w-full border h-full bg-white rounded p-2" placeholder="Choose Type" onClick={(e) => {
                       setType(e.target.value)
                     }} {...register("type")} >
                       <option value="mixed">Mixed Quiz</option>
@@ -257,8 +259,8 @@ export default function Create(props) {
                   )}</p>
                   <div >
                     <div className="flex h-full">
-                      <input type="number" className="border w-full h-full flex-grow rounded p-4" placeholder="0"  {...register("duration")} />
-                      <input className="bg-black-9 p-4 w-24 text-center h-full border text-black-4" placeholder="Minute" disabled />
+                      <input type="number" className="border w-full h-full flex-grow rounded p-2 text-sm" placeholder="0"  {...register("duration")} />
+                      <input className="bg-black-9 p-2 w-24 text-center h-full border text-black-4" placeholder="Minute" disabled />
                     </div>
                   </div>
                 </div>
@@ -309,7 +311,7 @@ export default function Create(props) {
                       setConsentment([...arr])
 
                       setValue(`consentments[${index}]`, e.target.value)
-                    }} className="form border w-full rounded-lg p-4 h-full m-1" autoComplete="off" placeholder="Input Consentment" />
+                    }} className="form border w-full rounded p-2 h-full m-1" autoComplete="off" placeholder="Input Consentment" />
                     {consenment.length !== 1 && (
                       <div className="m-auto cursor-pointer text-blue-1 -ml-8" onClick={() => {
                         let newArr = consenment
@@ -320,7 +322,7 @@ export default function Create(props) {
                   </div>
                 </>
               ))}
-              <div onClick={() => setConsentment([...consenment, ''])} className="text-blue-1 cursor-pointer text-center p-4 border-dashed border-2 border-blue-1 mt-4 rounded-lg">+ Add New Consentment</div>
+              <div onClick={() => setConsentment([...consenment, ''])} className="text-blue-1 cursor-pointer text-center p-2 border-dashed border-2 border-blue-1 mt-4 rounded-lg">+ Add New Consentment</div>
             </>
           )}
 
@@ -337,7 +339,7 @@ export default function Create(props) {
                           <p className="mt-4">Difficulty Level {errors && (
                             <span className="text-red-1 text-sm">{errors.type}</span>
                           )}</p>
-                          <Select bg='white' {...register(`questions[${indexEachQuestion}].level`)} size="lg" variant='outline' iconColor="blue">
+                          <Select bg='white' {...register(`questions[${indexEachQuestion}].level`)} size="sm" variant='outline' iconColor="blue">
                             <option value="easy">Easy</option>
                             <option value="medium">Medium</option>
                             <option value="hard">Hard</option>
@@ -345,7 +347,7 @@ export default function Create(props) {
                         </div>
                         <div className="w-full">
                           <p className="mt-4">Tag</p>
-                          <Select bg='white' {...register(`questions[${indexEachQuestion}].tag`)} size="lg" variant='outline' iconColor="blue">
+                          <Select bg='white' {...register(`questions[${indexEachQuestion}].tag`)} size="sm" variant='outline' iconColor="blue">
                             <option value="tag 1">tag 1</option>
                             <option value="tag 2">tag 2</option>
                             <option value="tag 3">tag 3</option>
@@ -379,7 +381,7 @@ export default function Create(props) {
                             }
                           })
                           setQuestions([...temp])
-                        }} {...register(`questions[${indexEachQuestion}].answer_type`)} size="lg" variant='outline' iconColor="blue">
+                        }} {...register(`questions[${indexEachQuestion}].answer_type`)} size="sm" variant='outline' iconColor="blue">
                           <option value="single">Single Correct Answer</option>
                           <option value="multiple">Multiple Correct Answer</option>
                         </Select>
@@ -392,7 +394,7 @@ export default function Create(props) {
                             setValue(`questions[${indexEachQuestion}].options[${indexAnswer}].correct`, 0)
                           }
                           return (
-                            <div className={`${itemAnswer.correct === 1 ? 'bg-blue-6 border-blue-1' : 'bg-white'} my-2  p-4 border rounded-lg`} key={indexAnswer}>
+                            <div className={`${itemAnswer.correct === 1 ? 'bg-blue-6 border-blue-1' : 'bg-white'} my-2  p-4 border rounded-lg text-sm`} key={indexAnswer}>
                               {errors && (
                                 <span className="text-red-1 text-sm">{errors[`questions.${indexEachQuestion}.options.${indexAnswer}.title`]}</span>
                               )}
@@ -473,7 +475,7 @@ export default function Create(props) {
                                   })
                                   setQuestions([...temp])
                                 }}
-                                  autoComplete="off" type="text" className={`${itemAnswer.correct === 1 ? 'bg-blue-6 text-black-5' : 'bg-white'} form border w-full rounded-lg p-4 h-full m-1`} placeholder="Input your answer" />
+                                  autoComplete="off" type="text" className={`${itemAnswer.correct === 1 ? 'bg-blue-6 text-black-5' : 'bg-white'} form border w-full rounded p-2 h-full m-1`} placeholder="Input your answer" />
                                 {eachQuestion.options.length !== 1 && (
                                   <div className="m-auto cursor-pointer text-blue-1 -ml-9" onClick={() => {
 
@@ -511,7 +513,7 @@ export default function Create(props) {
                             }
                           })
                           setQuestions([...temp])
-                        }} className="text-blue-1 cursor-pointer text-center p-4 border-dashed border-2 border-blue-1 mt-4 rounded-lg">+ Add New Answer</div>
+                        }} className="text-blue-1 cursor-pointer text-center p-2 border-dashed border-2 border-blue-1 mt-4 rounded-lg">+ Add New Answer</div>
                         <div className="mt-4">
                           <p className="mt-4">Answer Explanation {errors && (
                             <span className="text-red-1 text-sm">{errors[`questions.${indexEachQuestion}.answer_explanation`]}</span>
@@ -529,13 +531,13 @@ export default function Create(props) {
                             <p className="mt-4">Marks {errors && (
                               <span className="text-red-1 text-sm">{errors[`questions.${indexEachQuestion}.mark`]}</span>
                             )}</p>
-                            <input type="number" className=" w-full form border p-4 rounded-lg" placeholder="0" {...register(`questions[${indexEachQuestion}].mark`)} />
+                            <input type="number" className=" w-full form border rounded p-2" placeholder="0" {...register(`questions[${indexEachQuestion}].mark`)} />
                           </div>
                           <div className="w-full">
                             <p className="mt-4">Negative Marking {errors && (
                               <span className="text-red-1 text-sm">{errors[`questions.${indexEachQuestion}.negative_mark`]}</span>
                             )}</p>
-                            <input type="number" className="w-full form border p-4 rounded-lg" placeholder="0" {...register(`questions[${indexEachQuestion}].negative_mark`)} />
+                            <input type="number" className="w-full form border rounded p-2" placeholder="0" {...register(`questions[${indexEachQuestion}].negative_mark`)} />
                           </div>
                         </div>
                       </div>
@@ -560,17 +562,17 @@ export default function Create(props) {
             </div>
           )}
           <div className="flex -z-10 gap-4 flex-row-reverse my-4">
-            {currentStep < 3 && (<button className={`${3 > currentStep ? 'cursor-pointer' : 'cursor-default'} bg-blue-1  text-white p-4 rounded-lg`}>Next Step</button>
+            {currentStep < 3 && (<div className={`${3 > currentStep ? 'cursor-pointer' : 'cursor-default'}`}><Button title="Next Step" /></div>
             )}
             {currentStep === 3 && (
               <>
-                <button onClick={() => setStatus("published")} className='cursor-pointer bg-blue-1  text-white p-4 rounded-lg'>Save Quiz</button>
-                <button onClick={() => setStatus("draft")} className='cursor-pointer text-blue-1 p-4 rounded-lg'>Save Question</button>
+                <div onClick={() => setStatus("published")} ><Button title="Save Quiz" /></div>
+                <div onClick={() => setStatus("draft")} ><Button title="Save Question" /></div>
               </>
             )}
             <div onClick={() => {
               currentStep > 1 && setCurrentStep(currentStep - 1)
-            }} className={`${1 < currentStep ? 'cursor-pointer' : 'cursor-default'}  text-black-4 p-4 rounded-lg`}>Back Step</div>
+            }} className={`${1 < currentStep ? 'cursor-pointer' : 'cursor-default'} my-auto text-black-4 p-2 rounded-lg`}>Back Step</div>
           </div>
         </form>
       </Card>

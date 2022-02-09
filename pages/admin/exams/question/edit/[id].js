@@ -161,7 +161,7 @@ export default function Edit(props) {
   }
 
   return (
-    <div className="md:pt-12 md:pb-28">
+    <div className="mt-12">
       <Link href="/admin/exams">
         <a className="flex gap-4 text-blue-1 my-8"><FaAngleLeft /> Back</a>
       </Link>

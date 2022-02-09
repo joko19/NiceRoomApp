@@ -109,7 +109,7 @@ export default function Create(props) {
   }
 
   return (
-    <div className="md:pt-12 md:pb-28">
+    <div className="md:pt-4 md:pb-28">
       <Link href="/admin/practice">
         <a className="flex gap-4 text-blue-1 my-8"><FaAngleLeft /> Back</a>
       </Link>
@@ -122,7 +122,7 @@ export default function Create(props) {
                 <input type="text" hidden value={itemQuestion.type}  {...register(`questions.${indexQuestion}.type`)} />
                 {itemQuestion.type === "simple" && (
                   <div className="flex justify-between mt-2 bg-white p-4">
-                    <div className="text-2xl font-bold">{firstNumber + indexQuestion + 1}. {itemQuestion.type === 'simple' ? 'Simple' : 'Paragraph'} Question</div>
+                    <div className="text-2xl font-semibold">{firstNumber + indexQuestion + 1}. {itemQuestion.type === 'simple' ? 'Simple' : 'Paragraph'} Question</div>
                   </div>
                 )}
                 {itemQuestion.type === 'paragraph' && (
@@ -394,7 +394,7 @@ export default function Create(props) {
                             }
                           })
                           setQuestions([...temp])
-                        }} className="text-blue-1 cursor-pointer text-center p-4 border-dashed border-2 border-blue-1 mt-4 rounded-lg">+ Add New Answer</div>
+                        }} className="text-blue-1 cursor-pointer text-center p-2 border-dashed border-2 border-blue-1 mt-4 rounded-lg">+ Add New Answer</div>
                         <div className="mt-4">
                           <p className="mt-4">Answer Explanation {errors && (
                             <span className="text-red-1 text-sm">{errors[`questions.${indexQuestion}.question_items.${indexEachQuestion}.answer_explanation`]}</span>
@@ -412,13 +412,13 @@ export default function Create(props) {
                             <p className="mt-4">Marks {errors && (
                               <span className="text-red-1 text-sm">{errors[`questions.${indexQuestion}.question_items.${indexEachQuestion}.mark`]}</span>
                             )}</p>
-                            <input type="number" className=" w-full form border p-4 rounded-lg" placeholder="0" {...register(`questions[${indexQuestion}].question_items[${indexEachQuestion}].mark`)} />
+                            <input type="number" className=" w-full form border rounded p-2" placeholder="0" {...register(`questions[${indexQuestion}].question_items[${indexEachQuestion}].mark`)} />
                           </div>
                           <div className="w-full">
                             <p className="mt-4">Negative Marking {errors && (
                               <span className="text-red-1 text-sm">{errors[`questions.${indexQuestion}.question_items.${indexEachQuestion}.negative_mark`]}</span>
                             )}</p>
-                            <input type="number" className="w-full form border p-4 rounded-lg" placeholder="0" {...register(`questions[${indexQuestion}].question_items[${indexEachQuestion}].negative_mark`)} />
+                            <input type="number" className="w-full form border rounded p-2" placeholder="0" {...register(`questions[${indexQuestion}].question_items[${indexEachQuestion}].negative_mark`)} />
                           </div>
                         </div>
                       </div>
@@ -447,7 +447,7 @@ export default function Create(props) {
                       }
                     })
                     setQuestions([...temp])
-                  }} className="text-blue-1 cursor-pointer text-center p-4 border-dashed border-2 border-blue-1 mt-4 rounded-lg">+ Add New Question for this paragraph</div>
+                  }} className="text-blue-1 cursor-pointer text-center p-2 border-dashed border-2 border-blue-1 mt-4 rounded-lg">+ Add New Question for this paragraph</div>
                 </div>
 
                 )}
@@ -459,7 +459,7 @@ export default function Create(props) {
           <div className="mt-8">
             <div onClick={() => {
               onOpen()
-            }} className="text-blue-1 cursor-pointer text-center p-4 border-dashed border-2 border-blue-1 mt-4 rounded-lg">+ Add New Question</div>
+            }} className="text-blue-1 cursor-pointer text-center p-2 border-dashed border-2 border-blue-1 mt-4 rounded-lg">+ Add New Question</div>
           </div>
           <div className="flex -z-10 gap-4 flex-row-reverse my-4">
             <button onClick={() => setStatus("published")} className='cursor-pointer bg-blue-1  text-white p-4 rounded-lg'>Save Question</button>
