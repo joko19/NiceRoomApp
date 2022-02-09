@@ -16,6 +16,7 @@ import {
 } from '@chakra-ui/react'
 import Pagination from "../../../components/Pagination/pagination";
 import Button from "../../../components/Button/button";
+import { ModalDelete } from "../../../components/Modal/ModalDelete";
 
 export default function News(props) {
   const [search, setSearch] = useState('')
@@ -69,17 +70,17 @@ export default function News(props) {
 
   return (
     <>
-      <div className="md:py-16">
+      <div className="mt-12">
         <Card
           title="News"
           right={(
             <Link href="/admin/news/create">
-              <a className="btn btn-md bg-blue-1 text-white p-3 rounded-lg" > 
-              <Button title="+ Create News" /></a>
+              <a className="btn btn-md bg-blue-1 text-white p-3 rounded-lg" >
+                <Button title="+ Create News" /></a>
             </Link>
           )}
         >
-          <input type="text" className="p-2 border rounded w-1/2 mb-4" placeholder="Search News" onChange={(e) => {
+          <input type="text" className="p-2 border rounded w-1/2 mb-4 text-sm" placeholder="Search News" onChange={(e) => {
             setSearch(e.target.value)
             getData(e.target.value, limit, page)
           }} />
@@ -88,7 +89,7 @@ export default function News(props) {
             <div className="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
               <div className="py-2 align-middle inline-block min-w-full sm:px-6 lg:px-8">
                 <div className="shadow overflow-hidden border-b border-gray-200 sm:rounded-lg">
-                  <table className="table min-w-full divide-y divide-gray-200">
+                  <table className="table min-w-full divide-y divide-gray-200 text-sm">
                     <thead className="bg-black-9" >
                       {tableHead.map((item) => (
                         <th key={item} scope="col" className="px-6 py-3 text-left tracking-wider">
@@ -130,7 +131,7 @@ export default function News(props) {
                                     setTitle(item.title)
                                     setSelectedData(item.id)
                                     onOpenConfirmModal()
-                                    
+
                                   }}>
                                     <Image src="/asset/icon/table/ic_repeat.png" width={16} height={16} alt="icon publish" />
                                   </button>
@@ -191,26 +192,7 @@ export default function News(props) {
         </ModalContent>
       </Modal>
 
-      {/* Deleted Modal */}
-      <Modal isOpen={isOpen} onClose={onClose} isCentered>
-        <ModalOverlay />
-        <ModalContent>
-          <ModalHeader>Confirmation</ModalHeader>
-          <ModalCloseButton />
-          <ModalBody>
-            Are you sure to Delete it ?
-          </ModalBody>
-          <ModalFooter>
-            <div mr={3} onClick={onClose}>
-              Cancel
-            </div>
-            <div onClick={() => {
-              onDelete(selectedData)
-              onClose()
-            }}><Button title="Delete" /></div>
-          </ModalFooter>
-        </ModalContent>
-      </Modal>
+      <ModalDelete isOpen={isOpen} onClose={onClose} onDelete={(data) => onDelete(data)} selectedData={selectedData} />
     </>
   )
 }

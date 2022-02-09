@@ -56,12 +56,11 @@ function Header(props) {
                 color: item.slug === pathname ? 'text-yellow-1 font-bold border-b border-yellow-1' : 'text-white'
               }
               return (
-                <li key={item.id} className={status.color}><Link href={item.slug}><a>{item.name}</a></Link></li>
+                <li key={item.id} className={`${status.color} hover:text-yellow-1 hover:font-bold hover:border-b hover:border-yellow-1`}><Link href={item.slug}><a>{item.name}</a></Link></li>
               )
             })}
           </ul>
         </div>
-
         <div className="md:flex hidden md:flex-row flex-col gap-4 justify-center">
           <Select defaultValue="Select Category" placeholder="Select Category" bg='white' className="text-blue-1" size="md" variant='outline' iconColor="blue">
             {category.map((item) => (
@@ -73,7 +72,6 @@ function Header(props) {
       </div >
 
       {/* Mobile */}
-
       <nav className='flex md:hidden items-center shadow-lg flex-wrap fixed text-black  bg-blue-1 p-3 w-screen z-20 '>
         <Link href='/'>
           <a className='inline-flex items-center p-2 mr-4 gap-4'>

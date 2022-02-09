@@ -18,6 +18,7 @@ import apiInstitute from "../../action/institute";
 import Pagination from "../../components/Pagination/pagination";
 import Layout from "../../Layout/Layout";
 import Button from "../../components/Button/button";
+import { ModalDelete } from "../../components/Modal/ModalDelete";
 
 export default function InstituteAdmin(props) {
   const [search, setSearch] = useState('')
@@ -137,7 +138,7 @@ export default function InstituteAdmin(props) {
 
   return (
     <>
-      <div className="pt-24 md:py-16">
+      <div className="mt-12">
         <Card
           title="Institute Admin"
           right={(
@@ -159,7 +160,7 @@ export default function InstituteAdmin(props) {
             <div className="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
               <div className="py-2 align-middle inline-block min-w-full sm:px-6 lg:px-8">
                 <div className="shadow overflow-hidden border-b border-gray-200 sm:rounded-lg">
-                  <table className="table min-w-full divide-y divide-gray-200">
+                  <table className="table min-w-full divide-y divide-gray-200 text-sm">
                     <thead className="bg-black-9" >
                       {tableHead.map((item) => (
                         <th key={item} scope="col" className="px-6 py-3 text-left tracking-wider">
@@ -468,28 +469,7 @@ export default function InstituteAdmin(props) {
         </ModalContent>
       </Modal>
 
-      {/* Delete Modal */}
-      <Modal isOpen={isOpen} onClose={onClose} isCentered>
-        <ModalOverlay />
-        <ModalContent>
-          <ModalHeader>Confirmation</ModalHeader>
-          <ModalCloseButton />
-          <ModalBody>
-            Are you sure to Delete it ?
-          </ModalBody>
-          <ModalFooter>
-            <div className="cursor-pointer text-black-4" onClick={onClose}>
-              Cancel
-            </div>
-            <div onClick={() => {
-              onDelete(selectedData)
-              onClose()
-            }}>
-              <Button title="Delete" />
-            </div>
-          </ModalFooter>
-        </ModalContent>
-      </Modal>
+      <ModalDelete isOpen={isOpen} onClose={onClose} onDelete={(data) => onDelete(data)} selectedData={selectedData} />
     </>
   )
 }

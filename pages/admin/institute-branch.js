@@ -17,6 +17,7 @@ import { useForm } from "react-hook-form";
 import Pagination from "../../components/Pagination/pagination";
 import apiBranch from "../../action/branch";
 import Layout from "../../Layout/Layout";
+import { ModalDelete } from "../../components/Modal/ModalDelete";
 
 export default function InstituteBranch(props) {
 
@@ -61,9 +62,9 @@ export default function InstituteBranch(props) {
   return (
 
     <>
-      <div className="md:py-8 mt-24 md:mt-8">
+      <div className="mt-12">
         <Card title="Institute Branches">
-          <input type="text" className="p-2 border rounded w-1/2 mb-4" placeholder="Search Branch" onChange={(e) => {
+          <input type="text" className="p-2 border rounded w-1/2 mb-4 text-sm" placeholder="Search Branch" onChange={(e) => {
             setSearch(e.target.value)
             getData(e.target.value, status, limit, page)
           }} />
@@ -72,7 +73,7 @@ export default function InstituteBranch(props) {
             <div className="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
               <div className="py-2 align-middle inline-block min-w-full sm:px-6 lg:px-8">
                 <div className="shadow overflow-hidden border-b border-gray-200 sm:rounded-lg">
-                  <table className="table md:min-w-full overflow-auto divide-y divide-gray-200">
+                  <table className="table md:min-w-full overflow-auto divide-y divide-gray-200 text-sm">
                     <thead className="bg-black-9" >
                       {TableHead.map((item) => (
                         <th key={item} scope="col" className="px-6 py-3 text-left tracking-wider">

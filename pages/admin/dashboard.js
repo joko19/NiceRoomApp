@@ -19,6 +19,7 @@ import { FaEye, FaEyeSlash } from "react-icons/fa";
 import instance from "../../action/instance";
 import apiInstitute from "../../action/institute";
 import Button from "../../components/Button/button";
+import { ModalDelete } from "../../components/Modal/ModalDelete";
 
 export default function Index(props) {
   const TableHead = ['Name', 'Email', 'Phone', 'Action']
@@ -171,26 +172,26 @@ export default function Index(props) {
   }
 
   return (
-    <div className="mt-12 w-full mb-16">
+    <div className="mt-8 w-full mb-16">
       <div className="flex">
         <div className=" w-full">
-          <div className="flex gap-2">
+          <div className="flex">
             <div className="flex w-full gap-4 p-4 bg-white rounded-lg my-4">
-              <img className="w-16 h-16" src="/asset/icon/table/ic_school.png" />
+              <img className="w-12 h-12" src="/asset/icon/table/ic_school.png" />
               <div>
                 <p className="font-bold text-blue-1 text-2xl">
                   {listInstitute.length}
                 </p>
-                <p className="text-black-4">Registered Institute</p>
+                <p className="text-black-4 text-sm">Registered Institute</p>
               </div>
             </div>
             <div className="flex w-full gap-4 p-4 bg-white rounded-lg ml-4 my-4">
-              <img className="w-16 h-16" src="/asset/icon/table/ic_read.png" />
+              <img className="w-12 h-12" src="/asset/icon/table/ic_read.png" />
               <div>
                 <p className="font-bold text-yellow-1 text-2xl">
                   120.000
                 </p>
-                <p className="text-black-4">Student Joined</p>
+                <p className="text-black-4 text-sm">Student Joined</p>
               </div>
             </div>
           </div>
@@ -222,7 +223,7 @@ export default function Index(props) {
                 // </button>
               )}>
 
-              <input type="text" className="p-2 border rounded w-1/2 mb-4" placeholder="Search Operator" onChange={(e) => {
+              <input type="text" className="p-2 border text-sm rounded w-1/2 mb-4" placeholder="Search Operator" onChange={(e) => {
                 setSearch(e.target.value)
                 getData(e.target.value, limit, page)
               }} />
@@ -231,15 +232,15 @@ export default function Index(props) {
                 <div className="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
                   <div className="py-2 align-middle inline-block min-w-full sm:px-6 lg:px-8">
                     <div className="shadow overflow-hidden border-b border-gray-200 sm:rounded-lg">
-                      <table className="table md:min-w-full overflow-auto divide-y divide-gray-200">
+                      <table className="table md:min-w-full overflow-auto divide-y divide-gray-200 text-sm">
                         <thead className="bg-black-9" >
                           {TableHead.map((item) => (
-                            <th key={item} scope="col" className="px-6 py-3 text-left tracking-wider">
+                            <th key={item} scope="col" className="px-6 text-sm py-3 text-left tracking-wider">
                               {item}
                             </th>
                           ))}
                         </thead>
-                        <tbody className="bg-white divide-y divide-gray-200">
+                        <tbody className="bg-white divide-y divide-gray-200 text-sm">
                           {list.map((item, index) => (
                             <tr key={index}>
                               <td className="px-6 py-4 whitespace-nowrap">
@@ -288,13 +289,13 @@ export default function Index(props) {
           </div>
         </div>
         <div className="md:flex flex-col p-4 m-4 hidden sm:w-1/3 md:w-1/3 bg-white rounded-lg">
-          <h1 className="p-4 font-bold">List Institute</h1>
-          <input type="text" className="p-2 border rounded w-full mb-4" placeholder="Search Institute" onChange={(e) => {
+          <h1 className="text-1xl font-bold mb-2">List Institute</h1>
+          <input type="text" className="p-2 text-sm border rounded w-full" placeholder="Search Institute" onChange={(e) => {
             onSearchInstitute(e.target.value)
           }} />
           {listInstitute.map((item, index) => (
             <div key={item} className="border-b py-4">
-              <span className="border p-2 rounded">{index + 1}</span><span className="font-bold"> &nbsp; {item.name}</span><span className="text-black-5" > </span>
+              <span className="border p-2 rounded text-sm">{index + 1}</span><span className="font-bold text-sm"> &nbsp; {item.name}</span><span className="text-black-5" > </span>
             </div>
           ))}
         </div>
@@ -306,89 +307,88 @@ export default function Index(props) {
         motionPreset='slideInBottom'>
         <ModalOverlay />
         <ModalContent>
-          <ModalHeader>{update ? 'Edit' : 'Add'} Operator</ModalHeader>
           <ModalCloseButton />
           <ModalBody>
-            <form onSubmit={handleSubmit(onSubmit)} className="pb-4">
-
-              <div className="flex gap-4 flex-col md:flex-row mt-4">
-                <div className="w-full">
+            <>
+              <div className="text-1xl font-semibold pt-4"> {update ? 'Edit' : 'Add'} Operator </div>
+              <form onSubmit={handleSubmit(onSubmit)} className="pb-4 text-sm">
+                <div className="flex gap-4 flex-col md:flex-row mt-4">
                   <div className="w-full">
                     <p>Full Name {errors && (
                       <span className="text-red-1 text-sm">{errors.name}</span>
                     )}</p>
-                    <input type="text" className="w-full form border p-2 rounded" placeholder="Input Full Name" {...register("name")} />
+                    <input type="text" className="w-full form border mt-1 p-2 rounded" placeholder="Input Full Name" {...register("name")} />
                   </div>
-                  <p>Email {errors && (
-                    <span className="text-red-1 text-sm">{errors.email}</span>
-                  )}</p>
-                  <input type="text" className="form border w-full p-2 rounded" placeholder="Input Email Address" {...register("email")} />
-                </div>
-                <div className="w-full">
-                  <div className="flex justify-center">
-                    <div className="m-4 relative">
-                      <Image className="rounded-full object-cover" src={avatar} alt="photo profile" height={100} width={100} />
-                      <div className="absolute bottom-5 right-0">
-                        <label htmlFor="file-input">
-                          <Image src="/asset/icon/ic_edit.png" alt="icon update" width={48} height={48} className="ml-6 cursor-pointer" />
-                        </label>
-                      </div>
-                    </div>
+                  <div>
+                    <label htmlFor="file-input">
+                      <div className="m-4 relative my-auto cursor-pointer">
+                        <Image className="rounded-full object-cover" src={avatar} alt="photo profile" height={100} width={100} />
+                        <div className="absolute bottom-2 right-0">
+                          <Image src="/asset/icon/ic_edit.png" alt="icon update" width={28} height={28} className="ml-16 cursor-pointer" />
+
+                        </div>
+                      </div>  </label>
                     <div className="hidden">
                       <input id="file-input" type="file" className="hidden -z-50" accept="image/*" onChange={choosePhoto} />
                     </div>
                   </div>
                 </div>
-              </div>
 
-              <div className="flex gap-4 flex-col md:flex-row ">
-                <div className="w-full">
-                  <p>Phone{errors && (
-                    <span className="text-red-1 text-sm">{errors.phone}</span>
-                  )}</p>
-                  <input type="number" className="form border p-2 w-full rounded-lg" placeholder="Input Phone Number" {...register("phone")} />
-                </div>
-              </div>
-
-              <div className="flex gap-4 flex-col md:flex-row">
-                <div className="w-full">
-                  <p>Password  {errors && (
-                    <span className="text-red-1 text-sm">{errors.password}</span>
-                  )}</p>
-                  <div className="relative">
-                    <input type={`${passwd ? 'password' : 'text'}`} {...register("password")} className="form w-full border p-2 rounded" placeholder="Input New Password" />
-                    <span className="absolute inset-y-0 cursor-pointer right-0 pr-3 flex items-center text-sm leading-5" onClick={() => {
-                      passwd ? setpasswd(false) : setpasswd(true)
-                    }}>
-                      {passwd ?
-                        (<FaEyeSlash className=" z-10 inline-block align-middle" />) :
-                        (<FaEye className=" z-10 inline-block align-middle" />)
-                      }
-                    </span>
+                <div className="flex gap-4 flex-col md:flex-row">
+                  <div className="w-full">
+                    <p>Email {errors && (
+                      <span className="text-red-1 text-sm">{errors.email}</span>
+                    )}</p>
+                    <input type="text" className="form mt-1 border w-full p-2 rounded" placeholder="Input Email Address" {...register("email")} />
+                  </div>
+                  <div className="w-full">
+                    <p>Phone{errors && (
+                      <span className="text-red-1 text-sm">{errors.phone}</span>
+                    )}</p>
+                    <input type="number" className="form border p-2 mt-1 w-full rounded-lg" placeholder="Input Phone Number" {...register("phone")} />
                   </div>
                 </div>
-                <div className="w-full">
-                  <p>Confirm Password  {errors && (
-                    <span className="text-red-1 text-sm">{errors.password}</span>
-                  )}</p>
-                  <div className="relative">
-                    <input type={`${passwdConfirmation ? 'password' : 'text'}`} {...register("password_confirmation")} className="form w-full border p-2 rounded" placeholder="Input New Password" />
-                    <span className="absolute inset-y-0 cursor-pointer right-0 pr-3 flex items-center text-sm leading-5" onClick={() => {
-                      passwdConfirmation ? setpasswdConfirmation(false) : setpasswd(true)
-                    }}>
-                      {passwdConfirmation ?
-                        (<FaEyeSlash className=" z-10 inline-block align-middle" />) :
-                        (<FaEye className=" z-10 inline-block align-middle" />)
-                      }
-                    </span>
+
+                <div className="flex gap-4 flex-col md:flex-row mt-4">
+                  <div className="w-full">
+                    <p>Password  {errors && (
+                      <span className="text-red-1 text-sm">{errors.password}</span>
+                    )}</p>
+                    <div className="relative">
+                      <input type={`${passwd ? 'password' : 'text'}`} {...register("password")} className="form w-full border p-2 mt-1 rounded" placeholder="Input New Password" />
+                      <span className="absolute inset-y-0 cursor-pointer right-0 pr-3 flex items-center text-sm leading-5" onClick={() => {
+                        passwd ? setpasswd(false) : setpasswd(true)
+                      }}>
+                        {passwd ?
+                          (<FaEyeSlash className=" z-10 inline-block align-middle" />) :
+                          (<FaEye className=" z-10 inline-block align-middle" />)
+                        }
+                      </span>
+                    </div>
+                  </div>
+                  <div className="w-full">
+                    <p>Confirm Password  {errors && (
+                      <span className="text-red-1 text-sm">{errors.password}</span>
+                    )}</p>
+                    <div className="relative">
+                      <input type={`${passwdConfirmation ? 'password' : 'text'}`} {...register("password_confirmation")} className="form w-full border mt-1 p-2 rounded" placeholder="Input New Password" />
+                      <span className="absolute inset-y-0 cursor-pointer right-0 pr-3 flex items-center text-sm leading-5" onClick={() => {
+                        passwdConfirmation ? setpasswdConfirmation(false) : setpasswd(true)
+                      }}>
+                        {passwdConfirmation ?
+                          (<FaEyeSlash className=" z-10 inline-block align-middle" />) :
+                          (<FaEye className=" z-10 inline-block align-middle" />)
+                        }
+                      </span>
+                    </div>
                   </div>
                 </div>
-              </div>
-              <div className="flex flex-row-reverse gap-4 mt-4">
-                <Button title="Save" />
-                <button type="button" className="text-black-4 p-3 rounded-lg" onClick={onCloseCreateModal}>Close</button>
-              </div>
-            </form>
+                <div className="flex flex-row-reverse gap-4 mt-6">
+                  <Button title="Save" />
+                  <button type="button" className="text-black-4 p-3 rounded-lg" onClick={onCloseCreateModal}>Close</button>
+                </div>
+              </form>
+            </>
           </ModalBody>
         </ModalContent>
       </Modal>
@@ -413,25 +413,7 @@ export default function Index(props) {
         </ModalContent>
       </Modal>
 
-      {/* Delete Confirmation */}
-      <Modal isOpen={isOpen} onClose={onClose} isCentered>
-        <ModalOverlay />
-        <ModalContent>
-          <ModalHeader><center> Delete Operator</center></ModalHeader>
-          <ModalBody>
-            <center className="mb-8">Are you sure to delete {nameDeleted} from Operator ?</center>
-            <div className="flex gap-4 justify-center">
-              <button className="text-black-4 p-3" mr={3} onClick={onClose}>
-                Cancel
-              </button>
-              <button className="bg-red-1 text-white p-3 rounded-lg" onClick={() => {
-                onDelete(selectedData)
-                onClose()
-              }} onClose={onClose}>Delete</button>
-            </div>
-          </ModalBody>
-        </ModalContent>
-      </Modal>
+      <ModalDelete isOpen={isOpen} onClose={onClose} onDelete={(data) => onDelete(data)} selectedData={selectedData} />
     </div>
   )
 }

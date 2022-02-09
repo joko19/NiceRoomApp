@@ -112,7 +112,7 @@ function Landing(props) {
             <p className="mt-2">Makes preparation simplified with Examz</p>
           </div>
           {formStatus === 'login' && (
-            <div className='my-40 bg-white rounded-lg p-6 m-4 md:m-24'>
+            <div className='my-40 bg-white rounded-lg w-96 p-6 mx-auto md:mx-auto'>
               <form onSubmit={handleSubmit(onLogin)}>
                 <h1 className="text-xl text-center">Welcome to Examz!</h1>
                 <p className="text-black-3 text-center">Be ready for exam with us</p>
@@ -124,7 +124,7 @@ function Landing(props) {
                   <span className="text-red-1 text-sm">{errors.data.password}</span>
                 )}</p>
                 <div className="relative">
-                  <input type={`${passwdLogin ? 'password' : 'text'}`} className="form w-full border p-2 rounded" placeholder="Input New Password" {...register("password")} />
+                  <input type={`${passwdLogin ? 'password' : 'text'}`} className="form w-full border p-2 mb-2 rounded" placeholder="Input New Password" {...register("password")} />
                   <span className="absolute inset-y-0 cursor-pointer right-0 pr-3 flex items-center text-sm leading-5" onClick={() => {
                     passwdLogin ? setPasswdLogin(false) : setPasswdLogin(true)
                   }}>
@@ -134,20 +134,20 @@ function Landing(props) {
                     }
                   </span>
                 </div>
-                <span className="text-right text-end mt-2 text-black-3 cursor-pointer hover:text-blue-1" onClick={() => {
+                <span className="text-right text-end mt-4 text-black-3 cursor-pointer hover:text-blue-1" onClick={() => {
                   setErrors(null)
                   setFormStatus('forgotPassword')
                 }}>Forgot Password ?</span>
                 {errors && errors.message === 'Unauthorized' && (
                   <p className="text-red-1 text-sm">Check your email or password</p>
                 )}
-                <button type="submit" className="w-full bg-yellow-1 text-white p-3 mt-4 rounded" onClick={() => onLogin()}>Login</button>
+                <button type="submit" className="w-full bg-yellow-1 text-white p-2 mt-4 rounded" onClick={() => onLogin()}>Login</button>
               </form>
-              <p className="text-center m-4 text-black-4">or continue with</p>
+              <p className="text-center m-2 text-black-4">or continue with</p>
               <div className="flex flex-col md:flex-row gap-4">
-                <button className="flex w-full  gap-4 justify-center border px-6 py-3 border-yellow-1 rounded-lg" onClick={() => onLoginGoogle()}><img src="/asset/icon/ic_google.png" alt="login with google" /> Google</button>
+                <button className="flex w-full  gap-4 justify-center border px-6 py-2 border-yellow-1 rounded" onClick={() => onLoginGoogle()}><img src="/asset/icon/ic_google.png" height={16} width={16} className="my-auto" alt="login with google" /> Google</button>
               </div>
-              <p className="text-right mt-2 text-black-3">Dont you have account ?  <button className='text-blue-1 font-bold' onClick={() => {
+              <p className="text-center mt-2 text-black-3">Dont you have account ?  <button className='text-blue-1 font-bold' onClick={() => {
                 onChangeForm('register')
                 setErrors(null)
               }}>Register</button></p>
@@ -155,7 +155,7 @@ function Landing(props) {
           )}
 
           {formStatus === 'register' && (
-            <form onSubmit={handleSubmit(onRegister)} className="my-40 bg-white rounded-lg m-4 p-4 md:m-24">
+            <form onSubmit={handleSubmit(onRegister)} className="my-40 bg-white rounded-lg m-4 p-4 w-96 p-6 mx-auto md:mx-auto">
               <h1 className="text-xl text-center">Create Account</h1>
               <p className="text-black-3 text-center">create an account and get a lot of benefits</p>
               <p className="mt-4">Full Name {errors && errors.data && (
@@ -214,7 +214,7 @@ function Landing(props) {
           )}
 
           {formStatus === 'forgotPassword' && (
-            <form onSubmit={handleSubmit(onForgot)} className="my-40 bg-white rounded-lg p-4 md:mt-64  m-4 md:m-24">
+            <form onSubmit={handleSubmit(onForgot)} className="my-40 bg-white rounded-lg p-4 md:mt-64 w-96 p-6 mx-auto md:mx-auto">
               <h1 className="text-xl text-center">Forgot Password ?</h1>
               <p className="text-black-3 text-center">Enter your email or phone number to reset your password.</p>
               <p className="mt-4">Email {errors && (
@@ -237,29 +237,29 @@ function Landing(props) {
         </div>
       </section>
 
-      <section className="grid xl:grid-cols-3 md:mx-16 my-20">
+      <section className="grid xl:grid-cols-3 gap-4 md:mx-16 my-20">
         <div className="m-2 ">
           <Image src="/asset/icon/ic_question.png" height="48" width="48" alt='icon question' />
-          <h1 className="font-semibold text-2xl mt-4">Top Quality Questions</h1>
-          <p className="mt-4">All questions and solutions, designed by top exam experts, based on latest patterns and actual exam level</p>
+          <h1 className="font-semibold text-2xl mt-4 pb-1">Top Quality Questions</h1>
+          <p>All questions and solutions, designed by top exam experts, based on latest patterns and actual exam level</p>
         </div>
 
         <div className="m-2 filter">
           <Image src="/asset/icon/ic_live.png" height="48" width="48" alt='icon live' />
-          <h1 className="font-semibold text-2xl mt-4">Live Tests for Real Experience</h1>
-          <p className="mt-4">Get your All-India Rank and feel the thrill of a real-exam. Groom your pressure handling and time management skills.</p>
+          <h1 className="font-semibold text-2xl mt-4 pb-1">Live Tests for Real Experience</h1>
+          <p>Get your All-India Rank and feel the thrill of a real-exam. Groom your pressure handling and time management skills.</p>
         </div>
 
         <div className="m-2">
           <Image src="/asset/icon/ic_diagram.png" height="48" width="48" alt='icon diagram' />
-          <h1 className="font-semibold text-2xl mt-4">Personalized, detailed Analysis</h1>
-          <p className="mt-4">Know your weaknesses, strengths and everything else that you need to know to improve your score and rank.</p>
+          <h1 className="font-semibold text-2xl mt-4 pb-1">Personalized, detailed Analysis</h1>
+          <p>Know your weaknesses, strengths and everything else that you need to know to improve your score and rank.</p>
         </div>
       </section>
 
       <section className="bg-black-9 grid grid-cols-1 md:grid-cols-2 xl:grid-cols-2 py-20 md:px-20 px-4">
         <div className="self-center mr-4">
-          <h1 className="font-bold text-blue-1 text-2xl mb-4">Real number can be trusted</h1>
+          <h1 className="font-bold text-black-1 text-2xl pb-1">Real number can be trusted</h1>
           <p className="text-black-3">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Venenatis scelerisque at quam congue posuere libero in sit quam. Consequat, scelerisque non tincidunt sit lectus senectus. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Venenatis scelerisque at quam congue posuere libero in sit quam. Consequat, scelerisque non tincidunt sit lectus senectus. Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
         </div>
         <div className="grid  md:grid-cols-1 lg:grid-cols-2 ">
@@ -292,8 +292,8 @@ function Landing(props) {
       </section>
 
       <section className="py-20">
-        <h1 className="text-2xl text-center font-bold text-blue-1 p-1">Real story from our student</h1>
-        <p className="text-black-4 mt-4 text-center">Read and get inspired by stories from our happy student</p>
+        <h1 className="text-2xl text-center font-bold text-black-1 p-1">Real story from our student</h1>
+        <p className="text-black-4  text-center">Read and get inspired by stories from our happy student</p>
         <div className="grid grid-cols-1 md:grid-cols-3 xl:grid-cols-3 md:px-20 mt-12">
           <div className=" filter drop-shadow-lg bg-white p-8 mx-4">
             <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Intega aliquam lectus risus ut vestibulum consequat comodo lorem. Risus, in eget tristique commodo lectus mattis et.</p>
@@ -329,7 +329,7 @@ function Landing(props) {
       </section>
 
       <section className="bg-blue-1 py-20 px-20">
-        <h1 className="text-white font-bold text-4xl mb-4">Upcoming Exams</h1>
+        <h1 className="text-white font-bold text-2xl mb-4">Upcoming Exams</h1>
         <div className="grid grid-cols-1 md:grid-cols-3 xl:grid-cols-3 gap-4">
           {list.map((item) => (
             <div key={item} className="bg-white rounded-lg p-6">
@@ -342,19 +342,19 @@ function Landing(props) {
               </div>
               <div className="flex flex-col mt-4">
                 <div className="flex gap-2 text-black-3 gap-4">
-                  <img className='w-5 h-5' src="/asset/icon/ic_clock.png" alt="icon paper" />
+                  <img className='w-5 h-5' src="/asset/icon/ic_clock.svg" alt="icon paper" />
                   <span>120 mins duration </span>
                 </div>
                 <div className="flex gap-2 text-black-3 gap-4">
-                  <img className='w-5 h-5' src="/asset/icon/ic_signal.png" alt="icon paper" />
+                  <img className='w-5 h-5' src="/asset/icon/ic_volume.svg" alt="icon paper" />
                   <span>3 Section</span>
                 </div>
                 <div className="flex gap-2 text-black-3 gap-4">
-                  <img className='w-5 h-5' src="/asset/icon/ic_date.png" alt="icon paper" />
+                  <img className='w-5 h-5' src="/asset/icon/ic_date.svg" alt="icon paper" />
                   <span>12 Jan ~ 20 Feb 2020</span>
                 </div>
               </div>
-              <button className="bg-blue-1 text-white justify-center w-full py-2 rounded-lg mt-4">Start Exam</button>
+              <Button title="Start Exam" className="w-full my-4" />
               <p className="text-black-3 text-sm text-center my-4">200 Student are writing this exam</p>
             </div>
           ))}
@@ -362,34 +362,31 @@ function Landing(props) {
       </section>
 
       <section className="py-20">
-        <h1 className="text-2xl text-center font-bold text-blue-1 p-1">Lates news from us</h1>
-        <p className="text-black-4 mx-8 mt-1 text-center">Read and get inspired by these latest news curated by us</p>
+        <h1 className="text-2xl text-center font-bold text-black-1 p-1">Lates news from us</h1>
+        <p className="text-black-4 mx-8 text-center">Read and get inspired by these latest news curated by us</p>
 
         <div className="grid md:grid-cols-3 px-4 gap-4 md:px-20 mt-8">
           <div>
             <img src="/asset/img/news1.png" alt="news image" />
-            <p className="text-black-3">12/07/2021</p>
-            <h1 className="font-bold text-xl">Learn From Home Can Be Fun And More Colorful Nowadays</h1>
+            <h1 className="font-bold text-1xl">Learn From Home Can Be Fun And More Colorful Nowadays</h1>
             <p className="text-yellow-1">Read More</p>
           </div>
           <div>
             <img src="/asset/img/news2.png" alt="news image" />
-            <p className="text-black-3">12/07/2021</p>
-            <h1 className="font-bold text-xl">Learn From Home Can Be Fun And More Colorful Nowadays</h1>
+            <h1 className="font-bold text-1xl">Learn From Home Can Be Fun And More Colorful Nowadays</h1>
             <p className="text-yellow-1">Read More</p>
           </div>
           <div>
             <img src="/asset/img/news3.png" alt="news image" />
-            <p className="text-black-3">12/07/2021</p>
-            <h1 className="font-bold text-xl">Learn From Home Can Be Fun And More Colorful Nowadays</h1>
+            <h1 className="font-bold text-1xl">Learn From Home Can Be Fun And More Colorful Nowadays</h1>
             <p className="text-yellow-1">Read More</p>
           </div>
         </div>
       </section>
 
       <section className="py-20 bg-blue-6 flex-row items-center text-center">
-        <h1 className="text-2xl text-center  font-bold text-blue-1 p-1">Start your preparation for now</h1>
-        <p className="text-black-3 mx-4 text-center">Makes your exam preparation more simplified with Examz</p>
+        <h1 className="text-2xl text-center  font-bold text-black-1 p-1">Start your preparation for now</h1>
+        <p className="text-black-3 mx-4 mb-4 text-center">Makes your exam preparation more simplified with Examz</p>
         <Button title="Get Started For Free" />
       </section>
 

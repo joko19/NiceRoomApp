@@ -15,6 +15,7 @@ import {
 } from '@chakra-ui/react'
 import { FaAngleLeft } from "react-icons/fa";
 import { useRouter } from "next/router";
+import { ModalDelete } from "../../../components/Modal/ModalDelete";
 
 export default function Section({ data }) {
   const Router = useRouter()
@@ -120,7 +121,7 @@ export default function Section({ data }) {
                         Number of Question
                       </th>
                       <th scope="col" className="px-6 py-3 text-left tracking-wider">
-                        <div className="bg-blue-1 text-white w-48 text-center mx-auto p-4 rounded-lg cursor-pointer" onClick={() => {
+                        <div className="bg-blue-1 text-white w-48 text-center mx-auto p-2 rounded-lg cursor-pointer" onClick={() => {
                           setSelectedData(itemSection.id),
                             setSelectedName(itemSection.name)
                           onOpen()
@@ -175,22 +176,8 @@ export default function Section({ data }) {
       ))}
 
       {/* Delete Confirmation */}
-      <Modal isOpen={isDeleteModal} onClose={onCloseDeleteModal} isCentered>
-        <ModalOverlay />
-        <ModalContent>
-          <ModalHeader>Delete Confirmation </ModalHeader>
-          <ModalCloseButton />
-          <ModalBody>
-            <div className="flex gap-4">
-              Are you sure to Delete this Question ?
-            </div>
-            <div className="flex flex-row-reverse gap-4 mt-4" >
-              <button type="submit" onClick={() => onDelete(questionSelectedId)} className="bg-blue-1 p-3 rounded-lg text-white" >Delete</button>
-              <button type="button" className="text-black-4 p-3 rounded-lg" onClick={onCloseDeleteModal}>Cancel</button>
-            </div>
-          </ModalBody>
-        </ModalContent>
-      </Modal>
+
+      <ModalDelete isOpen={isDeleteModal} onClose={onCloseDeleteModal} onDelete={(data) => onDelete(data)} selectedData={questionSelectedId} />
 
       <Modal isOpen={isOpen} onClose={onClose} isCentered>
         <ModalOverlay />

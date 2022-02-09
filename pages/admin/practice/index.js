@@ -3,17 +3,13 @@ import Card from "../../../components/Cards/Card";
 import { useEffect, useState } from 'react'
 import Image from "next/image";
 import {
-  Modal,
-  ModalOverlay,
-  ModalContent,
-  ModalHeader,
-  ModalBody,
   useDisclosure,
 } from '@chakra-ui/react'
 import Pagination from "../../../components/Pagination/pagination";
 import { Select } from '@chakra-ui/react'
 import apiPractice from './../../../action/practice'
 import Link from "next/link";
+import { ModalDelete } from "../../../components/Modal/ModalDelete";
 
 export default function Index() {
   const [search, setSearch] = useState('')
@@ -56,7 +52,7 @@ export default function Index() {
 
   return (
     <>
-      <div className="md:py-24 mt-24 md:mt-12">
+      <div className="md:py-12">
         <Card
           title="Practice"
           right={(
@@ -65,13 +61,13 @@ export default function Index() {
             </Link>
           )}
         >
-          <div className="flex gap-4 mb-4">
-            <input type="text" className=" border rounded-lg w-1/2 p-2" value={search} placeholder="Search Practice" onChange={(e) => {
+          <div className="flex gap-4 my-4">
+            <input type="text" className=" border rounded-lg w-1/2 p-2 text-sm" value={search} placeholder="Search Practice" onChange={(e) => {
               setSearch(e.target.value)
               getData(e.target.value, type, status, limit, page)
             }} />
 
-            <div className="flex gap-4 w-1/2 h-full  ">
+            <div className="flex gap-4 w-1/2 h-full text-sm ">
               <Select placeholder='All Type' className="h-full" size="lg" onChange={(e) => {
                 setType(e.target.value)
                 getData(search, e.target.value, status, limit, page)
@@ -92,7 +88,7 @@ export default function Index() {
             <div className="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
               <div className="py-2 align-middle inline-block min-w-full sm:px-6 lg:px-8">
                 <div className="shadow overflow-hidden border-b border-gray-200 sm:rounded-lg">
-                  <table className="table md:min-w-full overflow-auto divide-y divide-gray-200">
+                  <table className="table md:min-w-full overflow-auto divide-y divide-gray-200 text-sm">
                     <thead className="bg-black-9" >
                       <th scope="col" className="px-6 py-3 text-left tracking-wider">
                         Test Name
@@ -153,25 +149,7 @@ export default function Index() {
         </Card>
       </div>
 
-      {/* Delete Confirmation */}
-      <Modal isOpen={isOpen} onClose={onClose} isCentered>
-        <ModalOverlay />
-        <ModalContent>
-          <ModalHeader><center> Delete Confirmation</center></ModalHeader>
-          <ModalBody>
-            <center className="mb-8">Are you sure to delete ?</center>
-            <div className="flex gap-4 justify-center">
-              <button className="text-black-4 p-3" mr={3} onClick={onClose}>
-                Cancel
-              </button>
-              <button className="bg-blue-1 text-white p-3 rounded-lg" onClick={() => {
-                onDelete(selectedData)
-                onClose()
-              }} onClose={onClose}>Deleted</button>
-            </div>
-          </ModalBody>
-        </ModalContent>
-      </Modal>
+      <ModalDelete isOpen={isOpen} onClose={onClose} onDelete={(data) => onDelete(data)} selectedData={selectedData} />
     </>
   )
 }

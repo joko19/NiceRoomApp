@@ -4,7 +4,7 @@ import { FaAngleLeft, FaAngleRight, FaAngleDoubleLeft, FaAngleDoubleRight } from
 function Pagination({ page, lastPage, total, limit, search, type = false, status = false, branch = false, batch = false, doLimit, doData }) {
   return (
 
-    <div className="flex mt-8 flex-row-reverse flex-end gap-4">
+    <div className="flex mt-8 flex-row-reverse flex-end gap-4 text-sm">
       <button className={`${page !== lastPage ? 'bg-black-6' : 'cursor-default'} rounded-full p-1`} onClick={() => {
         if (page !== lastPage) {
           if (branch !== false && batch !== false) {

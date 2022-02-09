@@ -18,6 +18,7 @@ import { useForm } from "react-hook-form";
 import Pagination from "../../../components/Pagination/pagination";
 import { region } from "../../../action/India";
 import Button from "../../../components/Button/button";
+import { ModalDelete } from "../../../components/Modal/ModalDelete";
 
 export default function Institute() {
   const [search, setSearch] = useState('')
@@ -118,7 +119,7 @@ export default function Institute() {
 
   return (
     <>
-      <div className="md:py-8 mt-24 md:mt-8">
+      <div className="mt-12">
         <Card
           title="Institution"
           right={(
@@ -140,7 +141,7 @@ export default function Institute() {
             <div className="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
               <div className="py-2 align-middle inline-block min-w-full sm:px-6 lg:px-8">
                 <div className="shadow overflow-hidden border-b border-gray-200 sm:rounded-lg">
-                  <table className="table md:min-w-full overflow-auto divide-y divide-gray-200">
+                  <table className="table md:min-w-full overflow-auto divide-y divide-gray-200 text-sm">
                     <thead className="bg-black-9" >
                       {TableHead.map((item) => (
                         <th key={item} scope="col" className="px-6 py-3 text-left tracking-wider">
@@ -206,11 +207,11 @@ export default function Institute() {
         motionPreset='slideInBottom'>
         <ModalOverlay />
         <ModalContent>
-          <ModalHeader>{update ? 'Edit' : 'Create'} Institute</ModalHeader>
+          <ModalHeader fontSize="xsmall">{update ? 'Edit' : 'Create'} Institute</ModalHeader>
           <ModalCloseButton />
           <ModalBody>
-            <form onSubmit={handleSubmit(onSubmit)} className="pb-4">
-              <div className="flex gap-4">
+            <form onSubmit={handleSubmit(onSubmit)} className="pb-4 text-sm">
+              <div className="flex gap-4 ">
                 <div className="w-full">
                   <p>Institute Name {errors && (
                     <span className="text-red-1 text-sm">{errors.name}</span>
@@ -280,7 +281,7 @@ export default function Institute() {
           <ModalHeader><center>Success</center></ModalHeader>
           <ModalCloseButton />
           <ModalBody>
-            <div className="flex flex-col text-center ">
+            <div className="flex flex-col text-center text-sm">
               <p>{getValues('name')} {update ? 'Update' : 'Create'} Successfully </p>
               <div className="self-center">
                 <button className="bg-blue-1 rounded-lg text-white mt-4 block align-center p-3" onClick={() => {
@@ -293,29 +294,7 @@ export default function Institute() {
         </ModalContent>
       </Modal>
 
-      {/* Delete Confirmation */}
-      <Modal isOpen={isOpen} onClose={onClose} isCentered>
-        <ModalOverlay />
-        <ModalContent>
-          <ModalHeader>Confirmation</ModalHeader>
-          <ModalCloseButton />
-          <ModalBody>
-            Are you sure to Delete it ?
-          </ModalBody>
-          <ModalFooter>
-            <div className="cursor-pointer" mr={3} onClick={onClose}>
-              Cancel
-            </div>
-            <div onClick={() => {
-              onDelete(selectedData)
-              onClose()
-            }} >
-
-              <Button title="Delete" />
-            </div>
-          </ModalFooter>
-        </ModalContent>
-      </Modal>
+      <ModalDelete isOpen={isOpen} onClose={onClose} onDelete={(data) => onDelete(data)} selectedData={selectedData} />
     </>
   )
 }

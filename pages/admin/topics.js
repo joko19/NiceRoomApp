@@ -16,6 +16,7 @@ import { useForm } from "react-hook-form";
 import Pagination from "../../components/Pagination/pagination";
 import Layout from "../../Layout/Layout";
 import Button from "../../components/Button/button";
+import { ModalDelete } from "../../components/Modal/ModalDelete";
 
 export default function Topics() {
   const [search, setSearch] = useState('')
@@ -62,7 +63,7 @@ export default function Topics() {
   const onDelete = async (id) => {
     await apiTopic.deleted(id)
       .then((res) => {
-        if (res.data.status) getTopics()
+        getData(search, limit, page)
       })
       .catch((err) => {
         console.log(err)
@@ -70,7 +71,7 @@ export default function Topics() {
   }
   return (
     <>
-      <div className="md:mt-8 md:py-8">
+      <div className="mt-12">
         <Card
           title="Topics"
           right={(
@@ -83,7 +84,7 @@ export default function Topics() {
             </div>
           )}
         >
-          <input type="text" className="p-2 border rounded w-1/2 mb-4" placeholder="Search Topic" onChange={(e) => {
+          <input type="text" className="p-2 border rounded w-1/2 mb-4 text-sm" placeholder="Search Topic" onChange={(e) => {
             setSearch(e.target.value)
             getData(e.target.value, limit, page)
           }} />
@@ -92,7 +93,7 @@ export default function Topics() {
             <div className="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
               <div className="py-2 align-middle inline-block min-w-full sm:px-6 lg:px-8">
                 <div className="shadow overflow-hidden border-b border-gray-200 sm:rounded-lg">
-                  <table className="table min-w-full divide-y divide-gray-200">
+                  <table className="table min-w-full divide-y divide-gray-200 text-sm">
                     <thead className="bg-black-9" >
                       <th
                         scope="col"
@@ -162,29 +163,7 @@ export default function Topics() {
         </ModalContent>
       </Modal>
 
-      {/* Delete Confirmation */}
-      <Modal isOpen={isOpen} onClose={onClose} isCentered>
-        <ModalOverlay /> 
-        <ModalContent>
-          <ModalHeader>Confirmation</ModalHeader>
-          <ModalCloseButton />
-          <ModalBody>
-            Are you sure to Delete it ?
-          </ModalBody>
-          <ModalFooter>
-            <div className="cursor-pointer text-black-4" onClick={onClose}>
-              Cancel
-            </div>
-            <div onClick={() => {
-              onDelete(selectedData)
-              getData(search, limit, page)
-              onClose()
-            }}>
-              <Button title="Delete" />
-            </div>
-          </ModalFooter>
-        </ModalContent>
-      </Modal>
+      <ModalDelete isOpen={isOpen} onClose={onClose} onDelete={(data) => onDelete(data)} selectedData={selectedData} />
     </>
   )
 }

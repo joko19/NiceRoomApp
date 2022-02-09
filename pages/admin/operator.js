@@ -18,6 +18,7 @@ import Pagination from "../../components/Pagination/pagination";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import instance from "../../action/instance";
 import Button from "../../components/Button/button";
+import { ModalDelete } from "../../components/Modal/ModalDelete";
 
 export default function Operator() {
   const [search, setSearch] = useState('')
@@ -154,7 +155,7 @@ export default function Operator() {
 
   return (
     <>
-      <div className="md:py-8 mt-24 md:mt-8">
+      <div className="mt-12">
         <Card
           title="Operator"
           right={(
@@ -170,7 +171,7 @@ export default function Operator() {
             </div>
           )}
         >
-          <input type="text" className="p-2 border rounded w-1/2 mb-4" placeholder="Search Operator" onChange={(e) => {
+          <input type="text" className="p-2 border rounded w-1/2 mb-4 text-sm" placeholder="Search Operator" onChange={(e) => {
             setSearch(e.target.value)
             getData(e.target.value, limit, page)
           }} />
@@ -179,7 +180,7 @@ export default function Operator() {
             <div className="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
               <div className="py-2 align-middle inline-block min-w-full sm:px-6 lg:px-8">
                 <div className="shadow overflow-hidden border-b border-gray-200 sm:rounded-lg">
-                  <table className="table md:min-w-full overflow-auto divide-y divide-gray-200">
+                  <table className="table md:min-w-full overflow-auto divide-y divide-gray-200 text-sm">
                     <thead className="bg-black-9" >
                       {TableHead.map((item) => (
                         <th key={item} scope="col" className="px-6 py-3 text-left tracking-wider">
@@ -244,7 +245,6 @@ export default function Operator() {
           <ModalCloseButton />
           <ModalBody>
             <form onSubmit={handleSubmit(onSubmit)} className="pb-4">
-
               <div className="flex justify-center">
                 <div className="m-4 relative">
                   <Image className="rounded-full object-cover" src={avatar} alt="photo profile" height={160} width={160} />
@@ -345,26 +345,7 @@ export default function Operator() {
         </ModalContent>
       </Modal>
 
-      {/* Delete Confirmation */}
-      <Modal isOpen={isOpen} onClose={onClose} isCentered>
-        <ModalOverlay />
-        <ModalContent>
-          <ModalHeader><center> Delete Operator</center></ModalHeader>
-          <ModalBody>
-            <center className="mb-8">Are you sure to delete {nameDeleted} from Operator ?</center>
-            <div className="flex gap-4 justify-center">
-              <button className="text-black-4 p-3" mr={3} onClick={onClose}>
-                Cancel
-              </button>
-              <div onClick={() => {
-                onDelete(selectedData)
-                onClose()
-              }}>
-                <Button title="Delete" /></div>
-            </div>
-          </ModalBody>
-        </ModalContent>
-      </Modal>
+      <ModalDelete isOpen={isOpen} onClose={onClose} onDelete={(data) => onDelete(data)} selectedData={selectedData} />
     </>
   )
 }

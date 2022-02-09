@@ -154,7 +154,7 @@ function Sidebar() {
       setItemList(staff)
   }, [])
   return (
-    <div className="py-24 bg-white h-full">
+    <div className="py-16 bg-white h-full">
       {router.pathname.startsWith("/institute") && roleStore === role.instituteAdmin && (
         <div className="bg-black-9 m-2 rounded-lg p-4 flex gap-4 mb-8">
           <Image src="/asset/icon/sidebar/ic_college.png" height="48" width="48" alt="icon campus" />
@@ -171,7 +171,7 @@ function Sidebar() {
         {itemList.map((item, index) => {
           const isActive = router.pathname.indexOf(item.path) !== -1
           return (
-            <li key={index} className={` ${isActive ? 'bg-blue-1 text-white shadow-lg' : 'bg-white'} flex px-1 gap-4 mt-4 rounded-lg  inline-block block py-1 text-black-3 `}>
+            <li key={index} className={` ${isActive ? 'bg-blue-1 text-white shadow-lg' : 'bg-white'} flex px-2 gap-4 mt-1 rounded-lg  inline-block block py-2 text-black-3 `}>
               <Link href={item.path}>
                 <a className="flex gap-4 inline-block cursor-pointer p-1 rounded">
                   {isActive ? (
