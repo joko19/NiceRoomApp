@@ -103,7 +103,9 @@ function Landing(props) {
 
   return (
     <>
-      <section className="banner full-height">
+    <section className='bg'>
+      <img src='/asset/img/background.png' className='bg-img' />
+      <section >
         <Header />
         <div className="grid md:grid-cols-2 ">
           <div className="pt-36 pl-36 hidden md:flex md:flex-col text-white">
@@ -236,6 +238,7 @@ function Landing(props) {
           )}
         </div>
       </section>
+    </section>
 
       <section className="grid xl:grid-cols-3 gap-4 md:mx-16 my-20">
         <div className="m-2 ">
