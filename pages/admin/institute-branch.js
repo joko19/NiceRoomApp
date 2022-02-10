@@ -60,8 +60,7 @@ export default function InstituteBranch(props) {
   }
 
   return (
-
-    <>
+    <div className="mt-12">
       <Card title="Institute Branches">
         <input type="text" className="p-2 border rounded w-1/2 mb-4 text-sm" placeholder="Search Branch" onChange={(e) => {
           setSearch(e.target.value)
@@ -152,7 +151,7 @@ export default function InstituteBranch(props) {
           </ModalBody>
         </ModalContent>
       </Modal>
-    </>
+    </div>
   )
 }
 InstituteBranch.layout = Layout

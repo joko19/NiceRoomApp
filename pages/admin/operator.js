@@ -155,7 +155,7 @@ export default function Operator() {
   }
 
   return (
-    <>
+    <div className="mt-12">
       <div className="">
         <Card
           title="Operator"
@@ -326,7 +326,7 @@ export default function Operator() {
       
       <ModalSuccessCreateEdit isSuccessModal={isSuccessModal} onCloseSuccessModal={onCloseSuccessModal} update={update} setUpdate={(data) => setUpdate(data)} />
       <ModalDelete isOpen={isOpen} onClose={onClose} onDelete={(data) => onDelete(data)} selectedData={selectedData} />
-    </>
+    </div>
   )
 }
 Operator.layout = Layout

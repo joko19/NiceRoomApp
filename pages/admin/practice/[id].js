@@ -68,10 +68,10 @@ export default function Section({ data }) {
 
 
   return (
-    <>
+    <div className="mt-12">
       <div className="text-sm">
         <BackButton url="/admin/practice" />
-        <TitleSection dataExams={dataExams} id={id} />
+        <TitleSection dataExams={dataExams} id={id} type="Practice" />
       </div>
       {listSection.sections.map((itemSection, index) => (
         <ListSession key={index} index={index} itemSection={itemSection} onOpenDeleteModal={onOpenDeleteModal} setQuestionSelectedId={(data) => setQuestionSelectedId(data)} setSelectedData={(data) => setSelectedData(data)} setSelectedName={(data) => setSelectedName(data)} onOpen={onOpen} />
@@ -102,7 +102,7 @@ export default function Section({ data }) {
           </ModalBody>
         </ModalContent>
       </Modal>
-    </>
+    </div>
   )
 }
 

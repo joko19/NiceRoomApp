@@ -52,7 +52,7 @@ export default function Index() {
   }
 
   return (
-    <>
+    <div className="mt-12">
       <Card
         title="Practice"
         right={(
@@ -149,7 +149,7 @@ export default function Index() {
       </Card>
 
       <ModalDelete isOpen={isOpen} onClose={onClose} onDelete={(data) => onDelete(data)} selectedData={selectedData} />
-    </>
+    </div>
   )
 }
 Index.layout = Layout

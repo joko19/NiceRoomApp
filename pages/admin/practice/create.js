@@ -20,7 +20,7 @@ import apiPractice from "../../../action/practice";
 import apiTopic from "../../../action/topics";
 import Multiselect from 'multiselect-react-dropdown';
 import DatePicker2 from "../../../components/DateTime/Date";
-import Button from "../../../components/Button/button";
+import Button, { BackButton } from "../../../components/Button/button";
 
 import { Time } from "../../../components/DateTime/Time";
 import { Stepper } from "../../../components/Section/Stepper";
@@ -124,12 +124,10 @@ export default function Create(props) {
   }
 
   return (
-    <div className="md:pt-8 md:pb-28">
-      <Link href="/admin/practice">
-        <a className="flex gap-4 text-blue-1 my-8"><FaAngleLeft /> Back</a>
-      </Link>
+    <div className="md:mt-12 md:pb-28">
+      <BackButton url="/admin/practice" />
       <Card
-        className="md:mt-8 w-full  bg-white overflow-visible text-sm"
+        className="w-full  bg-white overflow-visible text-sm"
         title="Create New Practice " >
         <Stepper step={step} currentStep={currentStep} />
         <form onSubmit={handleSubmit(submitPractice)}>

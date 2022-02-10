@@ -191,9 +191,9 @@ export default function Create(props) {
 
   return (
     <div className="md:pt-12 md:pb-28">
-      <BackButton url="/admin/practice" />]
+      <BackButton url="/admin/practice" />
       <Card
-        className="md:mt-8 w-full  bg-white overflow-visible"
+        className="w-full  bg-white overflow-visible"
         title="Edit Practice " >
         <Stepper step={step} currentStep={currentStep} />
         <form onSubmit={handleSubmit(submitPractice)}>

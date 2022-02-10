@@ -169,12 +169,10 @@ export default function Edit(props) {
   }
 
   return (
-    <div className="md:pt-12 md:pb-28">
-      <Link href="/admin/practice">
-        <a className="flex gap-4 text-blue-1 my-8"><FaAngleLeft /> Back</a>
-      </Link>
+    <div className="md:mt-12 md:pb-28">
+      <BackButton url="/admin/practice" />
       <Card
-        className="md:mt-8 w-full  bg-white overflow-visible" >
+        className="w-full  bg-white overflow-visible" >
         <form onSubmit={handleSubmit(submitQuiz)}>
           {questions.map((itemQuestion, indexQuestion) => {
             return (

@@ -69,7 +69,7 @@ export default function Topics() {
       })
   }
   return (
-    <>
+    <div className="mt-12">
       <Card
         title="Topics"
         right={(
@@ -159,7 +159,7 @@ export default function Topics() {
         </ModalContent>
       </Modal>
       <ModalDelete isOpen={isOpen} onClose={onClose} onDelete={(data) => onDelete(data)} selectedData={selectedData} />
-    </>
+    </div>
   )
 }
 Topics.layout = Layout

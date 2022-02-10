@@ -137,7 +137,7 @@ export default function InstituteAdmin(props) {
   }
 
   return (
-    <>
+    <div className="mt-12">
       <Card
         title="Institute Admin"
         right={(
@@ -467,7 +467,7 @@ export default function InstituteAdmin(props) {
       </Modal>
 
       <ModalDelete isOpen={isOpen} onClose={onClose} onDelete={(data) => onDelete(data)} selectedData={selectedData} />
-    </>
+    </div>
   )
 }
 InstituteAdmin.layout = Layout

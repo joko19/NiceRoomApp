@@ -17,6 +17,7 @@ import {
 } from '@chakra-ui/react'
 import { useForm } from "react-hook-form";
 import { FaAngleLeft, FaAngleRight, FaAngleDoubleLeft, FaAngleDoubleRight } from "react-icons/fa";
+import { BackButton } from "../../../components/Button/button";
 
 export default function Institute() {
   const Router = useRouter()
@@ -71,7 +72,7 @@ export default function Institute() {
     onOpenSuccessModal()
   }
 
-  const searchBranch = async(keyword) => {
+  const searchBranch = async (keyword) => {
     await apiInstitute.searchBranch(id, keyword)
       .then((res) => {
         setList(res.data.data.branches)
@@ -89,15 +90,13 @@ export default function Institute() {
   }
 
   return (
-    <>
+    <div className="mt-12">
       <div className="md:py-4 ">
-        <Link href="/admin/institution">
-          <a className="flex gap-4 text-blue-1 my-8"><FaAngleLeft /> Back</a>
-        </Link>
+        <BackButton url="/admin/institution" />
         <div className="bg-white p-4 rounded-lg text-sm">
           <div className="flex flex-auto w-full flex-row gap-4 m-4 space-between">
             <div className="flex">
-              <img src="/asset/icon/table/ic_building.png"  alt="icon university " className="bg-cover h-12 w-12" />
+              <img src="/asset/icon/table/ic_building.png" alt="icon university " className="bg-cover h-12 w-12" />
             </div>
             <div className="flex flex-col flex-1">
               <h1 className="font-bold">{dataInstitute.name}</h1>
@@ -305,7 +304,7 @@ export default function Institute() {
           </ModalFooter>
         </ModalContent>
       </Modal>
-    </>
+    </div>
   )
 }
 Institute.layout = Layout

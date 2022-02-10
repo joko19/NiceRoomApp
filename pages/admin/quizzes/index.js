@@ -51,7 +51,7 @@ export default function Create() {
   }
 
   return (
-    <>
+    < >
       <div className="md:py-12">
         <Card
           title="Quizzes"

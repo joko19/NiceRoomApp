@@ -173,7 +173,7 @@ export default function Index(props) {
   }
 
   return (
-    <div className="w-full mb-16 md:-my-4">
+    <div className="w-full mt-8 mb-16">
       <div className="flex">
         <div className=" w-full">
           <div className="flex">
@@ -211,17 +211,6 @@ export default function Index(props) {
                 }}>
                   <Button title="+ Add Operator" />
                 </div>
-                // <button className="btn btn-md bg-blue-1 text-white p-3 rounded-lg" 
-                // onClick={() => {
-                //   setAvatar('/asset/img/blank_profile.png')
-                //   getBranch()
-                //   setUpdate(false)
-                //   onOpenCreateModal()
-                //   setErrors(null)
-                //   reset()
-                // }}>
-                //   + Add Operator
-                // </button>
               )}>
 
               <input type="text" className="p-2 border text-sm rounded w-1/2 mb-4" placeholder="Search Operator" onChange={(e) => {
@@ -393,7 +382,7 @@ export default function Index(props) {
           </ModalBody>
         </ModalContent>
       </Modal>
-      
+
       <ModalSuccessCreateEdit isSuccessModal={isSuccessModal} onCloseSuccessModal={onCloseSuccessModal} update={update} setUpdate={(data) => setUpdate(data)} />
       <ModalDelete isOpen={isOpen} onClose={onClose} onDelete={(data) => onDelete(data)} selectedData={selectedData} />
     </div>

@@ -1,7 +1,7 @@
 import Image from "next/image"
 import Link from "next/link"
 
-export function TitleSection({ dataExams, id }) {
+export function TitleSection({ dataExams, id, type }) {
   return (
     <div className="flex justify-between">
       <h1 className="font-bold text-2xl my-auto ">List of test sessions <span className="text-blue-1">{dataExams.name}</span> </h1>
@@ -11,7 +11,7 @@ export function TitleSection({ dataExams, id }) {
             <div className="m-auto text-blue-1">
               <Image src="/asset/icon/table/fi_edit.png" className="mr-4 my-auto" height={16} width={16} />
               <span className="ml-2">
-                Edit Exams
+                Edit {type}
               </span>
             </div>
           </div>

@@ -161,7 +161,7 @@ export default function Edit(props) {
   }
 
   return (
-    <div>
+    <div className="mt-12">
       <BackButton url="/admin/exams" />
       <Card
         className="w-full  bg-white overflow-visible text-sm" >

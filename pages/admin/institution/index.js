@@ -118,7 +118,7 @@ export default function Institute() {
   }
 
   return (
-    <>
+    <div className="mt-12">
       <Card
         title="Institution"
         right={(
@@ -292,7 +292,7 @@ export default function Institute() {
       </Modal>
 
       <ModalDelete isOpen={isOpen} onClose={onClose} onDelete={(data) => onDelete(data)} selectedData={selectedData} />
-    </>
+    </div>
   )
 }
 Institute.layout = Layout
