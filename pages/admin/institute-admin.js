@@ -458,7 +458,7 @@ export default function InstituteAdmin(props) {
                   setUpdate(false)
                   setErrors(null)
                 }}>
-                  <Button title="Okay" />
+                  <Button title="Okay" className="mt-4" />
                 </div>
               </div>
             </div>

@@ -2,6 +2,7 @@ import Image from "next/image"
 import Link from "next/link"
 import Card from "../Cards/Card"
 import { HeaderInstruction } from "./HeaderInstruction"
+import Button from "../Button/button"
 
 export function ListSession({ itemSection, onOpenDeleteModal, setSelectedData, setSelectedName, onOpen, setQuestionSelectedId, index }) {
   return (
@@ -23,12 +24,12 @@ export function ListSession({ itemSection, onOpenDeleteModal, setSelectedData, s
                     Number of Question
                   </th>
                   <th scope="col" className="px-6 py-3 text-left tracking-wider">
-                    <div className="bg-blue-1 text-white w-48 text-center mx-auto p-2 rounded-lg cursor-pointer" onClick={() => {
+                    <div onClick={() => {
                       setSelectedData(itemSection.id),
                         setSelectedName(itemSection.name)
                       onOpen()
                     }}>
-                      + Add Question
+                      <Button title="+ Add Question" />
                     </div>
                   </th>
                 </thead>

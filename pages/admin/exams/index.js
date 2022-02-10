@@ -117,8 +117,8 @@ export default function Index() {
                           <div>{item.exam_type.name}</div>
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap ">
-                          <div className={`${item.status === 'draft' ? 'bg-black-8 text-black-3' : 'bg-green-2 text-green-1'} text-center rounded-lg p-3 `}>
-                            {item.status}
+                          <div className={`${item.status === 'draft' ? 'bg-black-8 text-black-3' : 'bg-green-2 text-green-1'} text-center font-bold rounded-lg p-3 `}>
+                            {item.status === 'draft' ? 'Draft' : 'Published'}
                           </div>
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap flex text-right gap-2 text-sm font-medium m-auto flex items-center h-full">
@@ -134,7 +134,7 @@ export default function Index() {
                                 onOpen()
                             }}>
                               <Image src="/asset/icon/table/fi_trash_red.png" className="inline-block align-baseline " width={16} height={16} alt="icon deleted" />
-                              <span className="text-red-1 inline-block align-top">    Delete</span>
+                              <span className="text-red-1 inline-block align-top">  Delete</span>
                             </button>
                           </div>
 
