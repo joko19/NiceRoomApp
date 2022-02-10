@@ -74,7 +74,7 @@ export default function Section({ data }) {
         <TitleSection dataExams={dataExams} id={id} />
       </div>
       {listSection.sections.map((itemSection, index) => (
-        <ListSession index={index} itemSection={itemSection} onOpenDeleteModal={onOpenDeleteModal} setQuestionSelectedId={(data) => setQuestionSelectedId(data)} setSelectedData={(data) => setSelectedData(data)} setSelectedName={(data) => setSelectedName(data)} onOpen={onOpen} />
+        <ListSession key={index} index={index} itemSection={itemSection} onOpenDeleteModal={onOpenDeleteModal} setQuestionSelectedId={(data) => setQuestionSelectedId(data)} setSelectedData={(data) => setSelectedData(data)} setSelectedName={(data) => setSelectedName(data)} onOpen={onOpen} />
       ))}
 
       {/* Delete Confirmation */}
