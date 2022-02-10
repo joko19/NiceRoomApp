@@ -199,8 +199,13 @@ export default function Create(props) {
           </div>
           <div className="flex flex-row-reverse gap-4 my-4">
             <div onClick={() => setIsPublish("published")}>
-              <Button title="Publish News" /></div>
-            <button className={`bg-yellow-1 text-white p-2 rounded  hover:filter hover:drop-shadow-xl m-2`} >Save as Draft</button>
+              <Button title="Publish News" />
+            </div>
+            <div>
+              <button onClick={() => setIsPublish("draft")} className="border border-blue-1 hover:bg-blue-6  rounded p-2" >Save to Draft</button>
+            </div>
+          </div>
+          <div onClick={() => setIsPublish("draft")}>
           </div>
         </form>
       </Card>

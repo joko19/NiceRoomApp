@@ -127,7 +127,7 @@ export default function Index() {
                             <Link href={`exams/${item.id}`}>
                               <a className="text-indigo-600 hover:text-indigo-900 m-auto">
                                 <Image src="/asset/icon/table/fi_edit.png" width={16} height={16} alt="icon edit" />
-                                <span className="text-blue-1 inline-block align-top">    Edit Exam</span>
+                                <span className="text-blue-1 inline-block align-top"> Detail Exam</span>
                               </a>
                             </Link>
                             <button href="#" className="text-indigo-600 hover:text-indigo-900 m-auto" onClick={() => {

@@ -23,7 +23,7 @@ export function ListSession({ itemSection, onOpenDeleteModal, setSelectedData, s
                   <th scope="col" className="px-6 py-3 text-center tracking-wider">
                     Number of Question
                   </th>
-                  <th scope="col" className="px-6 py-3 text-left tracking-wider">
+                  <th scope="col" className="px-6 py-3 text-left text-center tracking-wider">
                     <div onClick={() => {
                       setSelectedData(itemSection.id),
                         setSelectedName(itemSection.name)

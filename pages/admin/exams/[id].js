@@ -1,8 +1,6 @@
 import Layout from "../../../Layout/Layout";
-import Card from "../../../components/Cards/Card";
 import apiExam from "../../../action/exam";
 import { useEffect, useState } from 'react'
-import Image from "next/image";
 import Link from "next/link";
 import {
   Modal,
@@ -13,7 +11,6 @@ import {
   ModalCloseButton,
   useDisclosure,
 } from '@chakra-ui/react'
-import { FaAngleLeft } from "react-icons/fa";
 import { useRouter } from "next/router";
 import { ModalDelete } from "../../../components/Modal/ModalDelete";
 import Button, { BackButton } from "../../../components/Button/button";
@@ -30,6 +27,13 @@ export default function Section({ data }) {
     onOpen: onOpenDeleteModal,
     onClose: onCloseDeleteModal
   } = useDisclosure()
+  const {
+    isOpen: isSuccessModal,
+    onOpen: onOpenSuccessModal,
+    onClose: onCloseSuccessModal
+  } = useDisclosure()
+
+
   const [listSection, setListSection] = useState({
     sections: []
   })
@@ -66,17 +70,28 @@ export default function Section({ data }) {
       })
   }
 
+  const onPublish = async () => {
+    await apiExam.publish(id)
+      .then(() => {
+        onOpenSuccessModal()
+      })
+  }
+
+
 
   return (
     <div className="mt-12">
       <div className="text-sm">
         <BackButton url="/admin/exams" />
-        <TitleSection dataExams={dataExams} id={id} type="Exams"/>
+        <TitleSection dataExams={dataExams} id={id} type="Exams" />
       </div>
       {listSection.sections.map((itemSection, index) => (
         <ListSession key={index} index={index} itemSection={itemSection} onOpenDeleteModal={onOpenDeleteModal} setQuestionSelectedId={(data) => setQuestionSelectedId(data)} setSelectedData={(data) => setSelectedData(data)} setSelectedName={(data) => setSelectedName(data)} onOpen={onOpen} />
       ))}
 
+      <div className="flex flex-row-reverse" onClick={onPublish}>
+        <Button title="Publish" />
+      </div>
       {/* Delete Confirmation */}
 
       <ModalDelete isOpen={isDeleteModal} onClose={onCloseDeleteModal} onDelete={(data) => onDelete(data)} selectedData={questionSelectedId} />
@@ -100,6 +115,24 @@ export default function Section({ data }) {
                 <a> <Button title="Select" className="mt-4" /></a>
               </Link>
               <button type="button" className="text-black-4 p-3 rounded-lg" onClick={onClose}>Cancel</button>
+            </div>
+          </ModalBody>
+        </ModalContent>
+      </Modal>
+
+      {/* Success Modal */}
+      <Modal isOpen={isSuccessModal} onClose={onCloseSuccessModal} isCentered>
+        <ModalOverlay />
+        <ModalContent>
+          <ModalHeader fontSize="md"><center>Success</center></ModalHeader>
+          <ModalCloseButton />
+          <ModalBody>
+            <div className="flex flex-col text-center text-sm"> Exams has published
+              <div className="self-center">
+                <Link href="/admin/practice">
+                  <a> <Button title="Okay" className="mt-4" /></a>
+                </Link>
+              </div>
             </div>
           </ModalBody>
         </ModalContent>

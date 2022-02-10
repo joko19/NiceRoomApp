@@ -13,7 +13,6 @@ import {
   ModalBody,
   ModalCloseButton,
   useDisclosure,
-  Divider,
 } from '@chakra-ui/react'
 import QuillCreated from "../../../components/Editor/QuillCreated";
 import { Select } from '@chakra-ui/react'
@@ -27,7 +26,7 @@ export default function Create(props) {
   const [file, setFile] = useState(null)
   const [coverName, setCoverName] = useState(null)
   const [errors, setErrors] = useState()
-  const { register, handleSubmit, setValue, getValues, reset, unregister } = useForm();
+  const { register, handleSubmit, setValue, getValues} = useForm();
   const step = ['Quiz Details', 'Instruction', 'Question']
   const [currentStep, setCurrentStep] = useState(1)
   const [topics, setTopics] = useState([])
@@ -37,6 +36,12 @@ export default function Create(props) {
   const [endTime, setEndTime] = useState()
   const [consenment, setConsentment] = useState([''])
   const [status, setStatus] = useState()
+  const {
+    isOpen: isSuccessModal,
+    onOpen: onOpenSuccessModal,
+    onClose: onCloseSuccessModal
+  } = useDisclosure()
+
   const [questions, setQuestions] = useState([{
     id: 0,
     question: '',
@@ -141,12 +146,6 @@ export default function Create(props) {
         setErrors(err.response.data.data)
       })
   }
-
-  const {
-    isOpen: isSuccessModal,
-    onOpen: onOpenSuccessModal,
-    onClose: onCloseSuccessModal
-  } = useDisclosure()
 
   useEffect(() => {
     getTopics()
@@ -547,8 +546,8 @@ export default function Create(props) {
             )}
             {currentStep === 3 && (
               <>
-                <div onClick={() => setStatus("published")} ><Button title="Save Quiz" /></div>
-                <div onClick={() => setStatus("draft")} ><Button title="Save Question" /></div>
+                <div onClick={() => setStatus("published")} ><Button title="Publish Quiz" /></div>
+                <button onClick={() => setStatus("draft")} className="border border-blue-1 hover:bg-blue-6  rounded p-2" >Save to Draft</button>
               </>
             )}
             <div onClick={() => {

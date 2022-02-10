@@ -693,8 +693,8 @@ export default function Create(props) {
             )}
             {currentStep === 3 && (
               <>
-                <div onClick={() => setStatus("published")} ><Button title="Save Quiz" /></div>
-                <div onClick={() => setStatus("draft")} ><Button title="Save Question" /></div>
+                <div onClick={() => setStatus("published")} ><Button title="Publish Quiz" /></div>
+                <button onClick={() => setStatus("draft")} className="border border-blue-1 hover:bg-blue-6  rounded p-2" >Save to Draft</button>
               </>
             )}
             <div onClick={() => {
