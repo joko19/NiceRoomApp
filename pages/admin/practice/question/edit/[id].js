@@ -1,4 +1,4 @@
-import { useEffect, useState, useRef, useCallback } from "react";
+import { useEffect, useState, useCallback } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { FaAngleLeft } from "react-icons/fa";
@@ -18,6 +18,7 @@ import Quill from "../../../../../components/Editor/Quill";
 import { Select } from '@chakra-ui/react'
 import apiPractice from "../../../../../action/practice";
 import { useRouter } from "next/router";
+import Button from "../../../../../components/Button/button";
 
 export default function Edit(props) {
   const Router = useRouter()
@@ -181,14 +182,14 @@ export default function Edit(props) {
                 {itemQuestion.type === 'paragraph' && (
                   <>
                     <div className="flex justify-between mt-2">
-                      <div className="text-2xl font-bold">Edit {itemQuestion.type === 'simple' ? 'Simple' : 'Paragraph'} Question</div>
+                      <div className="text-1xl font-bold">Edit {itemQuestion.type === 'simple' ? 'Simple' : 'Paragraph'} Question</div>
                     </div>
                     <div className="flex gap-4">
                       <div className="w-full">
                         <p className="mt-4">Difficulty Level {errors && (
                           <span className="text-red-1 text-sm">{errors[`level`]}</span>
                         )}</p>
-                        <Select bg='white' {...register(`level`)} size="lg" variant='outline' iconColor="blue">
+                        <Select bg='white' {...register(`level`)} size="sm" variant='outline' iconColor="blue">
                           <option value="easy">Easy</option>
                           <option value="medium">Medium</option>
                           <option value="hard">Hard</option>
@@ -196,7 +197,7 @@ export default function Edit(props) {
                       </div>
                       <div className="w-full">
                         <p className="mt-4">Tag</p>
-                        <Select bg='white' {...register(`tag`)} size="lg" variant='outline' iconColor="blue">
+                        <Select bg='white' {...register(`tag`)} size="sm" variant='outline' iconColor="blue">
                           <option value="tag 1">tag 1</option>
                           <option value="tag 2">tag 2</option>
                           <option value="tag 3">tag 3</option>
@@ -239,7 +240,7 @@ export default function Edit(props) {
                       <input defaultValue={eachQuestion.id} hidden {...register(`question_items[${indexEachQuestion}].id`)} />
                       {itemQuestion.type === "paragraph" && (
                         <div className="flex justify-between mt-2 bg-white">
-                          <div className="text-2xl ">{indexEachQuestion + 1}. Question</div>
+                          <div className="text-1xl font-bold">{indexEachQuestion + 1}. Question</div>
                         </div>
                       )}
                       <div className="flex gap-4">
@@ -247,7 +248,7 @@ export default function Edit(props) {
                           <p className="mt-4">Difficulty Level {errors && (
                             <span className="text-red-1 text-sm">{errors.type}</span>
                           )}</p>
-                          <Select bg='white' {...register(`question_items[${indexEachQuestion}].level`)} size="lg" variant='outline' iconColor="blue">
+                          <Select bg='white' {...register(`question_items[${indexEachQuestion}].level`)} size="sm" variant='outline' iconColor="blue">
                             <option value="easy">Easy</option>
                             <option value="medium">Medium</option>
                             <option value="hard">Hard</option>
@@ -255,7 +256,7 @@ export default function Edit(props) {
                         </div>
                         <div className="w-full">
                           <p className="mt-4">Tag</p>
-                          <Select bg='white' {...register(`question_items[${indexEachQuestion}].tag`)} size="lg" variant='outline' iconColor="blue">
+                          <Select bg='white' {...register(`question_items[${indexEachQuestion}].tag`)} size="sm" variant='outline' iconColor="blue">
                             <option value="tag 1">tag 1</option>
                             <option value="tag 2">tag 2</option>
                             <option value="tag 3">tag 3</option>
@@ -296,7 +297,7 @@ export default function Edit(props) {
                             }
                           })
                           setQuestions([...temp])
-                        }} {...register(`question_items[${indexEachQuestion}].answer_type`)} size="lg" variant='outline' iconColor="blue">
+                        }} {...register(`question_items[${indexEachQuestion}].answer_type`)} size="sm" variant='outline' iconColor="blue">
                           <option value="single">Single Correct Answer</option>
                           <option value="multiple">Multiple Correct Answer</option>
                         </Select>
@@ -409,7 +410,7 @@ export default function Edit(props) {
                                   })
                                   setQuestions([...temp])
                                 }}
-                                  autoComplete="off" type="text" className={`${itemAnswer.correct === 1 ? 'bg-blue-6 text-black-5' : 'bg-white'} form border w-full rounded-lg p-4 h-full m-1`} placeholder="Input your answer" />
+                                  autoComplete="off" type="text" className={`${itemAnswer.correct === 1 ? 'bg-blue-6 text-black-5' : 'bg-white'} form border w-full rounded p-2 h-full m-1`} placeholder="Input your answer" />
                                 {eachQuestion.options.length !== 1 && (
                                   <div className="m-auto cursor-pointer text-blue-1 -ml-9" onClick={() => {
                                     const temp = questions
@@ -461,7 +462,7 @@ export default function Edit(props) {
                           })
                           setQuestions([...temp])
                           setLastIdOption(lastIdOption + 1)
-                        }} className="text-blue-1 cursor-pointer text-center p-4 border-dashed border-2 border-blue-1 mt-4 rounded-lg">+ Add New Answer</div>
+                        }} className="text-blue-1 cursor-pointer text-center p-2 border-dashed border-2 border-blue-1 mt-4 rounded-lg">+ Add New Answer</div>
                         <div className="mt-4">
                           <p className="mt-4">Answer Explanation {errors && (
                             <span className="text-red-1 text-sm">{errors[`question_items.${indexEachQuestion}.answer_explanation`]}</span>
@@ -478,13 +479,13 @@ export default function Edit(props) {
                             <p className="mt-4">Marks {errors && (
                               <span className="text-red-1 text-sm">{errors[`question_items.${indexEachQuestion}.mark`]}</span>
                             )}</p>
-                            <input type="number" className=" w-full form border p-4 rounded-lg" placeholder="0" {...register(`question_items[${indexEachQuestion}].mark`)} />
+                            <input type="number" className=" w-full form border p-2 rounded" placeholder="0" {...register(`question_items[${indexEachQuestion}].mark`)} />
                           </div>
                           <div className="w-full">
                             <p className="mt-4">Negative Marking {errors && (
                               <span className="text-red-1 text-sm">{errors[`question_items.${indexEachQuestion}.negative_mark`]}</span>
                             )}</p>
-                            <input type="number" className="w-full form border p-4 rounded-lg" placeholder="0" {...register(`question_items[${indexEachQuestion}].negative_mark`)} />
+                            <input type="number" className="w-full form border p-2 rounded" placeholder="0" {...register(`question_items[${indexEachQuestion}].negative_mark`)} />
                           </div>
                         </div>
                       </div>
@@ -516,7 +517,7 @@ export default function Edit(props) {
                       }
                     })
                     setQuestions([...temp])
-                  }} className="text-blue-1 cursor-pointer text-center p-4 border-dashed border-2 border-blue-1 mt-4 rounded-lg">+ Add New Question for this paragraph</div>
+                  }} className="text-blue-1 cursor-pointer text-center p-2 border-dashed border-2 border-blue-1 mt-4 rounded-lg">+ Add New Question for this paragraph</div>
                 </div>
 
                 )}
@@ -525,7 +526,7 @@ export default function Edit(props) {
             )
           })}
           <div className="flex -z-10 gap-4 flex-row-reverse my-4">
-            <button className='cursor-pointer bg-blue-1  text-white p-4 rounded-lg'>Save Question</button>
+            <button><Button title="Save Question" /></button>
 
             <Link href="/admin/practice">
               <a className="flex gap-4 text-blue-1">
@@ -547,7 +548,7 @@ export default function Edit(props) {
               Successfully Update Question
               <div className="self-center">
                 <Link href={`/admin/practice/`}>
-                  <a className="bg-blue-1 rounded-lg text-white mt-4 block align-center p-3">Okay</a>
+                  <a><Button title="Okay" className="mt-4"/></a>
                 </Link>
               </div>
             </div>

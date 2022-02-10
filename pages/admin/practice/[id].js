@@ -17,6 +17,7 @@ import { FaAngleLeft } from "react-icons/fa";
 import { useRouter } from "next/router";
 import { ModalDelete } from "../../../components/Modal/ModalDelete";
 import { HeaderInstruction } from "../../../components/Section/HeaderInstruction";
+import Button from "../../../components/Button/button";
 
 export default function Section({ data }) {
   const Router = useRouter()
@@ -166,10 +167,10 @@ export default function Section({ data }) {
       <Modal isOpen={isOpen} onClose={onClose} isCentered>
         <ModalOverlay />
         <ModalContent>
-          <ModalHeader>Add Question {selectedName}</ModalHeader>
+          <ModalHeader fontSize="md">Add Question {selectedName}</ModalHeader>
           <ModalCloseButton />
           <ModalBody>
-            <div className="flex gap-4">
+            <div className="flex gap-4 text-sm">
               <div className={`${questionType === 'simple' ? 'text-blue-1 bg-blue-6 border-blue-1' : 'text-black-4 bg-black-9'} w-full text-center border py-12 cursor-pointer rounded-lg border`} onClick={() => setQuestionType('simple')}>
                 Simple Question
               </div>
@@ -179,7 +180,7 @@ export default function Section({ data }) {
             </div>
             <div className="flex flex-row-reverse gap-4 mt-4" >
               <Link href={`/admin/practice/section/${listSection.id}_id=${selectedData}#${questionType}`}>
-                <a className="bg-blue-1 p-3 rounded-lg text-white">Select</a>
+                  <a><Button title="Select" className="mt-4"/></a>
               </Link>
               <button type="button" className="text-black-4 p-3 rounded-lg" onClick={onClose}>Cancel</button>
             </div>

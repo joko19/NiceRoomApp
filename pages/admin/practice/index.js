@@ -10,6 +10,7 @@ import { Select } from '@chakra-ui/react'
 import apiPractice from './../../../action/practice'
 import Link from "next/link";
 import { ModalDelete } from "../../../components/Modal/ModalDelete";
+import Button from '../../../components/Button/button'
 
 export default function Index() {
   const [search, setSearch] = useState('')
@@ -57,7 +58,7 @@ export default function Index() {
           title="Practice"
           right={(
             <Link href="/admin/practice/create">
-              <a className="btn btn-md bg-blue-1 text-white p-3 rounded-lg" > + Create Practice</a>
+              <a> <Button title="+ Create Practice"/></a>
             </Link>
           )}
         >

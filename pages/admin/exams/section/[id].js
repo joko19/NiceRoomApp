@@ -18,6 +18,7 @@ import QuillCreated from "../../../../components/Editor/QuillCreated";
 import { Select } from '@chakra-ui/react'
 import apiExam from "../../../../action/exam";
 import { useRouter } from "next/router";
+import Button from "../../../../components/Button/button";
 
 export default function Create(props) {
   const Router = useRouter()
@@ -128,7 +129,7 @@ export default function Create(props) {
                 {itemQuestion.type === 'paragraph' && (
                   <>
                     <div className="flex justify-between mt-2">
-                      <div className="text-2xl font-bold">{firstNumber + indexQuestion + 1}. {itemQuestion.type === 'simple' ? 'Simple' : 'Paragraph'} Question</div>
+                      <div className="text-1xl font-bold">{firstNumber + indexQuestion + 1}. {itemQuestion.type === 'simple' ? 'Simple' : 'Paragraph'} Question</div>
                     </div>
                     <div className="flex gap-4">
                       <div className="w-full">
@@ -466,7 +467,7 @@ export default function Create(props) {
             }} className="text-blue-1 cursor-pointer text-center p-2 border-dashed border-2 border-blue-1 mt-4 rounded-lg">+ Add New Question</div>
           </div>
           <div className="flex -z-10 gap-4 flex-row-reverse my-4">
-            <button onClick={() => setStatus("published")} className='cursor-pointer bg-blue-1  text-white rounded p-2'>Save Question</button>
+            <div onClick={() => setStatus("published")} ><Button title="Save Question" /></div>
             <button onClick={() => setStatus("draft")} className='cursor-pointer text-blue-1 rounded p-2'>Cancel</button>
           </div>
         </form>
@@ -522,7 +523,7 @@ export default function Create(props) {
               Question has Published
               <div className="self-center">
                 <Link href={`/admin/exams/${id}`}>
-                  <a className="bg-blue-1 rounded-lg text-white mt-4 block align-center p-3">Okay</a>
+               <a> <Button title="Okay" className="mt-4" /></a>
                 </Link>
               </div>
             </div>

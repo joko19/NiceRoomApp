@@ -199,7 +199,7 @@ export default function Create(props) {
         <div className="flex gap-24 m-auto ">
           {step.map((item, index) => (
             <div key={index}>
-              <div className="flex">
+              <div className="flex text-sm">
                 <div className={` ${index < currentStep ? 'bg-blue-1 text-white' : 'border bg-white text-black-5'} px-4 py-3 m-auto rounded-lg `}>
                   {index + 1}
                 </div>
@@ -209,7 +209,7 @@ export default function Create(props) {
                   </div>
                 )}
               </div>
-              <p className="text-blue-1 text-center mt-2">
+              <p className="text-blue-1 text-center text-sm mt-2">
                 {index < currentStep && item}
               </p>
             </div>
@@ -265,7 +265,7 @@ export default function Create(props) {
                     <span className="text-red-1 text-sm">{errors.exam_type_id}</span>
                   )}</p>
                   <div>
-                    <Select bg='white' size="lg" defaultValue="1" variant='outline' iconColor="blue" {...register('exam_type_id')}>
+                    <Select bg='white' size="md" defaultValue="1" variant='outline' iconColor="blue" {...register('exam_type_id')}>
                       <option value="" >Choose Exam type</option>
                       {examType.map((item) => (
                         <option key={item.id} value={item.id}>{item.name}</option>

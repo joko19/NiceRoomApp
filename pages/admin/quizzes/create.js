@@ -163,7 +163,7 @@ export default function Create(props) {
       <Card
         className="md:mt-4 w-full  bg-white overflow-visible"
         title="Create New Quiz " >
-        <div className="flex gap-24 m-auto ">
+        <div className="flex gap-24 m-auto text-sm">
           {step.map((item, index) => (
             <div key={index}>
               <div className="flex">
@@ -189,7 +189,7 @@ export default function Create(props) {
               {type === 'live' && (
                 <div className="flex">
                   {coverName === null && (
-                    <div className="flex p-8 border-dashed w-48 border-blue-1 h-48 mt-4 border-4 border-black self-center justify-center">
+                    <div className="flex p-8 border-dashed w-48 border-blue-1 h-48 mt-4 border-4 border-black self-center justify-center text-sm">
                       <input type="file" accept="image/*" className="hidden" id="file-input" onChange={chooseImage} />
                       <div className="m-auto">
                         <label htmlFor="file-input">
@@ -208,7 +208,7 @@ export default function Create(props) {
                       </center>
                     </div>
                   )}
-                  <div className="my-auto ml-4">
+                  <div className="my-auto ml-4 text-sm">
                     <p className="text-black-4">Maximum file size:</p>
                     <p className="font-bold">1 MB, image ration must be 1:1</p>
                   </div>
@@ -558,7 +558,7 @@ export default function Create(props) {
                   }]
                 }
                 setQuestions([...questions, newQuestionItem])
-              }} className="text-blue-1 cursor-pointer text-center p-4 border-dashed border-2 border-blue-1 mt-4 rounded-lg">+ Add New Question</div>
+              }} className="text-blue-1 cursor-pointer text-center p-2 border-dashed border-2 border-blue-1 mt-4 rounded-lg">+ Add New Question</div>
             </div>
           )}
           <div className="flex -z-10 gap-4 flex-row-reverse my-4">
@@ -581,10 +581,10 @@ export default function Create(props) {
       <Modal isOpen={isSuccessModal} onClose={onCloseSuccessModal} isCentered>
         <ModalOverlay />
         <ModalContent>
-          <ModalHeader><center>Success</center></ModalHeader>
+          <ModalHeader fontSize="md"><center>Success</center></ModalHeader>
           <ModalCloseButton />
           <ModalBody>
-            <div className="flex flex-col text-center ">
+            <div className="flex flex-col text-center text-sm">
               {status === 'published' ?
                 (
                   <p> Quiz has published </p>
@@ -595,7 +595,7 @@ export default function Create(props) {
               }
               <div className="self-center">
                 <Link href="/admin/quizzes">
-                  <a className="bg-blue-1 rounded-lg text-white mt-4 block align-center p-3">Okay</a>
+               <a> <Button title="Okay" className="mt-4" /></a>
                 </Link>
               </div>
             </div>

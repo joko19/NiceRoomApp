@@ -128,9 +128,9 @@ export default function Create(props) {
         <a className="flex gap-4 text-blue-1 my-8"><FaAngleLeft /> Back</a>
       </Link>
       <Card
-        className="md:mt-8 w-full  bg-white overflow-visible"
+        className="md:mt-8 w-full  bg-white overflow-visible text-sm"
         title="Create New Practice " >
-        <div className="flex gap-24 m-auto ">
+        <div className="flex gap-24 m-auto text-sm">
           {step.map((item, index) => (
             <div key={index}>
               <div className="flex text-sm">
@@ -143,7 +143,7 @@ export default function Create(props) {
                   </div>
                 )}
               </div>
-              <p className="text-blue-1 text-center mt-2">
+              <p className="text-blue-1 text-center text-sm mt-2">
                 {index < currentStep && item}
               </p>
             </div>
@@ -216,7 +216,7 @@ export default function Create(props) {
                     <span className="text-red-1 text-sm">{errors.type}</span>
                   )}</p>
                   <div>
-                    <Select bg='white' size="lg" variant='outline' iconColor="blue" {...register('exam_type_id')}>
+                    <Select bg='white' size="md" variant='outline' iconColor="blue" {...register('exam_type_id')}>
                       <option value="1">Type 1</option>
                       <option value="2">Type 2</option>
                       <option value="3">Type 3</option>
@@ -269,7 +269,7 @@ export default function Create(props) {
                 {sections.map((itemQuestion, indexQuestion) => {
                   return (
                     <>
-                      <p className="font-bold mt-4 text-lg">Section {indexQuestion + 1}</p>
+                      <p className="font-bold mt-4 text-sm">Section {indexQuestion + 1}</p>
                       <div className="flex gap-4" >
                         <div className="w-full">
                           <p className="mt-4">Section Name{errors && (
@@ -341,7 +341,7 @@ export default function Create(props) {
               Section Successfully Created
               <div className="self-center">
                 <Link href="/admin/practice">
-                  <a className="bg-blue-1 rounded-lg text-white mt-4 block align-center p-3">Okay</a>
+                  <a><Button title="Okay" className="mt-4"/></a>
                 </Link>
               </div>
             </div>

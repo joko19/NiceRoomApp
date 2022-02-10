@@ -17,6 +17,7 @@ import { FaAngleLeft } from "react-icons/fa";
 import { useRouter } from "next/router";
 import { ModalDelete } from "../../../components/Modal/ModalDelete";
 import { HeaderInstruction } from "../../../components/Section/HeaderInstruction";
+import Button from "../../../components/Button/button";
 
 export default function Section({ data }) {
   const Router = useRouter()
@@ -180,7 +181,7 @@ export default function Section({ data }) {
             </div>
             <div className="flex flex-row-reverse gap-4 mt-4" >
               <Link href={`/admin/exams/section/${listSection.id}_id=${selectedData}#${questionType}`}>
-                <a className="bg-blue-1 p-3 rounded-lg text-white">Select</a>
+               <a> <Button title="Select" className="mt-4" /></a>
               </Link>
               <button type="button" className="text-black-4 p-3 rounded-lg" onClick={onClose}>Cancel</button>
             </div>

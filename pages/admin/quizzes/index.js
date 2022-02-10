@@ -10,6 +10,7 @@ import { Select } from '@chakra-ui/react'
 import apiQuiz from "../../../action/quiz";
 import Link from "next/link";
 import { ModalDelete } from "../../../components/Modal/ModalDelete";
+import Button from "../../../components/Button/button";
 
 export default function Create() {
   const [search, setSearch] = useState('')
@@ -56,7 +57,7 @@ export default function Create() {
           title="Quizzes"
           right={(
             <Link href="/admin/quizzes/create">
-              <a className="btn btn-md bg-blue-1 text-white p-3 rounded-lg" > + Create Quiz</a>
+               <a> <Button title="+ Create Quiz"/></a>
             </Link>
           )}
         >

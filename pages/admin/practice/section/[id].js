@@ -18,6 +18,7 @@ import QuillCreated from "../../../../components/Editor/QuillCreated";
 import { Select } from '@chakra-ui/react'
 import apiPractice from "../../../../action/practice";
 import { useRouter } from "next/router";
+import Button from "../../../../components/Button/button";
 
 export default function Create(props) {
   const Router = useRouter()
@@ -122,20 +123,20 @@ export default function Create(props) {
                 <input type="text" hidden value={itemQuestion.type}  {...register(`questions.${indexQuestion}.type`)} />
                 {itemQuestion.type === "simple" && (
                   <div className="flex justify-between mt-2 bg-white p-4">
-                    <div className="text-2xl font-semibold">{firstNumber + indexQuestion + 1}. {itemQuestion.type === 'simple' ? 'Simple' : 'Paragraph'} Question</div>
+                    <div className="text-1xl font-semibold">{firstNumber + indexQuestion + 1}. {itemQuestion.type === 'simple' ? 'Simple' : 'Paragraph'} Question</div>
                   </div>
                 )}
                 {itemQuestion.type === 'paragraph' && (
                   <>
                     <div className="flex justify-between mt-2">
-                      <div className="text-2xl font-bold">{firstNumber + indexQuestion + 1}. {itemQuestion.type === 'simple' ? 'Simple' : 'Paragraph'} Question</div>
+                      <div className="text-1xl font-bold">{firstNumber + indexQuestion + 1}. {itemQuestion.type === 'simple' ? 'Simple' : 'Paragraph'} Question</div>
                     </div>
                     <div className="flex gap-4">
                       <div className="w-full">
                         <p className="mt-4">Difficulty Level {errors && (
                           <span className="text-red-1 text-sm">{errors[`questions.${indexQuestion}.level`]}</span>
                         )}</p>
-                        <Select bg='white' {...register(`questions[${indexQuestion}].level`)} size="lg" variant='outline' iconColor="blue">
+                        <Select bg='white' {...register(`questions[${indexQuestion}].level`)} size="sm" variant='outline' iconColor="blue">
                           <option value="easy">Easy</option>
                           <option value="medium">Medium</option>
                           <option value="hard">Hard</option>
@@ -143,7 +144,7 @@ export default function Create(props) {
                       </div>
                       <div className="w-full">
                         <p className="mt-4">Tag</p>
-                        <Select bg='white' {...register(`questions[${indexQuestion}].tag`)} size="lg" variant='outline' iconColor="blue">
+                        <Select bg='white' {...register(`questions[${indexQuestion}].tag`)} size="sm" variant='outline' iconColor="blue">
                           <option value="tag 1">tag 1</option>
                           <option value="tag 2">tag 2</option>
                           <option value="tag 3">tag 3</option>
@@ -175,15 +176,13 @@ export default function Create(props) {
                   </>
                 )}
 
-
-
                 {/* question */}
                 {itemQuestion.question_items.map((eachQuestion, indexEachQuestion) => {
                   return (
                     <div className={`bg-white p-4 ${itemQuestion.type === "paragraph" && 'mt-8'}`} key={indexEachQuestion}>
                       {itemQuestion.type === "paragraph" && (
                         <div className="flex justify-between mt-2 bg-white">
-                          <div className="text-2xl ">{indexEachQuestion + 1}. Question</div>
+                          <div className="text-1xl ">{indexEachQuestion + 1}. Question</div>
                         </div>
                       )}
                       <div className="flex gap-4">
@@ -191,7 +190,7 @@ export default function Create(props) {
                           <p className="mt-4">Difficulty Level {errors && (
                             <span className="text-red-1 text-sm">{errors.type}</span>
                           )}</p>
-                          <Select bg='white' {...register(`questions[${indexQuestion}].question_items[${indexEachQuestion}].level`)} size="lg" variant='outline' iconColor="blue">
+                          <Select bg='white' {...register(`questions[${indexQuestion}].question_items[${indexEachQuestion}].level`)} size="sm" variant='outline' iconColor="blue">
                             <option value="easy">Easy</option>
                             <option value="medium">Medium</option>
                             <option value="hard">Hard</option>
@@ -199,7 +198,7 @@ export default function Create(props) {
                         </div>
                         <div className="w-full">
                           <p className="mt-4">Tag</p>
-                          <Select bg='white' {...register(`questions[${indexQuestion}].question_items[${indexEachQuestion}].tag`)} size="lg" variant='outline' iconColor="blue">
+                          <Select bg='white' {...register(`questions[${indexQuestion}].question_items[${indexEachQuestion}].tag`)} size="sm" variant='outline' iconColor="blue">
                             <option value="tag 1">tag 1</option>
                             <option value="tag 2">tag 2</option>
                             <option value="tag 3">tag 3</option>
@@ -240,7 +239,7 @@ export default function Create(props) {
                             }
                           })
                           setQuestions([...temp])
-                        }} {...register(`questions[${indexQuestion}].question_items[${indexEachQuestion}].answer_type`)} size="lg" variant='outline' iconColor="blue">
+                        }} {...register(`questions[${indexQuestion}].question_items[${indexEachQuestion}].answer_type`)} size="sm" variant='outline' iconColor="blue">
                           <option value="single">Single Correct Answer</option>
                           <option value="multiple">Multiple Correct Answer</option>
                         </Select>
@@ -349,7 +348,7 @@ export default function Create(props) {
                                   })
                                   setQuestions([...temp])
                                 }}
-                                  autoComplete="off" type="text" className={`${itemAnswer.correct === 1 ? 'bg-blue-6 text-black-5' : 'bg-white'} form border w-full rounded-lg p-4 h-full m-1`} placeholder="Input your answer" />
+                                  autoComplete="off" type="text" className={`${itemAnswer.correct === 1 ? 'bg-blue-6 text-black-5' : 'bg-white'} form border w-full rounded-lg p-2 h-full m-1`} placeholder="Input your answer" />
                                 {eachQuestion.options.length !== 1 && (
                                   <div className="m-auto cursor-pointer text-blue-1 -ml-9" onClick={() => {
                                     const temp = questions
@@ -462,8 +461,8 @@ export default function Create(props) {
             }} className="text-blue-1 cursor-pointer text-center p-2 border-dashed border-2 border-blue-1 mt-4 rounded-lg">+ Add New Question</div>
           </div>
           <div className="flex -z-10 gap-4 flex-row-reverse my-4">
-            <button onClick={() => setStatus("published")} className='cursor-pointer bg-blue-1  text-white p-4 rounded-lg'>Save Question</button>
-            <button onClick={() => setStatus("draft")} className='cursor-pointer text-blue-1 p-4 rounded-lg'>Cancel</button>
+            <button onClick={() => setStatus("published")} className='cursor-pointer bg-blue-1  text-white p-2 rounded'>Save Question</button>
+            <button onClick={() => setStatus("draft")} className='cursor-pointer text-blue-1 p-2 rounded'>Cancel</button>
           </div>
         </form>
       </Card>
@@ -518,7 +517,7 @@ export default function Create(props) {
               Question has Published
               <div className="self-center">
                 <Link href={`/admin/practice/${id}`}>
-                  <a className="bg-blue-1 rounded-lg text-white mt-4 block align-center p-3">Okay</a>
+                  <a><Button title="Okay" className="mt-4"/></a>
                 </Link>
               </div>
             </div>
