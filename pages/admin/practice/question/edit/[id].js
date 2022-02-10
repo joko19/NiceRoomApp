@@ -18,7 +18,7 @@ import Quill from "../../../../../components/Editor/Quill";
 import { Select } from '@chakra-ui/react'
 import apiPractice from "../../../../../action/practice";
 import { useRouter } from "next/router";
-import Button from "../../../../../components/Button/button";
+import Button, {BackButton} from "../../../../../components/Button/button";
 
 export default function Edit(props) {
   const Router = useRouter()
