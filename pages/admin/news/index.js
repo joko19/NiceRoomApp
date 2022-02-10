@@ -112,8 +112,9 @@ export default function News(props) {
                             <div>{item.sub_title}</div>
                           </td>
                           <td className="px-6 py-4 whitespace-nowrap ">{date.toDateString()}</td>
-                          <td className="px-6 py-4 whitespace-nowrap ">
-                            <div className={`${item.status === 'draft' ? 'bg-black-8 text-black-3' : 'bg-green-2 text-green-1'} text-center font-bold rounded-lg p-3 `}>
+                          
+                          <td>
+                            <div className={`${item.status === 'draft' ? 'bg-black-8 text-black-3' : 'bg-green-2 text-green-1'} text-center w-24 flex-0 ml-6 font-bold  rounded-lg py-3 `}>
                               {item.status === 'draft' ? 'Draft' : 'Published'}
                             </div>
                           </td>

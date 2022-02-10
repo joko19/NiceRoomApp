@@ -116,11 +116,12 @@ export default function Index() {
                         <td className="px-6 py-4 whitespace-nowrap text-center">
                           <div>{item.exam_type.name}</div>
                         </td>
-                        <td className="px-6 py-4 whitespace-nowrap ">
-                          <div className={`${item.status === 'draft' ? 'bg-black-8 text-black-3' : 'bg-green-2 text-green-1'} text-center font-bold rounded-lg p-3 `}>
-                            {item.status === 'draft' ? 'Draft' : 'Published'}
-                          </div>
-                        </td>
+                       
+                        <td className="">
+                            <div className={`${item.status === 'draft' ? 'bg-black-8 text-black-3' : 'bg-green-2 text-green-1'} text-center w-24 flex-0 m-auto font-bold  rounded-lg py-3 `}>
+                              {item.status === 'draft' ? 'Draft' : 'Published'}
+                            </div>
+                          </td>
                         <td className="px-6 py-4 whitespace-nowrap flex text-right gap-2 text-sm font-medium m-auto flex items-center h-full">
                           <div className="flex m-auto gap-3 p-3">
                             <Link href={`exams/${item.id}`}>

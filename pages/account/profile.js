@@ -72,7 +72,7 @@ export default function Profile(props) {
   }
 
   return (
-    <>
+    <div className="mt-12">
         <Card
           className="w-full bg-white"
           title="Profile" >
@@ -159,7 +159,7 @@ export default function Profile(props) {
           </ModalBody>
         </ModalContent>
       </Modal>
-    </>
+    </div>
   )
 }
 Profile.layout = Layout

@@ -100,9 +100,9 @@ export default function InstituteBranch(props) {
                             {item.city}
                           </span>
                         </td>
-                        <td className="px-6 py-4 whitespace-nowrap flex text-center gap-2 text-sm font-medium">
+                        <td className={`${item.status === 'approve' ? 'text-green-1' : 'text-red-1'} px-6 py-4 whitespace-nowrap flex text-center gap-2 text-sm font-medium`}>
                           {item.status !== 'pending' && (
-                            <center> {item.status}</center>
+                            <center> {item.status === 'approve' ? 'Approve' : 'Reject'}</center>
                           )}
                           {item.status === 'pending' && (
                             <>

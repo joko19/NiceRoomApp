@@ -45,7 +45,7 @@ export default function Reset(props) {
   }
 
   return (
-    <>
+    <div className="mt-12">
       <Card
         className="w-full bg-white"
         title="Password" >
@@ -130,7 +130,7 @@ export default function Reset(props) {
           </ModalBody>
         </ModalContent>
       </Modal>
-    </>
+    </div>
   )
 }
 Reset.layout = Layout

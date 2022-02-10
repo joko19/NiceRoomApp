@@ -57,7 +57,7 @@ export default function Create() {
           title="Quizzes"
           right={(
             <Link href="/admin/quizzes/create">
-               <a> <Button title="+ Create Quiz"/></a>
+              <a> <Button title="+ Create Quiz" /></a>
             </Link>
           )}
         >
@@ -116,9 +116,9 @@ export default function Create() {
                           <td className="px-6 py-4 whitespace-nowrap">
                             <div>{item.type}</div>
                           </td>
-                          <td className="px-6 py-4 whitespace-nowrap">
-                            <div className={`${item.status === 'draft' ? 'bg-black-8  text-black-3' : 'bg-green-2 text-green-1'} text-center font-bold rounded-lg p-4 m-auto`}>
-                            {item.status === 'draft' ? 'Draft' : 'Published'}
+                          <td className="">
+                            <div className={`${item.status === 'draft' ? 'bg-black-8 text-black-3' : 'bg-green-2 text-green-1'} text-center w-24 flex-0 m-auto font-bold  rounded-lg py-3 `}>
+                              {item.status === 'draft' ? 'Draft' : 'Published'}
                             </div>
                           </td>
                           <td className="px-6 py-4 whitespace-nowrap flex text-right gap-2 text-sm font-medium">
