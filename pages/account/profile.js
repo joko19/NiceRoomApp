@@ -105,7 +105,7 @@ export default function Profile(props) {
                   <input type="text" className="form border p-2 rounded" placeholder="Input Your Last Name" {...register("lastName")} />
                 </div>
               </div>
-              <div className="flex flex-col md:flex-row gap-4">
+              <div className="flex flex-col md:flex-row gap-4 mt-2">
                 <div className="flex flex-col w-full">
                   <p>Gender {errors && (
                     <span className="text-red-1 text-sm">{errors.gender}</span>
@@ -123,13 +123,13 @@ export default function Profile(props) {
                   <input type="text" className="form border p-2 rounded"  placeholder="Input Your Email" {...register("email")} />
                 </div>
               </div>
-              <div className="flex flex-col md:flex-row gap-4">
+              <div className="flex flex-col md:flex-row gap-4 mt-2">
                 <div className="flex flex-col w-full">
-                  <p className="mt-4">Phone</p>
+                  <p>Phone</p>
                   <input type="number"  className="form border p-2 rounded" placeholder="Input Your Number" {...register("phone")} />
                 </div>
                 <div className="flex flex-col w-full">
-                  <p className="mt-4">Employee ID (Optional)</p>
+                  <p>Employee ID (Optional)</p>
                   <input type="number" className="form border p-2 rounded"  placeholder="Input Your Employee ID" {...register("employee_id")} />
                 </div>
               </div>

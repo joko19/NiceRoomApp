@@ -69,12 +69,10 @@ export default function Reset(props) {
                 </div>
               </div>
             </div>
-          )
-
-          }
-          <div className="flex flex-col md:flex-row gap-4">
+          )}
+          <div className="flex flex-col md:flex-row gap-4 mt-2">
             <div className="flex flex-col w-full">
-              <p className="mt-4">New Password
+              <p>New Password
                 {errors && (
                   <span className="text-red-1 text-sm"> {errors.password}</span>
                 )}</p>
@@ -91,7 +89,7 @@ export default function Reset(props) {
               </div>
             </div>
             <div className="flex flex-col w-full">
-              <p className="mt-4">Confirm New Password</p>
+              <p>Confirm New Password</p>
               <div className="relative">
                 <input type={`${confirm ? 'password' : 'text'}`} className="form w-full border p-2 rounded" placeholder="Input New Password" {...register("password_confirmation")} />
                 <span className="absolute inset-y-0 cursor-pointer right-0 pr-3 flex items-center text-sm leading-5" onClick={() => {
