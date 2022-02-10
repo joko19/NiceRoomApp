@@ -153,7 +153,7 @@ export default function Staff() {
 
   return (
     <>
-      <div className="md:py-24 mt-24 md:mt-12">
+      <div className=" mt-24 md:mt-12">
         <Card
           title="Staff"
           right={(
@@ -169,7 +169,7 @@ export default function Staff() {
             </button>
           )}
         >
-          <input type="text" className="p-4 border rounded-lg w-1/2 mb-4" placeholder="Search Staff" onChange={(e) => {
+          <input type="text" className="p-2 border rounded w-1/2 mb-4" placeholder="Search Staff" onChange={(e) => {
             setSearch(e.target.value)
             getData(e.target.value, limit, page)
           }} />

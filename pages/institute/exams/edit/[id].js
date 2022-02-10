@@ -26,6 +26,8 @@ import DatePicker2 from "../../../../components/DateTime/Date";
 import { useRouter } from "next/router";
 // import { Date } from "../../../components/DateTime/Date";
 import { Time } from "../../../../components/DateTime/Time";
+import Button from "../../../../components/Button/button";
+
 export default function Create(props) {
   const Router = useRouter()
   const { id } = Router.query
@@ -298,7 +300,7 @@ export default function Create(props) {
       <Card
         className="md:mt-8 w-full  bg-white overflow-visible"
         title="Edit Exam " >
-        <div className="flex gap-24 m-auto ">
+        <div className="flex gap-24 m-auto text-sm">
           {step.map((item, index) => (
             <div key={index}>
               <div className="flex">
@@ -317,15 +319,15 @@ export default function Create(props) {
             </div>
           ))}
         </div>
-        <form onSubmit={handleSubmit(submitExams)}>
+        <form onSubmit={handleSubmit(submitExams)} className="text-sm">
 
           {currentStep === 1 && (
             <div className="mb-8">
               <div className="flex gap-4 ">
                 <div className="w-full gap-4">
                   <p className="mt-4">Held Type</p>
-                  <div className="flex gap-4">
-                    <div className={` ${type === 'live' ? 'bg-blue-6' : 'bg-white'} flex gap-2 w-full p-4 border rounded-lg cursor-pointer`} onClick={() => {
+                  <div className="flex gap-3">
+                    <div className={` ${type === 'live' ? 'bg-blue-6' : 'bg-white'} flex gap-2 w-full p-2 border rounded-lg cursor-pointer`} onClick={() => {
                       setType('live')
                       setValue("type", "live")
                     }}>
@@ -336,7 +338,7 @@ export default function Create(props) {
                         Live Exam
                       </p>
                     </div>
-                    <div className={` ${type === 'standard' ? 'bg-blue-6' : 'bg-white'} flex gap-2 w-full p-4 border rounded-lg cursor-pointer`} onClick={() => {
+                    <div className={` ${type === 'standard' ? 'bg-blue-6' : 'bg-white'} flex gap-2 w-full p-2 border rounded-lg cursor-pointer`} onClick={() => {
                       setType('standard')
                       setValue("type", "standard")
                     }}>
@@ -356,7 +358,7 @@ export default function Create(props) {
                     <span className="text-red-1 text-sm">{errors.name}</span>
                   )}</p>
                   <div>
-                    <input type="text" className="form border w-full rounded-lg p-4 h-full" placeholder="Input Exam Name"  {...register("name")} />
+                    <input type="text" className="form border w-full rounded-lg p-3 h-full" placeholder="Input Exam Name"  {...register("name")} />
                   </div>
                 </div>
               </div>
@@ -367,7 +369,7 @@ export default function Create(props) {
                     <span className="text-red-1 text-sm">{errors.type}</span>
                   )}</p>
                   <div>
-                    <Select bg='white' size="lg" defaultValue="1" variant='outline' iconColor="blue" {...register('exam_type_id')}>
+                    <Select bg='white' size="md" defaultValue="1" variant='outline' iconColor="blue" {...register('exam_type_id')}>
                       <option disabled>Choose Exam Type</option>
                       {examType.map((item) => (
                         <option key={item.id} value={item.id}>{item.name}</option>
@@ -383,7 +385,7 @@ export default function Create(props) {
                     options={listTopic}
                     style={{
                       "multiselectContainer": {
-                        "padding": "4px",
+                        "padding": "2px",
                         "border-width": "1px",
                         "border-radius": "5px"
                       }, "searchBox": {
@@ -409,7 +411,7 @@ export default function Create(props) {
                       <p>Start Date {errors && (
                         <span className="text-red-1 text-sm">{errors.start_date}</span>
                       )}</p>
-                      <div className="border p-4 rounded-lg">
+                      <div className="border p-2 rounded">
                         <DatePicker2
                           data={getValues('start_date')}
                           setData={(data) => setValue("start_date", data)}
@@ -428,7 +430,7 @@ export default function Create(props) {
                       <p>End Date {errors && (
                         <span className="text-red-1 text-sm">{errors.end_date}</span>
                       )}</p>
-                      <div className="border p-4 rounded-lg">
+                      <div className="border p-2 rounded">
                         <DatePicker2
                           data={getValues('end_date')}
                           setData={(data) => setValue("end_date", data)}
@@ -526,7 +528,7 @@ export default function Create(props) {
                         arr[index] = e.target.value
                         setConsentments([...arr])
                         setValue(`consentments[${index}]`, e.target.value)
-                      }} className="form border w-full rounded-lg p-4 h-full m-1" autoComplete="off" placeholder="Input Consentment" />
+                      }} className="form border w-full rounded p-2 h-full m-1" autoComplete="off" placeholder="Input Consentment" />
                       {consentments.length !== 1 && (
                         <div className="m-auto cursor-pointer text-blue-1 -ml-8" onClick={() => {
                           let newArr = consentments
@@ -538,7 +540,7 @@ export default function Create(props) {
                   </>
                 )
               })}
-              <div onClick={() => setConsentments([...consentments, ''])} className="text-blue-1 cursor-pointer text-center p-4 border-dashed border-2 border-blue-1 mt-4 rounded-lg">+ Add New Consentment</div>
+              <div onClick={() => setConsentments([...consentments, ''])} className="text-blue-1 cursor-pointer text-center p-2 border-dashed border-2 border-blue-1 mt-4 rounded">+ Add New Consentment</div>
             </>
           )}
 
@@ -558,7 +560,7 @@ export default function Create(props) {
                             <span className="text-red-1 text-sm">{errors[`sections.${indexQuestion}.name`]}</span>
                           )}</p>
                           <div>
-                            <input type="text" className="form border w-full rounded-lg p-4 h-full" placeholder="Input Section Name"  {...register(`sections[${indexQuestion}].name`)} />
+                            <input type="text" className="form border w-full rounded-lg p-2 h-full" placeholder="Input Section Name"  {...register(`sections[${indexQuestion}].name`)} />
                           </div>
                         </div>
                         <div className="w-full">
@@ -567,8 +569,8 @@ export default function Create(props) {
                           )}</p>
                           <div >
                             <div className="flex h-full">
-                              <input type="number" className="border w-full h-full flex-grow rounded p-4" placeholder="0"  {...register(`sections[${indexQuestion}].duration`)} />
-                              <input className="bg-black-9 p-4 w-24 text-center h-full border text-black-4" placeholder="Minute" disabled />
+                              <input type="number" className="border w-full h-full flex-grow p-2 rounded" placeholder="0"  {...register(`sections[${indexQuestion}].duration`)} />
+                              <input className="bg-black-9 p-2 w-24 text-center h-full border text-black-4" placeholder="Minute" disabled />
                             </div>
                           </div>
                         </div>
@@ -597,22 +599,22 @@ export default function Create(props) {
                   id: sections[sections.length - 1].id + 1, option: [0],
                   new: true
                 }])
-              }} className="text-blue-1 cursor-pointer text-center p-4 border-dashed border-2 border-blue-1 mt-4 rounded-lg">+ Add New Section</div>
+              }} className="text-blue-1 cursor-pointer text-center p-2 border-dashed border-2 border-blue-1 mt-4 rounded-lg">+ Add New Section</div>
             </div>
           )}
           <div className="flex -z-10 gap-4 flex-row-reverse my-4">
             {currentStep < 3 && (
-              <button className={`${3 > currentStep ? 'cursor-pointer' : 'cursor-default'} bg-blue-1  text-white p-4 rounded-lg`}>Next Step</button>
+              <button className={`${3 > currentStep ? 'cursor-pointer' : 'cursor-default'} bg-blue-1  text-white p-2 rounded`}>Next Step</button>
             )}
             {currentStep === 3 && (
               <>
-                <button onClick={() => setStatus("published")} className='cursor-pointer bg-blue-1  text-white p-4 rounded-lg'>Save Test</button>
+                <button onClick={() => setStatus("published")} className='cursor-pointer bg-blue-1  text-white p-2 rounded'>Save Test</button>
               </>
             )}
             <div onClick={() => {
               currentStep > 1 && setCurrentStep(currentStep - 1)
               console.log(currentStep)
-            }} className={`${1 < currentStep ? 'cursor-pointer' : 'cursor-default'}  text-black-4 p-4 rounded-lg`}>Back Step</div>
+            }} className={`${1 < currentStep ? 'cursor-pointer' : 'cursor-default'}  text-black-4 p-2 rounded`}>Back Step</div>
           </div>
         </form>
       </Card>
@@ -628,7 +630,7 @@ export default function Create(props) {
               Section Successfully Created
               <div className="self-center">
                 <Link href="/institute/exams">
-                  <a className="bg-blue-1 rounded-lg text-white mt-4 block align-center p-3">Okay</a>
+                  <a> <Button title="Okay" className="mt-4" /></a>
                 </Link>
               </div>
             </div>

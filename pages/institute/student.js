@@ -166,7 +166,7 @@ export default function Student() {
 
   return (
     <>
-      <div className="md:py-24 mt-24 md:mt-12">
+      <div className="mt-24 md:mt-12">
         <Card
           title="Students"
           right={(
@@ -184,13 +184,13 @@ export default function Student() {
           )}
         >
           <div className="flex gap-4 mb-4">
-            <input type="text" className=" border rounded-lg w-full p-2" placeholder="Search Student" onChange={(e) => {
+            <input type="text" className=" border rounded w-full p-2" placeholder="Search Student" onChange={(e) => {
               setSearch(e.target.value)
               getData(e.target.value, branch, batch, status, limit, page)
             }} />
 
             <div className="w-full h-full  ">
-              <Select placeholder='All Branch' className="h-full" size="lg" onChange={(e) => {
+              <Select placeholder='All Branch' className="h-full" size="md" onChange={(e) => {
                 setBranch(e.target.value)
                 getData(search, e.target.value, batch, status, limit, page)
               }}>
@@ -200,7 +200,7 @@ export default function Student() {
               </Select>
             </div>
             <div className="w-full h-full  ">
-              <Select placeholder='All Batch' className="h-full" size="lg" onChange={(e) => {
+              <Select placeholder='All Batch' className="h-full" size="md" onChange={(e) => {
                 setBatch(e.target.value)
                 getData(search, branch, e.target.value, status, limit, page)
               }}>
@@ -210,7 +210,7 @@ export default function Student() {
               </Select>
             </div>
             <div className="w-full h-full  ">
-              <Select placeholder='All Status' className="h-full" size="lg" onChange={(e) => {
+              <Select placeholder='All Status' className="h-full" size="md" onChange={(e) => {
                 setStatus(e.target.value)
                 getData(search, branch, batch, e.target.value, limit, page)
               }}>

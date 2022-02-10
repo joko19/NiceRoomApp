@@ -399,47 +399,47 @@ export default function InstituteAdmin(props) {
       <Modal isOpen={isDetailModal} size='xl' onClose={onCloseDetailModal} isCentered>
         <ModalOverlay />
         <ModalContent>
-          <ModalHeader>Detail Institute Admin</ModalHeader>
+          <ModalHeader fontSize="md">Detail Institute Admin</ModalHeader>
           <ModalCloseButton />
           <ModalBody>
-            <div className="flex w-full bg-black-8 space-between justify between">
+            <div className="flex w-full bg-black-8 space-between justify between text-sm">
               <div className="flex flex-col gap-4 p-4 w-full">
                 <div>
-                  <p>Full Name : </p>
-                  <p className="font-bold">{detail && detail.name}</p>
+                  <p className="font-bold">Full Name : </p>
+                  <p >{detail && detail.name}</p>
                 </div>
                 <div>
-                  <p>Gender : </p>
-                  <p className="font-bold">{detail && detail.gender}</p>
+                  <p className="font-bold">Gender : </p>
+                  <p >{detail && detail.gender}</p>
                 </div>
               </div>
               <div className="flex flex-col gap-4 p-4 w-full">
                 <div>
-                  <p>Institute : </p>
-                  <p className="font-bold">{detail && detail.institute?.name}</p>
+                  <p className="font-bold">Institute : </p>
+                  <p >{detail && detail.institute?.name}</p>
                 </div>
                 <div>
-                  <p>Email : </p>
-                  <p className="font-bold">{detail && detail.email}</p>
+                  <p className="font-bold">Email : </p>
+                  <p >{detail && detail.email}</p>
                 </div>
               </div>
               <div className="flex flex-col gap-4 p-4 w-full">
                 <div>
-                  <p>Employee ID : </p>
-                  <p className="font-bold">{detail && detail.employee_id}</p>
+                  <p className="font-bold">Employee ID : </p>
+                  <p >{detail && detail.employee_id}</p>
                 </div>
 
                 <div>
-                  <p>Phone Number : </p>
-                  <p className="font-bold">{detail && detail.phone}</p>
+                  <p className="font-bold">Phone Number : </p>
+                  <p>{detail && detail.phone}</p>
                 </div>
               </div>
             </div>
             <div className="flex flex-row-reverse pb-2">
-              <button className="flex flex-row-reverse bg-blue-1 rounded-lg text-white mt-4 block align-center p-3" onClick={() => {
+              <div onClick={() => {
                 onCloseDetailModal()
                 setUpdate(false)
-              }}>Close</button>
+              }}><Button title="Close" className="mt-4" /></div>
             </div>
           </ModalBody>
         </ModalContent>
@@ -461,8 +461,8 @@ export default function InstituteAdmin(props) {
                   setUpdate(false)
                   setErrors(null)
                 }}>
-                <Button title="Okay" />
-                  </div>
+                  <Button title="Okay" />
+                </div>
               </div>
             </div>
           </ModalBody>

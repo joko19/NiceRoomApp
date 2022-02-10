@@ -1,10 +1,10 @@
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { FaAngleLeft } from "react-icons/fa";
 import Card from "../../../components/Cards/Card";
 import Layout from "../../../Layout/Layout";
-import { useForm, useFieldArray } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import {
   Modal,
   ModalOverlay,
@@ -24,6 +24,7 @@ import apiBatch from "../../../action/batch";
 import apiBranch from "../../../action/branch";
 import DatePicker2 from "../../../components/DateTime/Date";
 import { Time } from "../../../components/DateTime/Time";
+import Button from "../../../components/Button/button";
 
 export default function Create(props) {
   const [errors, setErrors] = useState()
@@ -124,7 +125,7 @@ export default function Create(props) {
   }
 
   const submitExams = async (data) => {
-    if(data.type === 'standard'){
+    if (data.type === 'standard') {
       delete data.start_time
       delete data.end_time
       delete data.start_date
@@ -188,7 +189,7 @@ export default function Create(props) {
   }
 
   return (
-    <div className="md:pt-12 md:pb-28">
+    <div className="md:pt-12 md:pb-28 text-sm">
       <Link href="/staff/exams">
         <a className="flex gap-4 text-blue-1 my-8"><FaAngleLeft /> Back</a>
       </Link>
@@ -198,7 +199,7 @@ export default function Create(props) {
         <div className="flex gap-24 m-auto ">
           {step.map((item, index) => (
             <div key={index}>
-              <div className="flex">
+              <div className="flex text-sm">
                 <div className={` ${index < currentStep ? 'bg-blue-1 text-white' : 'border bg-white text-black-5'} px-4 py-3 m-auto rounded-lg `}>
                   {index + 1}
                 </div>
@@ -208,7 +209,7 @@ export default function Create(props) {
                   </div>
                 )}
               </div>
-              <p className="text-blue-1 text-center mt-2">
+              <p className="text-blue-1 text-center text-sm mt-2">
                 {index < currentStep && item}
               </p>
             </div>
@@ -222,18 +223,18 @@ export default function Create(props) {
                 <div className="w-full gap-4">
                   <p className="mt-4">Held Type</p>
                   <div className="flex gap-4">
-                    <div className={` ${type === 'live' ? 'bg-blue-6' : 'bg-white'} flex gap-2 w-full p-4 border rounded-lg cursor-pointer`} onClick={() => {
+                    <div className={` ${type === 'live' ? 'bg-blue-6' : 'bg-white'} flex gap-2 w-full p-2 border rounded-lg cursor-pointer`} onClick={() => {
                       setValue("type", "live")
                       setType('live')
                     }}>
-                      <div  >
+                      <div>
                         <Image src={`${type === 'live' ? "/asset/icon/table/ic_radio_active.png" : "/asset/icon/table/ic_radio.png"}`} height={16} width={16} className="flex align-middle my-auto" />
                       </div>
                       <p className={`${type === 'live' ? 'text-blue-1' : 'text-black-5'}`}>
                         Live Exam
                       </p>
                     </div>
-                    <div className={` ${type === 'standard' ? 'bg-blue-6' : 'bg-white'} flex gap-2 w-full p-4 border rounded-lg cursor-pointer`} onClick={() => {
+                    <div className={` ${type === 'standard' ? 'bg-blue-6' : 'bg-white'} flex gap-2 w-full p-2 border rounded-lg cursor-pointer`} onClick={() => {
                       setValue("type", "standard")
                       setType('standard')
                     }}>
@@ -253,7 +254,7 @@ export default function Create(props) {
                     <span className="text-red-1 text-sm">{errors.name}</span>
                   )}</p>
                   <div>
-                    <input type="text" className="form border w-full rounded-lg p-4 h-full" placeholder="Input Exam Name"  {...register("name")} />
+                    <input type="text" className="form border w-full rounded p-2 h-full" placeholder="Input Exam Name"  {...register("name")} />
                   </div>
                 </div>
               </div>
@@ -264,7 +265,7 @@ export default function Create(props) {
                     <span className="text-red-1 text-sm">{errors.exam_type_id}</span>
                   )}</p>
                   <div>
-                    <Select bg='white' size="lg" defaultValue="1" variant='outline' iconColor="blue" {...register('exam_type_id')}>
+                    <Select bg='white' size="md" defaultValue="1" variant='outline' iconColor="blue" {...register('exam_type_id')}>
                       <option value="" >Choose Exam type</option>
                       {examType.map((item) => (
                         <option key={item.id} value={item.id}>{item.name}</option>
@@ -307,7 +308,7 @@ export default function Create(props) {
                       <p>Start Date {errors && (
                         <span className="text-red-1 text-sm">{errors.start_date}</span>
                       )}</p>
-                      <div className="border p-4 rounded-lg">
+                      <div className="border p-2 rounded">
                         <DatePicker2
                           setData={(data) => setValue("start_date", data)}
                         />
@@ -325,7 +326,7 @@ export default function Create(props) {
                       <p>End Date {errors && (
                         <span className="text-red-1 text-sm">{errors.end_date}</span>
                       )}</p>
-                      <div className="border p-4 rounded-lg">
+                      <div className="border p-2 rounded">
                         <DatePicker2
                           setData={(data) => setValue("end_date", data)}
                         />
@@ -422,7 +423,7 @@ export default function Create(props) {
                       arr[index] = e.target.value
                       setConsentments([...arr])
                       setValue(`consentments[${index}]`, e.target.value)
-                    }} className="form border w-full rounded-lg p-4 h-full m-1" autoComplete="off" placeholder="Input Consentment" />
+                    }} className="form border w-full p-2 rounded h-full m-1" autoComplete="off" placeholder="Input Consentment" />
                     {consentments.length !== 1 && (
                       <div className="m-auto cursor-pointer text-blue-1 -ml-8" onClick={() => {
                         let newArr = consentments
@@ -433,7 +434,7 @@ export default function Create(props) {
                   </div>
                 </>
               ))}
-              <div onClick={() => setConsentments([...consentments, ''])} className="text-blue-1 cursor-pointer text-center p-4 border-dashed border-2 border-blue-1 mt-4 rounded-lg">+ Add New Consentment</div>
+              <div onClick={() => setConsentments([...consentments, ''])} className="text-blue-1 cursor-pointer text-center p-2 border-dashed border-2 border-blue-1 mt-4 rounded-lg">+ Add New Consentment</div>
             </>
           )}
 
@@ -450,7 +451,7 @@ export default function Create(props) {
                             <span className="text-red-1 text-sm">{errors[`sections.${indexQuestion}.name`]}</span>
                           )}</p>
                           <div>
-                            <input type="text" className="form border w-full rounded-lg p-4 h-full" placeholder="Input Section Name"  {...register(`sections[${indexQuestion}].name`)} />
+                            <input type="text" className="form border w-full p-2 rounded h-full" placeholder="Input Section Name"  {...register(`sections[${indexQuestion}].name`)} />
                           </div>
                         </div>
                         <div className="w-full">
@@ -459,8 +460,8 @@ export default function Create(props) {
                           )}</p>
                           <div >
                             <div className="flex h-full">
-                              <input type="number" className="border w-full h-full flex-grow rounded p-4" placeholder="0"  {...register(`sections[${indexQuestion}].duration`)} />
-                              <input className="bg-black-9 p-4 w-24 text-center h-full border text-black-4" placeholder="Minute" disabled />
+                              <input type="number" className="border w-full h-full flex-grow rounded p-2" placeholder="0"  {...register(`sections[${indexQuestion}].duration`)} />
+                              <input className="bg-black-9 p-2 w-24 text-center h-full border text-black-4" placeholder="Minute" disabled />
                             </div>
                           </div>
                         </div>
@@ -486,20 +487,20 @@ export default function Create(props) {
               </div>
               <div onClick={() => {
                 setsections([...sections, { id: sections[sections.length - 1].id + 1, option: [0] }])
-              }} className="text-blue-1 cursor-pointer text-center p-4 border-dashed border-2 border-blue-1 mt-4 rounded-lg">+ Add New Section</div>
+              }} className="text-blue-1 cursor-pointer text-center p-2 border-dashed border-2 border-blue-1 mt-4 rounded-lg">+ Add New Section</div>
             </div>
           )}
           <div className="flex -z-10 gap-4 flex-row-reverse my-4">
-            {currentStep < 3 && (<button className={`${3 > currentStep ? 'cursor-pointer' : 'cursor-default'} bg-blue-1  text-white p-4 rounded-lg`}>Next Step</button>
+            {currentStep < 3 && (<div className={`${3 > currentStep ? 'cursor-pointer' : 'cursor-default'}`}><Button title="Next Step" /></div>
             )}
             {currentStep === 3 && (
               <>
-                <button onClick={() => setStatus("published")} className='cursor-pointer bg-blue-1  text-white p-4 rounded-lg'>Save Test</button>
+                <div onClick={() => setStatus("published")}><Button title="Save Test" /></div>
               </>
             )}
             <div onClick={() => {
               currentStep > 1 && setCurrentStep(currentStep - 1)
-            }} className={`${1 < currentStep ? 'cursor-pointer' : 'cursor-default'}  text-black-4 p-4 rounded-lg`}>Back Step</div>
+            }} className={`${1 < currentStep ? 'cursor-pointer' : 'cursor-default'}  text-black-4 p-2 rounded`}>Back Step</div>
           </div>
         </form>
       </Card>
@@ -508,14 +509,14 @@ export default function Create(props) {
       <Modal isOpen={isSuccessModal} onClose={onCloseSuccessModal} isCentered>
         <ModalOverlay />
         <ModalContent>
-          <ModalHeader><center>Success</center></ModalHeader>
+          <ModalHeader fontSize="medium"><center>Success</center></ModalHeader>
           <ModalCloseButton />
           <ModalBody>
-            <div className="flex flex-col text-center ">
+            <div className="flex flex-col text-center text-sm ">
               Section Successfully Created
               <div className="self-center">
                 <Link href="/staff/exams">
-                  <a className="bg-blue-1 rounded-lg text-white mt-4 block align-center p-3">Okay</a>
+                  <a><Button title="Okay" className="mt-4"/></a>
                 </Link>
               </div>
             </div>

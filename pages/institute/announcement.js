@@ -19,6 +19,7 @@ import instance from "../../action/instance";
 import Multiselect from 'multiselect-react-dropdown';
 import apiBatch from "../../action/batch";
 import apiBranch from "../../action/branch";
+import Button from "../../components/Button/button";
 
 export default function Announcement() {
   const [search, setSearch] = useState('')
@@ -212,11 +213,11 @@ export default function Announcement() {
 
   return (
     <>
-      <div className="md:py-24 mt-24 md:mt-12">
+      <div className="mt-12">
         <Card
           title="Announcement"
           right={(
-            <button className="btn btn-md bg-blue-1 text-white p-3 rounded-lg" onClick={() => {
+            <div onClick={() => {
               getBranch()
               setUpdate(false)
               onOpenCreateModal()
@@ -224,19 +225,19 @@ export default function Announcement() {
               reset()
               setFileName("Upload Your File")
             }}>
-              + Create Announcement
-            </button>
+              <Button title="+ create Announcement" />
+            </div>
           )}
         >
 
           <div className="flex gap-4 mb-4">
-            <input type="text" className="border rounded-lg w-full p-2 " placeholder="Search Announcement" onChange={(e) => {
+            <input type="text" className="border rounded w-full p-2 " placeholder="Search Announcement" onChange={(e) => {
               setSearch(e.target.value)
               getData(e.target.value, branch, status, limit, page)
             }} />
 
             <div className="w-full h-full  ">
-              <Select placeholder='All Branch' className="h-full" size="lg" onChange={(e) => {
+              <Select placeholder='All Branch' className="h-full" size="md" onChange={(e) => {
                 setBranch(e.target.value)
                 getData(search, e.target.value, status, limit, page)
               }}>
@@ -247,7 +248,7 @@ export default function Announcement() {
             </div>
 
             <div className="w-full h-full  ">
-              <Select placeholder='All Status' className="h-full" size="lg" onChange={(e) => {
+              <Select placeholder='All Status' className="h-full" size="md" onChange={(e) => {
                 setStatus(e.target.value)
                 getData(search, branch, e.target.value, limit, page)
               }}>

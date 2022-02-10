@@ -200,7 +200,7 @@ export default function Branch() {
 
   return (
     <>
-      <div className="md:py-24 mt-24 md:mt-12">
+      <div className="mt-12">
         <div className="flex  gap-4 bg-white rounded-lg pt-4 px-4 mb-4">
           <div className={`${isBranch ? 'text-blue-1  border-b-2  border-blue-1' : 'text-black-5'} cursor-pointer pb-4`} onClick={() => setIsBranch(true)}>
             Institution Branches
@@ -231,7 +231,7 @@ export default function Branch() {
               }} />
 
               <div className=" w-1/2 h-full  ">
-                <Select placeholder='All Status' className="h-full" size="lg" onChange={(e) => {
+                <Select placeholder='All Status' className="h-full" size="md" onChange={(e) => {
                   setStatus(e.target.value)
                   getData(search, e.target.value, limit, page)
                 }}>
