@@ -70,76 +70,73 @@ export default function Topics() {
   }
   return (
     <>
-      <div className="mt-12">
-        <Card
-          title="Topics"
-          right={(
-            <div onClick={() => {
-              setValue("name", "")
-              onOpenCreateModal()
-            }}>
+      <Card
+        title="Topics"
+        right={(
+          <div onClick={() => {
+            setValue("name", "")
+            onOpenCreateModal()
+          }}>
 
-              <Button title="+ Create Topic" />
-            </div>
-          )}
-        >
-          <input type="text" className="p-2 border rounded w-1/2 mb-4 text-sm" placeholder="Search Topic" onChange={(e) => {
-            setSearch(e.target.value)
-            getData(e.target.value, limit, page)
-          }} />
+            <Button title="+ Create Topic" />
+          </div>
+        )}
+      >
+        <input type="text" className="p-2 border rounded w-1/2 mb-4 text-sm" placeholder="Search Topic" onChange={(e) => {
+          setSearch(e.target.value)
+          getData(e.target.value, limit, page)
+        }} />
 
-          <div className="flex flex-col">
-            <div className="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
-              <div className="py-2 align-middle inline-block min-w-full sm:px-6 lg:px-8">
-                <div className="shadow overflow-hidden border-b border-gray-200 sm:rounded-lg">
-                  <table className="table min-w-full divide-y divide-gray-200 text-sm">
-                    <thead className="bg-black-9" >
-                      <th
-                        scope="col"
-                        className="px-6 py-3 text-left tracking-wider"
-                      >
-                        Topic Name
-                      </th>
-                      <th scope="col" className="text-left px-6 tracking-wider py-3">
-                        Action
-                      </th>
-                      {/* </tr> */}
-                    </thead>
-                    <tbody className="bg-white divide-y divide-gray-200">
-                      {list.map((item) => (
-                        <tr key={item.id}>
-                          <td className="px-6 py-4 whitespace-nowrap">
-                            <div>{item.name}</div>
-                          </td>
-                          <td className="px-6 py-4 whitespace-nowrap flex text-right gap-2 text-sm font-medium">
-                            <button className="text-indigo-600 hover:text-indigo-900"
-                              onClick={() => {
-                                setValue("name", item.name)
-                                setSelectedData(item.id)
-                                setUpdate(true)
-                                onOpenCreateModal()
-                              }}>
-                              <Image src="/asset/icon/table/fi_edit.png" width={16} height={16} alt="icon edit" />
-                            </button>
-                            <a href="#" className="text-indigo-600 hover:text-indigo-900">
-                              <Image src="/asset/icon/table/fi_trash-2.png" width={16} height={16} alt="icon edit" onClick={() => {
-                                setSelectedData(item.id),
-                                  onOpen()
-                              }} />
-                            </a>
-                          </td>
-                        </tr>
-                      ))}
-                    </tbody>
-                  </table>
-                </div>
-                <Pagination page={page} lastPage={topics.last_page} limit={limit} search={search} total={topics.total} doLimit={data => setLimit(data)} doData={getData} />
+        <div className="flex flex-col">
+          <div className="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
+            <div className="py-2 align-middle inline-block min-w-full sm:px-6 lg:px-8">
+              <div className="shadow overflow-hidden border-b border-gray-200 sm:rounded-lg">
+                <table className="table min-w-full divide-y divide-gray-200 text-sm">
+                  <thead className="bg-black-9" >
+                    <th
+                      scope="col"
+                      className="px-6 py-3 text-left tracking-wider"
+                    >
+                      Topic Name
+                    </th>
+                    <th scope="col" className="text-left px-6 tracking-wider py-3">
+                      Action
+                    </th>
+                    {/* </tr> */}
+                  </thead>
+                  <tbody className="bg-white divide-y divide-gray-200">
+                    {list.map((item) => (
+                      <tr key={item.id}>
+                        <td className="px-6 py-4 whitespace-nowrap">
+                          <div>{item.name}</div>
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap flex text-right gap-2 text-sm font-medium">
+                          <button className="text-indigo-600 hover:text-indigo-900"
+                            onClick={() => {
+                              setValue("name", item.name)
+                              setSelectedData(item.id)
+                              setUpdate(true)
+                              onOpenCreateModal()
+                            }}>
+                            <Image src="/asset/icon/table/fi_edit.png" width={16} height={16} alt="icon edit" />
+                          </button>
+                          <a href="#" className="text-indigo-600 hover:text-indigo-900">
+                            <Image src="/asset/icon/table/fi_trash-2.png" width={16} height={16} alt="icon edit" onClick={() => {
+                              setSelectedData(item.id),
+                                onOpen()
+                            }} />
+                          </a>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
               </div>
+              <Pagination page={page} lastPage={topics.last_page} limit={limit} search={search} total={topics.total} doLimit={data => setLimit(data)} doData={getData} />
             </div>
           </div>
-        </Card>
-      </div>
-
+        </div>
+      </Card>
 
       <Modal isOpen={isCreateModal} onClose={onCloseCreateModal} size='xl'
         motionPreset='slideInBottom'>
@@ -161,7 +158,6 @@ export default function Topics() {
           </ModalBody>
         </ModalContent>
       </Modal>
-
       <ModalDelete isOpen={isOpen} onClose={onClose} onDelete={(data) => onDelete(data)} selectedData={selectedData} />
     </>
   )

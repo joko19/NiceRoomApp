@@ -179,9 +179,9 @@ export default function Create(props) {
               <Button title="Publish" /></div>
             <div>
               <div onClick={() => setIsPublish("draft")}>
-              <button className={`bg-yellow-1 text-white p-2 rounded  hover:filter hover:drop-shadow-xl m-2`} >Save as Draft</button>
+                <button className={`bg-yellow-1 text-white py-2 px-4 font-semibold rounded hover:bg-yellow-2 hover:filter hover:drop-shadow-xl`} >Save as Draft</button>
+              </div>
             </div>
-          </div>
           </div>
         </form>
       </Card>
@@ -197,7 +197,7 @@ export default function Create(props) {
               <p> News Created Successfully </p>
               <div className="self-center">
                 <Link href="/admin/news">
-                  <a className="bg-blue-1 rounded-lg text-white mt-4 block align-center p-3"><Button title="Okay"/></a>
+                  <a className="bg-blue-1 rounded-lg text-white mt-4 block align-center p-3"><Button title="Okay" /></a>
                 </Link>
               </div>
             </div>

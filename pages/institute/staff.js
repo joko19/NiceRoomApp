@@ -17,6 +17,7 @@ import { useForm } from "react-hook-form";
 import Pagination from "../../components/Pagination/pagination";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import instance from "../../action/instance";
+import Button from "../../components/Button/button";
 
 export default function Staff() {
   const [search, setSearch] = useState('')

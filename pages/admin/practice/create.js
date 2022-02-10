@@ -23,6 +23,7 @@ import DatePicker2 from "../../../components/DateTime/Date";
 import Button from "../../../components/Button/button";
 
 import { Time } from "../../../components/DateTime/Time";
+import { Stepper } from "../../../components/Section/Stepper";
 export default function Create(props) {
   const [errors, setErrors] = useState()
   const { register, handleSubmit, setValue, getValues, reset, unregister } = useForm();
@@ -130,25 +131,7 @@ export default function Create(props) {
       <Card
         className="md:mt-8 w-full  bg-white overflow-visible text-sm"
         title="Create New Practice " >
-        <div className="flex gap-24 m-auto text-sm">
-          {step.map((item, index) => (
-            <div key={index}>
-              <div className="flex text-sm">
-                <div className={` ${index < currentStep ? 'bg-blue-1 text-white' : 'border bg-white text-black-5'} px-4 py-3 m-auto rounded-lg `}>
-                  {index + 1}
-                </div>
-                {index !== 2 && (
-                  <div className="bg-red-100">
-                    <Divider orientation="horizontal" />
-                  </div>
-                )}
-              </div>
-              <p className="text-blue-1 text-center text-sm mt-2">
-                {index < currentStep && item}
-              </p>
-            </div>
-          ))}
-        </div>
+        <Stepper step={step} currentStep={currentStep} />
         <form onSubmit={handleSubmit(submitPractice)}>
 
           {currentStep === 1 && (
@@ -341,7 +324,7 @@ export default function Create(props) {
               Section Successfully Created
               <div className="self-center">
                 <Link href="/admin/practice">
-                  <a><Button title="Okay" className="mt-4"/></a>
+                  <a><Button title="Okay" className="mt-4" /></a>
                 </Link>
               </div>
             </div>

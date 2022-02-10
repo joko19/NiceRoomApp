@@ -119,89 +119,86 @@ export default function Institute() {
 
   return (
     <>
-      <div className="mt-12">
-        <Card
-          title="Institution"
-          right={(
-            <div onClick={() => {
-              onOpenCreateModal()
-              setErrors(null)
-              reset()
-            }}>
-              <Button title="+ Create Institute" />
-            </div>
-          )}
-        >
-          <input type="text" className="p-2 border rounded w-1/2 mb-4" placeholder="Search Institute" onChange={(e) => {
-            setSearch(e.target.value)
-            getData(e.target.value, limit, page)
-          }} />
+      <Card
+        title="Institution"
+        right={(
+          <div onClick={() => {
+            onOpenCreateModal()
+            setErrors(null)
+            reset()
+          }}>
+            <Button title="+ Create Institute" />
+          </div>
+        )}
+      >
+        <input type="text" className="p-2 border rounded w-1/2 mb-4" placeholder="Search Institute" onChange={(e) => {
+          setSearch(e.target.value)
+          getData(e.target.value, limit, page)
+        }} />
 
-          <div className="flex flex-col">
-            <div className="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
-              <div className="py-2 align-middle inline-block min-w-full sm:px-6 lg:px-8">
-                <div className="shadow overflow-hidden border-b border-gray-200 sm:rounded-lg">
-                  <table className="table md:min-w-full overflow-auto divide-y divide-gray-200 text-sm">
-                    <thead className="bg-black-9" >
-                      {TableHead.map((item) => (
-                        <th key={item} scope="col" className="px-6 py-3 text-left tracking-wider">
-                          {item}
-                        </th>
-                      ))}
-                    </thead>
-                    <tbody className="bg-white divide-y divide-gray-200">
-                      {list.map((item, index) => (
-                        <tr key={index}>
-                          <td className="px-6 py-4 whitespace-nowrap">
-                            <div className="flex items-center">
-                              <div className="ml-4">
-                                <div>{item.name}</div>
-                              </div>
+        <div className="flex flex-col">
+          <div className="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
+            <div className="py-2 align-middle inline-block min-w-full sm:px-6 lg:px-8">
+              <div className="shadow overflow-hidden border-b border-gray-200 sm:rounded-lg">
+                <table className="table md:min-w-full overflow-auto divide-y divide-gray-200 text-sm">
+                  <thead className="bg-black-9" >
+                    {TableHead.map((item) => (
+                      <th key={item} scope="col" className="px-6 py-3 text-left tracking-wider">
+                        {item}
+                      </th>
+                    ))}
+                  </thead>
+                  <tbody className="bg-white divide-y divide-gray-200">
+                    {list.map((item, index) => (
+                      <tr key={index}>
+                        <td className="px-6 py-4 whitespace-nowrap">
+                          <div className="flex items-center">
+                            <div className="ml-4">
+                              <div>{item.name}</div>
                             </div>
-                          </td>
-                          <td className="px-6 py-4 whitespace-nowrap">
-                            <div>{item.state}</div>
-                          </td>
-                          <td className="px-6 py-4 whitespace-nowrap">
-                            <span>
-                              {item.city}
-                            </span>
-                          </td>
-                          <td className="px-6 py-4 whitespace-nowrap ">{item.establishment_year}</td>
-                          <td className="px-6 py-4 whitespace-nowrap flex text-right gap-2 text-sm font-medium">
-                            <Link href={`/admin/institution/${item.id}`}>
-                              <a className="text-indigo-600 hover:text-indigo-900">
-                                <Image src="/asset/icon/table/fi_eye.png" width={16} height={16} alt="icon detail" />
-                              </a>
-                            </Link>
-                            <button className="text-indigo-600 hover:text-indigo-900" onClick={() => {
-                              getDetail(item.id)
-                              setSelectedData(item.id)
-                              setUpdate(true)
-                              onOpenCreateModal()
-                              setErrors(null)
-                            }}>
-                              <Image src="/asset/icon/table/fi_edit.png" width={16} height={16} alt="icon edit" />
-                            </button>
-                            <button href="#" className="text-indigo-600 hover:text-indigo-900">
-                              <Image src="/asset/icon/table/fi_trash-2.png" width={16} height={16} alt="icon deleted" onClick={() => {
-                                setSelectedData(item.id),
-                                  onOpen()
-                              }} />
-                            </button>
-                          </td>
-                        </tr>
-                      ))}
-                    </tbody>
-                  </table>
-                </div>
-                <Pagination page={page} lastPage={dataInstitute.last_page} limit={limit} search={search} total={dataInstitute.total} doLimit={data => setLimit(data)} doData={getData} />
+                          </div>
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap">
+                          <div>{item.state}</div>
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap">
+                          <span>
+                            {item.city}
+                          </span>
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap ">{item.establishment_year}</td>
+                        <td className="px-6 py-4 whitespace-nowrap flex text-right gap-2 text-sm font-medium">
+                          <Link href={`/admin/institution/${item.id}`}>
+                            <a className="text-indigo-600 hover:text-indigo-900">
+                              <Image src="/asset/icon/table/fi_eye.png" width={16} height={16} alt="icon detail" />
+                            </a>
+                          </Link>
+                          <button className="text-indigo-600 hover:text-indigo-900" onClick={() => {
+                            getDetail(item.id)
+                            setSelectedData(item.id)
+                            setUpdate(true)
+                            onOpenCreateModal()
+                            setErrors(null)
+                          }}>
+                            <Image src="/asset/icon/table/fi_edit.png" width={16} height={16} alt="icon edit" />
+                          </button>
+                          <button href="#" className="text-indigo-600 hover:text-indigo-900">
+                            <Image src="/asset/icon/table/fi_trash-2.png" width={16} height={16} alt="icon deleted" onClick={() => {
+                              setSelectedData(item.id),
+                                onOpen()
+                            }} />
+                          </button>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
               </div>
+              <Pagination page={page} lastPage={dataInstitute.last_page} limit={limit} search={search} total={dataInstitute.total} doLimit={data => setLimit(data)} doData={getData} />
             </div>
           </div>
-        </Card>
-      </div>
-
+        </div>
+      </Card>
 
       <Modal isOpen={isCreateModal} onClose={onCloseCreateModal} size='xl'
         motionPreset='slideInBottom'>

@@ -18,6 +18,7 @@ import Pagination from "../../components/Pagination/pagination";
 import apiBatch from "../../action/batch";
 import { region } from "../../action/India";
 import { Select } from '@chakra-ui/react'
+import Button from "../../components/Button/button";
 
 export default function Branch() {
   const [search, setSearch] = useState('')
@@ -213,15 +214,15 @@ export default function Branch() {
           <Card
             title="Institution Branches"
             right={(
-              <button className="btn btn-md bg-blue-1 text-white p-3 rounded-lg" onClick={() => {
+              <div onClick={() => {
                 getBranch()
                 setUpdate(false)
                 onOpenCreateModal()
                 setErrors(null)
                 reset()
               }}>
-                + Create Branch
-              </button>
+              <Button title="+ create Branch" />
+              </div>
             )}
           > 
             <div className="flex gap-4 mb-4">

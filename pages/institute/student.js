@@ -20,6 +20,7 @@ import Pagination from "../../components/Pagination/pagination";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import instance from "../../action/instance";
 import apiBatch from "../../action/batch";
+import Button from "../../components/Button/button";
 
 export default function Student() {
   const [search, setSearch] = useState('')

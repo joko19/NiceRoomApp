@@ -138,95 +138,92 @@ export default function InstituteAdmin(props) {
 
   return (
     <>
-      <div className="mt-12">
-        <Card
-          title="Institute Admin"
-          right={(
-            <div onClick={() => {
-              setUpdate(false)
-              reset()
-              setErrors(null)
-              onOpenCreateModal()
-            }}>
-              <Button title="+ Create Admin" />
-            </div>
-          )}
-        >
-          <input type="text" className="p-2 border rounded w-1/2 mb-4" placeholder="Search Admin" onChange={(e) => {
-            setSearch(e.target.value)
-            getData(e.target.value, limit, page)
-          }} />
-          <div className="flex flex-col">
-            <div className="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
-              <div className="py-2 align-middle inline-block min-w-full sm:px-6 lg:px-8">
-                <div className="shadow overflow-hidden border-b border-gray-200 sm:rounded-lg">
-                  <table className="table min-w-full divide-y divide-gray-200 text-sm">
-                    <thead className="bg-black-9" >
-                      {tableHead.map((item) => (
-                        <th key={item} scope="col" className="px-6 py-3 text-left tracking-wider">
-                          {item}
-                        </th>
-                      ))}
-                    </thead>
-                    <tbody className="bg-white divide-y divide-gray-200">
-                      {list.map((item, index) => (
-                        <tr key={index}>
-                          <td className="px-6 py-4 whitespace-nowrap">
-                            <div className="flex items-center">
-                              <div className="ml-4">
-                                <div>{item.employee_id}</div>
-                              </div>
+      <Card
+        title="Institute Admin"
+        right={(
+          <div onClick={() => {
+            setUpdate(false)
+            reset()
+            setErrors(null)
+            onOpenCreateModal()
+          }}>
+            <Button title="+ Create Admin" />
+          </div>
+        )}
+      >
+        <input type="text" className="p-2 border rounded w-1/2 mb-4" placeholder="Search Admin" onChange={(e) => {
+          setSearch(e.target.value)
+          getData(e.target.value, limit, page)
+        }} />
+        <div className="flex flex-col">
+          <div className="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
+            <div className="py-2 align-middle inline-block min-w-full sm:px-6 lg:px-8">
+              <div className="shadow overflow-hidden border-b border-gray-200 sm:rounded-lg">
+                <table className="table min-w-full divide-y divide-gray-200 text-sm">
+                  <thead className="bg-black-9" >
+                    {tableHead.map((item) => (
+                      <th key={item} scope="col" className="px-6 py-3 text-left tracking-wider">
+                        {item}
+                      </th>
+                    ))}
+                  </thead>
+                  <tbody className="bg-white divide-y divide-gray-200">
+                    {list.map((item, index) => (
+                      <tr key={index}>
+                        <td className="px-6 py-4 whitespace-nowrap">
+                          <div className="flex items-center">
+                            <div className="ml-4">
+                              <div>{item.employee_id}</div>
                             </div>
-                          </td>
-                          <td className="px-6 py-4 whitespace-nowrap">
-                            <div>{item.name}</div>
-                          </td>
-                          <td className="px-6 py-4 whitespace-nowrap">
-                            <span>
-                              {item.email}
-                            </span>
-                          </td>
-                          <td className="px-6 py-4 whitespace-nowrap ">{item.phone}</td>
-                          <td className="px-6 py-4 whitespace-nowrap ">{item.institute.name}</td>
-                          <td className="px-6 py-4 whitespace-nowrap flex text-right gap-2 text-sm font-medium">
-                            <button className="text-indigo-600 hover:text-indigo-900"
-                              onClick={() => {
-                                getDetail(item.id)
-                                setDetail(item)
-                                onOpenDetailModal()
-                              }}>
-                              <Image src="/asset/icon/table/fi_eye.png" width={16} height={16} alt="icon edit" />
-                            </button>
+                          </div>
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap">
+                          <div>{item.name}</div>
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap">
+                          <span>
+                            {item.email}
+                          </span>
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap ">{item.phone}</td>
+                        <td className="px-6 py-4 whitespace-nowrap ">{item.institute.name}</td>
+                        <td className="px-6 py-4 whitespace-nowrap flex text-right gap-2 text-sm font-medium">
+                          <button className="text-indigo-600 hover:text-indigo-900"
+                            onClick={() => {
+                              getDetail(item.id)
+                              setDetail(item)
+                              onOpenDetailModal()
+                            }}>
+                            <Image src="/asset/icon/table/fi_eye.png" width={16} height={16} alt="icon edit" />
+                          </button>
 
-                            <button className="text-indigo-600 hover:text-indigo-900"
-                              onClick={() => {
-                                getDetail(item.id)
-                                setSelectedData(item.id)
-                                setUpdate(true)
-                                onOpenCreateModal()
-                                setErrors(null)
-                              }}>
-                              <Image src="/asset/icon/table/fi_edit.png" width={16} height={16} alt="icon edit" />
-                            </button>
-                            <a href="#" className="text-indigo-600 hover:text-indigo-900">
-                              <Image src="/asset/icon/table/fi_trash-2.png" width={16} height={16} alt="icon edit" onClick={() => {
-                                setSelectedData(item.id),
-                                  onOpen()
-                              }} />
-                            </a>
-                          </td>
-                        </tr>
-                      ))}
-                    </tbody>
-                  </table>
-                </div>
-                <Pagination page={page} lastPage={dataInstitute.last_page} limit={limit} search={search} total={dataInstitute.total} doLimit={data => setLimit(data)} doData={getData} />
+                          <button className="text-indigo-600 hover:text-indigo-900"
+                            onClick={() => {
+                              getDetail(item.id)
+                              setSelectedData(item.id)
+                              setUpdate(true)
+                              onOpenCreateModal()
+                              setErrors(null)
+                            }}>
+                            <Image src="/asset/icon/table/fi_edit.png" width={16} height={16} alt="icon edit" />
+                          </button>
+                          <a href="#" className="text-indigo-600 hover:text-indigo-900">
+                            <Image src="/asset/icon/table/fi_trash-2.png" width={16} height={16} alt="icon edit" onClick={() => {
+                              setSelectedData(item.id),
+                                onOpen()
+                            }} />
+                          </a>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
               </div>
+              <Pagination page={page} lastPage={dataInstitute.last_page} limit={limit} search={search} total={dataInstitute.total} doLimit={data => setLimit(data)} doData={getData} />
             </div>
           </div>
-        </Card>
-      </div>
-
+        </div>
+      </Card>
 
       <Modal isOpen={isCreateModal} onClose={onCloseCreateModal} size='xl'
         motionPreset='slideInBottom'>

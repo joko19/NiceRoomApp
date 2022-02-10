@@ -70,7 +70,6 @@ export default function News(props) {
 
   return (
     <>
-      <div className="mt-12">
         <Card
           title="News"
           right={(
@@ -165,9 +164,6 @@ export default function News(props) {
             </div>
           </div>
         </Card>
-      </div>
-
-
 
       {/* Success Modal */}
       <Modal isOpen={isConfirmModal} onClose={onCloseConfirmModal} isCentered>

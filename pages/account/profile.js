@@ -14,6 +14,7 @@ import {
 } from '@chakra-ui/react'
 import instance from "../../action/instance";
 import Layout from "../../Layout/Layout";
+import Button from "../../components/Button/button";
 
 export default function Profile(props) {
   const {
@@ -72,17 +73,16 @@ export default function Profile(props) {
 
   return (
     <>
-      <div className="mt-24 md:mt-8 p-4 w-full">
         <Card
-          className="md:mt-16 w-full bg-white"
+          className="w-full bg-white"
           title="Profile" >
-          <form onSubmit={handleSubmit(onSubmit)} >
+          <form onSubmit={handleSubmit(onSubmit)} className="text-sm">
             <div className="flex">
               <div className="m-4 relative">
-                <Image className="rounded-full object-cover" src={avatar} alt="photo profile" height={160} width={160} />
-                <div className="absolute bottom-5 right-0">
+                <Image className="rounded-full object-cover" src={avatar} alt="photo profile" height={120} width={120} />
+                <div className="absolute bottom-3 right-0">
                   <label htmlFor="file-input">
-                    <Image src="/asset/icon/ic_edit.png" alt="icon update" width={48} height={48} className="ml-6 cursor-pointer" />
+                    <Image src="/asset/icon/ic_edit.png" alt="icon update" width={32} height={32} className="ml-6 cursor-pointer" />
                   </label>
                 </div>
               </div>
@@ -96,13 +96,13 @@ export default function Profile(props) {
                   <p>First Name {errors && (
                     <span className="text-red-1 text-sm">{errors.name}</span>
                   )}</p>
-                  <input type="text"  className="form border w-full p-4 rounded-lg" placeholder="Input Your First Name" {...register("firstName")} />
+                  <input type="text"  className="form border w-full p-2 rounded" placeholder="Input Your First Name" {...register("firstName")} />
                 </div>
                 <div className="flex flex-col w-full">
                   <p>Last Name {errors && (
                     <span className="text-red-1 text-sm">{errors.name}</span>
                   )}</p>
-                  <input type="text" className="form border p-4 rounded-lg" placeholder="Input Your Last Name" {...register("lastName")} />
+                  <input type="text" className="form border p-2 rounded" placeholder="Input Your Last Name" {...register("lastName")} />
                 </div>
               </div>
               <div className="flex flex-col md:flex-row gap-4">
@@ -110,7 +110,7 @@ export default function Profile(props) {
                   <p>Gender {errors && (
                     <span className="text-red-1 text-sm">{errors.gender}</span>
                   )}</p>
-                  <select className="form border bg-white p-4 rounded-lg" placeholder="Choose Gender" {...register("gender")} >
+                  <select className="form border bg-white p-2 rounded" placeholder="Choose Gender" {...register("gender")} >
                     <option disabled>Choose Gender</option>
                     <option value="MALE">Male</option>
                     <option value="FEMALE">Female</option>
@@ -120,26 +120,25 @@ export default function Profile(props) {
                   <p>Email {errors && (
                     <span className="text-red-1 text-sm">{errors.email}</span>
                   )}</p>
-                  <input type="text" className="form border p-4 rounded-lg"  placeholder="Input Your Email" {...register("email")} />
+                  <input type="text" className="form border p-2 rounded"  placeholder="Input Your Email" {...register("email")} />
                 </div>
               </div>
               <div className="flex flex-col md:flex-row gap-4">
                 <div className="flex flex-col w-full">
                   <p className="mt-4">Phone</p>
-                  <input type="number"  className="form border p-4 rounded-lg" placeholder="Input Your Number" {...register("phone")} />
+                  <input type="number"  className="form border p-2 rounded" placeholder="Input Your Number" {...register("phone")} />
                 </div>
                 <div className="flex flex-col w-full">
                   <p className="mt-4">Employee ID (Optional)</p>
-                  <input type="number" className="form border p-4 rounded-lg"  placeholder="Input Your Employee ID" {...register("employee_id")} />
+                  <input type="number" className="form border p-2 rounded"  placeholder="Input Your Employee ID" {...register("employee_id")} />
                 </div>
               </div>
               <div className="flex flex-row-reverse gap-4 mt-4">
-                <button type="submit" className="bg-blue-1 p-3 rounded-lg text-white" >Update Profile</button>
+                <Button title="Update Profil" />
               </div>
             </div>
           </form>
         </Card>
-      </div>
 
       {/* Success Modal */}
       <Modal isOpen={isSuccessModal} onClose={onCloseSuccessModal} isCentered>
@@ -151,10 +150,10 @@ export default function Profile(props) {
             <div className="flex flex-col text-center ">
               <p> Update Data Successfully </p>
               <div className="self-center">
-                <button className="bg-blue-1 rounded-lg text-white mt-4 block align-center p-3" onClick={() => {
+                <div onClick={() => {
                   onCloseSuccessModal()
                   window.location.href = '/admin/dashboard'
-                }}>Okay</button>
+                }}>  <Button title="Okay" className="mt-4" /></div>
               </div>
             </div>
           </ModalBody>

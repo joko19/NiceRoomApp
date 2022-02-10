@@ -90,14 +90,14 @@ export default function Institute() {
 
   return (
     <>
-      <div className="md:py-24">
+      <div className="md:py-4 ">
         <Link href="/admin/institution">
           <a className="flex gap-4 text-blue-1 my-8"><FaAngleLeft /> Back</a>
         </Link>
-        <div className="bg-white p-4 rounded-lg">
+        <div className="bg-white p-4 rounded-lg text-sm">
           <div className="flex flex-auto w-full flex-row gap-4 m-4 space-between">
             <div className="flex">
-              <Image src="/asset/icon/table/ic_building.png" height={48} width={48} alt="icon university" />
+              <img src="/asset/icon/table/ic_building.png"  alt="icon university " className="bg-cover h-12 w-12" />
             </div>
             <div className="flex flex-col flex-1">
               <h1 className="font-bold">{dataInstitute.name}</h1>
@@ -105,21 +105,21 @@ export default function Institute() {
             </div>
             <div className="flex flex-col flex-1">
               <span className="text-black-4">address</span>
-              <p className="text-lg">{dataInstitute.address}</p>
+              <p className="text-sm">{dataInstitute.address}</p>
             </div>
 
             <div className="flex flex-col flex-1">
               <span className="text-black-4">State</span>
-              <p className="text-lg">{dataInstitute.state}</p>
+              <p className="text-sm">{dataInstitute.state}</p>
             </div>
 
             <div className="flex flex-col flex-1">
               <span className="text-black-4">City</span>
-              <p className="text-lg">{dataInstitute.city}</p>
+              <p className="text-sm">{dataInstitute.city}</p>
             </div>
           </div>
-          <h1 className="font-bold text-xl my-2">List Branch</h1>
-          <input type="text" className="p-4 border rounded-lg w-1/2 mb-4" placeholder="Search Institute" onChange={(e) => {
+          <h1 className="font-bold text-1xl my-2">List Branch</h1>
+          <input type="text" className="p-2 border rounded-lg w-1/2 mb-4" placeholder="Search Institute" onChange={(e) => {
             setSearch(e.target.value)
             searchBranch(e.target.value)
             // getData(e.target.value, limit, page)

@@ -4,7 +4,7 @@ import Image from "next/image";
 import { FaAngleLeft } from "react-icons/fa";
 import Card from "../../../../components/Cards/Card";
 import Layout from "../../../../Layout/Layout";
-import { useForm} from "react-hook-form";
+import { useForm } from "react-hook-form";
 import {
   Modal,
   ModalOverlay,
@@ -21,7 +21,8 @@ import apiQuiz from "../../../../action/quiz";
 import apiTopic from "../../../../action/topics";
 import { MyDTPicker } from "../../../../components/DateTime/DateTime";
 import { useRouter } from "next/router";
-import Button from "../../../../components/Button/button";
+import Button, { BackButton } from "../../../../components/Button/button";
+import { Stepper } from "../../../../components/Section/Stepper";
 
 export default function Create(props) {
   const Router = useRouter()
@@ -158,7 +159,7 @@ export default function Create(props) {
       req.start_time.split(":").length === 2 && data.append("start_time", req.start_time)
       req.end_time.split(":").length === 2 && data.append("end_time", req.end_time)
     }
-    
+
     if (req.type === 'live' && oldType === 'mixed') {
       console.log(req.start_time)
       data.append("topic_id", req.topic_id)
@@ -293,32 +294,12 @@ export default function Create(props) {
   }
 
   return (
-    <div className="md:pt-12 md:pb-28">
-      <Link href="/admin/quizzes">
-        <a className="flex gap-4 text-blue-1 my-8"><FaAngleLeft /> Back</a>
-      </Link>
+    <div className="md:pt-8 md:pb-28">
+      <BackButton url="/admin/quizzes" />
       <Card
-        className="md:mt-8 w-full  bg-white overflow-visible text-sm"
+        className="md:mt-4 w-full  bg-white overflow-visible text-sm"
         title="Edit Quiz " >
-        <div className="flex gap-24 m-auto ">
-          {step.map((item, index) => (
-            <div key={index}>
-              <div className="flex">
-                <div className={` ${index < currentStep ? 'bg-blue-1 text-white' : 'border bg-white text-black-5'} px-4 py-3 m-auto rounded-lg `}>
-                  {index + 1}
-                </div>
-                {index !== 2 && (
-                  <div className="bg-red-100">
-                    <Divider orientation="horizontal" />
-                  </div>
-                )}
-              </div>
-              <p className="text-blue-1 text-center mt-2">
-                {index < currentStep && item}
-              </p>
-            </div>
-          ))}
-        </div>
+        <Stepper step={step} currentStep={currentStep} />
         <form onSubmit={handleSubmit(submitQuiz)} className="text-sm">
           {currentStep === 1 && (
             <div className="mb-8">
@@ -712,8 +693,8 @@ export default function Create(props) {
             )}
             {currentStep === 3 && (
               <>
-              <div onClick={() => setStatus("published")} ><Button title="Save Quiz" /></div>
-              <div onClick={() => setStatus("draft")} ><Button title="Save Question" /></div>
+                <div onClick={() => setStatus("published")} ><Button title="Save Quiz" /></div>
+                <div onClick={() => setStatus("draft")} ><Button title="Save Question" /></div>
               </>
             )}
             <div onClick={() => {
@@ -741,7 +722,7 @@ export default function Create(props) {
               }
               <div className="self-center">
                 <Link href="/admin/quizzes">
-                <a> <Button title="Okay" className="mt-4" /></a>
+                  <a> <Button title="Okay" className="mt-4" /></a>
                 </Link>
               </div>
             </div>

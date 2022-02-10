@@ -20,6 +20,7 @@ import instance from "../../action/instance";
 import apiInstitute from "../../action/institute";
 import Button from "../../components/Button/button";
 import { ModalDelete } from "../../components/Modal/ModalDelete";
+import { ModalSuccessCreateEdit } from "../../components/Modal/ModalSuccess";
 
 export default function Index(props) {
   const TableHead = ['Name', 'Email', 'Phone', 'Action']
@@ -172,7 +173,7 @@ export default function Index(props) {
   }
 
   return (
-    <div className="mt-8 w-full mb-16">
+    <div className="w-full mb-16 md:-my-4">
       <div className="flex">
         <div className=" w-full">
           <div className="flex">
@@ -323,7 +324,7 @@ export default function Index(props) {
                     <label htmlFor="file-input">
                       <div className="m-4 relative my-auto cursor-pointer">
                         <Image className="rounded-full object-cover" src={avatar} alt="photo profile" height={100} width={100} />
-                        <div className="absolute bottom-2 right-0">
+                        <div className="absolute bottom-1 right-0">
                           <Image src="/asset/icon/ic_edit.png" alt="icon update" width={28} height={28} className="ml-16 cursor-pointer" />
 
                         </div>
@@ -392,27 +393,8 @@ export default function Index(props) {
           </ModalBody>
         </ModalContent>
       </Modal>
-
-      {/* Success Modal */}
-      <Modal isOpen={isSuccessModal} onClose={onCloseSuccessModal} isCentered>
-        <ModalOverlay />
-        <ModalContent>
-          <ModalHeader><center>Success</center></ModalHeader>
-          <ModalCloseButton />
-          <ModalBody>
-            <div className="flex flex-col text-center ">
-              <p>{getValues('name')} {update ? 'Update' : 'Create'} Successfully </p>
-              <div className="self-center">
-                <button className="bg-blue-1 rounded-lg text-white mt-4 block align-center p-3" onClick={() => {
-                  onCloseSuccessModal()
-                  setUpdate(false)
-                }}>Okay</button>
-              </div>
-            </div>
-          </ModalBody>
-        </ModalContent>
-      </Modal>
-
+      
+      <ModalSuccessCreateEdit isSuccessModal={isSuccessModal} onCloseSuccessModal={onCloseSuccessModal} update={update} setUpdate={(data) => setUpdate(data)} />
       <ModalDelete isOpen={isOpen} onClose={onClose} onDelete={(data) => onDelete(data)} selectedData={selectedData} />
     </div>
   )

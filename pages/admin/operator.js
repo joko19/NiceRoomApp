@@ -19,6 +19,7 @@ import { FaEye, FaEyeSlash } from "react-icons/fa";
 import instance from "../../action/instance";
 import Button from "../../components/Button/button";
 import { ModalDelete } from "../../components/Modal/ModalDelete";
+import { ModalSuccessCreateEdit } from "../../components/Modal/ModalSuccess";
 
 export default function Operator() {
   const [search, setSearch] = useState('')
@@ -155,7 +156,7 @@ export default function Operator() {
 
   return (
     <>
-      <div className="mt-12">
+      <div className="">
         <Card
           title="Operator"
           right={(
@@ -322,29 +323,8 @@ export default function Operator() {
           </ModalBody>
         </ModalContent>
       </Modal>
-
-      {/* Success Modal */}
-      <Modal isOpen={isSuccessModal} onClose={onCloseSuccessModal} isCentered>
-        <ModalOverlay />
-        <ModalContent>
-          <ModalHeader><center>Success</center></ModalHeader>
-          <ModalCloseButton />
-          <ModalBody>
-            <div className="flex flex-col text-center ">
-              <p>{getValues('name')} {update ? 'Update' : 'Create'} Successfully </p>
-              <div className="self-center">
-                <div onClick={() => {
-                  onCloseSuccessModal()
-                  setUpdate(false)
-                }}>
-                  <Button title="Okay" />
-                </div>
-              </div>
-            </div>
-          </ModalBody>
-        </ModalContent>
-      </Modal>
-
+      
+      <ModalSuccessCreateEdit isSuccessModal={isSuccessModal} onCloseSuccessModal={onCloseSuccessModal} update={update} setUpdate={(data) => setUpdate(data)} />
       <ModalDelete isOpen={isOpen} onClose={onClose} onDelete={(data) => onDelete(data)} selectedData={selectedData} />
     </>
   )

@@ -1,4 +1,5 @@
 import Link from "next/link"
+import { FaAngleLeft } from "react-icons/fa";
 
 function Button({ title, action = false, className, href = false }) {
   return (
@@ -16,6 +17,18 @@ function Button({ title, action = false, className, href = false }) {
         </Link>
       )}
     </>
+  )
+}
+
+export function BackButton({url}){
+  return(
+    <Link href={url}>
+      <a className="flex gap-4 text-blue-1 mb-4 hover:text-blue-2">
+        <FaAngleLeft className="my-auto" />
+        <span>Back</span>
+      </a>
+    </Link>
+
   )
 }
 

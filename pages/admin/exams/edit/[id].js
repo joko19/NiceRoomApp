@@ -26,7 +26,8 @@ import DatePicker2 from "../../../../components/DateTime/Date";
 import { useRouter } from "next/router";
 // import { Date } from "../../../components/DateTime/Date";
 import { Time } from "../../../../components/DateTime/Time";
-import Button from "../../../../components/Button/button";
+import Button, { BackButton } from "../../../../components/Button/button";
+import { Stepper } from "../../../../components/Section/Stepper";
 
 export default function Create(props) {
   const Router = useRouter()
@@ -293,32 +294,12 @@ export default function Create(props) {
   }
 
   return (
-    <div className="md:pt-12 md:pb-28">
-      <Link href="/admin/exams">
-        <a className="flex gap-4 text-blue-1 my-8"><FaAngleLeft /> Back</a>
-      </Link>
+    <div className=" md:pb-28">
+      <BackButton url="/admin/news" />
       <Card
-        className="md:mt-8 w-full  bg-white overflow-visible"
+        className="w-full  bg-white overflow-visible"
         title="Edit Exam " >
-        <div className="flex gap-24 m-auto text-sm">
-          {step.map((item, index) => (
-            <div key={index}>
-              <div className="flex">
-                <div className={` ${index < currentStep ? 'bg-blue-1 text-white' : 'border bg-white text-black-5'} px-4 py-3 m-auto rounded-lg `}>
-                  {index + 1}
-                </div>
-                {index !== 2 && (
-                  <div className="bg-red-100">
-                    <Divider orientation="horizontal" />
-                  </div>
-                )}
-              </div>
-              <p className="text-blue-1 text-center mt-2">
-                {index < currentStep && item}
-              </p>
-            </div>
-          ))}
-        </div>
+        <Stepper step={step} currentStep={currentStep} />
         <form onSubmit={handleSubmit(submitExams)} className="text-sm">
 
           {currentStep === 1 && (

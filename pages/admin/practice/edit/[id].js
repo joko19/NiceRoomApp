@@ -21,9 +21,10 @@ import apiTopic from "../../../../action/topics";
 import Multiselect from 'multiselect-react-dropdown';
 import DatePicker2 from "../../../../components/DateTime/Date";
 import { useRouter } from "next/router";
-import Button from "../../../../components/Button/button";
+import Button, { BackButton } from "../../../../components/Button/button";
 
 import { Time } from "../../../../components/DateTime/Time";
+import { Stepper } from "../../../../components/Section/Stepper";
 export default function Create(props) {
   const Router = useRouter()
   const { id } = Router.query
@@ -104,7 +105,7 @@ export default function Create(props) {
   }
 
   const submitPractice = async (data) => {
-    if (currentStep === 1) { 
+    if (currentStep === 1) {
       const arr = []
       if (consentments) {
         for (let i = 0; i < consentments.length; i++) {
@@ -190,31 +191,11 @@ export default function Create(props) {
 
   return (
     <div className="md:pt-12 md:pb-28">
-      <Link href="/admin/practice">
-        <a className="flex gap-4 text-blue-1 my-8"><FaAngleLeft /> Back</a>
-      </Link>
+      <BackButton url="/admin/practice" />]
       <Card
         className="md:mt-8 w-full  bg-white overflow-visible"
         title="Edit Practice " >
-        <div className="flex gap-24 m-auto ">
-          {step.map((item, index) => (
-            <div key={index}>
-              <div className="flex">
-                <div className={` ${index < currentStep ? 'bg-blue-1 text-white' : 'border bg-white text-black-5'} px-4 py-3 m-auto rounded-lg `}>
-                  {index + 1}
-                </div>
-                {index !== 2 && (
-                  <div className="bg-red-100">
-                    <Divider orientation="horizontal" />
-                  </div>
-                )}
-              </div>
-              <p className="text-blue-1 text-center mt-2">
-                {index < currentStep && item}
-              </p>
-            </div>
-          ))}
-        </div>
+        <Stepper step={step} currentStep={currentStep} />
         <form onSubmit={handleSubmit(submitPractice)}>
 
           {currentStep === 1 && (
@@ -265,7 +246,7 @@ export default function Create(props) {
                   <p>Start Date</p>
                   <div className="border p-2 rounded">
                     <DatePicker2
-                    data={getValues("start_date")}
+                      data={getValues("start_date")}
                       setData={(data) => setValue("start_date", data)}
                     />
                   </div>
@@ -415,7 +396,7 @@ export default function Create(props) {
               Section Successfully Created
               <div className="self-center">
                 <Link href="/admin/practice">
-                  <a><Button title="Okay" className="mt-4"/></a>
+                  <a><Button title="Okay" className="mt-4" /></a>
                 </Link>
               </div>
             </div>
