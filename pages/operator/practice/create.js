@@ -1,10 +1,9 @@
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
-import Image from "next/image";
 import { FaAngleLeft } from "react-icons/fa";
 import Card from "../../../components/Cards/Card";
 import Layout from "../../../Layout/Layout";
-import { useForm, useFieldArray } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import {
   Modal,
   ModalOverlay,
@@ -19,13 +18,12 @@ import QuillCreated from "../../../components/Editor/QuillCreated";
 import { Select } from '@chakra-ui/react'
 import apiPractice from "../../../action/practice";
 import apiTopic from "../../../action/topics";
-import { MyDTPicker } from "../../../components/DateTime/DateTime";
 import Multiselect from 'multiselect-react-dropdown';
-import apiBatch from "../../../action/batch";
-import apiBranch from "../../../action/branch";
 import DatePicker2 from "../../../components/DateTime/Date";
+import Button, { BackButton } from "../../../components/Button/button";
 
 import { Time } from "../../../components/DateTime/Time";
+import { Stepper } from "../../../components/Section/Stepper";
 export default function Create(props) {
   const [errors, setErrors] = useState()
   const { register, handleSubmit, setValue, getValues, reset, unregister } = useForm();
@@ -126,32 +124,12 @@ export default function Create(props) {
   }
 
   return (
-    <div className="md:pt-12 md:pb-28">
-      <Link href="/operator/practice">
-        <a className="flex gap-4 text-blue-1 my-8"><FaAngleLeft /> Back</a>
-      </Link>
+    <div className="md:mt-12 md:pb-28">
+      <BackButton url="/operator/practice" />
       <Card
-        className="md:mt-8 w-full  bg-white overflow-visible"
+        className="w-full  bg-white overflow-visible text-sm"
         title="Create New Practice " >
-        <div className="flex gap-24 m-auto ">
-          {step.map((item, index) => (
-            <div key={index}>
-              <div className="flex">
-                <div className={` ${index < currentStep ? 'bg-blue-1 text-white' : 'border bg-white text-black-5'} px-4 py-3 m-auto rounded-lg `}>
-                  {index + 1}
-                </div>
-                {index !== 2 && (
-                  <div className="bg-red-100">
-                    <Divider orientation="horizontal" />
-                  </div>
-                )}
-              </div>
-              <p className="text-blue-1 text-center mt-2">
-                {index < currentStep && item}
-              </p>
-            </div>
-          ))}
-        </div>
+        <Stepper step={step} currentStep={currentStep} />
         <form onSubmit={handleSubmit(submitPractice)}>
 
           {currentStep === 1 && (
@@ -162,7 +140,7 @@ export default function Create(props) {
                     <span className="text-red-1 text-sm">{errors.name}</span>
                   )}</p>
                   <div>
-                    <input type="text" className="form border w-full rounded-lg p-4 h-full" placeholder="Input Practice Name"  {...register("name")} />
+                    <input type="text" className="form border w-full rounded-lg p-3 h-full text-sm" placeholder="Input Practice Name"  {...register("name")} />
                   </div>
                 </div>
                 <div className="w-full ">
@@ -174,7 +152,7 @@ export default function Create(props) {
                     options={listTopic}
                     style={{
                       "multiselectContainer": {
-                        "padding": "4px",
+                        "padding": "2px",
                         "border-width": "1px",
                         "border-radius": "5px"
                       }, "searchBox": {
@@ -200,7 +178,7 @@ export default function Create(props) {
               <div className="flex mt-4 gap-4">
                 <div className="w-full">
                   <p>Start Date</p>
-                  <div className="border p-4 rounded-lg">
+                  <div className="border rounded p-2">
                     <DatePicker2
                       setData={(data) => setValue("start_date", data)}
                     />
@@ -219,7 +197,7 @@ export default function Create(props) {
                     <span className="text-red-1 text-sm">{errors.type}</span>
                   )}</p>
                   <div>
-                    <Select bg='white' size="lg" variant='outline' iconColor="blue" {...register('exam_type_id')}>
+                    <Select bg='white' size="md" variant='outline' iconColor="blue" {...register('exam_type_id')}>
                       <option value="1">Type 1</option>
                       <option value="2">Type 2</option>
                       <option value="3">Type 3</option>
@@ -251,7 +229,7 @@ export default function Create(props) {
                       arr[index] = e.target.value
                       setConsentments([...arr])
                       setValue(`consentments[${index}]`, e.target.value)
-                    }} className="form border w-full rounded-lg p-4 h-full m-1" autoComplete="off" placeholder="Input Consentment" />
+                    }} className="form border w-full rounded p-2 h-full m-1" autoComplete="off" placeholder="Input Consentment" />
                     {consentments.length !== 1 && (
                       <div className="m-auto cursor-pointer text-blue-1 -ml-8" onClick={() => {
                         let newArr = consentments
@@ -262,8 +240,8 @@ export default function Create(props) {
                   </div>
                 </>
               ))}
-              <div onClick={() => setConsentments([...consentments, ''])} className="text-blue-1 cursor-pointer text-center p-4 border-dashed border-2 border-blue-1 mt-4 rounded-lg">+ Add New Consentment</div>
-           </>
+              <div onClick={() => setConsentments([...consentments, ''])} className="text-blue-1 cursor-pointer text-center p-2 border-dashed border-2 border-blue-1 mt-4 rounded-lg">+ Add New Consentment</div>
+            </>
           )}
 
           {currentStep === 3 && (
@@ -272,14 +250,14 @@ export default function Create(props) {
                 {sections.map((itemQuestion, indexQuestion) => {
                   return (
                     <>
-                      <p className="font-bold mt-4 text-lg">Section {indexQuestion + 1}</p>
+                      <p className="font-bold mt-4 text-sm">Section {indexQuestion + 1}</p>
                       <div className="flex gap-4" >
                         <div className="w-full">
                           <p className="mt-4">Section Name{errors && (
                             <span className="text-red-1 text-sm">{errors[`sections.${indexQuestion}.name`]}</span>
                           )}</p>
                           <div>
-                            <input type="text" className="form border w-full rounded-lg p-4 h-full" placeholder="Input Section Name"  {...register(`sections[${indexQuestion}].name`)} />
+                            <input type="text" className="form border w-full rounded p-2 text-sm h-full" placeholder="Input Section Name"  {...register(`sections[${indexQuestion}].name`)} />
                           </div>
                         </div>
                         <div className="w-full">
@@ -288,8 +266,8 @@ export default function Create(props) {
                           )}</p>
                           <div >
                             <div className="flex h-full">
-                              <input type="number" className="border w-full h-full flex-grow rounded p-4" placeholder="0"  {...register(`sections[${indexQuestion}].duration`)} />
-                              <input className="bg-black-9 p-4 w-24 text-center h-full border text-black-4" placeholder="Minute" disabled />
+                              <input type="number" className="border w-full h-full flex-grow text-sm rounded p-2" placeholder="0"  {...register(`sections[${indexQuestion}].duration`)} />
+                              <input className="bg-black-9 p-2 w-24 text-center h-full border text-sm text-black-4" placeholder="Minute" disabled />
                             </div>
                           </div>
                         </div>
@@ -315,20 +293,20 @@ export default function Create(props) {
               </div>
               <div onClick={() => {
                 setsections([...sections, { id: sections[sections.length - 1].id + 1, option: [0] }])
-              }} className="text-blue-1 cursor-pointer text-center p-4 border-dashed border-2 border-blue-1 mt-4 rounded-lg">+ Add New Section</div>
+              }} className="text-blue-1 cursor-pointer text-center p-2 border-dashed border-2 border-blue-1 mt-4 rounded-lg">+ Add New Section</div>
             </div>
           )}
           <div className="flex -z-10 gap-4 flex-row-reverse my-4">
-            {currentStep < 3 && (<button className={`${3 > currentStep ? 'cursor-pointer' : 'cursor-default'} bg-blue-1  text-white p-4 rounded-lg`}>Next Step</button>
+            {currentStep < 3 && (<div className={`${3 > currentStep ? 'cursor-pointer' : 'cursor-default'}`}><Button title="Next Step" /></div>
             )}
             {currentStep === 3 && (
               <>
-                <button onClick={() => setStatus("published")} className='cursor-pointer bg-blue-1  text-white p-4 rounded-lg'>Save Test</button>
+                <div onClick={() => setStatus("published")}><Button title="Save Test" /></div>
               </>
             )}
             <div onClick={() => {
               currentStep > 1 && setCurrentStep(currentStep - 1)
-            }} className={`${1 < currentStep ? 'cursor-pointer' : 'cursor-default'}  text-black-4 p-4 rounded-lg`}>Back Step</div>
+            }} className={`${1 < currentStep ? 'cursor-pointer' : 'cursor-default'}  text-black-4 rounded p-2`}>Back Step</div>
           </div>
         </form>
       </Card>
@@ -344,7 +322,7 @@ export default function Create(props) {
               Section Successfully Created
               <div className="self-center">
                 <Link href="/operator/practice">
-                  <a className="bg-blue-1 rounded-lg text-white mt-4 block align-center p-3">Okay</a>
+                  <a><Button title="Okay" className="mt-4" /></a>
                 </Link>
               </div>
             </div>

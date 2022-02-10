@@ -122,11 +122,6 @@ function Sidebar() {
   },
   ]
   const operator = [{
-    icon: uri + 'ic_home.png',
-    active: uri + 'ic_home_active.png',
-    name: 'Home',
-    path: '/operator/home'
-  }, {
     icon: uri + 'ic_exams.png',
     active: uri + 'ic_exams_active.png',
     name: 'Exams',
