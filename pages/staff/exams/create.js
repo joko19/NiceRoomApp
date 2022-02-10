@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { FaAngleLeft } from "react-icons/fa";
 import Card from "../../../components/Cards/Card";
 import Layout from "../../../Layout/Layout";
 import { useForm } from "react-hook-form";
@@ -13,7 +12,6 @@ import {
   ModalBody,
   ModalCloseButton,
   useDisclosure,
-  Divider,
 } from '@chakra-ui/react'
 import QuillCreated from "../../../components/Editor/QuillCreated";
 import { Select } from '@chakra-ui/react'
@@ -24,7 +22,8 @@ import apiBatch from "../../../action/batch";
 import apiBranch from "../../../action/branch";
 import DatePicker2 from "../../../components/DateTime/Date";
 import { Time } from "../../../components/DateTime/Time";
-import Button from "../../../components/Button/button";
+import Button, { BackButton } from "../../../components/Button/button";
+import { Stepper } from "../../../components/Section/Stepper";
 
 export default function Create(props) {
   const [errors, setErrors] = useState()
@@ -189,33 +188,13 @@ export default function Create(props) {
   }
 
   return (
-    <div className="md:pt-12 md:pb-28 text-sm">
-      <Link href="/staff/exams">
-        <a className="flex gap-4 text-blue-1 my-8"><FaAngleLeft /> Back</a>
-      </Link>
+    <div>
+      <BackButton url="staff/exams" />
       <Card
-        className="md:mt-8 w-full  bg-white overflow-visible"
+        className=" w-full  bg-white overflow-visible"
         title="Create New Exam " >
-        <div className="flex gap-24 m-auto ">
-          {step.map((item, index) => (
-            <div key={index}>
-              <div className="flex text-sm">
-                <div className={` ${index < currentStep ? 'bg-blue-1 text-white' : 'border bg-white text-black-5'} px-4 py-3 m-auto rounded-lg `}>
-                  {index + 1}
-                </div>
-                {index !== 2 && (
-                  <div className="bg-red-100">
-                    <Divider orientation="horizontal" />
-                  </div>
-                )}
-              </div>
-              <p className="text-blue-1 text-center text-sm mt-2">
-                {index < currentStep && item}
-              </p>
-            </div>
-          ))}
-        </div>
-        <form onSubmit={handleSubmit(submitExams)}>
+        <Stepper step={step} currentStep={currentStep} />
+        <form onSubmit={handleSubmit(submitExams)}  className="text-sm">
           {currentStep === 1 && (
             <div className="mb-8">
               <input hidden type="text" value={type} {...register("type")} />
@@ -516,7 +495,7 @@ export default function Create(props) {
               Section Successfully Created
               <div className="self-center">
                 <Link href="/staff/exams">
-                  <a><Button title="Okay" className="mt-4"/></a>
+                  <a><Button title="Okay" className="mt-4" /></a>
                 </Link>
               </div>
             </div>

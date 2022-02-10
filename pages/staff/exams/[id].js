@@ -1,8 +1,6 @@
 import Layout from "../../../Layout/Layout";
-import Card from "../../../components/Cards/Card";
 import apiExam from "../../../action/exam";
 import { useEffect, useState } from 'react'
-import Image from "next/image";
 import Link from "next/link";
 import {
   Modal,
@@ -13,11 +11,11 @@ import {
   ModalCloseButton,
   useDisclosure,
 } from '@chakra-ui/react'
-import { FaAngleLeft } from "react-icons/fa";
 import { useRouter } from "next/router";
 import { ModalDelete } from "../../../components/Modal/ModalDelete";
-import { HeaderInstruction } from "../../../components/Section/HeaderInstruction";
-import Button from "../../../components/Button/button";
+import Button, { BackButton } from "../../../components/Button/button";
+import { ListSession } from "../../../components/Section/ListSession";
+import { TitleSection } from "../../../components/Section/TitleSection";
 
 export default function Section({ data }) {
   const Router = useRouter()
@@ -29,6 +27,13 @@ export default function Section({ data }) {
     onOpen: onOpenDeleteModal,
     onClose: onCloseDeleteModal
   } = useDisclosure()
+  const {
+    isOpen: isSuccessModal,
+    onOpen: onOpenSuccessModal,
+    onClose: onCloseSuccessModal
+  } = useDisclosure()
+
+
   const [listSection, setListSection] = useState({
     sections: []
   })
@@ -65,102 +70,28 @@ export default function Section({ data }) {
       })
   }
 
+  const onPublish = async () => {
+    await apiExam.publish(id)
+      .then(() => {
+        onOpenSuccessModal()
+      })
+  }
+
+
 
   return (
-    <>
-      <div className="mt-12 text-sm">
-        <Link href="/staff/exams">
-          <a className="flex gap-4 text-blue-1 my-4"><FaAngleLeft /> Back</a>
-        </Link>
-        <div className="flex justify-between">
-          <h1 className="font-bold text-2xl ">List of test sessions <span className="text-blue-1">{dataExams.name}</span> </h1>
-          <Link href={`edit/${id}`}>
-            <a className=" p-4">
-              <div className="flex  border border-blue-1 rounded p-2">
-                <div className="m-auto text-blue-1">
-                  <Image src="/asset/icon/table/fi_edit.png" className="mr-4 my-auto" height={16} width={16} />
-                  <span className="ml-2">
-                    Edit Exams
-                  </span>
-                </div>
-              </div>
-            </a>
-          </Link>
-        </div>
+    <div className="mt-12">
+      <div className="text-sm">
+        <BackButton url="/staff/exams" />
+        <TitleSection dataExams={dataExams} id={id} type="Exams" />
       </div>
       {listSection.sections.map((itemSection, index) => (
-        <Card key={index} className="my-4">
-        <HeaderInstruction itemSection={itemSection} index={index}/>
-          <div className="flex flex-col">
-            <div className="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
-              <div className="py-2 align-middle inline-block min-w-full sm:px-6 lg:px-8">
-                <div className="shadow overflow-hidden border-b border-gray-200 sm:rounded-lg">
-                  <table className="table md:min-w-full overflow-auto divide-y divide-gray-200 text-sm">
-                    <thead className="bg-blue-6" >
-                      <th scope="col" className="px-6 py-3 text-left tracking-wider">
-                        No.
-                      </th>
-                      <th scope="col" className="px-6 py-3 text-left tracking-wider">
-                        Type Question
-                      </th>
-                      <th scope="col" className="px-6 py-3 text-center tracking-wider">
-                        Number of Question
-                      </th>
-                      <th scope="col" className="px-6 py-3 text-left tracking-wider">
-                        <div className="bg-blue-1 text-white w-48 text-center mx-auto p-2 rounded-lg cursor-pointer" onClick={() => {
-                          setSelectedData(itemSection.id),
-                            setSelectedName(itemSection.name)
-                          onOpen()
-                        }}>
-                          + Add Question
-                        </div>
-                      </th>
-                    </thead>
-                    <tbody className="bg-white divide-y divide-gray-200">
-                      {itemSection.questions.map((itemQuestion, index) => (
-                        <tr key={index}>
-                          <td className="px-6 py-4 whitespace-nowrap">
-                            <div className="flex items-center">
-                              <div className="ml-4">
-                                <div>{index + 1}</div>
-                              </div>
-                            </div>
-                          </td>
-                          <td className="px-6 py-4 whitespace-nowrap">
-                            {itemQuestion.type}
-                          </td>
-                          <td className="px-6 py-4 whitespace-nowrap text-center">
-                            {itemQuestion.items_count} Question
-                          </td>
-                          <td className="flex gap-4 px-6 py-4 whitespace-nowrap flex text-right gap-2 text-sm font-medium">
-                            <div className="mx-auto flex gap-4">
-
-                              <Link href={`/staff/exams/question/edit/${itemQuestion.id}`}>
-                                <a className="text-indigo-600 hover:text-indigo-900">
-                                  <Image src="/asset/icon/table/fi_edit.png" width={16} height={16} alt="icon Edit" />
-                                  <span className="inline-block align-top">  Edit</span>
-                                </a>
-                              </Link>
-                              <button className="text-indigo-600 hover:text-indigo-900" onClick={() => {
-                                setQuestionSelectedId(itemQuestion.id),
-                                  onOpenDeleteModal()
-                              }}>
-                                <Image src="/asset/icon/table/fi_trash-2.png" width={16} height={16} alt="icon deleted" />
-                                <span className="inline-block align-top">  Delete</span>
-                              </button>
-                            </div>
-                          </td>
-                        </tr>
-                      ))}
-                    </tbody>
-                  </table>
-                </div>
-              </div>
-            </div>
-          </div>
-        </Card>
+        <ListSession key={index} index={index} itemSection={itemSection} onOpenDeleteModal={onOpenDeleteModal} setQuestionSelectedId={(data) => setQuestionSelectedId(data)} setSelectedData={(data) => setSelectedData(data)} setSelectedName={(data) => setSelectedName(data)} onOpen={onOpen} />
       ))}
 
+      <div className="flex flex-row-reverse" onClick={onPublish}>
+        <Button title="Publish" />
+      </div>
       {/* Delete Confirmation */}
 
       <ModalDelete isOpen={isDeleteModal} onClose={onCloseDeleteModal} onDelete={(data) => onDelete(data)} selectedData={questionSelectedId} />
@@ -181,14 +112,32 @@ export default function Section({ data }) {
             </div>
             <div className="flex flex-row-reverse gap-4 mt-4" >
               <Link href={`/staff/exams/section/${listSection.id}_id=${selectedData}#${questionType}`}>
-               <a> <Button title="Select" className="mt-4" /></a>
+                <a> <Button title="Select" className="mt-4" /></a>
               </Link>
               <button type="button" className="text-black-4 p-3 rounded-lg" onClick={onClose}>Cancel</button>
             </div>
           </ModalBody>
         </ModalContent>
       </Modal>
-    </>
+
+      {/* Success Modal */}
+      <Modal isOpen={isSuccessModal} onClose={onCloseSuccessModal} isCentered>
+        <ModalOverlay />
+        <ModalContent>
+          <ModalHeader fontSize="md"><center>Success</center></ModalHeader>
+          <ModalCloseButton />
+          <ModalBody>
+            <div className="flex flex-col text-center text-sm"> Exams has published
+              <div className="self-center">
+                <Link href="/staff/practice">
+                  <a> <Button title="Okay" className="mt-4" /></a>
+                </Link>
+              </div>
+            </div>
+          </ModalBody>
+        </ModalContent>
+      </Modal>
+    </div>
   )
 }
 

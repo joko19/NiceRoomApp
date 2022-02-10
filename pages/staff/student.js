@@ -20,6 +20,9 @@ import Pagination from "../../components/Pagination/pagination";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import instance from "../../action/instance";
 import apiBatch from "../../action/batch";
+import Button from "../../components/Button/button";
+import { ModalSuccessCreateEdit } from "../../components/Modal/ModalSuccess";
+import { ModalDelete } from "../../components/Modal/ModalDelete";
 
 export default function Student() {
   const [search, setSearch] = useState('')
@@ -166,11 +169,11 @@ export default function Student() {
 
   return (
     <>
-      <div className="md:py-24 mt-24 md:mt-12">
+      <div className="mt-24 md:mt-12">
         <Card
           title="Students"
           right={(
-            <button className="btn btn-md bg-blue-1 text-white p-3 rounded-lg" onClick={() => {
+            <div onClick={() => {
               setAvatar('/asset/img/blank_profile.png')
               getBranch()
               getBatch()
@@ -179,18 +182,18 @@ export default function Student() {
               setErrors(null)
               reset()
             }}>
-              + Create Student
-            </button>
+              <Button title="+ Create Student" />
+            </div>
           )}
         >
           <div className="flex gap-4 mb-4">
-            <input type="text" className=" border rounded-lg w-full p-2" placeholder="Search Student" onChange={(e) => {
+            <input type="text" className=" border rounded w-full p-2" placeholder="Search Student" onChange={(e) => {
               setSearch(e.target.value)
               getData(e.target.value, branch, batch, status, limit, page)
             }} />
 
-            <div className="w-full h-full  ">
-              <Select placeholder='All Branch' className="h-full" size="lg" onChange={(e) => {
+            <div className="w-full h-full   ">
+              <Select placeholder='All Branch' className="h-full" size="md" onChange={(e) => {
                 setBranch(e.target.value)
                 getData(search, e.target.value, batch, status, limit, page)
               }}>
@@ -200,7 +203,7 @@ export default function Student() {
               </Select>
             </div>
             <div className="w-full h-full  ">
-              <Select placeholder='All Batch' className="h-full" size="lg" onChange={(e) => {
+              <Select placeholder='All Batch' className="h-full" size="md" onChange={(e) => {
                 setBatch(e.target.value)
                 getData(search, branch, e.target.value, status, limit, page)
               }}>
@@ -210,7 +213,7 @@ export default function Student() {
               </Select>
             </div>
             <div className="w-full h-full  ">
-              <Select placeholder='All Status' className="h-full" size="lg" onChange={(e) => {
+              <Select placeholder='All Status' className="h-full" size="md" onChange={(e) => {
                 setStatus(e.target.value)
                 getData(search, branch, batch, e.target.value, limit, page)
               }}>
@@ -292,17 +295,16 @@ export default function Student() {
         motionPreset='slideInBottom'>
         <ModalOverlay />
         <ModalContent>
-          <ModalHeader>{update ? 'Edit' : 'Add'} Student</ModalHeader>
+          <ModalHeader fontSize="md">{update ? 'Edit' : 'Add'} Student</ModalHeader>
           <ModalCloseButton />
           <ModalBody>
-            <form onSubmit={handleSubmit(onSubmit)} className="pb-4">
-
+            <form onSubmit={handleSubmit(onSubmit)} className="pb-4 text-sm">
               <div className="flex justify-center">
                 <div className="m-4 relative">
-                  <Image className="rounded-full object-cover" src={avatar} alt="photo profile" height={160} width={160} />
-                  <div className="absolute bottom-5 right-0">
+                  <Image className="rounded-full object-cover" src={avatar} alt="photo profile" height={120} width={120} />
+                  <div className="absolute bottom-3 right-0">
                     <label htmlFor="file-input">
-                      <Image src="/asset/icon/ic_edit.png" alt="icon update" width={48} height={48} className="ml-6 cursor-pointer" />
+                      <Image src="/asset/icon/ic_edit.png" alt="icon update" width={32} height={32} className="ml-6 cursor-pointer" />
                     </label>
                   </div>
                 </div>
@@ -315,13 +317,13 @@ export default function Student() {
                   <p>Full Name {errors && (
                     <span className="text-red-1 text-sm">{errors.name}</span>
                   )}</p>
-                  <input type="text" className="w-full form border p-4 rounded-lg" placeholder="Input Full Name" {...register("name")} />
+                  <input type="text" className="w-full form border p-2 rounded" placeholder="Input Full Name" {...register("name")} />
                 </div>
                 <div className="w-full">
                   <p>Email {errors && (
                     <span className="text-red-1 text-sm">{errors.email}</span>
                   )}</p>
-                  <input type="text" className="form border w-full p-4 rounded-lg" placeholder="Input Email Address" {...register("email")} />
+                  <input type="text" className="form border w-full p-2 rounded" placeholder="Input Email Address" {...register("email")} />
                 </div>
               </div>
               <div className="flex gap-4 flex-col md:flex-row">
@@ -329,7 +331,7 @@ export default function Student() {
                   <p className="mt-4">Gender{errors && (
                     <span className="text-red-1 text-sm">{errors.gender}</span>
                   )}</p>
-                  <select className="form border bg-white w-full p-4 rounded-lg" defaultValue="Select Gender" placeholder="Choose Gender"  {...register("gender",)} >
+                  <select className="form border bg-white w-full p-2 rounded" defaultValue="Select Gender" placeholder="Choose Gender"  {...register("gender",)} >
                     <option disabled>Select Gender</option>
                     <option value="MALE">Male</option>
                     <option value="FEMALE">Female</option>
@@ -339,7 +341,7 @@ export default function Student() {
                   <p className="mt-4">Enrollment ID (Optional) {errors && (
                     <span className="text-red-1 text-sm">{errors.code}</span>
                   )}</p>
-                  <input type="text" className="form border p-4 w-full rounded-lg" placeholder="Input Enrollment ID" {...register("code")} />
+                  <input type="text" className="form border p-2 w-full rounded" placeholder="Input Enrollment ID" {...register("code")} />
                 </div>
               </div>
 
@@ -348,13 +350,13 @@ export default function Student() {
                   <p className="mt-4">Phone Number {errors && (
                     <span className="text-red-1 text-sm">{errors.phone}</span>
                   )}</p>
-                  <input type="number" className="form border p-4 w-full rounded-lg" placeholder="Input Phone Number" {...register("phone")} />
+                  <input type="number" className="form border p-2 w-full rounded" placeholder="Input Phone Number" {...register("phone")} />
                 </div>
                 <div className="w-full">
                   <p className="mt-4">Branch {errors && (
                     <span className="text-red-1 text-sm">{errors.branch_id}</span>
                   )}</p>
-                  <select className="form border bg-white w-full p-4 rounded-lg" defaultValue="Select Branch" placeholder="Choose Branch"  {...register("branch_id",)} >
+                  <select className="form border bg-white w-full p-2 rounded" defaultValue="Select Branch" placeholder="Choose Branch"  {...register("branch_id",)} >
                     <option disabled>Select Branch</option>
                     {listBranch.map((item) => (
                       <option key={item.id} value={item.id}>{item.name}</option>
@@ -368,7 +370,7 @@ export default function Student() {
                   <p className="mt-4">Batch {errors && (
                     <span className="text-red-1 text-sm">{errors.batch_id}</span>
                   )}</p>
-                  <select className="form border bg-white w-full p-4 rounded-lg" defaultValue="Select Batch" placeholder="Choose Batch"  {...register("batch_id",)} >
+                  <select className="form border bg-white w-full p-2 rounded" defaultValue="Select Batch" placeholder="Choose Batch"  {...register("batch_id",)} >
                     <option disabled>Select Batch</option>
                     {listBatch.map((item) => (
                       <option key={item.id} value={item.id}>{item.name}</option>
@@ -380,7 +382,7 @@ export default function Student() {
                     <span className="text-red-1 text-sm">{errors.password}</span>
                   )}</p>
                   <div className="relative">
-                    <input type={`${passwd ? 'password' : 'text'}`} {...register("password")} className="form w-full border p-4 rounded-lg" placeholder="Input New Password" />
+                    <input type={`${passwd ? 'password' : 'text'}`} {...register("password")} className="form w-full border p-2 rounded" placeholder="Input New Password" />
                     <span className="absolute inset-y-0 cursor-pointer right-0 pr-3 flex items-center text-sm leading-5" onClick={() => {
                       passwd ? setpasswd(false) : setpasswd(true)
                     }}>
@@ -393,53 +395,16 @@ export default function Student() {
                 </div>
               </div>
               <div className="flex flex-row-reverse gap-4 mt-4">
-                <button type="submit" className="bg-blue-1 p-3 rounded-lg text-white" >Save</button>
-                <button type="button" className="text-black-4 p-3 rounded-lg" onClick={onCloseCreateModal}>Close</button>
+                <div type="submit" ><Button title="Save" /></div>
+                <button type="button" className="text-black-4 p-2 rounded-lg" onClick={onCloseCreateModal}>Close</button>
               </div>
             </form>
           </ModalBody>
         </ModalContent>
       </Modal>
 
-      {/* Success Modal */}
-      <Modal isOpen={isSuccessModal} onClose={onCloseSuccessModal} isCentered>
-        <ModalOverlay />
-        <ModalContent>
-          <ModalHeader><center>Success</center></ModalHeader>
-          <ModalCloseButton />
-          <ModalBody>
-            <div className="flex flex-col text-center ">
-              <p>{getValues('name')} {update ? 'Update' : 'Create'} Successfully </p>
-              <div className="self-center">
-                <button className="bg-blue-1 rounded-lg text-white mt-4 block align-center p-3" onClick={() => {
-                  onCloseSuccessModal()
-                  setUpdate(false)
-                }}>Okay</button>
-              </div>
-            </div>
-          </ModalBody>
-        </ModalContent>
-      </Modal>
-
-      {/* Delete Confirmation */}
-      <Modal isOpen={isOpen} onClose={onClose} isCentered>
-        <ModalOverlay />
-        <ModalContent>
-          <ModalHeader><center> Delete Student</center></ModalHeader>
-          <ModalBody>
-            <center className="mb-8">Are you sure to delete {nameDeleted} from student ?</center>
-            <div className="flex gap-4 justify-center">
-              <button className="text-black-4 p-3" mr={3} onClick={onClose}>
-                Cancel
-              </button>
-              <button className="bg-blue-1 text-white p-3 rounded-lg" onClick={() => {
-                onDelete(selectedData)
-                onClose()
-              }} onClose={onClose}>Deleted</button>
-            </div>
-          </ModalBody>
-        </ModalContent>
-      </Modal>
+      <ModalSuccessCreateEdit isSuccessModal={isSuccessModal} onCloseSuccessModal={onCloseSuccessModal} update={update} setUpdate={(data) => setUpdate(data)} />
+      <ModalDelete isOpen={isOpen} onClose={onClose} onDelete={(data) => onDelete(data)} selectedData={selectedData} />
     </>
   )
 }

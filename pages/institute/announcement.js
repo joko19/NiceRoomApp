@@ -20,6 +20,8 @@ import Multiselect from 'multiselect-react-dropdown';
 import apiBatch from "../../action/batch";
 import apiBranch from "../../action/branch";
 import Button from "../../components/Button/button";
+import { ModalDelete } from "../../components/Modal/ModalDelete";
+import { ModalSuccessCreateEdit } from "../../components/Modal/ModalSuccess";
 
 export default function Announcement() {
   const [search, setSearch] = useState('')
@@ -264,18 +266,25 @@ export default function Announcement() {
                 <div className="shadow overflow-hidden border-b border-gray-200 sm:rounded-lg">
                   <table className="table md:min-w-full overflow-auto divide-y divide-gray-200">
                     <thead className="bg-black-9" >
-                      {TableHead.map((item) => (
-                        <th key={item} scope="col" className="px-6 py-3 text-left tracking-wider">
-                          {item}
-                        </th>
-                      ))}
+                      <th scope="col" className="px-6 py-3 text-center tracking-wider">
+                        Name
+                      </th>
+                      <th scope="col" className="px-6 py-3 text-center tracking-wider">
+                        Branch
+                      </th>
+                      <th scope="col" className="px-6 py-3 text-center tracking-wider">
+                        Status
+                      </th>
+                      <th scope="col" className="px-6 py-3 text-left tracking-wider">
+                        Action
+                      </th>
                     </thead>
-                    <tbody className="bg-white divide-y divide-gray-200">
+                    <tbody className="bg-white divide-y divide-gray-200 text-center">
                       {list.map((item, index) => (
                         <tr key={index}>
-                          <td className="px-6 py-4 whitespace-nowrap">
-                            <div className="flex items-center">
-                              <div className="ml-4">
+                          <td className="py-4 whitespace-nowrap">
+                            <div className="items-center text-center">
+                              <div>
                                 <div>{item.title}</div>
                               </div>
                             </div>
@@ -285,9 +294,9 @@ export default function Announcement() {
                               <p key={item}>{item.name} </p>
                             ))}
                           </td>
-                          <td className="px-6 py-4 whitespace-nowrap">
-                            <div className={`${item.status === 'draft' ? 'bg-black-8 text-black-3' : 'bg-green-2 text-green-1'} text-center rounded-lg p-3`}>
-                              {item.status}
+                          <td>
+                            <div className={`${item.status === 'draft' ? 'bg-black-8 text-black-3' : 'bg-green-2 text-green-1'} text-center w-24 flex-0 m-auto font-bold  rounded-lg py-3 `}>
+                              {item.status === 'draft' ? 'Draft' : 'Published'}
                             </div>
                           </td>
                           <td className="px-6 py-4 whitespace-nowrap flex text-right gap-2 text-sm font-medium">
@@ -337,29 +346,29 @@ export default function Announcement() {
         motionPreset='slideInBottom'>
         <ModalOverlay />
         <ModalContent>
-          <ModalHeader>{update ? 'Edit' : 'Add'} Announcement</ModalHeader>
+          <ModalHeader fontSize="md">{update ? 'Edit' : 'Add'} Announcement</ModalHeader>
           <ModalCloseButton />
           <ModalBody>
-            <form onSubmit={handleSubmit(onSubmit)} className="pb-4">
+            <form onSubmit={handleSubmit(onSubmit)} className="pb-4 text-sm">
               <div className="w-full">
                 <p>Title {errors && (
                   <span className="text-red-1 text-sm">{errors.title}</span>
                 )}</p>
-                <input type="text" className="w-full form border p-4 rounded-lg" placeholder="Input Title" {...register("title")} />
+                <input type="text" className="w-full form border p-2 rounded" placeholder="Input Title" {...register("title")} />
               </div>
 
               <div className="w-full mt-4">
                 <p>Sub Title {errors && (
                   <span className="text-red-1 text-sm">{errors.sub_title}</span>
                 )}</p>
-                <input type="text" className="w-full form border p-4 rounded-lg" placeholder="Input Sub Title" {...register("sub_title")} />
+                <input type="text" className="w-full form border p-2 rounded" placeholder="Input Sub Title" {...register("sub_title")} />
               </div>
 
               <div className="w-full mt-4">
                 <p>Description {errors && (
                   <span className="text-red-1 text-sm">{errors.description}</span>
                 )}</p>
-                <textarea type="text" className="w-full h-24 form border p-4 rounded-lg" placeholder="Input Description" {...register("description")} />
+                <textarea type="text" className="w-full h-24 form border p-2 rounded" placeholder="Input Description" {...register("description")} />
               </div>
 
               <div className="flex gap-4 mt-4 flex-col md:flex-row" >
@@ -372,7 +381,7 @@ export default function Announcement() {
                     options={listBatch}
                     style={{
                       "multiselectContainer": {
-                        "padding": "12px",
+                        "padding": "2px",
                         "border-width": "1px",
                         "border-radius": "5px"
                       }, "searchBox": {
@@ -399,7 +408,7 @@ export default function Announcement() {
                       options={listBranch}
                       style={{
                         "multiselectContainer": {
-                          "padding": "12px",
+                          "padding": "2px",
                           "border-width": "1px",
                           "border-radius": "5px"
                         }, "searchBox": {
@@ -425,12 +434,12 @@ export default function Announcement() {
                   <span className="text-red-1 text-sm">{errors.file}</span>
                 )}</p>
                 <div className="flex gap-4">
-                  {/* <input type="text" className=" flex-grow form border p-4 rounded-lg" value={fileName} placeholder="Upload Your File" disabled {...register("title")} /> */}
-                  <div className={`border rounded-lg p-4  flex-grow text-black-4 ${fileName === 'Please upload pdf file' && 'text-red-1'}`}>
-                    {fileName.length > 45 ? fileName.substring(0, 45) + "..." : fileName}
+                  {/* <input type="text" className=" flex-grow form border p-2 rounded" value={fileName} placeholder="Upload Your File" disabled {...register("title")} /> */}
+                  <div className={`border rounded p-2  flex-grow text-black-4 ${fileName === 'Please upload pdf file' && 'text-red-1'}`}>
+                    {fileName?.length > 45 ? fileName.substring(0, 45) + "..." : fileName}
                   </div>
                   <label htmlFor="file-input">
-                    <div className="w-full border inline-flex rounded-lg cursor-pointer p-4 text-blue-1 border-blue-1">
+                    <div className="w-full border inline-flex rounded cursor-pointer p-2 text-blue-1 border-blue-1">
                       <span>Add File</span>
                     </div>
                   </label>
@@ -441,31 +450,11 @@ export default function Announcement() {
               </div>
 
               <div className="flex flex-row-reverse gap-4 mt-4">
-                <button onClick={() => setIsPublish("draft")} className="bg-blue-1 p-3 rounded-lg text-white" >Save As Draft</button>
-                <button onClick={() => setIsPublish("published")} className="p-3 rounded-lg text-blue-1" >Publish</button>
-                <button type="button" className="text-black-4 p-3 rounded-lg" onClick={onCloseCreateModal}>Close</button>
+                <div onClick={() => setIsPublish("published")}  ><Button title="Publish" /></div>
+                <button onClick={() => setIsPublish("draft")} className="border border-blue-1 hover:bg-blue-6  rounded p-2" >Save to Draft</button>
+                <button type="button" className="text-black-4 p-2 rounded" onClick={onCloseCreateModal}>Close</button>
               </div>
             </form>
-          </ModalBody>
-        </ModalContent>
-      </Modal>
-
-      {/* Success Modal */}
-      <Modal isOpen={isSuccessModal} onClose={onCloseSuccessModal} isCentered>
-        <ModalOverlay />
-        <ModalContent>
-          <ModalHeader><center>Success</center></ModalHeader>
-          <ModalCloseButton />
-          <ModalBody>
-            <div className="flex flex-col text-center ">
-              <p>{getValues('name')} {update ? 'Update' : 'Create'} Successfully </p>
-              <div className="self-center">
-                <button className="bg-blue-1 rounded-lg text-white mt-4 block align-center p-3" onClick={() => {
-                  onCloseSuccessModal()
-                  setUpdate(false)
-                }}>Okay</button>
-              </div>
-            </div>
           </ModalBody>
         </ModalContent>
       </Modal>
@@ -474,40 +463,25 @@ export default function Announcement() {
       <Modal isOpen={isPublishModal} onClose={onClosePublishModal} isCentered>
         <ModalOverlay />
         <ModalContent>
-          <ModalHeader><center> Publish Announcement</center></ModalHeader>
+          <ModalHeader fontSize="md"><center> Publish Announcement</center></ModalHeader>
           <ModalBody>
-            <center className="mb-8">Are you sure to publish this Announcement ?</center>
+            <center className="mb-8 text-sm">Are you sure to publish this Announcement ?</center>
             <div className="flex gap-4 justify-center">
-              <button className="text-black-4 p-3" mr={3} onClick={onClosePublishModal}>
-                Cancel
+              <button className="text-black-4  text-sm p-2" mr={3} onClick={onClosePublishModal}>
+                Cancel 
               </button>
-              <button className="bg-blue-1 text-white p-3 rounded-lg" onClick={() => {
+              <div  onClick={() => {
                 onPublish()
                 onClosePublishModal()
-              }} onClose={onClosePublishModal}>Publish</button>
+              }} onClose={onClosePublishModal}><Button title="Publish" /> </div>
             </div>
           </ModalBody>
         </ModalContent>
       </Modal>
-      {/* Delete Confirmation */}
-      <Modal isOpen={isOpen} onClose={onClose} isCentered>
-        <ModalOverlay />
-        <ModalContent>
-          <ModalHeader><center> Delete Staff</center></ModalHeader>
-          <ModalBody>
-            <center className="mb-8">Are you sure to delete {nameDeleted} from staff ?</center>
-            <div className="flex gap-4 justify-center">
-              <button className="text-black-4 p-3" mr={3} onClick={onClose}>
-                Cancel
-              </button>
-              <button className="bg-blue-1 text-white p-3 rounded-lg" onClick={() => {
-                onDelete(selectedData)
-                onClose()
-              }} onClose={onClose}>Deleted</button>
-            </div>
-          </ModalBody>
-        </ModalContent>
-      </Modal>
+
+
+      <ModalSuccessCreateEdit isSuccessModal={isSuccessModal} onCloseSuccessModal={onCloseSuccessModal} update={update} setUpdate={(data) => setUpdate(data)} />
+      <ModalDelete isOpen={isOpen} onClose={onClose} onDelete={(data) => onDelete(data)} selectedData={selectedData} />
     </>
   )
 }

@@ -18,6 +18,9 @@ import Pagination from "../../components/Pagination/pagination";
 import apiBatch from "../../action/batch";
 import { region } from "../../action/India";
 import { Select } from '@chakra-ui/react'
+import Button from "../../components/Button/button";
+import { ModalSuccessCreateEdit } from "../../components/Modal/ModalSuccess";
+import { ModalDelete } from "../../components/Modal/ModalDelete";
 
 export default function Branch() {
   const [search, setSearch] = useState('')
@@ -200,7 +203,7 @@ export default function Branch() {
 
   return (
     <>
-      <div className="md:py-24 mt-24 md:mt-12">
+      <div className="mt-12">
         <div className="flex  gap-4 bg-white rounded-lg pt-4 px-4 mb-4">
           <div className={`${isBranch ? 'text-blue-1  border-b-2  border-blue-1' : 'text-black-5'} cursor-pointer pb-4`} onClick={() => setIsBranch(true)}>
             Institution Branches
@@ -213,17 +216,17 @@ export default function Branch() {
           <Card
             title="Institution Branches"
             right={(
-              <button className="btn btn-md bg-blue-1 text-white p-3 rounded-lg" onClick={() => {
+              <div onClick={() => {
                 getBranch()
                 setUpdate(false)
                 onOpenCreateModal()
                 setErrors(null)
                 reset()
               }}>
-                + Create Branch
-              </button>
+                <Button title="+ create Branch" />
+              </div>
             )}
-          > 
+          >
             <div className="flex gap-4 mb-4">
               <input type="text" className=" border rounded-lg w-1/2 p-2" value={search} placeholder="Search Branch" onChange={(e) => {
                 setSearch(e.target.value)
@@ -231,7 +234,7 @@ export default function Branch() {
               }} />
 
               <div className=" w-1/2 h-full  ">
-                <Select placeholder='All Status' className="h-full" size="lg" onChange={(e) => {
+                <Select placeholder='All Status' className="h-full" size="md" onChange={(e) => {
                   setStatus(e.target.value)
                   getData(search, e.target.value, limit, page)
                 }}>
@@ -298,7 +301,7 @@ export default function Branch() {
                       </tbody>
                     </table>
                   </div>
-                  <Pagination page={page} lastPage={dataInstitute.last_page} limit={limit} search={search}  status={status} total={dataInstitute.total} doLimit={data => setLimit(data)} doData={getData} />
+                  <Pagination page={page} lastPage={dataInstitute.last_page} limit={limit} search={search} status={status} total={dataInstitute.total} doLimit={data => setLimit(data)} doData={getData} />
                 </div>
               </div>
             </div>
@@ -388,22 +391,22 @@ export default function Branch() {
         motionPreset='slideInBottom'>
         <ModalOverlay />
         <ModalContent>
-          <ModalHeader>{update ? 'Edit' : 'Create'} Branch</ModalHeader>
+          <ModalHeader fontSize="md">{update ? 'Edit' : 'Create'} Branch</ModalHeader>
           <ModalCloseButton />
           <ModalBody>
-            <form onSubmit={handleSubmit(onSubmit)} className="pb-4">
+            <form onSubmit={handleSubmit(onSubmit)} className="pb-4 text-sm">
               <div className="flex gap-4">
                 <div className="w-full">
                   <p>Branch Name {errors && (
                     <span className="text-red-1 text-sm">{errors.name}</span>
                   )}</p>
-                  <input type="text" className="w-full form border p-4 rounded-lg" placeholder="Input Branch Name" {...register("name")} />
+                  <input type="text" className="w-full form border p-2 rounded" placeholder="Input Branch Name" {...register("name")} />
                 </div>
                 <div className="w-full">
                   <p>Address {errors && (
                     <span className="text-red-1 text-sm">{errors.address}</span>
                   )}</p>
-                  <input type="text" className="form border w-full p-4 rounded-lg" placeholder="Input Branch Address" {...register("address")} />
+                  <input type="text" className="form border w-full p-2 rounded" placeholder="Input Branch Address" {...register("address")} />
                 </div>
               </div>
 
@@ -412,7 +415,7 @@ export default function Branch() {
                   <p className="mt-4">State {errors && (
                     <span className="text-red-1 text-sm">{errors.state}</span>
                   )}</p>
-                  <select id="state" className="form border bg-white w-full p-4 rounded-lg" defaultValue="Select State" placeholder="Choose State" {...register("state")} onChange={chooseState}>
+                  <select id="state" className="form border bg-white w-full p-2 rounded" defaultValue="Select State" placeholder="Choose State" {...register("state")} onChange={chooseState}>
                     <option disabled>Select State</option>
                     {region.map((item) => {
                       return (
@@ -425,7 +428,7 @@ export default function Branch() {
                   <p className="mt-4">City {errors && (
                     <span className="text-red-1 text-sm">{errors.city}</span>
                   )}</p>
-                  <select className="form border bg-white w-full p-4 rounded-lg" defaultValue="Select City"  {...register("city")} >
+                  <select className="form border bg-white w-full p-2 rounded" defaultValue="Select City"  {...register("city")} >
                     <option disabled>Select City</option>
                     {cities.map((item) => (
                       <option key={item.id} value={item.name}>{item.name}</option>
@@ -439,13 +442,13 @@ export default function Branch() {
                   <p className="mt-4">Email {errors && (
                     <span className="text-red-1 text-sm">{errors.email}</span>
                   )}</p>
-                  <input type="text" className="form border p-4 w-full rounded-lg" placeholder="Input Email" {...register("email")} />
+                  <input type="text" className="form border p-2 w-full rounded" placeholder="Input Email" {...register("email")} />
                 </div>
                 <div className="w-full">
                   <p className="mt-4">Landline Number {errors && (
                     <span className="text-red-1 text-sm">{errors.landline_number}</span>
                   )}</p>
-                  <input type="number" className="form border p-4 w-full rounded-lg" placeholder="Input Landline Number" {...register("landline_number")} />
+                  <input type="number" className="form border p-2 w-full rounded" placeholder="Input Landline Number" {...register("landline_number")} />
                 </div>
               </div>
 
@@ -454,17 +457,17 @@ export default function Branch() {
                   <p className="mt-4">Phone Number {errors && (
                     <span className="text-red-1 text-sm">{errors.phone}</span>
                   )}</p>
-                  <input type="number" className="form border p-4 w-full rounded-lg" placeholder="Input Phone Number" {...register("phone")} />
+                  <input type="number" className="form border p-2 w-full rounded" placeholder="Input Phone Number" {...register("phone")} />
                 </div>
                 <div className="w-full">
                   <p className="mt-4">Pin Code {errors && (
                     <span className="text-red-1 text-sm">{errors.pin_code}</span>
                   )}</p>
-                  <input type="number" className="form border p-4 w-full rounded-lg" placeholder="Input 6-Digits Code Number" {...register("pin_code")} />
+                  <input type="number" className="form border p-2 w-full rounded" placeholder="Input 6-Digits Code Number" {...register("pin_code")} />
                 </div>
               </div>
               <div className="flex flex-row-reverse gap-4 mt-4">
-                <button type="submit" className="bg-blue-1 p-3 rounded-lg text-white" >Save</button>
+                <div type="submit" ><Button title="Save Batch" /></div>
                 <button type="button" className="text-black-4 p-3 rounded-lg" onClick={onCloseCreateModal}>Close</button>
               </div>
             </form>
@@ -477,24 +480,24 @@ export default function Branch() {
         motionPreset='slideInBottom' isCentered>
         <ModalOverlay />
         <ModalContent>
-          <ModalHeader>{updateBatch ? 'Edit' : 'Create'} Batch</ModalHeader>
+          <ModalHeader fontSize="md">{updateBatch ? 'Edit' : 'Create'} Batch</ModalHeader>
           <ModalCloseButton />
           <ModalBody>
-            <form onSubmit={handleSubmit(onSubmit)} className="pb-4">
+            <form onSubmit={handleSubmit(onSubmit)} className="pb-4 text-sm">
               <div className="w-full">
                 <p>Batch Name {errors && (
                   <span className="text-red-1 text-sm">{errors.name}</span>
                 )}</p>
-                <input type="text" className="w-full form border p-4 rounded-lg" placeholder="Input Batch Name" {...register("name")} />
+                <input type="text" className="w-full form border p-2 rounded" placeholder="Input Batch Name" {...register("name")} />
               </div>
               <div className="w-full mt-4">
                 <p>Batch Code {errors && (
                   <span className="text-red-1 text-sm">{errors.code}</span>
                 )}</p>
-                <input type="text" className="w-full form border p-4 rounded-lg" placeholder="Input Batch Code" {...register("code")} />
+                <input type="text" className="w-full form border p-2 rounded" placeholder="Input Batch Code" {...register("code")} />
               </div>
               <div className="flex flex-row-reverse gap-4 mt-4">
-                <button type="submit" className="bg-blue-1 p-3 rounded-lg text-white" >Save Batch</button>
+                <div type="submit" ><Button title="Save Batch" /></div>
                 <button type="button" className="text-black-4 p-3 rounded-lg" onClick={onCloseCreateModalBatch}>Close</button>
               </div>
             </form>
@@ -502,45 +505,8 @@ export default function Branch() {
         </ModalContent>
       </Modal>
 
-      {/* Success Modal */}
-      <Modal isOpen={isSuccessModal} onClose={onCloseSuccessModal} isCentered>
-        <ModalOverlay />
-        <ModalContent>
-          <ModalHeader><center>Success</center></ModalHeader>
-          <ModalCloseButton />
-          <ModalBody>
-            <div className="flex flex-col text-center ">
-              <p>{getValues('name')} {update ? 'Update' : 'Create'} Successfully </p>
-              <div className="self-center">
-                <button className="bg-blue-1 rounded-lg text-white mt-4 block align-center p-3" onClick={() => {
-                  onCloseSuccessModal()
-                  setUpdate(false)
-                }}>Okay</button>
-              </div>
-            </div>
-          </ModalBody>
-        </ModalContent>
-      </Modal>
-
-      {/* Delete Confirmation */}
-      <Modal isOpen={isOpen} onClose={onClose} isCentered>
-        <ModalOverlay />
-        <ModalContent>
-          <ModalHeader><center> Delete Confirmation</center></ModalHeader>
-          <ModalBody>
-            <center className="mb-8">Are you sure to delete ?</center>
-            <div className="flex gap-4 justify-center">
-              <button className="text-black-4 p-3" mr={3} onClick={onClose}>
-                Cancel
-              </button>
-              <button className="bg-blue-1 text-white p-3 rounded-lg" onClick={() => {
-                onDelete(selectedData)
-                onClose()
-              }} onClose={onClose}>Deleted</button>
-            </div>
-          </ModalBody>
-        </ModalContent>
-      </Modal>
+      <ModalSuccessCreateEdit isSuccessModal={isSuccessModal} onCloseSuccessModal={onCloseSuccessModal} update={update} setUpdate={(data) => setUpdate(data)} />
+      <ModalDelete isOpen={isOpen} onClose={onClose} onDelete={(data) => onDelete(data)} selectedData={selectedData} />
     </>
   )
 }

@@ -1,7 +1,6 @@
 import { useEffect, useState, useCallback } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { FaAngleLeft } from "react-icons/fa";
 import Card from "../../../../../components/Cards/Card";
 import Layout from "../../../../../Layout/Layout";
 import { useForm } from "react-hook-form";
@@ -18,7 +17,7 @@ import Quill from "../../../../../components/Editor/Quill";
 import { Select } from '@chakra-ui/react'
 import apiExam from "../../../../../action/exam";
 import { useRouter } from "next/router";
-import Button from "../../../../../components/Button/button";
+import Button, {BackButton} from "../../../../../components/Button/button";
 
 export default function Edit(props) {
   const Router = useRouter()
@@ -163,11 +162,9 @@ export default function Edit(props) {
 
   return (
     <div className="mt-12">
-      <Link href="/institute/exams">
-        <a className="flex gap-4 text-blue-1 my-8"><FaAngleLeft /> Back</a>
-      </Link>
+      <BackButton url="/institute/exams" />
       <Card
-        className="md:mt-8 w-full  bg-white overflow-visible text-sm" >
+        className="w-full  bg-white overflow-visible text-sm" >
         <form onSubmit={handleSubmit(submitQuiz)}>
           {questions.map((itemQuestion, indexQuestion) => {
             return (

@@ -98,27 +98,27 @@ function Sidebar() {
     icon: uri + 'ic_home.png',
     active: uri + 'ic_home_active.png',
     name: 'Home',
-    path: '/institute/home'
+    path: '/staff/home'
   }, {
     icon: uri + 'ic_institute_branch.png',
     active: uri + 'ic_institute_branch_active.png',
     name: 'Institute Branch',
-    path: '/institute/branch'
+    path: '/staff/branch'
   }, {
     icon: uri + 'ic_student.png',
     active: uri + 'ic_student_active.png',
     name: 'Students',
-    path: '/institute/student'
+    path: '/staff/student'
   }, {
     icon: uri + 'ic_exams.png',
     active: uri + 'ic_exams_active.png',
     name: 'Exams',
-    path: '/institute/exams'
+    path: '/staff/exams'
   }, {
     icon: uri + 'ic_announcement.png',
     active: uri + 'ic_announcement_active.png',
     name: 'Announcement',
-    path: '/institute/announcement'
+    path: '/staff/announcement'
   },
   ]
   const operator = [{

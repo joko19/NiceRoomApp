@@ -18,7 +18,7 @@ import QuillCreated from "../../../../components/Editor/QuillCreated";
 import { Select } from '@chakra-ui/react'
 import apiExam from "../../../../action/exam";
 import { useRouter } from "next/router";
-import Button from "../../../../components/Button/button";
+import Button, { BackButton } from "../../../../components/Button/button";
 
 export default function Create(props) {
   const Router = useRouter()
@@ -111,11 +111,9 @@ export default function Create(props) {
 
   return (
     <div className="mt-12">
-      <Link href="/institute/exams">
-        <a className="flex gap-4 text-blue-1 my-8"><FaAngleLeft /> Back</a>
-      </Link>
+      <BackButton url="/institute/exams" />
       <Card
-        className="md:mt-8 w-full  bg-white overflow-visible" >
+        className="w-full  bg-white overflow-visible" >
         <form onSubmit={handleSubmit(submitQuiz)}>
           {questions.map((itemQuestion, indexQuestion) => {
             return (

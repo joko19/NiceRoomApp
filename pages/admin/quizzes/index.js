@@ -116,7 +116,7 @@ export default function Create() {
                           <td className="px-6 py-4 whitespace-nowrap">
                             <div>{item.type}</div>
                           </td>
-                          <td className="">
+                          <td>
                             <div className={`${item.status === 'draft' ? 'bg-black-8 text-black-3' : 'bg-green-2 text-green-1'} text-center w-24 flex-0 m-auto font-bold  rounded-lg py-3 `}>
                               {item.status === 'draft' ? 'Draft' : 'Published'}
                             </div>
