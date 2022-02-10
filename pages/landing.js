@@ -155,7 +155,7 @@ function Landing(props) {
           )}
 
           {formStatus === 'register' && (
-            <form onSubmit={handleSubmit(onRegister)} className="my-40 bg-white rounded-lg m-4 p-4 w-96 p-6 mx-auto md:mx-auto">
+            <form onSubmit={handleSubmit(onRegister)} className="my-40 bg-white rounded-lg m-4 p-4  p-6 mx-auto md:mx-auto">
               <h1 className="text-xl text-center">Create Account</h1>
               <p className="text-black-3 text-center">create an account and get a lot of benefits</p>
               <p className="mt-4">Full Name {errors && errors.data && (

@@ -139,26 +139,26 @@ function Sidebar() {
   },
   ]
   useEffect(() => {
-    if (router.pathname.startsWith("/admin") && roleStore === role.admin)
+    if (roleStore === role.admin)
       setItemList(admin)
-    if (router.pathname.startsWith("/institute") && roleStore === role.instituteAdmin)
+    if (roleStore === role.instituteAdmin)
       setItemList(instituteAdmin)
-    if (router.pathname.startsWith("/operator") && roleStore === role.operator)
+    if (roleStore === role.operator)
       setItemList(operator)
-    if (router.pathname.startsWith("/staff") && roleStore === role.staff)
+    if (roleStore === role.staff)
       setItemList(staff)
   }, [])
   return (
     <div className="py-16 bg-white h-full">
-      {router.pathname.startsWith("/institute") && roleStore === role.instituteAdmin && (
-        <div className="bg-black-9 m-2 rounded-lg p-4 flex gap-4 mb-8">
-          <Image src="/asset/icon/sidebar/ic_college.png" height="48" width="48" alt="icon campus" />
+      {roleStore === role.instituteAdmin && (
+        <div className="bg-black-9 m-2 rounded-lg p-2 flex gap-4 mb-2">
+          <Image src="/asset/icon/sidebar/ic_college.png" height="32" width="32" alt="icon campus" />
           <span className="text-black-1 m-auto">Hardvard Campus</span>
         </div>
       )}
-      {router.pathname.startsWith("/staff") && roleStore === role.staff && (
-        <div className="bg-black-9 m-2 rounded-lg p-4 flex gap-4 mb-8">
-          <Image src="/asset/icon/sidebar/ic_college.png" height="48" width="48" alt="icon campus" />
+      {roleStore === role.staff && (
+        <div className="bg-black-9 m-2 rounded-lg p-2 flex gap-4 mb-2">
+          <Image src="/asset/icon/sidebar/ic_college.png" height="32" width="32" alt="icon campus" />
           <span className="text-black-1 m-auto">Hardvard Campus</span>
         </div>
       )}

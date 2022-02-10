@@ -36,7 +36,6 @@ export default function Branch() {
   const [nameDeleted, setNameDeleted] = useState()
   const [passwd, setpasswd] = useState(true)
   const [branch, setBranch] = useState([])
-  const [passwdConfirmation, setpasswdConfirmation] = useState(true)
   const {
     isOpen: isCreateModal,
     onOpen: onOpenCreateModal,
@@ -310,18 +309,18 @@ export default function Branch() {
           <Card
             title="Institution Batches"
             right={(
-              <button className="btn btn-md bg-blue-1 text-white p-3 rounded-lg" onClick={() => {
+              <div onClick={() => {
                 getBranch()
                 setUpdateBatch(false)
                 onOpenCreateModalBatch()
                 setErrors(null)
                 reset()
               }}>
-                + Create Batch
-              </button>
+                <Button title="+ Create Batch" />
+              </div>
             )}
           >
-            <input type="text" className="p-4 border rounded-lg w-1/2 mb-4" value={searchBatch} placeholder="Search Batch" onChange={(e) => {
+            <input type="text" className="p-2 border rounded w-1/2 mb-4" value={searchBatch} placeholder="Search Batch" onChange={(e) => {
               setSearchBatch(e.target.value)
               getBatch(e.target.value, limit, page)
             }} />

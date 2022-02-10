@@ -27,11 +27,12 @@ export default function Index() {
   const [selectedData, setSelectedData] = useState(null)
   const [dataInstitute, setDataInstitute] = useState([])
   const [list, setList] = useState([])
-  const TableHead = ['Exam Name', 'Type', 'Status', 'Action']
+  const TableHead = ['Exam Name', 'Type', 'Start Date', 'Status', 'Action']
 
   const getData = async (search, type, status, limit, page) => {
     await apiExam.index(search, type, status, limit, page)
       .then((res) => {
+        console.log(res.data.data)
         setDataInstitute(res.data.data)
         setList(res.data.data.data)
         setPage(res.data.data.current_page)
@@ -114,9 +115,11 @@ export default function Index() {
                           </div>
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap text-center">
-                          <div>{item.exam_type.name}</div>
+                          <div>{item.type}</div>
                         </td>
-                       
+                        <td className="px-6 py-4 whitespace-nowrap text-center">
+                          <div>{item.start_date ? item.start_date : '-'}</div>
+                        </td>
                         <td className="">
                             <div className={`${item.status === 'draft' ? 'bg-black-8 text-black-3' : 'bg-green-2 text-green-1'} text-center w-24 flex-0 m-auto font-bold  rounded-lg py-3 `}>
                               {item.status === 'draft' ? 'Draft' : 'Published'}
