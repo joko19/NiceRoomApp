@@ -313,7 +313,7 @@ export default function Create(props) {
                       setValue("type", "live")
                     }}>
                       <div  >
-                        <Image src={`${type === 'live' ? "/asset/icon/table/ic_radio_active.png" : "/asset/icon/table/ic_radio.png"}`} height={16} width={16} className="flex align-middle my-auto" />
+                        <Image src={`${type === 'live' ? "/asset/icon/table/ic_radio_active.svg" : "/asset/icon/table/ic_radio.svg"}`} height={16} width={16} className="flex align-middle my-auto" />
                       </div>
                       <p className={`${type === 'live' ? 'text-blue-1' : 'text-black-5'}`}>
                         Live Exam
@@ -324,7 +324,7 @@ export default function Create(props) {
                       setValue("type", "standard")
                     }}>
                       <div >
-                        <Image src={`${type === 'standard' ? "/asset/icon/table/ic_radio_active.png" : "/asset/icon/table/ic_radio.png"}`} height={16} width={16} className="flex align-middle my-auto" />
+                        <Image src={`${type === 'standard' ? "/asset/icon/table/ic_radio_active.svg" : "/asset/icon/table/ic_radio.svg"}`} height={16} width={16} className="flex align-middle my-auto" />
                       </div>
                       <p className={`${type === 'standard' ? 'text-blue-1' : 'text-black-5'}`}>
                         Standard Exam

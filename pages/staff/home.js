@@ -172,7 +172,7 @@ export default function Student() {
       <div className="mt-12 md:mt-8">
         <div className="flex">
           <div className="flex w-full gap-4 p-4 bg-white rounded-lg my-4">
-            <img className="w-12 h-12" src="/asset/icon/table/ic_school.png" />
+            <img className="w-12 h-12" src="/asset/icon/table/ic_school.svg" />
             <div>
               <p className="font-bold text-blue-1 text-2xl">
                 {/* {listInstitute.length} */}
@@ -182,7 +182,7 @@ export default function Student() {
             </div>
           </div>
           <div className="flex w-full gap-4 p-4 bg-white rounded-lg ml-4 my-4">
-            <img className="w-12 h-12" src="/asset/icon/table/ic_read.png" />
+            <img className="w-12 h-12" src="/asset/icon/table/ic_read.svg" />
             <div>
               <p className="font-bold text-yellow-1 text-2xl">
                 120.000
@@ -279,7 +279,7 @@ export default function Student() {
                           <td className="px-6 py-4 whitespace-nowrap flex text-right gap-2 text-sm font-medium">
                             <Link href={`/admin/institution/${item.id}`}>
                               <a className="text-indigo-600 hover:text-indigo-900">
-                                <Image src="/asset/icon/table/fi_eye.png" width={16} height={16} alt="icon detail" />
+                                <Image src="/asset/icon/table/fi_eye.svg" width={16} height={16} alt="icon detail" />
                               </a>
                             </Link>
                             <button className="text-indigo-600 hover:text-indigo-900" onClick={() => {
@@ -289,10 +289,10 @@ export default function Student() {
                               onOpenCreateModal()
                               setErrors(null)
                             }}>
-                              <Image src="/asset/icon/table/fi_edit.png" width={16} height={16} alt="icon edit" />
+                              <Image src="/asset/icon/table/fi_edit.svg" width={16} height={16} alt="icon edit" />
                             </button>
                             <button href="#" className="text-indigo-600 hover:text-indigo-900">
-                              <Image src="/asset/icon/table/fi_trash-2.png" width={16} height={16} alt="icon deleted" onClick={() => {
+                              <Image src="/asset/icon/table/fi_trash-2.svg" width={16} height={16} alt="icon deleted" onClick={() => {
                                 setNameDeleted(item.user.name)
                                 setSelectedData(item.user.id),
                                   onOpen()

@@ -123,7 +123,7 @@ export default function News(props) {
                               <>
                                 <Link href={`news/edit/${item.id}`}>
                                   <a className="text-indigo-600 hover:text-indigo-900">
-                                    <Image src="/asset/icon/table/fi_edit.png" width={16} height={16} alt="icon edit" />
+                                    <Image src="/asset/icon/table/fi_edit.svg" width={16} height={16} alt="icon edit" />
                                   </a>
                                 </Link>
                                 <button onClick={() => {
@@ -133,7 +133,7 @@ export default function News(props) {
                                   onOpenConfirmModal()
 
                                 }}>
-                                  <Image src="/asset/icon/table/ic_repeat.png" width={16} height={16} alt="icon publish" />
+                                  <Image src="/asset/icon/table/ic_repeat.svg" width={16} height={16} alt="icon publish" />
                                 </button>
                               </>
                             ) : (
@@ -143,12 +143,12 @@ export default function News(props) {
                                 setSelectedData(item.id)
                                 onOpenConfirmModal()
                               }}>
-                                <Image src="/asset/icon/table/ic_repeat.png" width={16} height={16} alt="icon unpublish" />
+                                <Image src="/asset/icon/table/ic_repeat.svg" width={16} height={16} alt="icon unpublish" />
                               </button>
 
                             )}
                             <a href="#" className="text-indigo-600 hover:text-indigo-900">
-                              <Image src="/asset/icon/table/fi_trash-2.png" width={16} height={16} alt="icon delete" onClick={() => {
+                              <Image src="/asset/icon/table/fi_trash-2.svg" width={16} height={16} alt="icon delete" onClick={() => {
                                 setSelectedData(item.id),
                                   onOpen()
                               }} />

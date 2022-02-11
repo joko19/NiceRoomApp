@@ -62,7 +62,7 @@ function Header(props) {
           </ul>
         </div>
         <div className="md:flex hidden md:flex-row flex-col gap-4 justify-center">
-          <Select defaultValue="Select Category" placeholder="Select Category" bg='white' className="text-blue-1" size="md" variant='outline' iconColor="blue">
+          <Select defaultValue="Select Category" placeholder="Select Category" bg='white' size="md" variant='outline' iconColor="blue">
             {category.map((item) => (
               <option key={item.id}>{item.name}</option>
             ))}

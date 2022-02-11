@@ -258,7 +258,7 @@ export default function Student() {
                           <td className="px-6 py-4 whitespace-nowrap flex text-right gap-2 text-sm font-medium">
                             <Link href={`/admin/institution/${item.id}`}>
                               <a className="text-indigo-600 hover:text-indigo-900">
-                                <Image src="/asset/icon/table/fi_eye.png" width={16} height={16} alt="icon detail" />
+                                <Image src="/asset/icon/table/fi_eye.svg" width={16} height={16} alt="icon detail" />
                               </a>
                             </Link>
                             <button className="text-indigo-600 hover:text-indigo-900" onClick={() => {
@@ -268,10 +268,10 @@ export default function Student() {
                               onOpenCreateModal()
                               setErrors(null)
                             }}>
-                              <Image src="/asset/icon/table/fi_edit.png" width={16} height={16} alt="icon edit" />
+                              <Image src="/asset/icon/table/fi_edit.svg" width={16} height={16} alt="icon edit" />
                             </button>
                             <button href="#" className="text-indigo-600 hover:text-indigo-900">
-                              <Image src="/asset/icon/table/fi_trash-2.png" width={16} height={16} alt="icon deleted" onClick={() => {
+                              <Image src="/asset/icon/table/fi_trash-2.svg" width={16} height={16} alt="icon deleted" onClick={() => {
                                 setNameDeleted(item.user.name)
                                 setSelectedData(item.user.id),
                                   onOpen()

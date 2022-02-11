@@ -194,7 +194,7 @@ export default function InstituteAdmin(props) {
                               setDetail(item)
                               onOpenDetailModal()
                             }}>
-                            <Image src="/asset/icon/table/fi_eye.png" width={16} height={16} alt="icon edit" />
+                            <Image src="/asset/icon/table/fi_eye.svg" width={16} height={16} alt="icon edit" />
                           </button>
 
                           <button className="text-indigo-600 hover:text-indigo-900"
@@ -205,10 +205,10 @@ export default function InstituteAdmin(props) {
                               onOpenCreateModal()
                               setErrors(null)
                             }}>
-                            <Image src="/asset/icon/table/fi_edit.png" width={16} height={16} alt="icon edit" />
+                            <Image src="/asset/icon/table/fi_edit.svg" width={16} height={16} alt="icon edit" />
                           </button>
                           <a href="#" className="text-indigo-600 hover:text-indigo-900">
-                            <Image src="/asset/icon/table/fi_trash-2.png" width={16} height={16} alt="icon edit" onClick={() => {
+                            <Image src="/asset/icon/table/fi_trash-2.svg" width={16} height={16} alt="icon edit" onClick={() => {
                               setSelectedData(item.id),
                                 onOpen()
                             }} />

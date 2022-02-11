@@ -205,10 +205,10 @@ export default function Branch() {
     <>
       <div className="mt-12">
         <div className="flex  gap-4 bg-white rounded-lg pt-4 px-4 mb-4">
-          <div className={`${isBranch ? 'text-blue-1  border-b-2  border-blue-1' : 'text-black-5'} cursor-pointer pb-4`} onClick={() => setIsBranch(true)}>
+          <div className={`${isBranch ? 'text-blue-1 font-bold  border-b-2  border-blue-1' : 'text-black-5'} cursor-pointer pb-4`} onClick={() => setIsBranch(true)}>
             Institution Branches
           </div>
-          <div className={`${!isBranch ? 'text-blue-1 border-b-2  border-blue-1' : 'text-black-5'} cursor-pointer pb-4 `} onClick={() => setIsBranch(false)}>
+          <div className={`${!isBranch ? 'text-blue-1 border-b-2 font-bold  border-blue-1' : 'text-black-5'} cursor-pointer pb-4 `} onClick={() => setIsBranch(false)}>
             Institution Batches
           </div>
         </div>
@@ -223,7 +223,7 @@ export default function Branch() {
                 setErrors(null)
                 reset()
               }}>
-                <Button title="+ create Branch" />
+                <Button title="+ Create Branch" />
               </div>
             )}
           >
@@ -286,10 +286,10 @@ export default function Branch() {
                                 onOpenCreateModal()
                                 setErrors(null)
                               }}>
-                                <Image src="/asset/icon/table/fi_edit.png" width={16} height={16} alt="icon edit" />
+                                <Image src="/asset/icon/table/fi_edit.svg" width={16} height={16} alt="icon edit" />
                               </button>
                               <button href="#" className="text-indigo-600 hover:text-indigo-900">
-                                <Image src="/asset/icon/table/fi_trash-2.png" width={16} height={16} alt="icon deleted" onClick={() => {
+                                <Image src="/asset/icon/table/fi_trash-2.svg" width={16} height={16} alt="icon deleted" onClick={() => {
                                   setNameDeleted(item.name)
                                   setSelectedData(item.id),
                                     onOpen()
@@ -363,10 +363,10 @@ export default function Branch() {
                                 onOpenCreateModalBatch()
                                 setErrors(null)
                               }}>
-                                <Image src="/asset/icon/table/fi_edit.png" width={16} height={16} alt="icon edit" />
+                                <Image src="/asset/icon/table/fi_edit.svg" width={16} height={16} alt="icon edit" />
                               </button>
                               <button href="#" className="text-indigo-600 hover:text-indigo-900">
-                                <Image src="/asset/icon/table/fi_trash-2.png" width={16} height={16} alt="icon deleted" onClick={() => {
+                                <Image src="/asset/icon/table/fi_trash-2.svg" width={16} height={16} alt="icon deleted" onClick={() => {
                                   setNameDeleted(item.name)
                                   setSelectedData(item.id),
                                     onOpen()

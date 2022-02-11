@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import Footer from '../components/footer/footer'
@@ -25,6 +25,13 @@ function Landing(props) {
   const [errors, setErrors] = useState(null)
   const { register, handleSubmit, resetField, reset, getValues } = useForm();
 
+  const { pathname } = useRouter();
+
+  useEffect(() => {
+    // some browsers (like safari) may require a timeout to delay calling this
+    // function after a page has loaded; otherwise, it may not update the position
+    window.scrollTo(0, 0);
+  }, [Router]);
   useEffect(() => {
     const uri = Router.asPath.split('#')
     if (uri[1] === 'register') {

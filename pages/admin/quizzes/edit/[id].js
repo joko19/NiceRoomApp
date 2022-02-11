@@ -543,7 +543,7 @@ export default function Create(props) {
                                   }}>
                                     <div className="m-auto" >
                                       {itemAnswer.correct === 1 ? (
-                                        <Image src='/asset/icon/table/ic_radio_active.png' width={16} height={16} />
+                                        <Image src='/asset/icon/table/ic_radio_active.svg' width={16} height={16} />
                                       ) : (
                                         <div className="border w-4 rounded-full h-4" />
                                       )}
@@ -568,7 +568,7 @@ export default function Create(props) {
                                   }}>
                                     <div className="m-auto" >
                                       {itemAnswer.correct === 1 ? (
-                                        <Image src='/asset/icon/table/ic_checkbox_active.png' width={16} height={16} />
+                                        <Image src='/asset/icon/table/ic_checkbox_active.svg' width={16} height={16} />
                                       ) : (
                                         <div className="border w-4 rounded h-4" />
                                       )}
@@ -616,7 +616,7 @@ export default function Create(props) {
                                     }
                                     setQuestions([...temp])
                                   }} >
-                                    <Image src="/asset/icon/table/fi_trash-2.png" width={16} height={16} alt="icon delete" />
+                                    <Image src="/asset/icon/table/fi_trash-2.svg" width={16} height={16} alt="icon delete" />
                                   </div>
                                 )}
                               </div>

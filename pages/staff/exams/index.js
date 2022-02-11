@@ -129,7 +129,7 @@ export default function Index() {
                           <div className="flex m-auto gap-3 p-3">
                             <Link href={`exams/${item.id}`}>
                               <a className="text-indigo-600 hover:text-indigo-900 m-auto">
-                                <Image src="/asset/icon/table/fi_edit.png" width={16} height={16} alt="icon edit" />
+                                <Image src="/asset/icon/table/fi_edit.svg" width={16} height={16} alt="icon edit" />
                                 <span className="text-blue-1 inline-block align-top"> Detail Exam</span>
                               </a>
                             </Link>
@@ -137,7 +137,7 @@ export default function Index() {
                               setSelectedData(item.id),
                                 onOpen()
                             }}>
-                              <Image src="/asset/icon/table/fi_trash_red.png" className="inline-block align-baseline " width={16} height={16} alt="icon deleted" />
+                              <Image src="/asset/icon/table/fi_trash_red.svg" className="inline-block align-baseline " width={16} height={16} alt="icon deleted" />
                               <span className="text-red-1 inline-block align-top">  Delete</span>
                             </button>
                           </div>

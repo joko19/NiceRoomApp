@@ -96,7 +96,7 @@ export default function Institute() {
         <div className="bg-white p-4 rounded-lg text-sm">
           <div className="flex flex-auto w-full flex-row gap-4 m-4 space-between">
             <div className="flex">
-              <img src="/asset/icon/table/ic_building.png" alt="icon university " className="bg-cover h-12 w-12" />
+              <img src="/asset/icon/table/ic_building.svg" alt="icon university " className="bg-cover h-12 w-12" />
             </div>
             <div className="flex flex-col flex-1">
               <h1 className="font-bold">{dataInstitute.name}</h1>

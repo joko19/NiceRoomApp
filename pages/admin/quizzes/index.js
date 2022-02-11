@@ -125,11 +125,11 @@ export default function Create() {
                             <div className="mx-auto flex gap-4">
                               <Link href={`quizzes/edit/${item.id}`}>
                                 <a className="text-indigo-600 hover:text-indigo-900">
-                                  <Image src="/asset/icon/table/fi_edit.png" width={16} height={16} alt="icon edit" />
+                                  <Image src="/asset/icon/table/fi_edit.svg" width={16} height={16} alt="icon edit" />
                                 </a>
                               </Link>
                               <button href="#" className="text-indigo-600 hover:text-indigo-900">
-                                <Image src="/asset/icon/table/fi_trash-2.png" width={16} height={16} alt="icon deleted" onClick={() => {
+                                <Image src="/asset/icon/table/fi_trash-2.svg" width={16} height={16} alt="icon deleted" onClick={() => {
                                   // setNameDeleted(item.name)
                                   setSelectedData(item.id),
                                     onOpen()

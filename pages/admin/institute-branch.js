@@ -107,14 +107,14 @@ export default function InstituteBranch(props) {
                           {item.status === 'pending' && (
                             <>
                               <button href="#" className="text-indigo-600 hover:text-indigo-900">
-                                <Image src="/asset/icon/table/ic_decline.png" width={32} height={32} alt="icon rejected" onClick={() => {
+                                <Image src="/asset/icon/table/ic_decline.svg" width={32} height={32} alt="icon rejected" onClick={() => {
                                   setSelectedId(item.id)
                                   setStatusAction("reject")
                                   onOpen()
                                 }} />
                               </button>
                               <button href="#" className="text-indigo-600 hover:text-indigo-900">
-                                <Image src="/asset/icon/table/ic_acc.png" width={32} height={32} alt="icon approve" onClick={() => {
+                                <Image src="/asset/icon/table/ic_acc.svg" width={32} height={32} alt="icon approve" onClick={() => {
                                   setSelectedId(item.id)
                                   setStatusAction("approve")
                                   onOpen()
