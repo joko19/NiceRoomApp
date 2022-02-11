@@ -11,129 +11,129 @@ function Sidebar() {
   const uri = "/asset/icon/sidebar/"
   const roleStore = store.getState().auth.user.user.roles[0].name
   const admin = [{
-    icon: uri + 'ic_home.png',
-    active: uri + 'ic_home_active.png',
+    icon: uri + 'ic_home.svg',
+    active: uri + 'ic_home_active.svg',
     name: 'Home',
     path: '/admin/dashboard'
   }, {
-    icon: uri + 'ic_institute.png',
-    active: uri + 'ic_institute_active.png',
+    icon: uri + 'ic_institute.svg',
+    active: uri + 'ic_institute_active.svg',
     name: 'Institute',
     path: '/admin/institution'
   }, {
-    icon: uri + 'ic_institute_admin.png',
-    active: uri + 'ic_institute_admin_active.png',
+    icon: uri + 'ic_institute_admin.svg',
+    active: uri + 'ic_institute_admin_active.svg',
     name: 'Institute Admin',
     path: '/admin/institute-admin'
   }, {
-    icon: uri + 'ic_institute_branch.png',
-    active: uri + 'ic_institute_branch_active.png',
+    icon: uri + 'ic_institute_branch.svg',
+    active: uri + 'ic_institute_branch_active.svg',
     name: 'Institute Branch',
     path: '/admin/institute-branch'
   }, {
-    icon: uri + 'ic_operator.png',
-    active: uri + 'ic_operator_active.png',
+    icon: uri + 'ic_operator.svg',
+    active: uri + 'ic_operator_active.svg',
     name: 'Operator Team',
     path: '/admin/operator'
   }, {
-    icon: uri + 'ic_topics.png',
-    active: uri + 'ic_topics_active.png',
+    icon: uri + 'ic_topics.svg',
+    active: uri + 'ic_topics_active.svg',
     name: 'Topics',
     path: '/admin/topics'
   }, {
-    icon: uri + 'ic_exams.png',
-    active: uri + 'ic_exams_active.png',
+    icon: uri + 'ic_exams.svg',
+    active: uri + 'ic_exams_active.svg',
     name: 'Exams',
     path: '/admin/exams'
   }, {
-    icon: uri + 'ic_practice.png',
-    active: uri + 'ic_practice_active.png',
+    icon: uri + 'ic_practice.svg',
+    active: uri + 'ic_practice_active.svg',
     name: 'Practice Test',
     path: '/admin/practice'
   }, {
-    icon: uri + 'ic_quizzes.png',
-    active: uri + 'ic_quizzes_active.png',
+    icon: uri + 'ic_quizzes.svg',
+    active: uri + 'ic_quizzes_active.svg',
     name: 'Quizzes',
     path: '/admin/quizzes'
   }, {
-    icon: uri + 'ic_news.png',
-    active: uri + 'ic_news_active.png',
+    icon: uri + 'ic_news.svg',
+    active: uri + 'ic_news_active.svg',
     name: 'News',
     path: '/admin/news'
   },
   ]
   const instituteAdmin = [{
-    icon: uri + 'ic_home.png',
-    active: uri + 'ic_home_active.png',
+    icon: uri + 'ic_home.svg',
+    active: uri + 'ic_home_active.svg',
     name: 'Home',
     path: '/institute/home'
   }, {
-    icon: uri + 'ic_institute_branch.png',
-    active: uri + 'ic_institute_branch_active.png',
+    icon: uri + 'ic_institute_branch.svg',
+    active: uri + 'ic_institute_branch_active.svg',
     name: 'Institute Branch',
     path: '/institute/branch'
   }, {
-    icon: uri + 'ic_institute_admin.png',
-    active: uri + 'ic_institute_admin_active.png',
+    icon: uri + 'ic_institute_admin.svg',
+    active: uri + 'ic_institute_admin_active.svg',
     name: 'Staff',
     path: '/institute/staff'
   }, {
-    icon: uri + 'ic_student.png',
-    active: uri + 'ic_student_active.png',
+    icon: uri + 'ic_student.svg',
+    active: uri + 'ic_student_active.svg',
     name: 'Students',
     path: '/institute/student'
   }, {
-    icon: uri + 'ic_exams.png',
-    active: uri + 'ic_exams_active.png',
+    icon: uri + 'ic_exams.svg',
+    active: uri + 'ic_exams_active.svg',
     name: 'Exams',
     path: '/institute/exams'
   }, {
-    icon: uri + 'ic_announcement.png',
-    active: uri + 'ic_announcement_active.png',
+    icon: uri + 'ic_announcement.svg',
+    active: uri + 'ic_announcement_active.svg',
     name: 'Announcement',
     path: '/institute/announcement'
   },
   ]
   const staff = [{
-    icon: uri + 'ic_home.png',
-    active: uri + 'ic_home_active.png',
+    icon: uri + 'ic_home.svg',
+    active: uri + 'ic_home_active.svg',
     name: 'Home',
     path: '/staff/home'
   }, {
-    icon: uri + 'ic_institute_branch.png',
-    active: uri + 'ic_institute_branch_active.png',
+    icon: uri + 'ic_institute_branch.svg',
+    active: uri + 'ic_institute_branch_active.svg',
     name: 'Institute Branch',
     path: '/staff/branch'
   }, {
-    icon: uri + 'ic_student.png',
-    active: uri + 'ic_student_active.png',
+    icon: uri + 'ic_student.svg',
+    active: uri + 'ic_student_active.svg',
     name: 'Students',
     path: '/staff/student'
   }, {
-    icon: uri + 'ic_exams.png',
-    active: uri + 'ic_exams_active.png',
+    icon: uri + 'ic_exams.svg',
+    active: uri + 'ic_exams_active.svg',
     name: 'Exams',
     path: '/staff/exams'
   }, {
-    icon: uri + 'ic_announcement.png',
-    active: uri + 'ic_announcement_active.png',
+    icon: uri + 'ic_announcement.svg',
+    active: uri + 'ic_announcement_active.svg',
     name: 'Announcement',
     path: '/staff/announcement'
   },
   ]
   const operator = [{
-    icon: uri + 'ic_exams.png',
-    active: uri + 'ic_exams_active.png',
+    icon: uri + 'ic_exams.svg',
+    active: uri + 'ic_exams_active.svg',
     name: 'Exams',
     path: '/operator/exams'
   }, {
-    icon: uri + 'ic_practice.png',
-    active: uri + 'ic_practice_active.png',
+    icon: uri + 'ic_practice.svg',
+    active: uri + 'ic_practice_active.svg',
     name: 'Practice Test',
     path: '/operator/practice'
   }, {
-    icon: uri + 'ic_quizzes.png',
-    active: uri + 'ic_quizzes_active.png',
+    icon: uri + 'ic_quizzes.svg',
+    active: uri + 'ic_quizzes_active.svg',
     name: 'Quizzes',
     path: '/operator/quizzes'
   },
@@ -152,13 +152,13 @@ function Sidebar() {
     <div className="py-16 bg-white h-full">
       {roleStore === role.instituteAdmin && (
         <div className="bg-black-9 m-2 rounded-lg p-2 flex gap-4 mb-2">
-          <Image src="/asset/icon/sidebar/ic_college.png" height="32" width="32" alt="icon campus" />
+          <Image src="/asset/icon/sidebar/ic_college.svg" height="32" width="32" alt="icon campus" />
           <span className="text-black-1 m-auto">Hardvard Campus</span>
         </div>
       )}
       {roleStore === role.staff && (
         <div className="bg-black-9 m-2 rounded-lg p-2 flex gap-4 mb-2">
-          <Image src="/asset/icon/sidebar/ic_college.png" height="32" width="32" alt="icon campus" />
+          <Image src="/asset/icon/sidebar/ic_college.svg" height="32" width="32" alt="icon campus" />
           <span className="text-black-1 m-auto">Hardvard Campus</span>
         </div>
       )}
