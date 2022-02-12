@@ -30,3 +30,13 @@ tr:nth-child(odd) {
   height: '100%'
 }
 
+
+.destination-itemcontainer {
+  display: flex;
+  overflow-y: hidden;
+  margin: 8px 4px 15px;
+}
+
+.destination-itemcontainer::-webkit-scrollbar{
+    display: none;
+}

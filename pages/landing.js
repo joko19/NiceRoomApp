@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react'
+import { useState, useRef } from 'react'
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import Footer from '../components/footer/footer'
@@ -12,11 +12,12 @@ import { useToast } from '@chakra-ui/react'
 import { useRouter } from "next/router";
 import Button from '../components/Button/button'
 import Image from 'next/image';
+import Slider from '../components/Slider/Slider';
 
 function Landing(props) {
   const Router = useRouter()
   const toast = useToast()
-  const list = [1, 2, 3]
+  const list = [1, 2, 3, 4, 5, 6]
   const [passwdLogin, setPasswdLogin] = useState(true)
   const [passwdRegister, setPasswdRegister] = useState(true)
   const [confirm, setConfirm] = useState(true)
@@ -27,17 +28,17 @@ function Landing(props) {
 
   const { pathname } = useRouter();
 
-  useEffect(() => {
-    // some browsers (like safari) may require a timeout to delay calling this
-    // function after a page has loaded; otherwise, it may not update the position
-    window.scrollTo(0, 0);
-  }, [Router]);
-  useEffect(() => {
-    const uri = Router.asPath.split('#')
-    if (uri[1] === 'register') {
-      setFormStatus('register')
-    }
-  }, [])
+  // useEffect(() => {
+  //   // some browsers (like safari) may require a timeout to delay calling this
+  //   // function after a page has loaded; otherwise, it may not update the position
+  //   window.scrollTo(0, 0);
+  // }, [Router]);
+  // useEffect(() => {
+  //   const uri = Router.asPath.split('#')
+  //   if (uri[1] === 'register') {
+  //     setFormStatus('register')
+  //   }
+  // }, [])
 
   const onRegister = async () => {
     const data = {
@@ -108,161 +109,181 @@ function Landing(props) {
     setFormStatus(to)
   }
 
+  const listRef = useRef(null);
+
+  const scrollRight = () => {
+    if (listRef.current) {
+      listRef.current.scrollBy({
+        top: 0,
+        left: 300,
+        behavior: "smooth",
+      });
+    }
+  };
+
+  const scrollLeft = () => {
+    if (listRef.current) {
+      listRef.current.scrollBy({
+        top: 0,
+        left: -300,
+        behavior: "smooth",
+      });
+    }
+  };
   return (
     <>
-    <section className='bg'>
-      <img src='/asset/img/background.png' className='bg-img' />
-      <section >
-        <Header />
-        <div className="grid md:grid-cols-2 ">
-          <div className="pt-36 pl-36 hidden md:flex md:flex-col text-white">
-            <h1 className="font-bold text-5xl">All-in-One Sites <br />
-              for Preparation Exam</h1>
-            <p className="mt-2">Makes preparation simplified with Examz</p>
-          </div>
-          {formStatus === 'login' && (
-            <div className='my-40 bg-white rounded-lg w-96 p-6 mx-auto md:mx-auto'>
-              <form onSubmit={handleSubmit(onLogin)}>
-                <h1 className="text-xl text-center">Welcome to Examz!</h1>
-                <p className="text-black-3 text-center">Be ready for exam with us</p>
-                <p className="mt-4">Email / Phone {errors && errors.data && (
-                  <span className="text-red-1 text-sm">{errors.data.email}</span>
-                )}</p>
-                <input type="text" className="p-2 border rounded w-full" placeholder="Input Email or Phone" {...register("email")} />
-                <p className="mt-4">Password {errors && errors.data && (
-                  <span className="text-red-1 text-sm">{errors.data.password}</span>
-                )}</p>
-                <div className="relative">
-                  <input type={`${passwdLogin ? 'password' : 'text'}`} className="form w-full border p-2 mb-2 rounded" placeholder="Input New Password" {...register("password")} />
-                  <span className="absolute inset-y-0 cursor-pointer right-0 pr-3 flex items-center text-sm leading-5" onClick={() => {
-                    passwdLogin ? setPasswdLogin(false) : setPasswdLogin(true)
-                  }}>
-                    {passwdLogin ?
-                      (<FaEyeSlash className=" z-10 inline-block align-middle" />) :
-                      (<FaEye className=" z-10 inline-block align-middle" />)
-                    }
-                  </span>
-                </div>
-                <span className="text-right text-end mt-4 text-black-3 cursor-pointer hover:text-blue-1" onClick={() => {
-                  setErrors(null)
-                  setFormStatus('forgotPassword')
-                }}>Forgot Password ?</span>
-                {errors && errors.message === 'Unauthorized' && (
-                  <p className="text-red-1 text-sm">Check your email or password</p>
-                )}
-                <button type="submit" className="w-full bg-yellow-1 text-white p-2 mt-4 rounded" onClick={() => onLogin()}>Login</button>
-              </form>
-              <p className="text-center m-2 text-black-4">or continue with</p>
-              <div className="flex flex-col md:flex-row gap-4">
-                <button className="flex w-full  gap-4 justify-center border px-6 py-2 border-yellow-1 rounded" onClick={() => onLoginGoogle()}><img src="/asset/icon/ic_google.png" height={16} width={16} className="my-auto" alt="login with google" /> Google</button>
-              </div>
-              <p className="text-center mt-2 text-black-3">Dont you have account ?  <button className='text-blue-1 font-bold' onClick={() => {
-                onChangeForm('register')
-                setErrors(null)
-              }}>Register</button></p>
+      <section className='bg'>
+        <img src='/asset/img/background.png' className='bg-img' />
+        <section >
+          <Header />
+          <div className="grid md:grid-cols-2 ">
+            <div className="pt-36 pl-36 hidden md:flex md:flex-col text-white">
+              <h1 className="font-bold text-5xl">All-in-One Sites <br />
+                for Preparation Exam</h1>
+              <p className="mt-2">Makes preparation simplified with Examz</p>
             </div>
-          )}
-
-          {formStatus === 'register' && (
-            <form onSubmit={handleSubmit(onRegister)} className="my-40 bg-white rounded-lg m-4 p-4  p-6 mx-auto md:mx-auto">
-              <h1 className="text-xl text-center">Create Account</h1>
-              <p className="text-black-3 text-center">create an account and get a lot of benefits</p>
-              <p className="mt-4">Full Name {errors && errors.data && (
-                <span className="text-red-1 text-sm">{errors.data.name}</span>
-              )}</p>
-              <input type="text" className="p-2 border rounded w-full" placeholder="Input Your Fullname"{...register("name")} />
-              <p className="mt-4">Email {errors && errors.data && (
-                <span className="text-red-1 text-sm">{errors.data.email}</span>
-              )}</p>
-              <input type="text" className="p-2 border rounded w-full" placeholder="Input Your Email" {...register("email")} />
-              <p className="mt-4">Phone {errors && errors.data && (
-                <span className="text-red-1 text-sm">{errors.data.phone}</span>
-              )}</p>
-              <input type="number" className="p-2 border rounded w-full" placeholder="Input Your Phone Number"{...register("phone")} />
-              <div className='flex gap-4'>
-                <div className='w-full'>
-                  <p className="mt-4">Password</p>
+            {formStatus === 'login' && (
+              <div className='my-40 bg-white rounded-lg w-96 p-6 mx-auto md:mx-auto'>
+                <form onSubmit={handleSubmit(onLogin)}>
+                  <h1 className="text-xl text-center">Welcome to Examz!</h1>
+                  <p className="text-black-3 text-center">Be ready for exam with us</p>
+                  <p className="mt-4">Email / Phone {errors && errors.data && (
+                    <span className="text-red-1 text-sm">{errors.data.email}</span>
+                  )}</p>
+                  <input type="text" className="p-2 border rounded w-full" placeholder="Input Email or Phone" {...register("email")} />
+                  <p className="mt-4">Password {errors && errors.data && (
+                    <span className="text-red-1 text-sm">{errors.data.password}</span>
+                  )}</p>
                   <div className="relative">
-                    <input type={`${passwdRegister ? 'password' : 'text'}`} className="form w-full border p-2 rounded-lg" placeholder="Input Your Password" {...register("password")} />
+                    <input type={`${passwdLogin ? 'password' : 'text'}`} className="form w-full border p-2 mb-2 rounded" placeholder="Input New Password" {...register("password")} />
                     <span className="absolute inset-y-0 cursor-pointer right-0 pr-3 flex items-center text-sm leading-5" onClick={() => {
-                      passwdRegister ? setPasswdRegister(false) : setPasswdRegister(true)
+                      passwdLogin ? setPasswdLogin(false) : setPasswdLogin(true)
                     }}>
-                      {passwdRegister ?
+                      {passwdLogin ?
                         (<FaEyeSlash className=" z-10 inline-block align-middle" />) :
                         (<FaEye className=" z-10 inline-block align-middle" />)
                       }
                     </span>
                   </div>
+                  <span className="text-right text-end mt-4 text-black-3 cursor-pointer hover:text-blue-1" onClick={() => {
+                    setErrors(null)
+                    setFormStatus('forgotPassword')
+                  }}>Forgot Password ?</span>
+                  {errors && errors.message === 'Unauthorized' && (
+                    <p className="text-red-1 text-sm">Check your email or password</p>
+                  )}
+                  <button type="submit" className="w-full bg-yellow-1 text-white p-2 mt-4 rounded" onClick={() => onLogin()}>Login</button>
+                </form>
+                <p className="text-center m-2 text-black-4">or continue with</p>
+                <div className="flex flex-col md:flex-row gap-4">
+                  <button className="flex w-full  gap-4 justify-center border px-6 py-2 border-yellow-1 rounded" onClick={() => onLoginGoogle()}><img src="/asset/icon/ic_google.png" height={16} width={16} className="my-auto" alt="login with google" /> Google</button>
                 </div>
-                <div className='w-full'>
-                  <p className="mt-4">Password Confirmation</p>
-                  <div className="relative">
-                    <input type={`${confirm ? 'password' : 'text'}`} className="form w-full border p-2 rounded" placeholder="Confirmation Password" {...register("password_confirmation")} />
-                    <span className="absolute inset-y-0 cursor-pointer right-0 pr-3 flex items-center text-sm leading-5" onClick={() => {
-                      confirm ? setConfirm(false) : setConfirm(true)
-                    }}>
-                      {confirm ?
-                        (<FaEyeSlash className=" z-10 inline-block align-middle" />) :
-                        (<FaEye className=" z-10 inline-block align-middle" />)
-                      }
-                    </span>
-                  </div>
-
-                </div>
-              </div>
-              {errors && errors.data && (
-                <p className="text-red-1 text-sm">{errors.data.password}</p>
-              )}
-
-              <button className="w-full bg-yellow-1 text-white p-2 mt-4 rounded" >Register</button>
-              <p className="text-right mt-2 text-black-1">Do you have account ? <button className='font-bold text-blue-1' onClick={() => {
-                onChangeForm('login')
-                setErrors(null)
-              }}> Login </button></p>
-            </form>
-          )}
-
-          {formStatus === 'forgotPassword' && (
-            <form onSubmit={handleSubmit(onForgot)} className="my-40 bg-white rounded-lg p-4 md:mt-64 w-96 p-6 mx-auto md:mx-auto">
-              <h1 className="text-xl text-center">Forgot Password ?</h1>
-              <p className="text-black-3 text-center">Enter your email or phone number to reset your password.</p>
-              <p className="mt-4">Email {errors && (
-                <span className="text-red-1 text-sm">{errors.message}</span>
-              )}</p>
-              <input type="text" className="p-2 border rounded w-full" placeholder="Input Your Email" {...register("email", { required: true })} />
-              <p className="text-blue-1 text-xs">{infoReset}</p>
-              <button className="w-full bg-yellow-1 text-white p-2 mt-4 rounded">Submit</button>
-              <p className="text-right mt-2 text-black-3 text-center">Remember Password ? &nbsp;
-                <button className="text-blue-1" onClick={() => {
-                  onChangeForm('login')
-                  setErrors(null)
-                }}>Login</button>&nbsp;or&nbsp;
-                <button className="text-blue-1" onClick={() => {
+                <p className="text-center mt-2 text-black-3">Dont you have account ?  <button className='text-blue-1 font-bold' onClick={() => {
                   onChangeForm('register')
                   setErrors(null)
-                }}> Register</button> </p>
-            </form>
-          )}
-        </div>
-      </section>
-    </section>
+                }}>Register</button></p>
+              </div>
+            )}
 
+            {formStatus === 'register' && (
+              <form onSubmit={handleSubmit(onRegister)} className="my-40 bg-white rounded-lg m-4 p-4  p-6 mx-auto md:mx-auto">
+                <h1 className="text-xl text-center">Create Account</h1>
+                <p className="text-black-3 text-center">create an account and get a lot of benefits</p>
+                <p className="mt-4">Full Name {errors && errors.data && (
+                  <span className="text-red-1 text-sm">{errors.data.name}</span>
+                )}</p>
+                <input type="text" className="p-2 border rounded w-full" placeholder="Input Your Fullname"{...register("name")} />
+                <p className="mt-4">Email {errors && errors.data && (
+                  <span className="text-red-1 text-sm">{errors.data.email}</span>
+                )}</p>
+                <input type="text" className="p-2 border rounded w-full" placeholder="Input Your Email" {...register("email")} />
+                <p className="mt-4">Phone {errors && errors.data && (
+                  <span className="text-red-1 text-sm">{errors.data.phone}</span>
+                )}</p>
+                <input type="number" className="p-2 border rounded w-full" placeholder="Input Your Phone Number"{...register("phone")} />
+                <div className='flex gap-4'>
+                  <div className='w-full'>
+                    <p className="mt-4">Password</p>
+                    <div className="relative">
+                      <input type={`${passwdRegister ? 'password' : 'text'}`} className="form w-full border p-2 rounded-lg" placeholder="Input Your Password" {...register("password")} />
+                      <span className="absolute inset-y-0 cursor-pointer right-0 pr-3 flex items-center text-sm leading-5" onClick={() => {
+                        passwdRegister ? setPasswdRegister(false) : setPasswdRegister(true)
+                      }}>
+                        {passwdRegister ?
+                          (<FaEyeSlash className=" z-10 inline-block align-middle" />) :
+                          (<FaEye className=" z-10 inline-block align-middle" />)
+                        }
+                      </span>
+                    </div>
+                  </div>
+                  <div className='w-full'>
+                    <p className="mt-4">Password Confirmation</p>
+                    <div className="relative">
+                      <input type={`${confirm ? 'password' : 'text'}`} className="form w-full border p-2 rounded" placeholder="Confirmation Password" {...register("password_confirmation")} />
+                      <span className="absolute inset-y-0 cursor-pointer right-0 pr-3 flex items-center text-sm leading-5" onClick={() => {
+                        confirm ? setConfirm(false) : setConfirm(true)
+                      }}>
+                        {confirm ?
+                          (<FaEyeSlash className=" z-10 inline-block align-middle" />) :
+                          (<FaEye className=" z-10 inline-block align-middle" />)
+                        }
+                      </span>
+                    </div>
+
+                  </div>
+                </div>
+                {errors && errors.data && (
+                  <p className="text-red-1 text-sm">{errors.data.password}</p>
+                )}
+
+                <button className="w-full bg-yellow-1 text-white p-2 mt-4 rounded" >Register</button>
+                <p className="text-right mt-2 text-black-1">Do you have account ? <button className='font-bold text-blue-1' onClick={() => {
+                  onChangeForm('login')
+                  setErrors(null)
+                }}> Login </button></p>
+              </form>
+            )}
+
+            {formStatus === 'forgotPassword' && (
+              <form onSubmit={handleSubmit(onForgot)} className="my-40 bg-white rounded-lg p-4 md:mt-64 w-96 p-6 mx-auto md:mx-auto">
+                <h1 className="text-xl text-center">Forgot Password ?</h1>
+                <p className="text-black-3 text-center">Enter your email or phone number to reset your password.</p>
+                <p className="mt-4">Email {errors && (
+                  <span className="text-red-1 text-sm">{errors.message}</span>
+                )}</p>
+                <input type="text" className="p-2 border rounded w-full" placeholder="Input Your Email" {...register("email", { required: true })} />
+                <p className="text-blue-1 text-xs">{infoReset}</p>
+                <button className="w-full bg-yellow-1 text-white p-2 mt-4 rounded">Submit</button>
+                <p className="text-right mt-2 text-black-3 text-center">Remember Password ? &nbsp;
+                  <button className="text-blue-1" onClick={() => {
+                    onChangeForm('login')
+                    setErrors(null)
+                  }}>Login</button>&nbsp;or&nbsp;
+                  <button className="text-blue-1" onClick={() => {
+                    onChangeForm('register')
+                    setErrors(null)
+                  }}> Register</button> </p>
+              </form>
+            )}
+          </div>
+        </section>
+      </section>
       <section className="grid xl:grid-cols-3 gap-4 md:mx-16 my-20">
         <div className="m-2 ">
           <Image src="/asset/icon/ic_question.png" height="48" width="48" alt='icon question' />
-          <h1 className="font-semibold text-2xl mt-4 pb-1">Top Quality Questions</h1>
+          <h1 className="font-semibold text-1xl mt-4 pb-1">Top Quality Questions</h1>
           <p>All questions and solutions, designed by top exam experts, based on latest patterns and actual exam level</p>
         </div>
 
         <div className="m-2 filter">
           <Image src="/asset/icon/ic_live.png" height="48" width="48" alt='icon live' />
-          <h1 className="font-semibold text-2xl mt-4 pb-1">Live Tests for Real Experience</h1>
+          <h1 className="font-semibold text-1xl mt-4 pb-1">Live Tests for Real Experience</h1>
           <p>Get your All-India Rank and feel the thrill of a real-exam. Groom your pressure handling and time management skills.</p>
         </div>
 
         <div className="m-2">
           <Image src="/asset/icon/ic_diagram.png" height="48" width="48" alt='icon diagram' />
-          <h1 className="font-semibold text-2xl mt-4 pb-1">Personalized, detailed Analysis</h1>
+          <h1 className="font-semibold text-1xl mt-4 pb-1">Personalized, detailed Analysis</h1>
           <p>Know your weaknesses, strengths and everything else that you need to know to improve your score and rank.</p>
         </div>
       </section>
@@ -340,35 +361,9 @@ function Landing(props) {
 
       <section className="bg-blue-1 py-20 px-20">
         <h1 className="text-white font-bold text-2xl mb-4">Upcoming Exams</h1>
-        <div className="grid grid-cols-1 md:grid-cols-3 xl:grid-cols-3 gap-4">
-          {list.map((item) => (
-            <div key={item} className="bg-white rounded-lg p-6">
-              <div className="flex flex-row gap-4">
-                <img className='w-12 h-12' src="/asset/icon/ic_a+_yellow.png" alt="icon paper" />
-                <div>
-                  <p className="font-bold self-center">The Hindu Vocab Exam</p>
-                  <p className="text-black-3 text-sm">By <span className='text-blue-1'>Student University</span> Engineering</p>
-                </div>
-              </div>
-              <div className="flex flex-col mt-4">
-                <div className="flex gap-2 text-black-3 gap-4">
-                  <img className='w-5 h-5' src="/asset/icon/ic_clock.svg" alt="icon paper" />
-                  <span>120 mins duration </span>
-                </div>
-                <div className="flex gap-2 text-black-3 gap-4">
-                  <img className='w-5 h-5' src="/asset/icon/ic_volume.svg" alt="icon paper" />
-                  <span>3 Section</span>
-                </div>
-                <div className="flex gap-2 text-black-3 gap-4">
-                  <img className='w-5 h-5' src="/asset/icon/ic_date.svg" alt="icon paper" />
-                  <span>12 Jan ~ 20 Feb 2020</span>
-                </div>
-              </div>
-              <Button title="Start Exam" className="w-full my-4" />
-              <p className="text-black-3 text-sm text-center my-4">200 Student are writing this exam</p>
-            </div>
-          ))}
-        </div>
+     <Slider ArrowColor="white">
+
+     </Slider>
       </section>
 
       <section className="py-20">

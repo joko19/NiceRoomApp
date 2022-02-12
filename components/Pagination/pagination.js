@@ -1,6 +1,5 @@
 import { FaAngleLeft, FaAngleRight, FaAngleDoubleLeft, FaAngleDoubleRight } from "react-icons/fa";
 
-
 function Pagination({ page, lastPage, total, limit, search, type = false, status = false, branch = false, batch = false, doLimit, doData }) {
   return (
 
