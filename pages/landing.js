@@ -13,6 +13,8 @@ import { useRouter } from "next/router";
 import Button from '../components/Button/button'
 import Image from 'next/image';
 import Slider from '../components/Slider/Slider';
+import CardExams from '../components/Cards/CardExams';
+import Link from 'next/link';
 
 function Landing(props) {
   const Router = useRouter()
@@ -360,10 +362,19 @@ function Landing(props) {
       </section>
 
       <section className="bg-blue-1 py-20 px-20">
-        <h1 className="text-white font-bold text-2xl mb-4">Upcoming Exams</h1>
-     <Slider ArrowColor="white">
-
-     </Slider>
+        <div className='flex align-middle'>
+          <span className="text-white font-bold text-2xl mr-2">Upcoming Exams</span>
+          <Link href="/upcoming-exam">
+            <a className='inline-block hover:text-blue-4 mt-2 text-white'>
+              See All
+            </a>
+          </Link>
+        </div>
+        <Slider ArrowColor="white">
+          {list.map((item) => (
+            <CardExams key={item} />
+          ))}
+        </Slider>
       </section>
 
       <section className="py-20">

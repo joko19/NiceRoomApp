@@ -3,13 +3,16 @@ import Header from '../components/Navbar/header';
 import Footer from "../components/footer/footer";
 import { FaAngleRight } from 'react-icons/fa';
 import Button from '../components/Button/button';
+import Slider from '../components/Slider/Slider';
+import CardQuizzes from '../components/Cards/CardQuizzes';
+import { TitleButton } from '../components/Slider/TitleButton';
+
 
 function Quizzes() {
-  const list = [1, 2, 3]
+  const list = [1, 2, 3, 4, 5, 6, 7]
   return (
     <div className=" bg-black-8 pt-20" >
       <Header />
-
       <div className="py-4 md:mx-32">
         <div className='flex gap-1'>
           <Link href="/landing">
@@ -17,94 +20,30 @@ function Quizzes() {
           </Link>
           <FaAngleRight className='mt-1' /> <span className='text-blue-1'>Quizzes</span>
         </div>
-        <div className="flex gap-4 align-text-top align-top">
-          <img src="/asset/icon/ic_live_transparent.png" alt="icon live" className='w-8 h-8' />
-          <h1 className="text-2xl">Live Quiz</h1><span className="text-1xl text-blue-1 align-text-bottom inline-block">See All</span>
-        </div>
-        <div className=" grid md:grid-cols-3 gap-4 my-4">
+        <TitleButton title="Live Quiz" url="#" isLive={true} />
+        <Slider ArrowColor="blue" >
           {list.map((item) => (
-            <div key={item} className="bg-white rounded-lg p-6">
-              <div className="flex flex-row gap-4">
-                <img className='w-12 h-12' src="/asset/icon/ic_quiz.png" alt="icon paper" />
-                <div>
-                  <p className="font-bold self-center">The Hindu Vocab Quiz<img className='inline ml-2' src="/asset/icon/ic_live_text.png"/></p>
-                  <p className="text-black-3 text-sm">By <span className='text-blue-1'>Student University</span> Engineering</p>
-                </div>
-              </div>
-              <div className="flex flex-col mt-4">
-                <div className="flex gap-4 text-black-3">
-                  <img className='w-5 h-5' src="/asset/icon/ic_clock.svg" alt="icon paper" />
-                  <span>120 mins duration </span>
-                </div>
-                <div className="flex gap-4 text-black-3">
-                  <img className='w-5 h-5' src="/asset/icon/ic_date.svg" alt="icon paper" />
-                  <span>12 Jan ~ 20 Feb 2020</span>
-                </div>
-              </div>
-              <Button title="Start Quiz" className="w-full mt-4" />
-            </div>
+            <CardQuizzes key={item} isLive={true} />
           ))}
-        </div>
+        </Slider>
       </div>
 
       <div className="py-4 md:mx-32">
-        <div className="flex gap-8 align-text-bottom">
-          <h1 className="text-2xl">PO, CLERK, SO, Insurance</h1><span className="text-1xl text-blue-1 align-text-bottom inline-block">See All</span>
-        </div>
-        <div className=" grid md:grid-cols-3 gap-4 my-4">
+        <TitleButton title="PO, CLERK, SO, Insurance" url="#" />
+        <Slider ArrowColor="blue" >
           {list.map((item) => (
-            <div key={item} className="bg-white rounded-lg p-6">
-              <div className="flex flex-row gap-4">
-                <img className='w-12 h-12' src="/asset/icon/ic_quiz.png" alt="icon paper" />
-                <div>
-                  <p className="font-bold self-center">The Hindu Vocab Quiz</p>
-                  <p className="text-black-3 text-sm">By <span className='text-blue-1'>Student University</span> Engineering</p>
-                </div>
-              </div>
-              <div className="flex flex-col mt-4">
-                <div className="flex gap-4 text-black-3">
-                  <img className='w-5 h-5' src="/asset/icon/ic_clock.svg" alt="icon paper" />
-                  <span>120 mins duration </span>
-                </div>
-                <div className="flex gap-4 text-black-3">
-                  <img className='w-5 h-5' src="/asset/icon/ic_date.svg" alt="icon paper" />
-                  <span>12 Jan ~ 20 Feb 2020</span>
-                </div>
-              </div>
-              <Button title="Start Quiz" className="w-full mt-4" />
-            </div>
+            <CardQuizzes key={item} />
           ))}
-        </div>
+        </Slider>
       </div>
 
       <div className="py-4 md:mx-32 mb-20">
-        <div className="flex gap-8 align-text-bottom">
-          <h1 className="text-2xl">IAS</h1><span className="text-1xl text-blue-1 align-text-bottom inline-block">See All</span>
-        </div>
-        <div className=" grid md:grid-cols-3 gap-4 my-4">
+        <TitleButton title="IAS" url="#" />
+        <Slider ArrowColor="blue" >
           {list.map((item) => (
-            <div key={item} className="bg-white rounded-lg p-6">
-              <div className="flex flex-row gap-4">
-                <img className='w-12 h-12' src="/asset/icon/ic_quiz.png" alt="icon paper" />
-                <div>
-                  <p className="font-bold self-center">The Hindu Vocab Quiz</p>
-                  <p className="text-black-3 text-sm">By <span className='text-blue-1'>Student University</span> Engineering</p>
-                </div>
-              </div>
-              <div className="flex flex-col mt-4">
-                <div className="flex gap-4 text-black-3">
-                  <img className='w-5 h-5' src="/asset/icon/ic_clock.svg" alt="icon paper" />
-                  <span>120 mins duration </span>
-                </div>
-                <div className="flex gap-4 text-black-3">
-                  <img className='w-5 h-5' src="/asset/icon/ic_date.svg" alt="icon paper" />
-                  <span>12 Jan ~ 20 Feb 2020</span>
-                </div>
-              </div>
-              <Button title="Start Quiz" className="w-full mt-4" />
-            </div>
+            <CardQuizzes key={item} />
           ))}
-        </div>
+        </Slider>
       </div>
       <Footer />
     </div >

@@ -4,7 +4,7 @@ import Link from "next/link"
 export function TitleSection({ dataExams, id, type }) {
   return (
     <div className="flex justify-between">
-      <h1 className="font-bold text-1xl my-auto ">List of test sessions <span className="text-blue-1">{dataExams.name}</span> </h1>
+      <h1 className="font-bold text-xl my-auto ">List of test sessions <span className="text-blue-1">{dataExams.name}</span> </h1>
       <Link href={`edit/${id}`}>
         <a >
           <div className="flex  border border-blue-1 hover:bg-blue-6  rounded p-2">

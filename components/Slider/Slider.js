@@ -1,7 +1,7 @@
 import React, { useRef } from "react";
 import { FaAngleLeft, FaAngleRight } from "react-icons/fa";
 
-export default function Card({ children, className = '', title = '', subtitle = '', props = null, right = null }) {
+export default function Card({ children, ArrowColor }) {
 
   const listRef = useRef(null);
 
@@ -26,12 +26,12 @@ export default function Card({ children, className = '', title = '', subtitle = 
   };
   return (
     <div className='flex -mx-8'>
-      <FaAngleLeft size={32} color="white" className='my-auto mr-4 cursor-pointer'
+      <FaAngleLeft size={32} color={ArrowColor} className='my-auto mr-4 cursor-pointer'
         onClick={scrollLeft} />
       <div className='flex overflow-x-hidden' ref={listRef}>
         {children}
       </div>
-      <FaAngleRight size={32} color="white" className='my-auto ml-4 cursor-pointer'
+      <FaAngleRight size={32} color={ArrowColor} className='my-auto ml-4 cursor-pointer'
         onClick={scrollRight} />
     </div>
   )
