@@ -1,14 +1,11 @@
 import Card from "../../components/Cards/Card";
 import { useEffect, useState } from 'react'
 import Image from "next/image";
-import Link from "next/link";
 import {
-  Button,
   Modal,
   ModalOverlay,
   ModalContent,
   ModalHeader,
-  ModalFooter,
   ModalBody,
   ModalCloseButton,
   useDisclosure,
@@ -17,7 +14,7 @@ import { useForm } from "react-hook-form";
 import Pagination from "../../components/Pagination/pagination";
 import apiBranch from "../../action/branch";
 import Layout from "../../Layout/Layout";
-import { ModalDelete } from "../../components/Modal/ModalDelete";
+import Button from "../../components/Button/button";
 
 export default function InstituteBranch(props) {
 
@@ -61,7 +58,13 @@ export default function InstituteBranch(props) {
 
   return (
     <div className="mt-12">
-      <Card title="Institute Branches">
+      <Card title="Institute Branches"
+        right={(
+          <div >
+            <button className={`bg-white text-white py-2 px-4 font-semibold rounded hover:bg-blue-2 hover:filter hover:drop-shadow-xl`}>none</button>
+          </div>
+        )}
+      >
         <input type="text" className="p-2 border rounded w-1/2 mb-4 text-sm" placeholder="Search Branch" onChange={(e) => {
           setSearch(e.target.value)
           getData(e.target.value, status, limit, page)
@@ -102,7 +105,7 @@ export default function InstituteBranch(props) {
                         </td>
                         <td className={`${item.status === 'approve' ? 'text-green-1' : 'text-red-1'} px-6 h-12 my-auto whitespace-nowrap flex text-center gap-2 text-sm font-medium`}>
                           {item.status !== 'pending' && (
-                            <center>
+                            <center className="my-auto">
                               {item.status.charAt(0).toUpperCase() + item.status.slice(1)}
                             </center>
                           )}
