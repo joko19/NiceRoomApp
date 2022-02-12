@@ -9,7 +9,7 @@ export function TitleSection({ dataExams, id, type }) {
         <a >
           <div className="flex  border border-blue-1 hover:bg-blue-6  rounded p-2">
             <div className="m-auto text-blue-1">
-              <Image src="/asset/icon/table/fi_edit.png" className="mr-4 my-auto" height={12} width={12} />
+              <Image src="/asset/icon/table/fi_edit.svg" className="mr-4 my-auto" height={12} width={12} />
               <span className="ml-2">
                 Edit {type}
               </span>

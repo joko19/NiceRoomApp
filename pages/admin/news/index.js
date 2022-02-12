@@ -74,7 +74,7 @@ export default function News(props) {
         title="News"
         right={(
           <Link href="/admin/news/create">
-            <a className="btn btn-md bg-blue-1 text-white p-3 rounded-lg" >
+            <a>
               <Button title="+ Create News" /></a>
           </Link>
         )}
@@ -91,7 +91,7 @@ export default function News(props) {
                 <table className="table min-w-full divide-y divide-gray-200 text-sm">
                   <thead className="bg-black-9" >
                     {tableHead.map((item) => (
-                      <th key={item} scope="col" className="px-6 py-3 text-left tracking-wider">
+                      <th key={item} scope="col" className="px-6 py-3 text-center tracking-wider">
                         {item}
                       </th>
                     ))}
@@ -101,25 +101,20 @@ export default function News(props) {
                       const date = new Date(item.created_at)
                       return (
                         <tr key={item.id}>
-                          <td className="px-6 py-4 whitespace-nowrap">
-                            <div className="flex items-center">
-                              <div className="ml-4">
-                                <div>{item.title}</div>
-                              </div>
-                            </div>
+                          <td className="px-6 py-4 whitespace-nowrap text-center">
+                            <div>{item.title}</div>
                           </td>
-                          <td className="px-6 py-4 whitespace-nowrap">
+                          <td className="px-6 py-4 whitespace-nowrap text-center">
                             <div>{item.sub_title}</div>
                           </td>
-                          <td className="px-6 py-4 whitespace-nowrap ">{date.toDateString()}</td>
-                          
-                          <td>
-                            <div className={`${item.status === 'draft' ? 'bg-black-8 text-black-3' : 'bg-green-2 text-green-1'} text-center w-24 flex-0 ml-6 font-bold  rounded-lg py-3 `}>
-                              {item.status === 'draft' ? 'Draft' : 'Published'}
+                          <td className="px-6 py-4 whitespace-nowrap text-center">{date.toDateString()}</td>
+                          <td className="h-12">
+                            <div className={`${item.status === 'draft' ? 'bg-black-8 text-black-3' : 'bg-green-2 text-green-1'} text-center w-24 flex-0 m-auto font-bold  rounded py-1 `}>
+                              {item.status.charAt(0).toUpperCase() + item.status.slice(1)}
                             </div>
                           </td>
-                          <td className="px-6 py-4 whitespace-nowrap flex text-right gap-2 text-sm font-medium">
-                            {item.status === 'draft' ? (
+                          <td className="px-6 py-4 whitespace-nowrap flex text-right gap-2 text-sm font-medium text-center">
+                            <div className="mx-auto gap-2">{item.status === 'draft' ? (
                               <>
                                 <Link href={`news/edit/${item.id}`}>
                                   <a className="text-indigo-600 hover:text-indigo-900">
@@ -147,12 +142,15 @@ export default function News(props) {
                               </button>
 
                             )}
-                            <a href="#" className="text-indigo-600 hover:text-indigo-900">
-                              <Image src="/asset/icon/table/fi_trash-2.svg" width={16} height={16} alt="icon delete" onClick={() => {
-                                setSelectedData(item.id),
-                                  onOpen()
-                              }} />
-                            </a>
+                              <a href="#" className="text-indigo-600 hover:text-indigo-900">
+                                <Image src="/asset/icon/table/fi_trash-2.svg" width={16} height={16} alt="icon delete" onClick={() => {
+                                  setSelectedData(item.id),
+                                    onOpen()
+                                }} />
+                              </a>
+
+                            </div>
+
                           </td>
                         </tr>
                       )

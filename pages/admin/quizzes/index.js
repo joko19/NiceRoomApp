@@ -61,7 +61,7 @@ export default function Create() {
             </Link>
           )}
         >
-          <div className="flex gap-4 my-4">
+          <div className="flex gap-4 mb-4">
             <input type="text" className=" border rounded-lg w-1/2 p-2 text-sm" value={search} placeholder="Search Quiz" onChange={(e) => {
               setSearch(e.target.value)
               getData(e.target.value, type, status, limit, page)

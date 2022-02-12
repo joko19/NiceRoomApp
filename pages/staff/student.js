@@ -229,7 +229,7 @@ export default function Student() {
                   <table className="table md:min-w-full overflow-auto divide-y divide-gray-200">
                     <thead className="bg-black-9" >
                       {TableHead.map((item) => (
-                        <th key={item} scope="col" className="px-6 py-3 text-left tracking-wider">
+                        <th key={item} scope="col" className="px-6 h-12 text-left tracking-wider">
                           {item}
                         </th>
                       ))}
@@ -237,27 +237,27 @@ export default function Student() {
                     <tbody className="bg-white divide-y divide-gray-200">
                       {list.map((item, index) => (
                         <tr key={index}>
-                          <td className="px-6 py-4 whitespace-nowrap">
+                          <td className="px-6 h-12 whitespace-nowrap">
                             <div className="flex items-center">
                               <div className="ml-4">
                                 <div>{item.user.name}</div>
                               </div>
                             </div>
                           </td>
-                          <td className="px-6 py-4 whitespace-nowrap">
+                          <td className="px-6 h-12 whitespace-nowrap">
                             <div>{item.code}</div>
                           </td>
-                          <td className="px-6 py-4 whitespace-nowrap">
+                          <td className="px-6 h-12 whitespace-nowrap">
                             <span>
                               {item.branch.name}
                             </span>
                           </td>
-                          <td className="px-6 py-4 whitespace-nowrap">
+                          <td className="px-6 h-12 whitespace-nowrap">
                             <div>{item.status}</div>
                           </td>
-                          <td className="px-6 py-4 whitespace-nowrap flex text-right gap-2 text-sm font-medium">
+                          <td className="px-6 h-12 whitespace-nowrap flex text-right gap-2 text-sm font-medium">
                             <Link href={`/admin/institution/${item.id}`}>
-                              <a className="text-indigo-600 hover:text-indigo-900">
+                              <a className="text-indigo-600 hover:text-indigo-900 my-auto">
                                 <Image src="/asset/icon/table/fi_eye.svg" width={16} height={16} alt="icon detail" />
                               </a>
                             </Link>

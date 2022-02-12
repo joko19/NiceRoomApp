@@ -15,7 +15,6 @@ import {
 } from '@chakra-ui/react'
 import { useForm } from "react-hook-form";
 import Pagination from "../../components/Pagination/pagination";
-import instance from "../../action/instance";
 import Multiselect from 'multiselect-react-dropdown';
 import apiBatch from "../../action/batch";
 import apiBranch from "../../action/branch";
@@ -266,40 +265,41 @@ export default function Announcement() {
                 <div className="shadow overflow-hidden border-b border-gray-200 sm:rounded-lg">
                   <table className="table md:min-w-full overflow-auto divide-y divide-gray-200">
                     <thead className="bg-black-9" >
-                      <th scope="col" className="px-6 py-3 text-center tracking-wider">
+                      <th scope="col" className="px-6 h-12 text-center tracking-wider">
                         Name
                       </th>
-                      <th scope="col" className="px-6 py-3 text-center tracking-wider">
+                      <th scope="col" className="px-6 h-12 text-center tracking-wider">
                         Branch
                       </th>
-                      <th scope="col" className="px-6 py-3 text-center tracking-wider">
+                      <th scope="col" className="px-6 h-12 text-center tracking-wider">
                         Status
                       </th>
-                      <th scope="col" className="px-6 py-3 text-left tracking-wider">
+                      <th scope="col" className="px-6 h-12 text-left tracking-wider">
                         Action
                       </th>
                     </thead>
                     <tbody className="bg-white divide-y divide-gray-200 text-center">
                       {list.map((item, index) => (
                         <tr key={index}>
-                          <td className="py-4 whitespace-nowrap">
+                          <td className="h-12 whitespace-nowrap">
                             <div className="items-center text-center">
                               <div>
                                 <div>{item.title}</div>
                               </div>
                             </div>
                           </td>
-                          <td className="px-6 py-4 whitespace-nowrap">
+                          <td className="px-6 h-12 whitespace-nowrap">
                             {item.branches.map((item) => (
                               <p key={item}>{item.name} </p>
                             ))}
                           </td>
-                          <td>
-                            <div className={`${item.status === 'draft' ? 'bg-black-8 text-black-3' : 'bg-green-2 text-green-1'} text-center w-24 flex-0 m-auto font-bold  rounded-lg py-3 `}>
-                              {item.status === 'draft' ? 'Draft' : 'Published'}
+
+                          <td className="h-12">
+                            <div className={`${item.status === 'draft' ? 'bg-black-8 text-black-3' : 'bg-green-2 text-green-1'} text-center w-24 flex-0 m-auto font-bold  rounded py-1 `}>
+                              {item.status.charAt(0).toUpperCase() + item.status.slice(1)}
                             </div>
                           </td>
-                          <td className="px-6 py-4 whitespace-nowrap flex text-right gap-2 text-sm font-medium">
+                          <td className="px-6 h-12 whitespace-nowrap flex text-right gap-2 text-sm font-medium">
                             {item.status === 'draft' && (
                               <>
                                 <button className="text-indigo-600 hover:text-indigo-900" onClick={() => {
@@ -317,7 +317,7 @@ export default function Announcement() {
                                   onOpenPublishModal()
                                   setErrors(null)
                                 }}>
-                                  <Image src="/asset/icon/table/ic_publish.svg" width={16} height={16} alt="icon publish" />
+                                  <Image src="/asset/icon/table/ic_repeat.svg" width={16} height={16} alt="icon publish" />
                                 </button>
                               </>
                             )}
@@ -468,9 +468,9 @@ export default function Announcement() {
             <center className="mb-8 text-sm">Are you sure to publish this Announcement ?</center>
             <div className="flex gap-4 justify-center">
               <button className="text-black-4  text-sm p-2" mr={3} onClick={onClosePublishModal}>
-                Cancel 
+                Cancel
               </button>
-              <div  onClick={() => {
+              <div onClick={() => {
                 onPublish()
                 onClosePublishModal()
               }} onClose={onClosePublishModal}><Button title="Publish" /> </div>

@@ -162,7 +162,7 @@ export default function InstituteAdmin(props) {
                 <table className="table min-w-full divide-y divide-gray-200 text-sm">
                   <thead className="bg-black-9" >
                     {tableHead.map((item) => (
-                      <th key={item} scope="col" className="px-6 py-3 text-left tracking-wider">
+                      <th key={item} scope="col" className="px-6 h-12 text-left tracking-wider">
                         {item}
                       </th>
                     ))}
@@ -170,24 +170,25 @@ export default function InstituteAdmin(props) {
                   <tbody className="bg-white divide-y divide-gray-200">
                     {list.map((item, index) => (
                       <tr key={index}>
-                        <td className="px-6 py-4 whitespace-nowrap">
+                        <td className="px-6 h-12 whitespace-nowrap">
                           <div className="flex items-center">
                             <div className="ml-4">
                               <div>{item.employee_id}</div>
                             </div>
                           </div>
                         </td>
-                        <td className="px-6 py-4 whitespace-nowrap">
+                        <td className="px-6 h-12 whitespace-nowrap">
                           <div>{item.name}</div>
                         </td>
-                        <td className="px-6 py-4 whitespace-nowrap">
+                        <td className="px-6 h-12 whitespace-nowrap">
                           <span>
                             {item.email}
                           </span>
                         </td>
-                        <td className="px-6 py-4 whitespace-nowrap ">{item.phone}</td>
-                        <td className="px-6 py-4 whitespace-nowrap ">{item.institute.name}</td>
-                        <td className="px-6 py-4 whitespace-nowrap flex text-right gap-2 text-sm font-medium">
+                        <td className="px-6 h-12 whitespace-nowrap ">{item.phone}</td>
+                        <td className="px-6 h-12 whitespace-nowrap ">{item.institute.name}</td>
+
+                        <td className="px-6 h-12 whitespace-nowrap flex text-right gap-2 text-sm font-medium">
                           <button className="text-indigo-600 hover:text-indigo-900"
                             onClick={() => {
                               getDetail(item.id)
@@ -207,13 +208,14 @@ export default function InstituteAdmin(props) {
                             }}>
                             <Image src="/asset/icon/table/fi_edit.svg" width={16} height={16} alt="icon edit" />
                           </button>
-                          <a href="#" className="text-indigo-600 hover:text-indigo-900">
+                          <button href="#" className="text-indigo-600 my-autp hover:text-indigo-900">
                             <Image src="/asset/icon/table/fi_trash-2.svg" width={16} height={16} alt="icon edit" onClick={() => {
                               setSelectedData(item.id),
                                 onOpen()
                             }} />
-                          </a>
+                          </button>
                         </td>
+
                       </tr>
                     ))}
                   </tbody>

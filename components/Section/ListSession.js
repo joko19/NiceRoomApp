@@ -14,19 +14,19 @@ export function ListSession({ itemSection, onOpenDeleteModal, setSelectedData, s
             <div className="shadow overflow-hidden border-b border-gray-200 sm:rounded-lg">
               <table className="table md:min-w-full overflow-auto divide-y divide-gray-200 text-sm">
                 <thead className="bg-blue-6" >
-                  <th scope="col" className="px-6 py-3 text-left tracking-wider">
+                  <th scope="col" className="px-6 h-12 text-left tracking-wider">
                     No.
                   </th>
-                  <th scope="col" className="px-6 py-3 text-left tracking-wider">
+                  <th scope="col" className="px-6 h-12 text-left tracking-wider">
                     Type Question
                   </th>
-                  <th scope="col" className="px-6 py-3 text-center tracking-wider">
+                  <th scope="col" className="px-6 h-12 text-center tracking-wider">
                     Number of Question
                   </th>
-                  <th scope="col" className="px-6 py-3 text-left text-center tracking-wider">
+                  <th scope="col" className="px-6 h-12 text-left text-center tracking-wider">
                     <div onClick={() => {
                       setSelectedData(itemSection.id),
-                        setSelectedName(itemSection.name)
+                      setSelectedName(itemSection.name)
                       onOpen()
                     }}>
                       <Button title="+ Add Question" />
@@ -36,34 +36,31 @@ export function ListSession({ itemSection, onOpenDeleteModal, setSelectedData, s
                 <tbody className="bg-white divide-y divide-gray-200">
                   {itemSection.questions.map((itemQuestion, index) => (
                     <tr key={index}>
-                      <td className="px-6 py-4 whitespace-nowrap">
+                      <td className="px-6 h-12 whitespace-nowrap">
                         <div className="flex items-center">
                           <div className="ml-4">
                             <div>{index + 1}</div>
                           </div>
                         </div>
                       </td>
-                      <td className="px-6 py-4 whitespace-nowrap">
+                      <td className="px-6 h-12 whitespace-nowrap">
                         {itemQuestion.type}
                       </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-center">
+                      <td className="px-6 h-12 whitespace-nowrap text-center">
                         {itemQuestion.items_count} Question
                       </td>
-                      <td className="flex gap-4 px-6 py-4 whitespace-nowrap flex text-right gap-2 text-sm font-medium">
-                        <div className="mx-auto flex gap-4">
-
+                      <td className="flex gap-4 px-6 h-12 whitespace-nowrap flex text-right gap-2 text-sm font-medium">
+                        <div className="m-auto flex gap-4">
                           <Link href={`/admin/exams/question/edit/${itemQuestion.id}`}>
                             <a className="text-indigo-600 hover:text-indigo-900">
-                              <Image src="/asset/icon/table/fi_edit.png" width={16} height={16} alt="icon Edit" />
-                              <span className="inline-block align-top">  Edit</span>
+                              <Image src="/asset/icon/table/fi_edit.svg" width={16} height={16} alt="icon Edit" />
                             </a>
                           </Link>
                           <button className="text-indigo-600 hover:text-indigo-900" onClick={() => {
                             setQuestionSelectedId(itemQuestion.id),
                               onOpenDeleteModal()
                           }}>
-                            <Image src="/asset/icon/table/fi_trash-2.png" width={16} height={16} alt="icon deleted" />
-                            <span className="inline-block align-top">  Delete</span>
+                            <Image src="/asset/icon/table/fi_trash-2.svg" width={16} height={16} alt="icon deleted" />
                           </button>
                         </div>
                       </td>

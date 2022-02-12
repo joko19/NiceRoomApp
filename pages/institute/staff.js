@@ -184,7 +184,7 @@ export default function Staff() {
                   <table className="table md:min-w-full overflow-auto divide-y divide-gray-200">
                     <thead className="bg-black-9" >
                       {TableHead.map((item) => (
-                        <th key={item} scope="col" className="px-6 py-3 text-left tracking-wider">
+                        <th key={item} scope="col" className="px-6 h-12 text-left tracking-wider">
                           {item}
                         </th>
                       ))}
@@ -192,22 +192,22 @@ export default function Staff() {
                     <tbody className="bg-white divide-y divide-gray-200">
                       {list.map((item, index) => (
                         <tr key={index}>
-                          <td className="px-6 py-4 whitespace-nowrap">
+                          <td className="px-6 h-12 whitespace-nowrap">
                             <div className="flex items-center">
                               <div className="ml-4">
                                 <div>{item.name}</div>
                               </div>
                             </div>
                           </td>
-                          <td className="px-6 py-4 whitespace-nowrap">
+                          <td className="px-6 h-12 whitespace-nowrap">
                             <div>{item.email}</div>
                           </td>
-                          <td className="px-6 py-4 whitespace-nowrap">
+                          <td className="px-6 h-12 whitespace-nowrap">
                             <span>
                               {item.phone}
                             </span>
                           </td>
-                          <td className="px-6 py-4 whitespace-nowrap flex text-right gap-2 text-sm font-medium">
+                          <td className="px-6 h-12 whitespace-nowrap flex text-right gap-2 text-sm font-medium">
                             <button className="text-indigo-600 hover:text-indigo-900" onClick={() => {
                               getDetail(item.id)
                               setSelectedData(item.id)

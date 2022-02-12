@@ -74,7 +74,7 @@ export default function InstituteBranch(props) {
                 <table className="table md:min-w-full overflow-auto divide-y divide-gray-200 text-sm">
                   <thead className="bg-black-9" >
                     {TableHead.map((item) => (
-                      <th key={item} scope="col" className="px-6 py-3 text-left tracking-wider">
+                      <th key={item} scope="col" className="px-6 h-12 text-left tracking-wider">
                         {item}
                       </th>
                     ))}
@@ -82,27 +82,29 @@ export default function InstituteBranch(props) {
                   <tbody className="bg-white divide-y divide-gray-200">
                     {list.map((item, index) => (
                       <tr key={index}>
-                        <td className="px-6 py-4 whitespace-nowrap">
+                        <td className="px-6 h-12 whitespace-nowrap">
                           <div className="flex items-center">
                             <div className="ml-4">
                               <div>{item.institute.name}</div>
                             </div>
                           </div>
                         </td>
-                        <td className="px-6 py-4 whitespace-nowrap">
+                        <td className="px-6 h-12 whitespace-nowrap">
                           <div>{item.name}</div>
                         </td>
-                        <td className="px-6 py-4 whitespace-nowrap">
+                        <td className="px-6 h-12 whitespace-nowrap">
                           <div>{item.state}</div>
                         </td>
-                        <td className="px-6 py-4 whitespace-nowrap">
+                        <td className="px-6 h-12 whitespace-nowrap">
                           <span>
                             {item.city}
                           </span>
                         </td>
-                        <td className={`${item.status === 'approve' ? 'text-green-1' : 'text-red-1'} px-6 py-4 whitespace-nowrap flex text-center gap-2 text-sm font-medium`}>
+                        <td className={`${item.status === 'approve' ? 'text-green-1' : 'text-red-1'} px-6 h-12 my-auto whitespace-nowrap flex text-center gap-2 text-sm font-medium`}>
                           {item.status !== 'pending' && (
-                            <center> {item.status === 'approve' ? 'Approve' : 'Reject'}</center>
+                            <center>
+                              {item.status.charAt(0).toUpperCase() + item.status.slice(1)}
+                            </center>
                           )}
                           {item.status === 'pending' && (
                             <>
