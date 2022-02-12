@@ -61,7 +61,7 @@ export default function InstituteBranch(props) {
       <Card title="Institute Branches"
         right={(
           <div >
-            <button className={`bg-white text-white py-2 px-4 font-semibold rounded hover:bg-blue-2 hover:filter hover:drop-shadow-xl`}>none</button>
+            <button className={`bg-white text-white py-2 px-4 font-semibold rounded `}>none</button>
           </div>
         )}
       >
