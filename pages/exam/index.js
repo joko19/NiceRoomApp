@@ -1,10 +1,10 @@
 import Link from 'next/link';
-import Header from '../components/Navbar/header';
-import Footer from "../components/footer/footer";
+import Header from '../../components/Navbar/header';
+import Footer from "../../components/footer/footer";
 import { FaAngleRight } from 'react-icons/fa';
-import Slider from '../components/Slider/Slider';
-import CardExams from '../components/Cards/CardExams';
-import { TitleButton } from '../components/Slider/TitleButton';
+import Slider from '../../components/Slider/Slider';
+import CardExams from '../../components/Cards/CardExams';
+import { TitleButton } from '../../components/Slider/TitleButton';
 
 function Exam() {
   const list = [1, 2, 3, 4, 5, 6, 7]
@@ -19,7 +19,7 @@ function Exam() {
           <FaAngleRight className='mt-1' /> <span className='text-blue-1'>Exam</span>
         </div>
         
-        <TitleButton title="Live Exams" url="#" isLive={true} />
+        <TitleButton title="Live Exams" url="/exam/1" isLive={true} />
         <Slider ArrowColor="blue" >
           {list.map((item) => (
             <CardExams key={item} isLive={true} />
@@ -28,7 +28,7 @@ function Exam() {
       </div>
 
       <div className="py-4 md:mx-32">
-        <TitleButton title="PO, CLERK, SO, Insurance" url="#" />
+        <TitleButton title="PO, CLERK, SO, Insurance" url="/exam/1" />
         <Slider ArrowColor="blue">
           {list.map((item) => (
             <CardExams key={item} />
@@ -37,7 +37,7 @@ function Exam() {
       </div>
 
       <div className="py-4 md:mx-32 mb-20">
-        <TitleButton title="IAS" url="#" />
+        <TitleButton title="IAS" url="/exam/1" />
         <Slider ArrowColor="blue">
           {list.map((item) => (
             <CardExams key={item} />

@@ -362,8 +362,8 @@ function Landing(props) {
       </section>
 
       <section className="bg-blue-1 py-20 px-20">
-        <div className='flex align-middle'>
-          <span className="text-white font-bold text-2xl mr-2">Upcoming Exams</span>
+        <div className='flex justify-between'>
+          <span className="text-white font-bold text-2xl ml-4">Upcoming Exams</span>
           <Link href="/upcoming-exam">
             <a className='inline-block hover:text-blue-4 mt-2 text-white'>
               See All

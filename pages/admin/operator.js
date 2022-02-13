@@ -242,84 +242,88 @@ export default function Operator() {
         motionPreset='slideInBottom'>
         <ModalOverlay />
         <ModalContent>
-          <ModalHeader>{update ? 'Edit' : 'Add'} Operator</ModalHeader>
           <ModalCloseButton />
           <ModalBody>
-            <form onSubmit={handleSubmit(onSubmit)} className="pb-4">
-              <div className="flex justify-center">
-                <div className="m-4 relative">
-                  <Image className="rounded-full object-cover" src={avatar} alt="photo profile" height={160} width={160} />
-                  <div className="absolute bottom-5 right-0">
+            <>
+              <div className="text-1xl font-semibold pt-4"> {update ? 'Edit' : 'Add'} Operator </div>
+              <form onSubmit={handleSubmit(onSubmit)} className="pb-4 text-sm">
+                <div className="flex gap-4 flex-col md:flex-row mt-4">
+                  <div className="w-full">
+                    <p>Full Name {errors && (
+                      <span className="text-red-1 text-sm">{errors.name}</span>
+                    )}</p>
+                    <input type="text" className="w-full form border mt-1 p-2 rounded" placeholder="Input Full Name" {...register("name")} />
+                  </div>
+                  <div>
                     <label htmlFor="file-input">
-                      <Image src="/asset/icon/ic_edit.png" alt="icon update" width={48} height={48} className="ml-6 cursor-pointer" />
-                    </label>
-                  </div>
-                </div>
-                <div className="hidden">
-                  <input id="file-input" type="file" className="hidden -z-50" accept="image/*" onChange={choosePhoto} />
-                </div>
-              </div>
-              <div className="w-full">
-                <p>Full Name {errors && (
-                  <span className="text-red-1 text-sm">{errors.name}</span>
-                )}</p>
-                <input type="text" className="w-full form border p-2 rounded" placeholder="Input Full Name" {...register("name")} />
-              </div>
+                      <div className="m-4 relative my-auto cursor-pointer">
+                        <Image className="rounded-full object-cover" src={avatar} alt="photo profile" height={100} width={100} />
+                        <div className="absolute bottom-1 right-0">
+                          <Image src="/asset/icon/ic_edit.png" alt="icon update" width={28} height={28} className="ml-16 cursor-pointer" />
 
-              <div className="flex gap-4 flex-col md:flex-row mt-4">
-                <div className="w-full">
-                  <p>Email {errors && (
-                    <span className="text-red-1 text-sm">{errors.email}</span>
-                  )}</p>
-                  <input type="text" className="form border w-full p-2 rounded" placeholder="Input Email Address" {...register("email")} />
+                        </div>
+                      </div>  </label>
+                    <div className="hidden">
+                      <input id="file-input" type="file" className="hidden -z-50" accept="image/*" onChange={choosePhoto} />
+                    </div>
+                  </div>
                 </div>
-                <div className="w-full">
-                  <p>Phone{errors && (
-                    <span className="text-red-1 text-sm">{errors.phone}</span>
-                  )}</p>
-                  <input type="number" className="form border w-full  p-2 rounded" placeholder="Input Phone Number" {...register("phone")} />
-                </div>
-              </div>
 
-              <div className="flex gap-4 flex-col md:flex-row">
-                <div className="w-full">
-                  <p className="mt-4">Password  {errors && (
-                    <span className="text-red-1 text-sm">{errors.password}</span>
-                  )}</p>
-                  <div className="relative">
-                    <input type={`${passwd ? 'password' : 'text'}`} {...register("password")} className="form w-full border p-2 rounded" placeholder="Input New Password" />
-                    <span className="absolute inset-y-0 cursor-pointer right-0 pr-3 flex items-center text-sm leading-5" onClick={() => {
-                      passwd ? setpasswd(false) : setpasswd(true)
-                    }}>
-                      {passwd ?
-                        (<FaEyeSlash className=" z-10 inline-block align-middle" />) :
-                        (<FaEye className=" z-10 inline-block align-middle" />)
-                      }
-                    </span>
+                <div className="flex gap-4 flex-col md:flex-row">
+                  <div className="w-full">
+                    <p>Email {errors && (
+                      <span className="text-red-1 text-sm">{errors.email}</span>
+                    )}</p>
+                    <input type="text" className="form mt-1 border w-full p-2 rounded" placeholder="Input Email Address" {...register("email")} />
+                  </div>
+                  <div className="w-full">
+                    <p>Phone{errors && (
+                      <span className="text-red-1 text-sm">{errors.phone}</span>
+                    )}</p>
+                    <input type="number" className="form border p-2 mt-1 w-full rounded-lg" placeholder="Input Phone Number" {...register("phone")} />
                   </div>
                 </div>
-                <div className="w-full">
-                  <p className="mt-4">Confirm Password  {errors && (
-                    <span className="text-red-1 text-sm">{errors.password}</span>
-                  )}</p>
-                  <div className="relative">
-                    <input type={`${passwdConfirmation ? 'password' : 'text'}`} {...register("password_confirmation")} className="form w-full border p-2 rounded" placeholder="Input New Password" />
-                    <span className="absolute inset-y-0 cursor-pointer right-0 pr-3 flex items-center text-sm leading-5" onClick={() => {
-                      passwdConfirmation ? setpasswdConfirmation(false) : setpasswd(true)
-                    }}>
-                      {passwdConfirmation ?
-                        (<FaEyeSlash className=" z-10 inline-block align-middle" />) :
-                        (<FaEye className=" z-10 inline-block align-middle" />)
-                      }
-                    </span>
+
+                <div className="flex gap-4 flex-col md:flex-row mt-4">
+                  <div className="w-full">
+                    <p>Password  {errors && (
+                      <span className="text-red-1 text-sm">{errors.password}</span>
+                    )}</p>
+                    <div className="relative">
+                      <input type={`${passwd ? 'password' : 'text'}`} {...register("password")} className="form w-full border p-2 mt-1 rounded" placeholder="Input New Password" />
+                      <span className="absolute inset-y-0 cursor-pointer right-0 pr-3 flex items-center text-sm leading-5" onClick={() => {
+                        passwd ? setpasswd(false) : setpasswd(true)
+                      }}>
+                        {passwd ?
+                          (<FaEyeSlash className=" z-10 inline-block align-middle" />) :
+                          (<FaEye className=" z-10 inline-block align-middle" />)
+                        }
+                      </span>
+                    </div>
+                  </div>
+                  <div className="w-full">
+                    <p>Confirm Password  {errors && (
+                      <span className="text-red-1 text-sm">{errors.password}</span>
+                    )}</p>
+                    <div className="relative">
+                      <input type={`${passwdConfirmation ? 'password' : 'text'}`} {...register("password_confirmation")} className="form w-full border mt-1 p-2 rounded" placeholder="Input New Password" />
+                      <span className="absolute inset-y-0 cursor-pointer right-0 pr-3 flex items-center text-sm leading-5" onClick={() => {
+                        passwdConfirmation ? setpasswdConfirmation(false) : setpasswd(true)
+                      }}>
+                        {passwdConfirmation ?
+                          (<FaEyeSlash className=" z-10 inline-block align-middle" />) :
+                          (<FaEye className=" z-10 inline-block align-middle" />)
+                        }
+                      </span>
+                    </div>
                   </div>
                 </div>
-              </div>
-              <div className="flex flex-row-reverse gap-4 mt-4">
-                <Button title="Save" />
-                <button type="button" className="text-black-4 p-3 rounded-lg" onClick={onCloseCreateModal}>Close</button>
-              </div>
-            </form>
+                <div className="flex flex-row-reverse gap-4 mt-6">
+                  <Button title="Save" />
+                  <button type="button" className="text-black-4 p-3 rounded-lg" onClick={onCloseCreateModal}>Close</button>
+                </div>
+              </form>
+            </>
           </ModalBody>
         </ModalContent>
       </Modal>
