@@ -15,10 +15,10 @@ function Layout(props) {
       <div className="wrapper bg-black-8 min-h-screen">
         <AdminNavbar user={props.auth.isAuthenticated ? props.auth.user.user.name : ''} avatar={props.auth.isAuthenticated && props.auth.user.user.avatar}/>
         <div className="flex">
-          <div className="flex-none md:w-64 grow-0 bg-white h-full">
+          <div className="flex-none grow-0 bg-white h-full">
             <Sidebar />
           </div>
-          <div className="px-8 w-full overflow-hidden p-8 grow">
+          <div className=" pl-64 w-full overflow-hidden pt-8 pr-4 grow">
             {props.children}
             {/* <FooterAdmin /> */}
           </div>
