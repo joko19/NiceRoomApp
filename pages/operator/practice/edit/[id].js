@@ -12,7 +12,7 @@ import {
   ModalBody,
   ModalCloseButton,
   useDisclosure,
-  Divider,
+  useToast
 } from '@chakra-ui/react'
 import Quill from "../../../../components/Editor/Quill";
 import { Select } from '@chakra-ui/react'
@@ -29,6 +29,7 @@ export default function Create(props) {
   const Router = useRouter()
   const { id } = Router.query
   const [errors, setErrors] = useState()
+  const toast = useToast()
   const { register, handleSubmit, setValue, getValues, reset, unregister } = useForm();
   const step = ['Practice Details', 'Instruction', 'Sections']
   const [currentStep, setCurrentStep] = useState(1)
@@ -44,6 +45,19 @@ export default function Create(props) {
     },
   ])
 
+  useEffect(() => {
+    const uri = Router.asPath.split('#')
+    if (uri[1] === 'draft') {
+      toast({
+        title: 'Change Needed',
+        description: "You must change date before edit Exams",
+        status: 'error',
+        position: 'top-right',
+        duration: 9000,
+        isClosable: true,
+      })
+    }
+  }, [])
 
   const getDetails = async (id) => {
     await apiPractice.detail(id)

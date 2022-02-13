@@ -1,4 +1,4 @@
-import { useState, useRef } from 'react'
+import { useState, useRef, useEffect } from 'react'
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import Footer from '../components/footer/footer'
@@ -30,17 +30,19 @@ function Landing(props) {
 
   const { pathname } = useRouter();
 
-  // useEffect(() => {
-  //   // some browsers (like safari) may require a timeout to delay calling this
-  //   // function after a page has loaded; otherwise, it may not update the position
-  //   window.scrollTo(0, 0);
-  // }, [Router]);
-  // useEffect(() => {
-  //   const uri = Router.asPath.split('#')
-  //   if (uri[1] === 'register') {
-  //     setFormStatus('register')
-  //   }
-  // }, [])
+  useEffect(() => {
+    // some browsers (like safari) may require a timeout to delay calling this
+    // function after a page has loaded; otherwise, it may not update the position
+    window.scrollTo(0, 0);
+  }, [Router]);
+
+  
+  useEffect(() => {
+    const uri = Router.asPath.split('#')
+    if (uri[1] === 'register') {
+      setFormStatus('register')
+    }
+  }, [])
 
   const onRegister = async () => {
     const data = {
@@ -111,27 +113,6 @@ function Landing(props) {
     setFormStatus(to)
   }
 
-  const listRef = useRef(null);
-
-  const scrollRight = () => {
-    if (listRef.current) {
-      listRef.current.scrollBy({
-        top: 0,
-        left: 300,
-        behavior: "smooth",
-      });
-    }
-  };
-
-  const scrollLeft = () => {
-    if (listRef.current) {
-      listRef.current.scrollBy({
-        top: 0,
-        left: -300,
-        behavior: "smooth",
-      });
-    }
-  };
   return (
     <>
       <section className='bg'>

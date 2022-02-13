@@ -67,7 +67,7 @@ function Header(props) {
               <option key={item.id}>{item.name}</option>
             ))}
           </Select>
-          <Button title="Register" href="landing#register" />
+          <Button title="Register" href="/landing#register" />
         </div>
       </div >
 

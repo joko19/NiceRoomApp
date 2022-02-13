@@ -273,8 +273,10 @@ export default function Student() {
                               {item.branch.name}
                             </span>
                           </td>
-                          <td className="px-6 h-12 whitespace-nowrap">
-                            <div>{item.status}</div>
+                          <td className={`${item.status === 'pending' && 'text-yellow-1'} ${item.status === 'approve' && 'text-green-1'} ${item.status === 'reject' && 'text-red-1'} px-6 h-12 whitespace-nowrap`}>
+                            <div>
+                              {item.status.charAt(0).toUpperCase() + item.status.slice(1)}
+                            </div>
                           </td>
                           <td className="px-6 h-12 whitespace-nowrap flex text-right gap-2 text-sm font-medium">
                             <Link href={`/institute/student/${item.user.id}`}>

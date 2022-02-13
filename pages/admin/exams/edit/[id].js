@@ -13,7 +13,7 @@ import {
   ModalBody,
   ModalCloseButton,
   useDisclosure,
-  Divider,
+  useToast
 } from '@chakra-ui/react'
 import Quill from "../../../../components/Editor/Quill";
 import { Select } from '@chakra-ui/react'
@@ -32,6 +32,7 @@ import { Stepper } from "../../../../components/Section/Stepper";
 export default function Create(props) {
   const Router = useRouter()
   const { id } = Router.query
+  const toast = useToast()
   const [errors, setErrors] = useState()
   const { register, handleSubmit, setValue, getValues, reset, unregister } = useForm();
   const step = ['Exams Details', 'Instruction', 'Sections']
@@ -56,6 +57,19 @@ export default function Create(props) {
     },
   ])
 
+  useEffect(() => {
+    const uri = Router.asPath.split('#')
+    if (uri[1] === 'draft') {
+      toast({
+        title: 'Change Needed',
+        description: "You must change date before edit Exams",
+        status: 'error',
+        position: 'top-right',
+        duration: 9000,
+        isClosable: true,
+      })
+    }
+  }, [])
 
   const getDetail = async (id) => {
     await apiExam.detail(id)

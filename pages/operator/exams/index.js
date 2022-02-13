@@ -25,7 +25,7 @@ export default function Index() {
   const [dataInstitute, setDataInstitute] = useState([])
   const [list, setList] = useState([])
 
-  const TableHead = ['Exam Name', 'Type', 'Date', 'Status', 'Action']
+  const TableHead = ['Exam Name', 'Type', 'Date','Total Question', 'Status', 'Action']
   const {
     isOpen: isConfirmModal,
     onOpen: onOpenConfirmModal,

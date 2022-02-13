@@ -21,7 +21,15 @@ export default function ExamPracticeTable({ TableHead, list, type, onOpen, setSe
             <div>{type === 'exams' ? item.type : item.exam_type.name}</div>
           </td>
           <td className="px-6 h-12  whitespace-nowrap  text-center">
-            <div>{item.start_date ? item.start_date + ' - ' + item.end_date : '-'}</div>
+            {type === 'exams' && (
+              <div>{item.start_date ? item.start_date + ' - ' + item.end_date : '-'}</div>
+            )}
+            {type === 'practice' && (
+              <div>{item.start_date ? item.start_date : '-'}</div>
+            )}
+          </td>
+          <td className="px-6 h-12 whitespace-nowrap text-center">
+            <div>{item.items_count}</div>
           </td>
           <td className="h-12">
             <div className={`${item.status === 'draft' ? 'bg-black-8 text-black-3' : 'bg-green-2 text-green-1'} text-center w-24 flex-0 m-auto font-bold  rounded py-1 `}>
@@ -37,24 +45,33 @@ export default function ExamPracticeTable({ TableHead, list, type, onOpen, setSe
               </Link>
               {item.status === 'draft' && (
                 <>
-                  <Link href={`${type}/${item.id}`}>
-                    <a className="text-indigo-600 hover:text-indigo-900 m-auto">
-                      <Image src="/asset/icon/table/fi_edit.svg" width={16} height={16} alt="icon edit" />
-                    </a>
-                  </Link>
+                  {item.expired_draft === 0 ? (
+                    <Link href={`${type}/${item.id}`}>
+                      <a className="text-indigo-600 hover:text-indigo-900 m-auto">
+                        <Image src="/asset/icon/table/fi_edit.svg" width={16} height={16} alt="icon edit" />
+                      </a>
+                    </Link>
+                  ) : (
+                    <Link href={`${type}/edit/${item.id}#draft`}>
+                      <a className="text-indigo-600 hover:text-indigo-900 m-auto">
+                        <Image src="/asset/icon/table/fi_edit.svg" width={16} height={16} alt="icon edit" />
+                      </a>
+                    </Link>
+                  )}
+
                   <button className="text-indigo-600 hover:text-indigo-900 m-auto" onClick={() => {
                     setSelectedData(item.id),
                       onOpen()
                   }}>
                     <Image src="/asset/icon/table/fi_trash-2.svg" className="inline-block align-baseline " width={16} height={16} alt="icon deleted" />
                   </button>
-                </>
-              )}
+                </>)}
+
               {item.status === 'waiting' && (
                 <>
                   <button className="text-indigo-600 hover:text-indigo-900 m-auto" onClick={() => {
                     setSelectedData(item.id),
-                    onOpenPublish()
+                      onOpenPublish()
                   }}>
                     <Image src="/asset/icon/table/ic_repeat.svg" className="inline-block align-baseline " width={16} height={16} alt="icon deleted" />
                   </button>
@@ -65,6 +82,6 @@ export default function ExamPracticeTable({ TableHead, list, type, onOpen, setSe
         </tr>
       ))}
     </tbody>
-  </table>
+  </table >
   )
 }

@@ -14,7 +14,10 @@ function UpcomingExam() {
           <Link href="/landing">
             <a className='mb-4 text-black-5'>Home</a>
           </Link>
-          <FaAngleRight className='mt-1' /> <span className='text-blue-1'>Exams</span>
+          <FaAngleRight className='mt-1' />
+          <span className='text-blue-1'>Exam</span>
+          <FaAngleRight className='mt-1' />
+          <span className='text-blue-1'>PO, CLERK, SO, Insurance</span>
         </div>
         <div className="py-4">
           <div className="flex gap-4 align-text-bottom">
