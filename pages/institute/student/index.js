@@ -1,7 +1,7 @@
-import Layout from "../../Layout/Layout";
-import Card from "../../components/Cards/Card";
-import apiStudent from "../../action/student";
-import apiBranch from "../../action/branch";
+import Layout from "../../../Layout/Layout";
+import Card from "../../../components/Cards/Card";
+import apiStudent from "../../../action/student";
+import apiBranch from "../../../action/branch";
 import { useEffect, useState } from 'react'
 import Image from "next/image";
 import Link from 'next/link'
@@ -16,13 +16,13 @@ import {
   Select
 } from '@chakra-ui/react'
 import { useForm } from "react-hook-form";
-import Pagination from "../../components/Pagination/pagination";
+import Pagination from "../../../components/Pagination/pagination";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
-import instance from "../../action/instance";
-import apiBatch from "../../action/batch";
-import Button from "../../components/Button/button";
-import { ModalSuccessCreateEdit } from "../../components/Modal/ModalSuccess";
-import { ModalDelete } from "../../components/Modal/ModalDelete";
+import instance from "../../../action/instance";
+import apiBatch from "../../../action/batch";
+import Button from "../../../components/Button/button";
+import { ModalSuccessCreateEdit } from "../../../components/Modal/ModalSuccess";
+import { ModalDelete } from "../../../components/Modal/ModalDelete";
 
 export default function Student() {
   const [search, setSearch] = useState('')
@@ -256,7 +256,7 @@ export default function Student() {
                             <div>{item.status}</div>
                           </td>
                           <td className="px-6 h-12 whitespace-nowrap flex text-right gap-2 text-sm font-medium">
-                            <Link href={`/admin/institution/${item.id}`}>
+                            <Link href={`/institute/student/${item.user.id}`}>
                               <a className="text-indigo-600 hover:text-indigo-900 my-auto">
                                 <Image src="/asset/icon/table/fi_eye.svg" width={16} height={16} alt="icon detail" />
                               </a>
@@ -270,7 +270,7 @@ export default function Student() {
                             }}>
                               <Image src="/asset/icon/table/fi_edit.svg" width={16} height={16} alt="icon edit" />
                             </button>
-                            <button href="#" className="text-indigo-600 hover:text-indigo-900">
+                            <button className="text-indigo-600 hover:text-indigo-900">
                               <Image src="/asset/icon/table/fi_trash-2.svg" width={16} height={16} alt="icon deleted" onClick={() => {
                                 setNameDeleted(item.user.name)
                                 setSelectedData(item.user.id),
