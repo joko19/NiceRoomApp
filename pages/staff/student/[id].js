@@ -58,7 +58,7 @@ export default function Section({ data }) {
   return (
     <div className="mt-12">
       <div className="text-sm">
-        <BackButton url="/institute/student" />
+        <BackButton url="/staff/student" />
       </div>
       <Card>
         <div className="flex gap-4">

@@ -277,7 +277,7 @@ export default function Student() {
                             <div>{item.status}</div>
                           </td>
                           <td className="px-6 h-12 whitespace-nowrap flex text-right gap-2 text-sm font-medium">
-                            <Link href={`/admin/institution/${item.id}`}>
+                            <Link href={`/institute/student/${item.user.id}`}>
                               <a className="text-indigo-600 hover:text-indigo-900 my-auto">
                                 <Image src="/asset/icon/table/fi_eye.svg" width={16} height={16} alt="icon detail" />
                               </a>
