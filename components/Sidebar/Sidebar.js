@@ -149,7 +149,7 @@ function Sidebar() {
       setItemList(staff)
   }, [])
   return (
-    <div className="py-16 bg-white h-screen">
+    <div className="py-16 bg-white fixed h-screen">
       {roleStore === role.instituteAdmin && (
         <div className="bg-black-9 m-2 rounded-lg p-2 flex gap-4 mb-2">
           <Image src="/asset/icon/sidebar/ic_college.svg" height="32" width="32" alt="icon campus" />

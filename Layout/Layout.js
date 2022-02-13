@@ -12,13 +12,13 @@ import { store } from "../redux/store";
 function Layout(props) {
   return (
     <>
-      <div className="wrapper bg-black-8 h-screen">
+      <div className="wrapper bg-black-8 min-h-screen">
         <AdminNavbar user={props.auth.isAuthenticated ? props.auth.user.user.name : ''} avatar={props.auth.isAuthenticated && props.auth.user.user.avatar}/>
         <div className="flex">
-          <div className="flex-none grow-0">
+          <div className="flex-none grow-0 bg-white h-full">
             <Sidebar />
           </div>
-          <div className="px-8 md:px-12 w-full overflow-hidden p-8 grow">
+          <div className="px-8 md:ml-64 w-full overflow-hidden p-8 grow">
             {props.children}
             {/* <FooterAdmin /> */}
           </div>
