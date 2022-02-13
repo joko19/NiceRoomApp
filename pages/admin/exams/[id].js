@@ -17,7 +17,7 @@ import Button, { BackButton } from "../../../components/Button/button";
 import { ListSession } from "../../../components/Section/ListSession";
 import { TitleSection } from "../../../components/Section/TitleSection";
 
-export default function Section({ data }) {
+export default function Section() {
   const Router = useRouter()
   const { id } = Router.query
   const [dataExams, setDataExams] = useState({})
@@ -140,7 +140,6 @@ export default function Section({ data }) {
     </div>
   )
 }
-
 
 // This also gets called at build time
 export async function getServerSideProps(context) {

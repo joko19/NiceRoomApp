@@ -30,7 +30,7 @@ export default function ExamPracticeTable({ TableHead, list, type, onOpen, setSe
           </td>
           <td className="pl-20 h-12 whitespace-nowrap flex  gap-2 my-auto text-sm font-medium flex  h-full">
             <div className="flex gap-2 flex-row mt-4">
-              <Link href="#">
+              <Link href={`${type}/view/${item.id}`}>
                 <a className="text-indigo-600 hover:text-indigo-900 m-auto">
                   <Image src="/asset/icon/table/fi_eye.svg" width={16} height={16} alt="icon edit" />
                 </a>

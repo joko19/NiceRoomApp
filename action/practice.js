@@ -12,6 +12,7 @@ const detailQuestion = (id) => instance.auth.get('/practice-question/' + id)
 const detailSection = (id) => instance.auth.get("/practice-section/" + id)
 const createQuestion = (data) => instance.auth.post('/practice-question', data)
 const updateQuestion = (id, data) => instance.auth.post('/practice-question/' + id + '?_method=PUT', data)
+const detailsectionQuestion = (id) => instance.auth.get('/practice-section-question/' + id)
 
 const apiPractice = {
   create,
@@ -25,7 +26,8 @@ const apiPractice = {
   detailQuestion,
   detailSection,
   createQuestion,
-  updateQuestion
+  updateQuestion,
+  detailsectionQuestion
 }
 
 export default apiPractice

@@ -14,6 +14,7 @@ const detailQuestion = (id) => instance.auth.get('/exam-question/' + id)
 const detailSection = (id) => instance.auth.get("/exam-section/" + id)
 const createQuestion = (data) => instance.auth.post('/exam-question', data)
 const updateQuestion = (id, data) => instance.auth.post('/exam-question/' + id + '?_method=PUT', data)
+const detailsectionQuestion = (id) => instance.auth.get('/exam-section-question/' + id)
 
 const apiExam = {
   AllCategory,
@@ -30,6 +31,7 @@ const apiExam = {
   detailSection,
   createQuestion,
   updateQuestion,
+  detailsectionQuestion
 }
 
 export default apiExam
