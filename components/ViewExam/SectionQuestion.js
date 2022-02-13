@@ -47,7 +47,7 @@ export default function SectionQuestion({ dataExams, indexActiveSection, urlBack
 
                     {itemQuestion.options.map((itemOptions, indexOption) => {
                       return (
-                        <span> {itemOptions.correct === 1 && alphabet[indexOption]}</span>
+                        <span key={indexOption}> {itemOptions.correct === 1 && alphabet[indexOption]}</span>
                       )
                     })}
                   </p>

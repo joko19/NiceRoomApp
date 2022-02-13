@@ -23,7 +23,6 @@ function Layout(props) {
             {/* <FooterAdmin /> */}
           </div>
         </div>
-        <Footer />
       </div>
     </>
   )
