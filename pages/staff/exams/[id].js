@@ -129,7 +129,7 @@ export default function Section({ data }) {
           <ModalBody>
             <div className="flex flex-col text-center text-sm"> Exams has published
               <div className="self-center">
-                <Link href="/staff/practice">
+                <Link href="/staff/exams">
                   <a> <Button title="Okay" className="mt-4" /></a>
                 </Link>
               </div>

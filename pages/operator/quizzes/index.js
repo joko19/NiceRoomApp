@@ -11,6 +11,7 @@ import apiQuiz from "../../../action/quiz";
 import Link from "next/link";
 import { ModalDelete } from "../../../components/Modal/ModalDelete";
 import Button from "../../../components/Button/button";
+import { ModalUnPublish } from "../../../components/Modal/ModalUnpublish";
 
 export default function Create() {
   const [search, setSearch] = useState('')
@@ -22,6 +23,11 @@ export default function Create() {
   const [selectedData, setSelectedData] = useState(null)
   const [dataInstitute, setDataInstitute] = useState([])
   const [list, setList] = useState([])
+  const {
+    isOpen: isConfirmModal,
+    onOpen: onOpenConfirmModal,
+    onClose: onCloseConfirmModal
+  } = useDisclosure()
 
   const getData = async (search, type, status, limit, page) => {
     await apiQuiz.index(search, type, status, limit, page)
@@ -30,6 +36,7 @@ export default function Create() {
         setList(res.data.data.data)
         setPage(res.data.data.current_page)
 
+        console.log(res.data.data)
       })
       .catch((err) => {
         // console.log(err)
@@ -42,6 +49,16 @@ export default function Create() {
 
   const onDelete = async (id) => {
     await apiQuiz.deleted(id)
+      .then(() => {
+        getData(search, type, status, limit, page)
+      })
+      .catch((err) => {
+        // console.log(err)
+      })
+  }
+
+  const onUnpublish = async (id) => {
+    await apiQuiz.unpublish(id)
       .then(() => {
         getData(search, type, status, limit, page)
       })
@@ -96,6 +113,9 @@ export default function Create() {
                       <th scope="col" className="px-6 py-3 text-left tracking-wider">
                         Type
                       </th>
+                      <th scope="col" className="px-6 py-3 text-left tracking-wider">
+                        Date
+                      </th>
                       <th scope="col" className="px-6 py-3 text-center tracking-wider">
                         Status
                       </th>
@@ -116,26 +136,47 @@ export default function Create() {
                           <td className="px-6 py-4 whitespace-nowrap">
                             <div>{item.type}</div>
                           </td>
-                          <td>
-                            <div className={`${item.status === 'draft' ? 'bg-black-8 text-black-3' : 'bg-green-2 text-green-1'} text-center w-24 flex-0 m-auto font-bold  rounded-lg py-3 `}>
-                              {item.status === 'draft' ? 'Draft' : 'Published'}
+                          <td className="px-6 py-4 whitespace-nowrap">
+                            <div>{item.start_time ? item.start_time.split(" ")[0] + ' - ' + item.end_time.split(" ")[0] : '-'}</div>
+                          </td>
+                          <td className="h-12">
+                            <div className={`${item.status === 'draft' ? 'bg-black-8 text-black-3' : 'bg-green-2 text-green-1'} text-center w-24 flex-0 m-auto font-bold  rounded py-1 `}>
+                              {item.status.charAt(0).toUpperCase() + item.status.slice(1)}
                             </div>
                           </td>
                           <td className="px-6 py-4 whitespace-nowrap flex text-right gap-2 text-sm font-medium">
-                            <div className="mx-auto flex gap-4">
-                              <Link href={`quizzes/edit/${item.id}`}>
-                                <a className="text-indigo-600 hover:text-indigo-900">
-                                  <Image src="/asset/icon/table/fi_edit.svg" width={16} height={16} alt="icon edit" />
+                            <div className="flex m-auto gap-4">
+                              <Link href={`/operator/quizzes/view/${item.id}`}>
+                                <a className="text-indigo-600 hover:text-indigo-900 ">
+                                  <Image src="/asset/icon/table/fi_eye.svg" width={16} height={16} alt="icon edit" />
                                 </a>
                               </Link>
-                              <button href="#" className="text-indigo-600 hover:text-indigo-900">
-                                <Image src="/asset/icon/table/fi_trash-2.svg" width={16} height={16} alt="icon deleted" onClick={() => {
-                                  // setNameDeleted(item.name)
-                                  setSelectedData(item.id),
-                                    onOpen()
-                                }} />
-                              </button>
-
+                              {item.status === 'draft' && (
+                                <div className="flex gap-4">
+                                  <Link href={`quizzes/edit/${item.id}`}>
+                                    <a className="text-indigo-600 hover:text-indigo-900">
+                                      <Image src="/asset/icon/table/fi_edit.svg" width={16} height={16} alt="icon edit" />
+                                    </a>
+                                  </Link>
+                                  <button href="#" className="text-indigo-600 hover:text-indigo-900">
+                                    <Image src="/asset/icon/table/fi_trash-2.svg" width={16} height={16} alt="icon deleted" onClick={() => {
+                                      // setNameDeleted(item.name)
+                                      setSelectedData(item.id),
+                                        onOpen()
+                                    }} />
+                                  </button>
+                                </div>
+                              )}
+                              {item.status === 'waiting' && (
+                                <>
+                                  <button className="text-indigo-600 hover:text-indigo-900 m-auto" onClick={() => {
+                                    setSelectedData(item.id),
+                                      onOpenConfirmModal()
+                                  }}>
+                                    <Image src="/asset/icon/table/ic_repeat.svg" className="inline-block align-baseline " width={16} height={16} alt="icon deleted" />
+                                  </button>
+                                </>
+                              )}
                             </div>
                           </td>
                         </tr>
@@ -150,6 +191,7 @@ export default function Create() {
         </Card>
       </div>
 
+      <ModalUnPublish isConfirmModal={isConfirmModal} onCloseConfirmModal={onCloseConfirmModal} selectedData={selectedData} onUnpublish={(data) => onUnpublish(data)} />
       <ModalDelete isOpen={isOpen} onClose={onClose} onDelete={(data) => onDelete(data)} selectedData={selectedData} />
     </>
   )

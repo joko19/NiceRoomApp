@@ -11,6 +11,7 @@ import Link from "next/link";
 import { ModalDelete } from "../../../components/Modal/ModalDelete";
 import Button from '../../../components/Button/button'
 import ExamPracticeTable from "../../../components/Table/ExamsPracticeTable";
+import { ModalUnPublish } from "../../../components/Modal/ModalUnpublish";
 
 export default function Index() {
   const [search, setSearch] = useState('')
@@ -24,6 +25,11 @@ export default function Index() {
   const [list, setList] = useState([])
   const TableHead = ['Practice Name', 'Type', 'Date', 'Status', 'Action']
 
+  const {
+    isOpen: isConfirmModal,
+    onOpen: onOpenConfirmModal,
+    onClose: onCloseConfirmModal
+  } = useDisclosure()
   const getData = async (search, type, status, limit, page) => {
     await apiPractice.index(search, type, status, limit, page)
       .then((res) => {
@@ -51,6 +57,15 @@ export default function Index() {
       })
   }
 
+  const onUnpublish = async (id) => {
+    await apiPractice.unpublish(id)
+      .then(() => {
+        getData(search, type, status, limit, page)
+      })
+      .catch((err) => {
+        // console.log(err)
+      })
+  }
   return (
     <div className="mt-12">
       <Card
@@ -88,7 +103,7 @@ export default function Index() {
           <div className="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
             <div className="py-2 align-middle inline-block min-w-full sm:px-6 lg:px-8">
               <div className="shadow overflow-hidden border-b border-gray-200 sm:rounded-lg">
-                <ExamPracticeTable TableHead={TableHead} list={list} onOpen={onOpen} setSelectedData={(id) => setSelectedData(id)} type="practice" />
+                <ExamPracticeTable TableHead={TableHead} list={list} onOpen={onOpen} setSelectedData={(id) => setSelectedData(id)} type="practice" onOpenPublish={onOpenConfirmModal}/>
               </div>
               <Pagination page={page} lastPage={dataInstitute.last_page} limit={limit} search={search} type={type} status={status} total={dataInstitute.total} doLimit={data => setLimit(data)} doData={getData} />
             </div>
@@ -96,6 +111,7 @@ export default function Index() {
         </div>
       </Card>
 
+      <ModalUnPublish isConfirmModal={isConfirmModal} onCloseConfirmModal={onCloseConfirmModal} selectedData={selectedData} onUnpublish={(data) => onUnpublish(data)} />
       <ModalDelete isOpen={isOpen} onClose={onClose} onDelete={(data) => onDelete(data)} selectedData={selectedData} />
     </div>
   )
