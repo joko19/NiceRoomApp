@@ -97,7 +97,7 @@ export default function Section({ data }) {
           options={dataChart.options}
           series={dataChart.series}
           type="bar"
-          height={240}
+          height={360}
         />
       </Card>
     </div>

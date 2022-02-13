@@ -273,10 +273,10 @@ export default function Branch() {
                                 {item.city}
                               </span>
                             </td>
-                            <td className="px-6 h-12 whitespace-nowrap">
-                              <span>
-                                {item.status}
-                              </span>
+                            <td className={`${item.status === 'pending' && 'text-yellow-1'} ${item.status === 'approve' && 'text-green-1'} ${item.status === 'reject' && 'text-red-1'} px-6 h-12 whitespace-nowrap`}>
+                              <div>
+                                {item.status.charAt(0).toUpperCase() + item.status.slice(1)}
+                              </div>
                             </td>
                             <td className="px-6 h-12 whitespace-nowrap flex text-right gap-2 text-sm font-medium">
                               <button className="text-indigo-600 hover:text-indigo-900" onClick={() => {

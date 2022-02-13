@@ -278,7 +278,7 @@ export default function Index(props) {
             </Card>
           </div>
         </div>
-        <div className="md:flex flex-col p-4 m-4 hidden sm:w-1/3 md:w-1/3 bg-white rounded-lg">
+        <div className="md:flex flex-col p-4 ml-4 mt-4 hidden sm:w-1/3 md:w-1/3 bg-white rounded-lg">
           <h1 className="text-1xl font-bold mb-2">List Institute</h1>
           <input type="text" className="p-2 text-sm border rounded w-full" placeholder="Search Institute" onChange={(e) => {
             onSearchInstitute(e.target.value)
