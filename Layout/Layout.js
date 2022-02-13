@@ -17,11 +17,8 @@ function Layout(props) {
         <div className="flex">
           <div className="flex-none grow-0 bg-white h-full">
             <Sidebar />
-            <div className="w-64">
-              sidebar
-            </div>
           </div>
-          <div className="  w-full overflow-hidden pt-8 pr-4 grow">
+          <div className="  w-full ml-4 md:ml-64 overflow-hidden pt-8 pr-4 grow">
             {props.children}
             {/* <FooterAdmin /> */}
           </div>
