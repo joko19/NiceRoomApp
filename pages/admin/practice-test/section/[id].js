@@ -2,8 +2,8 @@ import { useEffect, useState, useRef } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { FaAngleLeft } from "react-icons/fa";
-import Card from "../../components/Cards/Card";
-import Layout from "../../Layout/Layout";
+import Card from "../../../../components/Cards/Card";
+import Layout from "../../../../Layout/Layout";
 import { useForm } from "react-hook-form";
 import {
   Modal,
@@ -14,11 +14,11 @@ import {
   ModalCloseButton,
   useDisclosure,
 } from '@chakra-ui/react'
-import QuillCreated from "../../components/Editor/QuillCreated";
+import QuillCreated from "../../../../components/Editor/QuillCreated";
 import { Select } from '@chakra-ui/react'
-import apiPractice from "../../action/practice";
+import apiPractice from "../../../../action/practice";
 import { useRouter } from "next/router";
-import Button, { BackButton } from "../../components/Button/button";
+import Button, { BackButton } from "../../../../components/Button/button";
 
 export default function Create(props) {
   const Router = useRouter()
