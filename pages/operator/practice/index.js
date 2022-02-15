@@ -98,7 +98,7 @@ export default function Index() {
               }}>
                 <option value="">All Type</option>
                 {typePractice.map((item, index) => (
-                  <option key={index} value={item.name}>{item.name}</option>
+                  <option key={item.id} value={item.name}>{item.name}</option>
                 ))}
               </select>
 
