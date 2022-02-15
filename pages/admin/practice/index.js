@@ -43,15 +43,12 @@ export default function Index() {
       .catch((err) => {
         // console.log(err)
       })
-  }
-  useEffect(() => {
-    getData(search, type, status, limit, page)
-  }, [])
-
-  useEffect(async () => {
     await apiExam.allType()
       .then((res) => setTypePractice(res.data.data))
       .catch((err) => console.log(err))
+  }
+  useEffect(() => {
+    getData(search, type, status, limit, page)
   }, [])
 
 
