@@ -21,7 +21,7 @@ function UpcomingExam() {
           <div className="flex gap-4 align-text-bottom">
             <h1 className="text-2xl">Upcoming Exams</h1>
           </div>
-          <div className=" grid md:grid-cols-3 gap-4 my-4">
+          <div className=" flex flex-wrap gap-4 my-4">
             {list.map((item) => (
               <CardExams key={item} />
             ))}

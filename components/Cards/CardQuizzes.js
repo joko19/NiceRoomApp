@@ -6,7 +6,7 @@ export default function CardQuizzes({ isLive = false }) {
   return (
     <div className="flex-nowrap min-w-max m-2 bg-white rounded-lg p-4">
       <div className="flex flex-row gap-4">
-        <img className='w-12 h-12' src="/asset/icon/ic_quiz.png" alt="icon paper" />
+        <img className='w-9 h-9 my-auto' src="/asset/icon/ic_quiz.png" alt="icon paper" />
         <div>
           <p className="font-bold self-center">The Hindu Quiz {isLive && (<img className='inline ml-2' src="/asset/icon/ic_live_text.png" />)}</p>
           <p className="text-black-3 text-sm">By <span className='text-blue-1'>Student University</span></p>
