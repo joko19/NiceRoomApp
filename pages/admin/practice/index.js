@@ -92,7 +92,7 @@ export default function Index() {
 
           <div className="flex gap-4 w-1/2 h-full text-sm ">
             <div className="w-full border rounded py-2 pl-2">
-              <select defaultValue={"all type"} className="bg-white w-full" onChange={(e) => {
+              {/* <select defaultValue={"all type"} className="bg-white w-full" onChange={(e) => {
                 setType(e.target.value)
                 getData(search, e.target.value, status, limit, page)
               }}>
@@ -100,7 +100,7 @@ export default function Index() {
                 {typePractice.map((item, index) => (
                   <option key={item.id} value={item.name}>{item.name}</option>
                 ))}
-              </select>
+              </select> */}
 
             </div>
             <div className="w-full py-2 pl-2 rounded border">
