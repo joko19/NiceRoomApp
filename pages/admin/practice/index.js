@@ -23,7 +23,10 @@ export default function Index() {
   const { isOpen, onOpen, onClose } = useDisclosure()
   const [selectedData, setSelectedData] = useState(null)
   const [dataInstitute, setDataInstitute] = useState([])
-  const [typePractice, setTypePractice] = useState([])
+  const [typePractice, setTypePractice] = useState([{
+    name: 'All Type',
+    value: ''
+  }])
   const [list, setList] = useState([])
   const TableHead = ['Practice Name', 'Type', 'Start Date', 'Total Question', 'Status', 'Action']
 
@@ -51,7 +54,22 @@ export default function Index() {
 
   useEffect(async () => {
     await apiExam.allType()
-      .then((res) => setTypePractice(res.data.data))
+      .then((res) => {
+        console.log(res.data.data)
+        var newType = []
+        res.data.data.map((item) => {
+          var typed = {
+            value: item.name,
+            name: item.name
+          }
+          newType.push(typed)
+        })
+        // newType.push(typePractice)
+        console.log(newType)
+        setTypePractice([...typePractice, ...newType])
+        
+        console.log(typePractice)
+      })
       .catch((err) => console.log(err))
   }, [])
 
@@ -97,9 +115,8 @@ export default function Index() {
                 setType(e.target.value)
                 getData(search, e.target.value, status, limit, page)
               }}>
-                <option value="">All Type</option>
                 {typePractice.map((item, index) => (
-                  <option key={item.id} value={item.name}>{item.name}</option>
+                  <option key={index} value={item.value}>{item.name}</option>
                 ))}
               </select>
 
