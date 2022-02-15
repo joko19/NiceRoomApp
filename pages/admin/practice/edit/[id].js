@@ -1,5 +1,6 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { FaAngleLeft } from "react-icons/fa";
 import Card from "../../../../components/Cards/Card";
 import Layout from "../../../../Layout/Layout";
@@ -17,48 +18,52 @@ import {
 import Quill from "../../../../components/Editor/Quill";
 import { Select } from '@chakra-ui/react'
 import apiPractice from "../../../../action/practice";
+import apiExam from "../../../../action/exam";
 import apiTopic from "../../../../action/topics";
 import Multiselect from 'multiselect-react-dropdown';
+import apiBatch from "../../../../action/batch";
+import apiBranch from "../../../../action/branch";
 import DatePicker2 from "../../../../components/DateTime/Date";
 import { useRouter } from "next/router";
-import Button, { BackButton } from "../../../../components/Button/button";
-import apiExam from "../../../../action/exam";
+// import { Date } from "../../../components/DateTime/Date";
 import { Time } from "../../../../components/DateTime/Time";
+import Button, { BackButton } from "../../../../components/Button/button";
 import { Stepper } from "../../../../components/Section/Stepper";
+
 export default function Create(props) {
   const Router = useRouter()
   const { id } = Router.query
-  const [errors, setErrors] = useState()
   const toast = useToast()
+  const [errors, setErrors] = useState()
   const { register, handleSubmit, setValue, getValues, reset, unregister } = useForm();
   const step = ['Practice Details', 'Instruction', 'Sections']
   const [currentStep, setCurrentStep] = useState(1)
-  const [type, setType] = useState('standard')
+  const [topics, setTopics] = useState([])
+  const [type, setType] = useState()
+  const [instruction, setInstruction] = useState('')
   const [startTime, setStartTime] = useState()
-  const [typePractice, setTypePractice] = useState([])
-  const [consentments, setConsentments] = useState([''])
+  const [endTime, setEndTime] = useState()
+  const [consentments, setConsentments] = useState([0])
   const [status, setStatus] = useState()
+  const [listBranch, setListBranch] = useState([])
+  const [listBatch, setListBatch] = useState([])
   const [listTopic, setListTopic] = useState([])
   const [topicItem, setTopicItem] = useState([])
+  const [batchItem, setBatchItem] = useState([])
+  const [branchItem, setBranchItem] = useState([])
+  const [examType, setExamType] = useState([])
   const [sections, setsections] = useState([
     {
       id: 0,
     },
   ])
 
-
-  useEffect(async () => {
-    await apiExam.allType()
-      .then((res) => setTypePractice(res.data.data))
-      .catch((err) => console.log(err))
-  }, [])
-
   useEffect(() => {
     const uri = Router.asPath.split('#')
     if (uri[1] === 'draft') {
       toast({
         title: 'Change Needed',
-        description: "You must change date before edit Exams",
+        description: "You must change date before edit Practice",
         status: 'error',
         position: 'top-right',
         duration: 9000,
@@ -67,7 +72,7 @@ export default function Create(props) {
     }
   }, [])
 
-  const getDetails = async (id) => {
+  const getDetail = async (id) => {
     await apiPractice.detail(id)
       .then((res) => {
         const data = res.data.data
@@ -103,8 +108,17 @@ export default function Create(props) {
         }
       })
   }
+
+  const getExamType = async () => {
+    await apiExam.allType()
+      .then((res) => {
+        setExamType(res.data.data)
+      })
+  }
+
   const onSelectTopic = (list, item) => {
     setTopicItem(list)
+    console.log(list)
     let arr = []
     for (let i = 0; i < list.length; i++) {
       arr.push(list[i].id)
@@ -126,8 +140,17 @@ export default function Create(props) {
       .then((res) => setListTopic(res.data.data.data))
   }
 
-  const submitPractice = async (data) => {
+  const submitExams = async (data) => {
+    console.log(data)
+    if (data.type === 'standard') {
+      delete data.start_time
+      delete data.end_time
+      delete data.start_date
+      delete data.end_date
+    }
     if (currentStep === 1) {
+      console.log(data)
+      delete data.consentments
       const arr = []
       if (consentments) {
         for (let i = 0; i < consentments.length; i++) {
@@ -142,7 +165,8 @@ export default function Create(props) {
           setCurrentStep(2))
         .catch((err) => {
           setErrors(err.response.data.data)
-          if (!err.response.data.data.name && !err.response.data.data.duration) {
+          console.log(err.response)
+          if (!err.response.data.data.name && !err.response.data.data.duration && !err.response.data.data.start_date && !err.response.data.data.end_date && !err.response.data.data.start_time && !err.response.data.data.end_time) {
             setErrors(null)
             setCurrentStep(2)
           }
@@ -152,6 +176,7 @@ export default function Create(props) {
     }
 
     if (currentStep === 2) {
+      console.log(data)
       delete data.consentments
       const arr = []
       if (consentments) {
@@ -162,14 +187,17 @@ export default function Create(props) {
         }
       }
       data.consentments = arr
+      console.log(data)
       await apiPractice.update(id, data)
         .then(() =>
           setCurrentStep(3))
         .catch((err) => {
           setErrors(err.response.data.data)
+          console.log(err.response.data.data)
           if (!err.response.data.data["consentments"] && !err.response.data.data.instruction) {
             setErrors(null)
             setCurrentStep(3)
+            getDetail(id)
           }
           return;
         })
@@ -177,6 +205,8 @@ export default function Create(props) {
     }
 
     if (currentStep === 3) {
+      console.log(data)
+      delete data.consentments
       const arr = []
       if (consentments) {
         for (let i = 0; i < consentments.length; i++) {
@@ -191,6 +221,7 @@ export default function Create(props) {
           onOpenSuccessModal()
         })
         .catch((err) => {
+          console.log(err.response.data.data)
           setErrors(err.response.data.data)
         })
     }
@@ -203,24 +234,23 @@ export default function Create(props) {
   } = useDisclosure()
 
   useEffect(() => {
-    getTopics()
-    getDetails(id)
-  }, []);
+    getDetail(id)
+    getExamType()
+  }, [currentStep]);
 
   const setDataForm = (identifier, data) => {
     setValue(identifier, data)
   }
 
   return (
-    <div className="md:pt-12 md:pb-28">
-      <BackButton url="/admin/practice" />
+    <div className=" md:pb-28">
+      <BackButton url="/admin/news" />
       <Card
         className="w-full  bg-white overflow-visible"
-        title="Edit Practice " >
+        title="Edit Exam " >
         <Stepper step={step} currentStep={currentStep} />
-        <form onSubmit={handleSubmit(submitPractice)}>
-
-          {currentStep === 1 && (
+        <form onSubmit={handleSubmit(submitExams)} className="text-sm">
+        {currentStep === 1 && (
             <div className="mb-8">
               <div className="flex gap-4 ">
                 <div className="w-full">
@@ -287,7 +317,7 @@ export default function Create(props) {
                   )}</p>
                   <div className="border p-1 rounded">
                     <select className="bg-white w-full" {...register('exam_type_id')}>
-                      {typePractice.map((item, index) => (
+                      {examType.map((item, index) => (
                         <option key={index} value={item.id}>{item.name}</option>
                       ))}
                     </select>
@@ -298,7 +328,6 @@ export default function Create(props) {
             </div>
           )}
 
-
           {currentStep === 2 && (
             <>
               <p className="mt-4">Instruction {errors && (
@@ -308,20 +337,18 @@ export default function Create(props) {
                 <Quill className="h-48" data={getValues('instruction')} setData={(data) => setValue('instruction', data)} />
               </div>
               <p className="mt-4">Consentment</p>
-
               {consentments.map((item, index) => {
                 return (
-                  <div>
-                    {errors && (
-                      <span className="text-red-1 text-sm">{errors[`consentments.${index}`]}</span>
-                    )}
+                  <>{errors && (
+                    <span className="text-red-1 text-sm">{errors[`consentments.${index}`]}</span>
+                  )}
                     <div key={index} className="flex">
-                      <input type="text" value={item} onChange={(e) => {
+                      <input key={index} type="text" value={item} onChange={(e) => {
                         const arr = consentments
                         arr[index] = e.target.value
                         setConsentments([...arr])
                         setValue(`consentments[${index}]`, e.target.value)
-                      }} className="form border w-full rounded-lg p-2 h-full m-1" autoComplete="off" placeholder="Input Consentment" />
+                      }} className="form border w-full rounded p-2 h-full m-1" autoComplete="off" placeholder="Input Consentment" />
                       {consentments.length !== 1 && (
                         <div className="m-auto cursor-pointer text-blue-1 -ml-8" onClick={() => {
                           let newArr = consentments
@@ -330,10 +357,10 @@ export default function Create(props) {
                         }} >x</div>
                       )}
                     </div>
-                  </div>
+                  </>
                 )
               })}
-              <div onClick={() => setConsentments([...consentments, ''])} className="text-blue-1 cursor-pointer text-center p-2 border-dashed border-2 border-blue-1 mt-4 rounded-lg">+ Add New Consent</div>
+              <div onClick={() => setConsentments([...consentments, ''])} className="text-blue-1 cursor-pointer text-center p-2 border-dashed border-2 border-blue-1 mt-4 rounded">+ Add New Consentment</div>
             </>
           )}
 
@@ -345,7 +372,7 @@ export default function Create(props) {
                     setValue(`sections[${indexQuestion}].id`, -1)
                   }
                   return (
-                    <div key={indexQuestion}>
+                    <>
                       <p className="font-bold mt-4 text-lg">Section {indexQuestion + 1}</p>
                       <div className="flex gap-4" >
                         <div className="w-full">
@@ -353,7 +380,7 @@ export default function Create(props) {
                             <span className="text-red-1 text-sm">{errors[`sections.${indexQuestion}.name`]}</span>
                           )}</p>
                           <div>
-                            <input type="text" className="form border w-full rounded-lg p-4 h-full" placeholder="Input Section Name"  {...register(`sections[${indexQuestion}].name`)} />
+                            <input type="text" className="form border w-full rounded-lg p-2 h-full" placeholder="Input Section Name"  {...register(`sections[${indexQuestion}].name`)} />
                           </div>
                         </div>
                         <div className="w-full">
@@ -362,8 +389,8 @@ export default function Create(props) {
                           )}</p>
                           <div >
                             <div className="flex h-full">
-                              <input type="number" className="border w-full h-full flex-grow rounded p-4" placeholder="0"  {...register(`sections[${indexQuestion}].duration`)} />
-                              <input className="bg-black-9 p-4 w-24 text-center h-full border text-black-4" placeholder="Minute" disabled />
+                              <input type="number" className="border w-full h-full flex-grow p-2 rounded" placeholder="0"  {...register(`sections[${indexQuestion}].duration`)} />
+                              <input className="bg-black-9 p-2 w-24 text-center h-full border text-black-4" placeholder="Minute" disabled />
                             </div>
                           </div>
                         </div>
@@ -373,12 +400,15 @@ export default function Create(props) {
                           <span className="text-red-1 text-sm">{errors[`sections.${indexQuestion}.instruction`]}</span>
                         )}</p>
                         <div className="w-full  bg-white rounded-lg " style={{ lineHeight: 2 }} >
+
+                          {/* <textarea {...register(`sections[${indexQuestion}].question`)} /> */}
                           <Quill className="h-32   border-none rounded-lg" data={getValues(`sections[${indexQuestion}].instruction`)} register={(data) => setDataForm(`sections[${indexQuestion}].instruction`, data)} />
                         </div>
                         <div className="bg-white h-12">
                         </div>
                       </div>
-                    </div>
+
+                    </>
                   )
                 }
                 )}
@@ -389,19 +419,21 @@ export default function Create(props) {
                   id: sections[sections.length - 1].id + 1, option: [0],
                   new: true
                 }])
-              }} className="text-blue-1 cursor-pointer text-center p-4 border-dashed border-2 border-blue-1 mt-4 rounded-lg">+ Add New Section</div>
+              }} className="text-blue-1 cursor-pointer text-center p-2 border-dashed border-2 border-blue-1 mt-4 rounded-lg">+ Add New Section</div>
             </div>
           )}
           <div className="flex -z-10 gap-4 flex-row-reverse my-4">
-            {currentStep < 3 && (<div className={`${3 > currentStep ? 'cursor-pointer' : 'cursor-default'} `}><Button title="Next Step" /></div>
+            {currentStep < 3 && (
+              <button className={`${3 > currentStep ? 'cursor-pointer' : 'cursor-default'} bg-blue-1  text-white p-2 rounded`}>Next Step</button>
             )}
             {currentStep === 3 && (
               <>
-                <div onClick={() => setStatus("published")}><Button title="Save Test" /></div>
+                <button onClick={() => setStatus("published")} className='cursor-pointer bg-blue-1  text-white p-2 rounded'>Save Test</button>
               </>
             )}
             <div onClick={() => {
               currentStep > 1 && setCurrentStep(currentStep - 1)
+              console.log(currentStep)
             }} className={`${1 < currentStep ? 'cursor-pointer' : 'cursor-default'}  text-black-4 p-2 rounded`}>Back Step</div>
           </div>
         </form>
@@ -418,7 +450,7 @@ export default function Create(props) {
               Section Successfully Created
               <div className="self-center">
                 <Link href="/admin/practice">
-                  <a><Button title="Okay" className="mt-4" /></a>
+                  <a> <Button title="Okay" className="mt-4" /></a>
                 </Link>
               </div>
             </div>
@@ -434,4 +466,5 @@ export default function Create(props) {
 export async function getServerSideProps(context) {
   return { props: {} }
 }
+
 Create.layout = Layout

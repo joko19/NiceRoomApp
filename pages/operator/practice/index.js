@@ -6,7 +6,7 @@ import {
   Select
 } from '@chakra-ui/react'
 import Pagination from "../../../components/Pagination/pagination";
-import apiExam from "../../../action/exam";
+import apiPractice from "../../../action/practice";
 import Link from "next/link";
 import Button from "../../../components/Button/button";
 import { ModalDelete } from "../../../components/Modal/ModalDelete";
@@ -24,7 +24,7 @@ export default function Index() {
   const [dataInstitute, setDataInstitute] = useState([])
   const [list, setList] = useState([])
 
-  const TableHead = ['Exam Name', 'Type', 'Date', 'Total Question', 'Status', 'Action']
+  const TableHead = ['Exam Name', 'Type', 'Start Date', 'Total Question', 'Status', 'Action']
   const {
     isOpen: isConfirmModal,
     onOpen: onOpenConfirmModal,
@@ -32,7 +32,7 @@ export default function Index() {
   } = useDisclosure()
 
   const getData = async (search, type, status, limit, page) => {
-    await apiExam.index(search, type, status, limit, page)
+    await apiPractice.index(search, type, status, limit, page)
       .then((res) => {
         console.log(res.data.data)
         setDataInstitute(res.data.data)
@@ -50,7 +50,7 @@ export default function Index() {
 
 
   const onDelete = async (id) => {
-    await apiExam.deleted(id)
+    await apiPractice.deleted(id)
       .then(() => {
         getData(search, type, status, limit, page)
       })
@@ -60,7 +60,7 @@ export default function Index() {
   }
 
   const onUnpublish = async (id) => {
-    await apiExam.unpublish(id)
+    await apiPractice.unpublish(id)
       .then(() => {
         getData(search, type, status, limit, page)
       })
@@ -72,11 +72,11 @@ export default function Index() {
   return (
     <div className="mt-12">
       <Card
-        title="Exams"
+        title="Practice"
         right={(
-          <Link href="/admin/exams/create">
+          <Link href="/operator/practice/create">
             <a>
-              <Button title="+ Create Exam" />
+              <Button title="+ Create Practice" />
             </a>
           </Link>
         )}
@@ -114,7 +114,7 @@ export default function Index() {
           <div className="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
             <div className="py-2 align-middle inline-block min-w-full sm:px-6 lg:px-8">
               <div className="shadow overflow-hidden border-b border-gray-200 sm:rounded-lg">
-                <ExamPracticeTable TableHead={TableHead} list={list} onOpen={onOpen} setSelectedData={(id) => setSelectedData(id)} type="exams" onOpenPublish={onOpenConfirmModal} />
+                <ExamPracticeTable TableHead={TableHead} list={list} onOpen={onOpen} setSelectedData={(id) => setSelectedData(id)} type="practice" onOpenPublish={onOpenConfirmModal} />
               </div>
               <Pagination page={page} lastPage={dataInstitute.last_page} limit={limit} search={search} type={type} status={status} total={dataInstitute.total} doLimit={data => setLimit(data)} doData={getData} />
             </div>

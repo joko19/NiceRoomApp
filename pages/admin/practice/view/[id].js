@@ -1,6 +1,6 @@
 import Layout from "../../../../Layout/Layout";
 import { useState, useEffect } from "react";
-import apiPractice from "../../../../action/practice";
+import apiExam from "../../../../action/exam";
 import { useRouter } from "next/router";
 import SectionQuestion from "../../../../components/ViewExam/SectionQuestion";
 
@@ -19,7 +19,7 @@ export default function View() {
   const [activeSection, setActiveSection] = useState()
   const [indexActiveSection, setIndexActiveSection] = useState(0)
   const getDetail = async () => {
-    await apiPractice.detailsectionQuestion(id)
+    await apiExam.detailsectionQuestion(id)
       .then((result) => {
         setDataExams(result.data.data)
         setActiveSection(result.data.data.sections[0].name)

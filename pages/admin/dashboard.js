@@ -51,6 +51,7 @@ export default function Index(props) {
   const [avatar, setAvatar] = useState('/asset/img/blank_profile.png')
   const [file, setFile] = useState()
   const [listInstitute, setListInstitute] = useState([])
+  
   const getData = async (search, limit, page) => {
     await apiOperator.index(search, limit, page)
       .then((res) => {

@@ -25,7 +25,7 @@ export default function Create(props) {
   const { id } = Router.query
   const { isOpen, onOpen, onClose } = useDisclosure()
   const [errors, setErrors] = useState()
-  const { register, handleSubmit, setValue, getValues, unregister } = useForm();
+  const { register, handleSubmit, setValue, getValues, reset, unregister } = useForm();
   const [status, setStatus] = useState()
   const [questionType, setQuestionType] = useState()
   const [idSection, setIdSection] = useState()
@@ -110,18 +110,18 @@ export default function Create(props) {
   }
 
   return (
-    <div className="md:mt-12 md:pb-28">
+    <div className="mt-12">
       <BackButton url="/admin/practice" />
       <Card
         className="w-full  bg-white overflow-visible" >
         <form onSubmit={handleSubmit(submitQuiz)}>
           {questions.map((itemQuestion, indexQuestion) => {
             return (
-              <div className="bg-blue-6 p-4" key={indexQuestion}>
+              <div className="bg-blue-6 p-4 text-sm" key={indexQuestion}>
                 <input type="text" hidden value={itemQuestion.type}  {...register(`questions.${indexQuestion}.type`)} />
                 {itemQuestion.type === "simple" && (
                   <div className="flex justify-between mt-2 bg-white p-4">
-                    <div className="text-1xl font-semibold">{firstNumber + indexQuestion + 1}. {itemQuestion.type === 'simple' ? 'Simple' : 'Paragraph'} Question</div>
+                    <div className="text-sm font-bold">{firstNumber + indexQuestion + 1}. {itemQuestion.type === 'simple' ? 'Simple' : 'Paragraph'} Question</div>
                   </div>
                 )}
                 {itemQuestion.type === 'paragraph' && (
@@ -166,6 +166,7 @@ export default function Create(props) {
                         <span className="text-red-1 text-sm">{errors[`questions.${indexQuestion}.paragraph`]}</span>
                       )}</p>
                       <div className="w-full  bg-white rounded-lg " style={{ lineHeight: 2 }} >
+                        {/* <textarea {...register(`questions[${indexQuestion}].question`)} /> */}
                         <QuillCreated className="h-32   border-none rounded-lg" data={getValues(`questions[${indexQuestion}].paragraph`)} register={(data) => setDataForm(`questions[${indexQuestion}].paragraph`, data)} />
                       </div>
                       <div className="bg-white h-12">
@@ -180,7 +181,7 @@ export default function Create(props) {
                     <div className={`bg-white p-4 ${itemQuestion.type === "paragraph" && 'mt-8'}`} key={indexEachQuestion}>
                       {itemQuestion.type === "paragraph" && (
                         <div className="flex justify-between mt-2 bg-white">
-                          <div className="text-1xl ">{indexEachQuestion + 1}. Question</div>
+                          <div className="text-2xl ">{indexEachQuestion + 1}. Question</div>
                         </div>
                       )}
                       <div className="flex gap-4">
@@ -275,6 +276,7 @@ export default function Create(props) {
                                                     setValue(`questions[${indexQuestion}].question_items[${indexEachQuestion}].options[${i}].correct`, 0)
                                                   }
                                                 }
+
                                               }
                                             })
                                           }
@@ -323,7 +325,10 @@ export default function Create(props) {
                                         <div className="border w-4 rounded h-4" />
                                       )}
                                     </div>
-                                  </div>)}
+                                  </div>
+
+                                  // <input className="m-auto" type="checkbox" id="html" {...register(`questions[${indexQuestion}].question_items[${indexEachQuestion}].options[${indexAnswer}].correct`)} value="1" />
+                                )}
                                 <span className="m-auto">{alphabet[indexAnswer]}</span>
                                 <input value={itemAnswer.title} onChange={(e) => {
 
@@ -346,7 +351,8 @@ export default function Create(props) {
                                   })
                                   setQuestions([...temp])
                                 }}
-                                  autoComplete="off" type="text" className={`${itemAnswer.correct === 1 ? 'bg-blue-6 text-black-5' : 'bg-white'} form border w-full rounded-lg p-2 h-full m-1`} placeholder="Input your answer" />
+                                  // {...register(`questions[${indexQuestion}].question_items[${indexEachQuestion}].options[${indexAnswer}].title`)} 
+                                  autoComplete="off" type="text" className={`${itemAnswer.correct === 1 ? 'bg-blue-6 text-black-5' : 'bg-white'} form border w-full rounded p-2 h-full m-1`} placeholder="Input your answer" />
                                 {eachQuestion.options.length !== 1 && (
                                   <div className="m-auto cursor-pointer text-blue-1 -ml-9" onClick={() => {
                                     const temp = questions
@@ -459,8 +465,8 @@ export default function Create(props) {
             }} className="text-blue-1 cursor-pointer text-center p-2 border-dashed border-2 border-blue-1 mt-4 rounded-lg">+ Add New Question</div>
           </div>
           <div className="flex -z-10 gap-4 flex-row-reverse my-4">
-            <button onClick={() => setStatus("published")} className='cursor-pointer bg-blue-1  text-white p-2 rounded'>Save Question</button>
-            <button onClick={() => setStatus("draft")} className='cursor-pointer text-blue-1 p-2 rounded'>Cancel</button>
+            <div onClick={() => setStatus("published")} ><Button title="Save Question" /></div>
+            <button onClick={() => setStatus("draft")} className='cursor-pointer text-blue-1 rounded p-2'>Cancel</button>
           </div>
         </form>
       </Card>
@@ -515,7 +521,7 @@ export default function Create(props) {
               Question has Published
               <div className="self-center">
                 <Link href={`/admin/practice/${id}`}>
-                  <a><Button title="Okay" className="mt-4"/></a>
+               <a> <Button title="Okay" className="mt-4" /></a>
                 </Link>
               </div>
             </div>
@@ -530,6 +536,7 @@ export default function Create(props) {
 // This also gets called at build time
 export async function getServerSideProps(context) {
   const idExam = context.query.id
+  // getDetail(idExam)
   const idSection = idExam.split('=')[1]
   const num = idSection.split('#')[0]
   return { props: { id_section: num } }

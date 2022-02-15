@@ -1,8 +1,6 @@
 import Layout from "../../../Layout/Layout";
-import Card from "../../../components/Cards/Card";
 import apiPractice from "../../../action/practice";
 import { useEffect, useState } from 'react'
-import Image from "next/image";
 import Link from "next/link";
 import {
   Modal,
@@ -15,11 +13,11 @@ import {
 } from '@chakra-ui/react'
 import { useRouter } from "next/router";
 import { ModalDelete } from "../../../components/Modal/ModalDelete";
-import { ListSession } from "../../../components/Section/ListSession";
 import Button, { BackButton } from "../../../components/Button/button";
+import { ListSession } from "../../../components/Section/ListSession";
 import { TitleSection } from "../../../components/Section/TitleSection";
 
-export default function Section({ data }) {
+export default function Section() {
   const Router = useRouter()
   const { id } = Router.query
   const [dataExams, setDataExams] = useState({})
@@ -29,6 +27,13 @@ export default function Section({ data }) {
     onOpen: onOpenDeleteModal,
     onClose: onCloseDeleteModal
   } = useDisclosure()
+  const {
+    isOpen: isSuccessModal,
+    onOpen: onOpenSuccessModal,
+    onClose: onCloseSuccessModal
+  } = useDisclosure()
+
+
   const [listSection, setListSection] = useState({
     sections: []
   })
@@ -36,12 +41,6 @@ export default function Section({ data }) {
   const [selectedName, setSelectedName] = useState()
   const [questionType, setQuestionType] = useState()
   const [questionSelectedId, setQuestionSelectedId] = useState()
-  const {
-    isOpen: isSuccessModal,
-    onOpen: onOpenSuccessModal,
-    onClose: onCloseSuccessModal
-  } = useDisclosure()
-
 
   const getDetail = async () => {
     await apiPractice.detail(id)
@@ -71,7 +70,7 @@ export default function Section({ data }) {
       })
   }
 
-  const onPublish = async() => {
+  const onPublish = async () => {
     await apiPractice.publish(id)
       .then(() => {
         onOpenSuccessModal()
@@ -79,28 +78,31 @@ export default function Section({ data }) {
   }
 
 
+
   return (
     <div className="mt-12">
       <div className="text-sm">
-        <BackButton url="/admin/practice" />
+        <BackButton url="/operator/practice" />
         <TitleSection dataExams={dataExams} id={id} type="Practice" />
       </div>
       {listSection.sections.map((itemSection, index) => (
-        <ListSession key={index} index={index} idExamPractice={id} type="practice" itemSection={itemSection} onOpenDeleteModal={onOpenDeleteModal} setQuestionSelectedId={(data) => setQuestionSelectedId(data)} setSelectedData={(data) => setSelectedData(data)} setSelectedName={(data) => setSelectedName(data)} onOpen={onOpen} />
+        <ListSession key={index} type="practice" idExamPractice={id} index={index} itemSection={itemSection} onOpenDeleteModal={onOpenDeleteModal} setQuestionSelectedId={(data) => setQuestionSelectedId(data)} setSelectedData={(data) => setSelectedData(data)} setSelectedName={(data) => setSelectedName(data)} onOpen={onOpen} />
       ))}
+
       <div className="flex flex-row-reverse" onClick={onPublish}>
         <Button title="Publish" />
       </div>
+      {/* Delete Confirmation */}
 
       <ModalDelete isOpen={isDeleteModal} onClose={onCloseDeleteModal} onDelete={(data) => onDelete(data)} selectedData={questionSelectedId} />
 
       <Modal isOpen={isOpen} onClose={onClose} isCentered>
         <ModalOverlay />
         <ModalContent>
-          <ModalHeader fontSize="md">Add Question {selectedName}</ModalHeader>
+          <ModalHeader>Add Question {selectedName}</ModalHeader>
           <ModalCloseButton />
           <ModalBody>
-            <div className="flex gap-4 text-sm">
+            <div className="flex gap-4">
               <div className={`${questionType === 'simple' ? 'text-blue-1 bg-blue-6 border-blue-1' : 'text-black-4 bg-black-9'} w-full text-center border py-12 cursor-pointer rounded-lg border`} onClick={() => setQuestionType('simple')}>
                 Simple Question
               </div>
@@ -109,14 +111,15 @@ export default function Section({ data }) {
               </div>
             </div>
             <div className="flex flex-row-reverse gap-4 mt-4" >
-              <Link href={`/admin/practice/section/${listSection.id}_id=${selectedData}#${questionType}`}>
-                <a><Button title="Select" className="mt-4" /></a>
+              <Link href={`/operator/practice/section/${listSection.id}_id=${selectedData}#${questionType}`}>
+                <a> <Button title="Select" className="mt-4" /></a>
               </Link>
-              <button type="button" className="text-black-4 p-4 rounded-lg" onClick={onClose}>Cancel</button>
+              <button type="button" className="text-black-4 p-3 rounded-lg" onClick={onClose}>Cancel</button>
             </div>
           </ModalBody>
         </ModalContent>
       </Modal>
+
       {/* Success Modal */}
       <Modal isOpen={isSuccessModal} onClose={onCloseSuccessModal} isCentered>
         <ModalOverlay />
@@ -126,7 +129,7 @@ export default function Section({ data }) {
           <ModalBody>
             <div className="flex flex-col text-center text-sm"> Practice has published
               <div className="self-center">
-                <Link href="/admin/practice">
+                <Link href="/operator/practice">
                   <a> <Button title="Okay" className="mt-4" /></a>
                 </Link>
               </div>
@@ -137,7 +140,6 @@ export default function Section({ data }) {
     </div>
   )
 }
-
 
 // This also gets called at build time
 export async function getServerSideProps(context) {
