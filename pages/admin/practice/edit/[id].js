@@ -340,7 +340,7 @@ export default function Create(props) {
           {currentStep === 3 && (
             <div className="mt-8">
               <div className="bg-blue-6 p-4">
-                {sections.map((itemQuestion, indexQuestion) => {
+                {/* {sections.map((itemQuestion, indexQuestion) => {
                   if (itemQuestion.new) {
                     setValue(`sections[${indexQuestion}].id`, -1)
                   }
@@ -381,7 +381,7 @@ export default function Create(props) {
                     </div>
                   )
                 }
-                )}
+                )} */}
 
               </div>
               <div onClick={() => {
