@@ -101,14 +101,15 @@ export default function Index() {
 
             </div>
             <div className="w-full py-2 pl-2 rounded border">
-              <Select placeholder='All Status' className="h-full" size="sm" variant="unstyled" onChange={(e) => {
+              <select className="h-full w-full  bg-white" onChange={(e) => {
                 setStatus(e.target.value)
                 getData(search, type, e.target.value, limit, page)
               }}>
+                <option value=''>All Status</option>
                 <option value='waiting'>Waiting</option>
                 <option value='draft'>Draft</option>
                 <option value='published'>Published</option>
-              </Select>
+              </select>
             </div>
           </div>
         </div>

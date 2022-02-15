@@ -203,11 +203,12 @@ export default function Create(props) {
                   <p className="mt-4">Practice Type {errors && (
                     <span className="text-red-1 text-sm">{errors.exam_type_id}</span>
                   )}</p>
-                  <div>
-                    <Select bg='white' size="sm" placeholder="Choose Type" height={8} variant='outline' iconColor="blue" {...register('exam_type_id')}>
+                  <div className="border  p-1 rounded text-sm">
+                    <select className="w-full bg-white" {...register('exam_type_id')}>
+                      <option value="" >Choose Type</option>
                       {type.map((item) => (
                         <option value={item.id}>{item.name}</option>
-                      ))}</Select>
+                      ))}</select>
                   </div>
                 </div>
                 <div className="w-full"></div>

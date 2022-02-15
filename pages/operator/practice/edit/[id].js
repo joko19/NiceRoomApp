@@ -285,12 +285,12 @@ export default function Create(props) {
                   <p className="mt-4">Practice Type {errors && (
                     <span className="text-red-1 text-sm">{errors.type}</span>
                   )}</p>
-                  <div>
-                    <Select bg='white' size="sm" height={8} variant='outline' iconColor="blue" {...register('exam_type_id')}>
+                  <div className="border p-1 rounded">
+                    <select className="bg-white w-full" {...register('exam_type_id')}>
                       {typePractice.map((item, index) => (
                         <option key={index} value={item.id}>{item.name}</option>
                       ))}
-                    </Select>
+                    </select>
                   </div>
                 </div>
                 <div className="w-full"></div>
@@ -311,11 +311,12 @@ export default function Create(props) {
 
               {consentments.map((item, index) => {
                 return (
-                  <div key={index}>{errors && (
-                    <span className="text-red-1 text-sm">{errors[`consentments.${index}`]}</span>
-                  )}
+                  <div>
+                    {errors && (
+                      <span className="text-red-1 text-sm">{errors[`consentments.${index}`]}</span>
+                    )}
                     <div key={index} className="flex">
-                      <input key={index} type="text" value={item} onChange={(e) => {
+                      <input type="text" value={item} onChange={(e) => {
                         const arr = consentments
                         arr[index] = e.target.value
                         setConsentments([...arr])
@@ -377,7 +378,6 @@ export default function Create(props) {
                         <div className="bg-white h-12">
                         </div>
                       </div>
-
                     </div>
                   )
                 }

@@ -43,15 +43,12 @@ export default function Index() {
       .catch((err) => {
         // console.log(err)
       })
-  }
-  useEffect(() => {
-    getData(search, type, status, limit, page)
-  }, [])
-
-  useEffect(async () => {
     await apiExam.allType()
       .then((res) => setTypePractice(res.data.data))
       .catch((err) => console.log(err))
+  }
+  useEffect(() => {
+    getData(search, type, status, limit, page)
   }, [])
 
 
@@ -92,25 +89,27 @@ export default function Index() {
 
           <div className="flex gap-4 w-1/2 h-full text-sm ">
             <div className="w-full border rounded py-2 pl-2">
-              <Select placeholder='All Type' size="sm" variant="unstyled" onChange={(e) => {
+              <select defaultValue={"all type"} className="bg-white w-full" onChange={(e) => {
                 setType(e.target.value)
                 getData(search, e.target.value, status, limit, page)
               }}>
+                <option value="">All Type</option>
                 {typePractice.map((item, index) => (
                   <option key={index} value={item.name}>{item.name}</option>
                 ))}
-              </Select>
+              </select>
 
             </div>
             <div className="w-full py-2 pl-2 rounded border">
-              <Select placeholder='All Status' className="h-full" size="sm" variant="unstyled" onChange={(e) => {
+              <select className="h-full w-full  bg-white" onChange={(e) => {
                 setStatus(e.target.value)
                 getData(search, type, e.target.value, limit, page)
               }}>
+                <option value=''>All Status</option>
                 <option value='waiting'>Waiting</option>
                 <option value='draft'>Draft</option>
                 <option value='published'>Published</option>
-              </Select>
+              </select>
             </div>
           </div>
         </div>
