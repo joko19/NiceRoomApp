@@ -309,7 +309,7 @@ export default function Create(props) {
               </div>
               <p className="mt-4">Consentment</p>
 
-              {consentments.map((item, index) => {
+              {/* {consentments.map((item, index) => {
                 return (
                   <div key={index}>
                     {errors && (
@@ -332,7 +332,7 @@ export default function Create(props) {
                     </div>
                   </div>
                 )
-              })}
+              })} */}
               <div onClick={() => setConsentments([...consentments, ''])} className="text-blue-1 cursor-pointer text-center p-2 border-dashed border-2 border-blue-1 mt-4 rounded-lg">+ Add New Consent</div>
             </>
           )}
