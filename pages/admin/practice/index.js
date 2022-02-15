@@ -57,15 +57,7 @@ export default function Index() {
       .then((res) => {
         console.log(res.data.data)
         var newType = []
-        res.data.data.map((item) => {
-          var typed = {
-            value: item.name,
-            name: item.name
-          }
-          newType.push(typed)
-        })
-        // newType.push(typePractice)
-        console.log(newType)
+       
         setTypePractice([...typePractice, ...newType])
 
         console.log(typePractice)
