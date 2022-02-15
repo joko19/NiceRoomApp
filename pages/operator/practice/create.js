@@ -193,7 +193,7 @@ export default function Create(props) {
       <BackButton url="operator/practice" />
       <Card
         className=" w-full  bg-white overflow-visible"
-        title="Create New Exam " >
+        title="Create New Practice " >
         <Stepper step={step} currentStep={currentStep} />
         <form onSubmit={handleSubmit(submitExams)} className="text-sm">
         {currentStep === 1 && (

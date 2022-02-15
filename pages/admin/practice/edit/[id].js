@@ -247,7 +247,7 @@ export default function Create(props) {
       <BackButton url="/admin/news" />
       <Card
         className="w-full  bg-white overflow-visible"
-        title="Edit Exam " >
+        title="Edit Practice " >
         <Stepper step={step} currentStep={currentStep} />
         <form onSubmit={handleSubmit(submitExams)} className="text-sm">
         {currentStep === 1 && (
