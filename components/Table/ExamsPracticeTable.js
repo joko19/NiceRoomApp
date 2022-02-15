@@ -5,8 +5,8 @@ import Image from "next/image";
 export default function ExamPracticeTable({ TableHead, list, type, onOpen, setSelectedData, onOpenPublish }) {
   return (<table className="table md:min-w-full overflow-auto divide-y divide-gray-200 text-sm">
     <thead className="bg-black-9" >
-      {TableHead.map((item) => (
-        <th key={item} scope="col" className="px-6 h-12 text- tracking-wider">
+      {TableHead.map((item, index) => (
+        <th key={index} scope="col" className="px-6 h-12 text- tracking-wider">
           {item}
         </th>
       ))}
