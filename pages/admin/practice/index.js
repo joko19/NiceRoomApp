@@ -67,7 +67,7 @@ export default function Index() {
         // newType.push(typePractice)
         console.log(newType)
         setTypePractice([...typePractice, ...newType])
-        
+
         console.log(typePractice)
       })
       .catch((err) => console.log(err))
@@ -115,9 +115,7 @@ export default function Index() {
                 setType(e.target.value)
                 getData(search, e.target.value, status, limit, page)
               }}>
-                {typePractice.map((item, index) => (
-                  <option key={index} value={item.value}>{item.name}</option>
-                ))}
+                <option value=''>All Type</option>
               </select>
 
             </div>
