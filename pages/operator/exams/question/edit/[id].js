@@ -27,7 +27,7 @@ export default function Edit(props) {
   const [status, setStatus] = useState()
   const [lastIdOption, setLastIdOption] = useState()
   const [listDeleteOption, setListDeleteOption] = useState([])
-
+  const [idExamPractice, setIdExamPractice] = useState()
   const [questions, setQuestions] = useState([
     {
       id: 0,
@@ -47,6 +47,12 @@ export default function Edit(props) {
   ])
 
   const getDetail = useCallback(async (id) => {
+
+    const idExam = Router.query.id
+    const idSecti = idExam.split("=")
+    const ids = idSecti[1]
+    console.log(ids)
+    setIdExamPractice(ids)
     await apiExam.detailQuestion(id)
       .then((res) => {
         const arr = []
@@ -539,7 +545,7 @@ export default function Edit(props) {
             <div className="flex flex-col text-center ">
               Successfully Update Question
               <div className="self-center">
-                <Link href={`/operator/exams/`}>
+                <Link href={`/operator/exams/${idExamPractice}`}>
                   <a> <Button title="Okay" className="mt-4" /></a>
                 </Link>
               </div>

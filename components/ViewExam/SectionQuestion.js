@@ -24,7 +24,6 @@ export default function SectionQuestion({ dataExams, indexActiveSection, urlBack
                 <div className="flex">
                   {index + 1}.
                   <div className="text-container" dangerouslySetInnerHTML={{ __html: item?.paragraph }} />
-
                 </div>
                 <div className="text-container ml-3" dangerouslySetInnerHTML={{ __html: item?.instruction }} />
               </>
@@ -33,9 +32,9 @@ export default function SectionQuestion({ dataExams, indexActiveSection, urlBack
               const alphabet = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z']
               return (
                 <div key={indexQuestion}>
-                  <div className={`flex ${item.type === 'paragraph' && 'ml-4'}`}>
+                  <div className={`flex ${item.type === 'paragraph' && 'ml-4'} mt-2 `}>
                     {item.type === 'paragraph' ? indexQuestion + 1 : index + 1}.
-                    <div className="text-container" dangerouslySetInnerHTML={{ __html: itemQuestion.question }} />
+                    <div className="text-container " dangerouslySetInnerHTML={{ __html: itemQuestion.question }} />
                   </div>
                   {itemQuestion.options.map((itemOptions, indexOption) => (
                     <div key={indexOption} className={`${item.type === 'paragraph' ? 'ml-8' : 'ml-4'}`}>
@@ -43,7 +42,7 @@ export default function SectionQuestion({ dataExams, indexActiveSection, urlBack
                       {itemOptions.title}
                     </div>
                   ))}
-                  <p className={`${item.type === 'paragraph' ? 'ml-8' : 'ml-4'} text-blue-1 font-bold `}>Answer :
+                  <p className={`${item.type === 'paragraph' ? 'ml-8' : 'ml-4'} text-blue-1 mt-2 font-bold `}>Answer :
 
                     {itemQuestion.options.map((itemOptions, indexOption) => {
                       return (

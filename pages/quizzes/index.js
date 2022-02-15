@@ -2,7 +2,6 @@ import Link from 'next/link';
 import Header from '../../components/Navbar/header';
 import Footer from "../../components/footer/footer";
 import { FaAngleRight } from 'react-icons/fa';
-import Button from '../../components/Button/button';
 import Slider from '../../components/Slider/Slider';
 import CardQuizzes from '../../components/Cards/CardQuizzes';
 import { TitleButton } from '../../components/Slider/TitleButton';

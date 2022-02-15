@@ -86,7 +86,7 @@ export default function Section() {
         <TitleSection dataExams={dataExams} id={id} type="Exams" />
       </div>
       {listSection.sections.map((itemSection, index) => (
-        <ListSession key={index} index={index} itemSection={itemSection} onOpenDeleteModal={onOpenDeleteModal} setQuestionSelectedId={(data) => setQuestionSelectedId(data)} setSelectedData={(data) => setSelectedData(data)} setSelectedName={(data) => setSelectedName(data)} onOpen={onOpen} />
+        <ListSession key={index} type="exams" idExamPractice={id} index={index} itemSection={itemSection} onOpenDeleteModal={onOpenDeleteModal} setQuestionSelectedId={(data) => setQuestionSelectedId(data)} setSelectedData={(data) => setSelectedData(data)} setSelectedName={(data) => setSelectedName(data)} onOpen={onOpen} />
       ))}
 
       <div className="flex flex-row-reverse" onClick={onPublish}>

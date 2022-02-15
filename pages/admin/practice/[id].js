@@ -86,7 +86,7 @@ export default function Section({ data }) {
         <TitleSection dataExams={dataExams} id={id} type="Practice" />
       </div>
       {listSection.sections.map((itemSection, index) => (
-        <ListSession key={index} index={index} itemSection={itemSection} onOpenDeleteModal={onOpenDeleteModal} setQuestionSelectedId={(data) => setQuestionSelectedId(data)} setSelectedData={(data) => setSelectedData(data)} setSelectedName={(data) => setSelectedName(data)} onOpen={onOpen} />
+        <ListSession key={index} index={index} idExamPractice={id} type="practice" itemSection={itemSection} onOpenDeleteModal={onOpenDeleteModal} setQuestionSelectedId={(data) => setQuestionSelectedId(data)} setSelectedData={(data) => setSelectedData(data)} setSelectedName={(data) => setSelectedName(data)} onOpen={onOpen} />
       ))}
       <div className="flex flex-row-reverse" onClick={onPublish}>
         <Button title="Publish" />
@@ -112,7 +112,7 @@ export default function Section({ data }) {
               <Link href={`/admin/practice/section/${listSection.id}_id=${selectedData}#${questionType}`}>
                 <a><Button title="Select" className="mt-4" /></a>
               </Link>
-              <button type="button" className="text-black-4 p-3 rounded-lg" onClick={onClose}>Cancel</button>
+              <button type="button" className="text-black-4 p-4 rounded-lg" onClick={onClose}>Cancel</button>
             </div>
           </ModalBody>
         </ModalContent>

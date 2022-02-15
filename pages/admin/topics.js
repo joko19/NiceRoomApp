@@ -148,7 +148,7 @@ export default function Topics() {
             <form onSubmit={handleSubmit(onSubmit)} className="pb-4">
               <div>
                 <p>Topic Name</p>
-                <input type="text" className="form border w-full p-2 rounded" placeholder="Input Topic Name" {...register("name", { required: true })} />
+                <input type="text" className="form border w-full p-2 text-sm rounded" placeholder="Input Topic Name" {...register("name", { required: true })} />
               </div>
               <div className="flex flex-row-reverse gap-4 mt-4">
                 <Button title="Save Topic" />

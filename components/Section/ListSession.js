@@ -4,7 +4,16 @@ import Card from "../Cards/Card"
 import { HeaderInstruction } from "./HeaderInstruction"
 import Button from "../Button/button"
 
-export function ListSession({ itemSection, onOpenDeleteModal, setSelectedData, setSelectedName, onOpen, setQuestionSelectedId, index }) {
+export function ListSession({ itemSection, onOpenDeleteModal, setSelectedData, setSelectedName, onOpen, idExamPractice, setQuestionSelectedId, index, type }) {
+  const idExam = idExamPractice
+  const idSecti = idExam.split("_")
+  var ids = ''
+  if (idSecti.length === 2) {
+    ids = idSecti[0]
+  } else {
+    ids = idExamPractice
+  }
+  console.log(ids)
   return (
     <Card key={index} className="my-4">
       <HeaderInstruction itemSection={itemSection} index={index} />
@@ -26,7 +35,7 @@ export function ListSession({ itemSection, onOpenDeleteModal, setSelectedData, s
                   <th scope="col" className="px-6 h-12 text-left text-center tracking-wider">
                     <div onClick={() => {
                       setSelectedData(itemSection.id),
-                      setSelectedName(itemSection.name)
+                        setSelectedName(itemSection.name)
                       onOpen()
                     }}>
                       <Button title="+ Add Question" />
@@ -51,7 +60,7 @@ export function ListSession({ itemSection, onOpenDeleteModal, setSelectedData, s
                       </td>
                       <td className="flex gap-4 px-6 h-12 whitespace-nowrap flex text-right gap-2 text-sm font-medium">
                         <div className="m-auto flex gap-4">
-                          <Link href={`/admin/exams/question/edit/${itemQuestion.id}`}>
+                          <Link href={`/admin/${type}/question/edit/${itemQuestion.id}_id=${ids}`}>
                             <a className="text-indigo-600 hover:text-indigo-900">
                               <Image src="/asset/icon/table/fi_edit.svg" width={16} height={16} alt="icon Edit" />
                             </a>

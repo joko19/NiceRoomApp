@@ -1,12 +1,11 @@
 import Layout from "../../../Layout/Layout";
 import Card from "../../../components/Cards/Card";
 import { useEffect, useState } from 'react'
-import Image from "next/image";
 import {
   useDisclosure,
+  Select
 } from '@chakra-ui/react'
 import Pagination from "../../../components/Pagination/pagination";
-import { Select } from '@chakra-ui/react'
 import apiExam from "../../../action/exam";
 import Link from "next/link";
 import Button from "../../../components/Button/button";
@@ -25,7 +24,7 @@ export default function Index() {
   const [dataInstitute, setDataInstitute] = useState([])
   const [list, setList] = useState([])
 
-  const TableHead = ['Exam Name', 'Type', 'Date','Total Question', 'Status', 'Action']
+  const TableHead = ['Exam Name', 'Type', 'Date', 'Total Question', 'Status', 'Action']
   const {
     isOpen: isConfirmModal,
     onOpen: onOpenConfirmModal,
@@ -89,34 +88,40 @@ export default function Index() {
           }} />
 
           <div className="flex gap-4 w-1/2 h-full  ">
-            <Select placeholder='All Type' className="h-full" size="md" onChange={(e) => {
-              setType(e.target.value)
-              getData(search, e.target.value, status, limit, page)
-            }}>
-              <option value='live'>Live</option>
-              <option value='mixed'>Mixed</option>
-            </Select>
-            <Select placeholder='All Status' className="h-full" size="md" onChange={(e) => {
-              setStatus(e.target.value)
-              getData(search, type, e.target.value, limit, page)
-            }}>
-              <option value='published'>Published</option>
-              <option value='draft'>Draft</option>
-            </Select>
+            <div className="w-full rounded py-2 pl-2 border">
+              <Select placeholder='All Type' size="sm" variant="unstyled" onChange={(e) => {
+                setType(e.target.value)
+                getData(search, e.target.value, status, limit, page)
+              }}>
+                <option value='live'>Live</option>
+                <option value='standard'>Standard</option>
+              </Select>
+            </div>
+            <div className="w-full rounded py-2 pl-2 border">
+              <Select placeholder='All Status' size="sm" variant="unstyled" onChange={(e) => {
+                setStatus(e.target.value)
+                getData(search, type, e.target.value, limit, page)
+              }}>
+              <option value='waiting'>Waiting</option>
+                <option value='published'>Published</option>
+                <option value='draft'>Draft</option>
+                <option value='completed'>Completed</option>
+              </Select>
+            </div>
           </div>
         </div>
         <div className="flex flex-col">
           <div className="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
             <div className="py-2 align-middle inline-block min-w-full sm:px-6 lg:px-8">
               <div className="shadow overflow-hidden border-b border-gray-200 sm:rounded-lg">
-                <ExamPracticeTable TableHead={TableHead} list={list} onOpen={onOpen} setSelectedData={(id) => setSelectedData(id)} type="exams" onOpenPublish={onOpenConfirmModal}/>
+                <ExamPracticeTable TableHead={TableHead} list={list} onOpen={onOpen} setSelectedData={(id) => setSelectedData(id)} type="exams" onOpenPublish={onOpenConfirmModal} />
               </div>
               <Pagination page={page} lastPage={dataInstitute.last_page} limit={limit} search={search} type={type} status={status} total={dataInstitute.total} doLimit={data => setLimit(data)} doData={getData} />
             </div>
           </div>
         </div>
       </Card>
-          <ModalUnPublish isConfirmModal={isConfirmModal} onCloseConfirmModal={onCloseConfirmModal} selectedData={selectedData} onUnpublish={(data) => onUnpublish(data)} />
+      <ModalUnPublish isConfirmModal={isConfirmModal} onCloseConfirmModal={onCloseConfirmModal} selectedData={selectedData} onUnpublish={(data) => onUnpublish(data)} />
       <ModalDelete isOpen={isOpen} onClose={onClose} onDelete={(data) => onDelete(data)} selectedData={selectedData} />
     </div>
   )

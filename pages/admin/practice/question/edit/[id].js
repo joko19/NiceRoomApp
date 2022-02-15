@@ -18,12 +18,12 @@ import Quill from "../../../../../components/Editor/Quill";
 import { Select } from '@chakra-ui/react'
 import apiPractice from "../../../../../action/practice";
 import { useRouter } from "next/router";
-import Button, {BackButton} from "../../../../../components/Button/button";
+import Button, { BackButton } from "../../../../../components/Button/button";
 
 export default function Edit(props) {
   const Router = useRouter()
   const { id } = Router.query
-  const { isOpen, onOpen, onClose } = useDisclosure()
+  const [idExamPractice, setIdExamPractice] = useState()
   const [errors, setErrors] = useState()
   const { register, handleSubmit, setValue, getValues, reset, unregister } = useForm();
   const [status, setStatus] = useState()
@@ -53,6 +53,11 @@ export default function Edit(props) {
   ])
 
   const getDetail = useCallback(async (id) => {
+    const idExam = Router.query.id
+    const idSecti = idExam.split("=")
+    const ids = idSecti[1]
+    console.log(ids)
+    setIdExamPractice(ids)
     await apiPractice.detailQuestion(id)
       .then((res) => {
         const arr = []
@@ -545,8 +550,8 @@ export default function Edit(props) {
             <div className="flex flex-col text-center ">
               Successfully Update Question
               <div className="self-center">
-                <Link href={`/admin/practice/`}>
-                  <a><Button title="Okay" className="mt-4"/></a>
+                <Link href={`/admin/practice/${idExamPractice}`}>
+                  <a><Button title="Okay" className="mt-4" /></a>
                 </Link>
               </div>
             </div>

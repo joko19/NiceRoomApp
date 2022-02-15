@@ -22,7 +22,7 @@ import Multiselect from 'multiselect-react-dropdown';
 import DatePicker2 from "../../../../components/DateTime/Date";
 import { useRouter } from "next/router";
 import Button, { BackButton } from "../../../../components/Button/button";
-
+import apiExam from "../../../../action/exam";
 import { Time } from "../../../../components/DateTime/Time";
 import { Stepper } from "../../../../components/Section/Stepper";
 export default function Create(props) {
@@ -35,6 +35,7 @@ export default function Create(props) {
   const [currentStep, setCurrentStep] = useState(1)
   const [type, setType] = useState('standard')
   const [startTime, setStartTime] = useState()
+  const [typePractice, setTypePractice] = useState([])
   const [consentments, setConsentments] = useState([''])
   const [status, setStatus] = useState()
   const [listTopic, setListTopic] = useState([])
@@ -44,6 +45,13 @@ export default function Create(props) {
       id: 0,
     },
   ])
+
+
+  useEffect(async () => {
+    await apiExam.allType()
+      .then((res) => setTypePractice(res.data.data))
+      .catch((err) => console.log(err))
+  }, [])
 
   useEffect(() => {
     const uri = Router.asPath.split('#')
@@ -220,7 +228,7 @@ export default function Create(props) {
                     <span className="text-red-1 text-sm">{errors.name}</span>
                   )}</p>
                   <div>
-                    <input type="text" className="form border w-full rounded-lg p-3 h-full" placeholder="Input Practice Name"  {...register("name")} />
+                    <input type="text" className="form border w-full rounded p-2 h-full" placeholder="Input Practice Name"  {...register("name")} />
                   </div>
                 </div>
                 <div className="w-full ">
@@ -232,7 +240,7 @@ export default function Create(props) {
                     options={listTopic}
                     style={{
                       "multiselectContainer": {
-                        "padding": "3px",
+                        "padding": "0px",
                         "border-width": "1px",
                         "border-radius": "5px"
                       }, "searchBox": {
@@ -258,7 +266,7 @@ export default function Create(props) {
               <div className="flex mt-4 gap-4">
                 <div className="w-full">
                   <p>Start Date</p>
-                  <div className="border p-2 rounded">
+                  <div className="border p-1 rounded">
                     <DatePicker2
                       data={getValues("start_date")}
                       setData={(data) => setValue("start_date", data)}
@@ -278,10 +286,10 @@ export default function Create(props) {
                     <span className="text-red-1 text-sm">{errors.type}</span>
                   )}</p>
                   <div>
-                    <Select bg='white' size="md" variant='outline' iconColor="blue" {...register('exam_type_id')}>
-                      <option value="1">Type 1</option>
-                      <option value="2">Type 2</option>
-                      <option value="3">Type 3</option>
+                    <Select bg='white' size="sm" height={8} variant='outline' iconColor="blue" {...register('exam_type_id')}>
+                      {typePractice.map((item) => (
+                        <option value={item.id}>{item.name}</option>
+                      ))}
                     </Select>
                   </div>
                 </div>

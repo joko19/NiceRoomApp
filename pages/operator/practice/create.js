@@ -21,7 +21,7 @@ import apiTopic from "../../../action/topics";
 import Multiselect from 'multiselect-react-dropdown';
 import DatePicker2 from "../../../components/DateTime/Date";
 import Button, { BackButton } from "../../../components/Button/button";
-
+import apiExam from "../../../action/exam";
 import { Time } from "../../../components/DateTime/Time";
 import { Stepper } from "../../../components/Section/Stepper";
 export default function Create(props) {
@@ -37,6 +37,7 @@ export default function Create(props) {
   const [status, setStatus] = useState()
   const [listTopic, setListTopic] = useState([])
   const [topicItem, setTopicItem] = useState([])
+  const [type, setType] = useState([])
   const [sections, setsections] = useState([
     {
       id: 0,
@@ -60,6 +61,12 @@ export default function Create(props) {
     setValue("topics[]", arr)
   }
 
+  useEffect(async () => {
+    await apiExam.allType()
+      .then((res) => setType(res.data.data))
+      .catch((err) => console.log(err))
+  }, [])
+
   const getTopics = async () => {
     await apiTopic.all('', '', '')
       .then((res) => setListTopic(res.data.data.data))
@@ -72,7 +79,7 @@ export default function Create(props) {
           setCurrentStep(2))
         .catch((err) => {
           setErrors(err.response.data.data)
-          if (!err.response.data.data.name && !err.response.data.data.duration) {
+          if (!err.response.data.data.name && !err.response.data.data.duration && !err.response.data.data.exam_type_id) {
             setErrors(null)
             setCurrentStep(2)
           }
@@ -140,7 +147,7 @@ export default function Create(props) {
                     <span className="text-red-1 text-sm">{errors.name}</span>
                   )}</p>
                   <div>
-                    <input type="text" className="form border w-full rounded-lg p-3 h-full text-sm" placeholder="Input Practice Name"  {...register("name")} />
+                    <input type="text" className="form border w-full rounded p-2 h-full text-sm" placeholder="Input Practice Name"  {...register("name")} />
                   </div>
                 </div>
                 <div className="w-full ">
@@ -152,7 +159,7 @@ export default function Create(props) {
                     options={listTopic}
                     style={{
                       "multiselectContainer": {
-                        "padding": "2px",
+                        "padding": "0px",
                         "border-width": "1px",
                         "border-radius": "5px"
                       }, "searchBox": {
@@ -178,7 +185,7 @@ export default function Create(props) {
               <div className="flex mt-4 gap-4">
                 <div className="w-full">
                   <p>Start Date</p>
-                  <div className="border rounded p-2">
+                  <div className="border rounded p-1">
                     <DatePicker2
                       setData={(data) => setValue("start_date", data)}
                     />
@@ -194,14 +201,13 @@ export default function Create(props) {
               <div className="flex gap-4" >
                 <div className="w-full">
                   <p className="mt-4">Practice Type {errors && (
-                    <span className="text-red-1 text-sm">{errors.type}</span>
+                    <span className="text-red-1 text-sm">{errors.exam_type_id}</span>
                   )}</p>
                   <div>
-                    <Select bg='white' size="md" variant='outline' iconColor="blue" {...register('exam_type_id')}>
-                      <option value="1">Type 1</option>
-                      <option value="2">Type 2</option>
-                      <option value="3">Type 3</option>
-                    </Select>
+                    <Select bg='white' size="sm" placeholder="Choose Type" height={8} variant='outline' iconColor="blue" {...register('exam_type_id')}>
+                      {type.map((item) => (
+                        <option value={item.id}>{item.name}</option>
+                      ))}</Select>
                   </div>
                 </div>
                 <div className="w-full"></div>

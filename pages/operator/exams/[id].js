@@ -17,7 +17,7 @@ import Button, { BackButton } from "../../../components/Button/button";
 import { ListSession } from "../../../components/Section/ListSession";
 import { TitleSection } from "../../../components/Section/TitleSection";
 
-export default function Section({ data }) {
+export default function Section() {
   const Router = useRouter()
   const { id } = Router.query
   const [dataExams, setDataExams] = useState({})
@@ -86,7 +86,7 @@ export default function Section({ data }) {
         <TitleSection dataExams={dataExams} id={id} type="Exams" />
       </div>
       {listSection.sections.map((itemSection, index) => (
-        <ListSession key={index} index={index} itemSection={itemSection} onOpenDeleteModal={onOpenDeleteModal} setQuestionSelectedId={(data) => setQuestionSelectedId(data)} setSelectedData={(data) => setSelectedData(data)} setSelectedName={(data) => setSelectedName(data)} onOpen={onOpen} />
+        <ListSession key={index} type="exams" idExamPractice={id} index={index} itemSection={itemSection} onOpenDeleteModal={onOpenDeleteModal} setQuestionSelectedId={(data) => setQuestionSelectedId(data)} setSelectedData={(data) => setSelectedData(data)} setSelectedName={(data) => setSelectedName(data)} onOpen={onOpen} />
       ))}
 
       <div className="flex flex-row-reverse" onClick={onPublish}>
@@ -140,7 +140,6 @@ export default function Section({ data }) {
     </div>
   )
 }
-
 
 // This also gets called at build time
 export async function getServerSideProps(context) {

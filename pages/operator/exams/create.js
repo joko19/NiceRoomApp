@@ -194,7 +194,7 @@ export default function Create(props) {
         className=" w-full  bg-white overflow-visible"
         title="Create New Exam " >
         <Stepper step={step} currentStep={currentStep} />
-        <form onSubmit={handleSubmit(submitExams)}  className="text-sm">
+        <form onSubmit={handleSubmit(submitExams)} className="text-sm">
           {currentStep === 1 && (
             <div className="mb-8">
               <input hidden type="text" value={type} {...register("type")} />
@@ -202,25 +202,25 @@ export default function Create(props) {
                 <div className="w-full gap-4">
                   <p className="mt-4">Held Type</p>
                   <div className="flex gap-4">
-                    <div className={` ${type === 'live' ? 'bg-blue-6' : 'bg-white'} flex gap-2 w-full p-2 border rounded-lg cursor-pointer`} onClick={() => {
+                    <div className={` ${type === 'live' ? 'bg-blue-6' : 'bg-white'} flex gap-2 h-8 w-full border rounded cursor-pointer`} onClick={() => {
                       setValue("type", "live")
                       setType('live')
                     }}>
-                      <div>
-                        <Image src={`${type === 'live' ? "/asset/icon/table/ic_radio_active.svg" : "/asset/icon/table/ic_radio.svg"}`} height={16} width={16} className="flex align-middle my-auto" />
+                    <div className="my-auto ml-2">
+                        <Image src={`${type === 'live' ? "/asset/icon/table/ic_radio_active.svg" : "/asset/icon/table/ic_radio.svg"}`} height={12} width={12} className="flex align-middle my-auto" />
                       </div>
-                      <p className={`${type === 'live' ? 'text-blue-1' : 'text-black-5'}`}>
+                      <p className={`${type === 'live' ? 'text-blue-1' : 'text-black-5'} my-auto`}>
                         Live Exam
                       </p>
                     </div>
-                    <div className={` ${type === 'standard' ? 'bg-blue-6' : 'bg-white'} flex gap-2 w-full p-2 border rounded-lg cursor-pointer`} onClick={() => {
+                    <div className={` ${type === 'standard' ? 'bg-blue-6' : 'bg-white'} flex gap-2  w-full  h-8 border rounded cursor-pointer`} onClick={() => {
                       setValue("type", "standard")
                       setType('standard')
                     }}>
-                      <div >
-                        <Image src={`${type === 'standard' ? "/asset/icon/table/ic_radio_active.svg" : "/asset/icon/table/ic_radio.svg"}`} height={16} width={16} className="flex align-middle my-auto" />
+                      <div className="my-auto ml-2">
+                        <Image src={`${type === 'standard' ? "/asset/icon/table/ic_radio_active.svg" : "/asset/icon/table/ic_radio.svg"}`} height={12} width={12} className="flex align-middle my-auto ml-4" />
                       </div>
-                      <p className={`${type === 'standard' ? 'text-blue-1' : 'text-black-5'}`}>
+                      <p className={`${type === 'standard' ? 'text-blue-1' : 'text-black-5'} my-auto `}>
                         Standard Exam
                       </p>
                     </div>
@@ -239,12 +239,15 @@ export default function Create(props) {
               </div>
 
               <div className="flex gap-4 " >
+
                 <div className="w-full">
                   <p className="mt-4">Exam Type {errors && (
                     <span className="text-red-1 text-sm">{errors.exam_type_id}</span>
                   )}</p>
                   <div>
-                    <Select bg='white' size="md" defaultValue="1" variant='outline' iconColor="blue" {...register('exam_type_id')}>
+                    <Select height={8} size="sm" bg='white' defaultValue="1" variant='outline' style={{
+                      'size': '28px'
+                    }} iconColor="blue" {...register('exam_type_id')}>
                       <option value="" >Choose Exam type</option>
                       {examType.map((item) => (
                         <option key={item.id} value={item.id}>{item.name}</option>
@@ -255,12 +258,13 @@ export default function Create(props) {
                   <p className="mt-4">Topic {errors && (
                     <span className="text-red-1 text-sm">{errors.topics}</span>
                   )}</p>
+
                   <Multiselect
                     className="z-100 "
                     options={listTopic}
                     style={{
                       "multiselectContainer": {
-                        "padding": "4px",
+                        "padding": "0px",
                         "border-width": "1px",
                         "border-radius": "5px"
                       }, "searchBox": {
@@ -331,7 +335,7 @@ export default function Create(props) {
                     options={listBatch}
                     style={{
                       "multiselectContainer": {
-                        "padding": "4px",
+                        "padding": "0px",
                         "border-width": "1px",
                         "border-radius": "5px"
                       }, "searchBox": {
@@ -358,7 +362,7 @@ export default function Create(props) {
                       options={listBranch}
                       style={{
                         "multiselectContainer": {
-                          "padding": "4px",
+                          "padding": "0px",
                           "border-width": "1px",
                           "border-radius": "5px"
                         }, "searchBox": {

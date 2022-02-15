@@ -322,25 +322,25 @@ export default function Create(props) {
                 <div className="w-full gap-4">
                   <p className="mt-4">Held Type</p>
                   <div className="flex gap-3">
-                    <div className={` ${type === 'live' ? 'bg-blue-6' : 'bg-white'} flex gap-2 w-full p-2 border rounded-lg cursor-pointer`} onClick={() => {
+                    <div className={` ${type === 'live' ? 'bg-blue-6' : 'bg-white'} flex gap-2 w-full border h-8 rounded cursor-pointer`} onClick={() => {
                       setType('live')
                       setValue("type", "live")
                     }}>
-                      <div  >
-                        <Image src={`${type === 'live' ? "/asset/icon/table/ic_radio_active.svg" : "/asset/icon/table/ic_radio.svg"}`} height={16} width={16} className="flex align-middle my-auto" />
+                      <div className="my-auto ml-2" >
+                        <Image src={`${type === 'live' ? "/asset/icon/table/ic_radio_active.svg" : "/asset/icon/table/ic_radio.svg"}`} height={12} width={12} className="flex align-middle my-auto" />
                       </div>
-                      <p className={`${type === 'live' ? 'text-blue-1' : 'text-black-5'}`}>
+                      <p className={`${type === 'live' ? 'text-blue-1' : 'text-black-5'} my-auto`}>
                         Live Exam
                       </p>
                     </div>
-                    <div className={` ${type === 'standard' ? 'bg-blue-6' : 'bg-white'} flex gap-2 w-full p-2 border rounded-lg cursor-pointer`} onClick={() => {
+                    <div className={` ${type === 'standard' ? 'bg-blue-6' : 'bg-white'} flex gap-2 w-full border rounded cursor-pointer`} onClick={() => {
                       setType('standard')
                       setValue("type", "standard")
                     }}>
-                      <div >
-                        <Image src={`${type === 'standard' ? "/asset/icon/table/ic_radio_active.svg" : "/asset/icon/table/ic_radio.svg"}`} height={16} width={16} className="flex align-middle my-auto" />
+                      <div className="my-auto ml-2" >
+                        <Image src={`${type === 'standard' ? "/asset/icon/table/ic_radio_active.svg" : "/asset/icon/table/ic_radio.svg"}`} height={12} width={12} className="flex align-middle my-auto" />
                       </div>
-                      <p className={`${type === 'standard' ? 'text-blue-1' : 'text-black-5'}`}>
+                      <p className={`${type === 'standard' ? 'text-blue-1' : 'text-black-5'} my-auto`}>
                         Standard Exam
                       </p>
                     </div>
@@ -353,7 +353,7 @@ export default function Create(props) {
                     <span className="text-red-1 text-sm">{errors.name}</span>
                   )}</p>
                   <div>
-                    <input type="text" className="form border w-full rounded-lg p-3 h-full" placeholder="Input Exam Name"  {...register("name")} />
+                    <input type="text" className="form border w-full rounded p-2 h-full" placeholder="Input Exam Name"  {...register("name")} />
                   </div>
                 </div>
               </div>
@@ -364,7 +364,7 @@ export default function Create(props) {
                     <span className="text-red-1 text-sm">{errors.type}</span>
                   )}</p>
                   <div>
-                    <Select bg='white' size="md" defaultValue="1" variant='outline' iconColor="blue" {...register('exam_type_id')}>
+                    <Select bg='white' size="sm" height={9} defaultValue="1" variant='outline'  iconColor="blue" {...register('exam_type_id')}>
                       <option disabled>Choose Exam Type</option>
                       {examType.map((item) => (
                         <option key={item.id} value={item.id}>{item.name}</option>
@@ -380,7 +380,7 @@ export default function Create(props) {
                     options={listTopic}
                     style={{
                       "multiselectContainer": {
-                        "padding": "2px",
+                        "padding": "0px",
                         "border-width": "1px",
                         "border-radius": "5px"
                       }, "searchBox": {

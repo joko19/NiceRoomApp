@@ -79,26 +79,31 @@ export default function Create() {
           )}
         >
           <div className="flex gap-4 mb-4">
-            <input type="text" className=" border rounded-lg w-1/2 p-2 text-sm" value={search} placeholder="Search Quiz" onChange={(e) => {
+            <input type="text" className=" border rounded w-1/2 p-2 text-sm" value={search} placeholder="Search Quiz" onChange={(e) => {
               setSearch(e.target.value)
               getData(e.target.value, type, status, limit, page)
             }} />
 
             <div className="flex gap-4 w-1/2 h-full  ">
-              <Select placeholder='All Type' className="h-full" size="md" onChange={(e) => {
-                setType(e.target.value)
-                getData(search, e.target.value, status, limit, page)
-              }}>
-                <option value='live'>Live</option>
-                <option value='mixed'>Mixed</option>
-              </Select>
-              <Select placeholder='All Status' className="h-full" size="md" onChange={(e) => {
-                setStatus(e.target.value)
-                getData(search, type, e.target.value, limit, page)
-              }}>
-                <option value='published'>Published</option>
-                <option value='draft'>Draft</option>
-              </Select>
+              <div className="w-full rounded py-2 pl-2 border">
+                <Select placeholder='All Type' size="sm" variant="unstyled" onChange={(e) => {
+                  setType(e.target.value)
+                  getData(search, e.target.value, status, limit, page)
+                }}>
+                  <option value='live'>Live</option>
+                  <option value='mixed'>Mixed</option>
+                </Select>
+              </div>
+              <div className="py-2 pl-2 w-full border rounded">
+                <Select placeholder='All Status' size="sm" variant="unstyled" onChange={(e) => {
+                  setStatus(e.target.value)
+                  getData(search, type, e.target.value, limit, page)
+                }}>
+                  <option value='published'>Published</option>
+                  <option value='draft'>Draft</option>
+                </Select>
+
+              </div>
             </div>
           </div>
           <div className="flex flex-col">

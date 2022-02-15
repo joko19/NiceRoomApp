@@ -46,9 +46,9 @@ export function Time({ setDate = false, data = false }) {
 
 function renderInput(props, openCalendar, closeCalendar) {
   return (
-    <div className="flex justify-between justify-content border p-2 rounded">
-      <input {...props} />
-      <div className="cursor-pointer" onClick={openCalendar}><Image src="/asset/icon/table/fi_clock.svg" height={16} width={16} /></div>
+    <div className="flex justify-between justify-content border p-1  text-sm rounded">
+      <input {...props} className="text-sm" />
+      <div className="cursor-pointer" onClick={openCalendar}><Image src="/asset/icon/table/fi_clock.svg" height={12} width={12} /></div>
     </div>
   );
 }
