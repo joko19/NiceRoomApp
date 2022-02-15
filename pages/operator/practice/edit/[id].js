@@ -344,7 +344,7 @@ export default function Create(props) {
                     setValue(`sections[${indexQuestion}].id`, -1)
                   }
                   return (
-                    <>
+                    <div key={indexQuestion}>
                       <p className="font-bold mt-4 text-lg">Section {indexQuestion + 1}</p>
                       <div className="flex gap-4" >
                         <div className="w-full">
@@ -378,7 +378,7 @@ export default function Create(props) {
                         </div>
                       </div>
 
-                    </>
+                    </div>
                   )
                 }
                 )}
