@@ -96,8 +96,8 @@ export default function Index() {
                 setType(e.target.value)
                 getData(search, e.target.value, status, limit, page)
               }}>
-                {typePractice.map((item) => (
-                  <option value={item.name}>{item.name}</option>
+                {typePractice.map((item, index) => (
+                  <option key={index} value={item.name}>{item.name}</option>
                 ))}
               </Select>
 
