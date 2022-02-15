@@ -3,16 +3,15 @@ import Card from "../../../components/Cards/Card";
 import { useEffect, useState } from 'react'
 import {
   useDisclosure,
+  Select
 } from '@chakra-ui/react'
 import Pagination from "../../../components/Pagination/pagination";
-import { Select } from '@chakra-ui/react'
-import apiPractice from './../../../action/practice'
+import apiExam from "../../../action/exam";
 import Link from "next/link";
+import Button from "../../../components/Button/button";
 import { ModalDelete } from "../../../components/Modal/ModalDelete";
-import Button from '../../../components/Button/button'
 import ExamPracticeTable from "../../../components/Table/ExamsPracticeTable";
 import { ModalUnPublish } from "../../../components/Modal/ModalUnpublish";
-import apiExam from "../../../action/exam";
 
 export default function Index() {
   const [search, setSearch] = useState('')
@@ -23,18 +22,19 @@ export default function Index() {
   const { isOpen, onOpen, onClose } = useDisclosure()
   const [selectedData, setSelectedData] = useState(null)
   const [dataInstitute, setDataInstitute] = useState([])
-  const [typePractice, setTypePractice] = useState([])
   const [list, setList] = useState([])
-  const TableHead = ['Practice Name', 'Type', 'Start Date', 'Total Question', 'Status', 'Action']
 
+  const TableHead = ['Exam Name', 'Type', 'Date', 'Total Question', 'Status', 'Action']
   const {
     isOpen: isConfirmModal,
     onOpen: onOpenConfirmModal,
     onClose: onCloseConfirmModal
   } = useDisclosure()
+
   const getData = async (search, type, status, limit, page) => {
-    await apiPractice.index(search, type, status, limit, page)
+    await apiExam.index(search, type, status, limit, page)
       .then((res) => {
+        console.log(res.data.data)
         setDataInstitute(res.data.data)
         setList(res.data.data.data)
         setPage(res.data.data.current_page)
@@ -49,14 +49,8 @@ export default function Index() {
   }, [])
 
 
-  useEffect(async () => {
-    await apiExam.allType()
-      .then((res) => setTypePractice(res.data.data))
-      .catch((err) => console.log(err))
-  }, [])
-
   const onDelete = async (id) => {
-    await apiPractice.deleted(id)
+    await apiExam.deleted(id)
       .then(() => {
         getData(search, type, status, limit, page)
       })
@@ -66,7 +60,7 @@ export default function Index() {
   }
 
   const onUnpublish = async (id) => {
-    await apiPractice.unpublish(id)
+    await apiExam.unpublish(id)
       .then(() => {
         getData(search, type, status, limit, page)
       })
@@ -74,45 +68,45 @@ export default function Index() {
         // console.log(err)
       })
   }
+
   return (
     <div className="mt-12">
       <Card
-        title="Practice"
+        title="Exams"
         right={(
-          <Link href="/admin/practice/create">
-            <a> <Button title="+ Create Practice" /></a>
+          <Link href="/admin/exams/create">
+            <a>
+              <Button title="+ Create Exam" />
+            </a>
           </Link>
         )}
       >
         <div className="flex gap-4 mb-4">
-          <input type="text" className=" border rounded w-1/2 p-2 text-sm" value={search} placeholder="Search Practice" onChange={(e) => {
+          <input type="text" className=" border rounded w-1/2 p-2 text-sm" value={search} placeholder="Search Exam" onChange={(e) => {
             setSearch(e.target.value)
             getData(e.target.value, type, status, limit, page)
           }} />
 
-          <div className="flex gap-4 w-1/2 h-full text-sm ">
-            <div className="w-full border rounded py-2 pl-2">
-              {/* <select defaultValue={"all type"} className="bg-white w-full" onChange={(e) => {
+          <div className="flex gap-4 w-1/2 h-full  ">
+            <div className="w-full rounded py-2 pl-2 border">
+              <Select placeholder='All Type' size="sm" variant="unstyled" onChange={(e) => {
                 setType(e.target.value)
                 getData(search, e.target.value, status, limit, page)
               }}>
-                <option value="">All Type</option>
-                {typePractice.map((item, index) => (
-                  <option key={item.id} value={item.name}>{item.name}</option>
-                ))}
-              </select> */}
-
+                <option value='live'>Live</option>
+                <option value='standard'>Standard</option>
+              </Select>
             </div>
-            <div className="w-full py-2 pl-2 rounded border">
-              <select className="h-full w-full  bg-white" onChange={(e) => {
+            <div className="w-full rounded py-2 pl-2 border">
+              <Select placeholder='All Status' size="sm" variant="unstyled" onChange={(e) => {
                 setStatus(e.target.value)
                 getData(search, type, e.target.value, limit, page)
               }}>
-                <option value=''>All Status</option>
-                <option value='waiting'>Waiting</option>
-                <option value='draft'>Draft</option>
+              <option value='waiting'>Waiting</option>
                 <option value='published'>Published</option>
-              </select>
+                <option value='draft'>Draft</option>
+                <option value='completed'>Completed</option>
+              </Select>
             </div>
           </div>
         </div>
@@ -120,14 +114,13 @@ export default function Index() {
           <div className="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
             <div className="py-2 align-middle inline-block min-w-full sm:px-6 lg:px-8">
               <div className="shadow overflow-hidden border-b border-gray-200 sm:rounded-lg">
-                <ExamPracticeTable TableHead={TableHead} list={list} onOpen={onOpen} setSelectedData={(id) => setSelectedData(id)} type="practice" onOpenPublish={onOpenConfirmModal} />
+                <ExamPracticeTable TableHead={TableHead} list={list} onOpen={onOpen} setSelectedData={(id) => setSelectedData(id)} type="exams" onOpenPublish={onOpenConfirmModal} />
               </div>
               <Pagination page={page} lastPage={dataInstitute.last_page} limit={limit} search={search} type={type} status={status} total={dataInstitute.total} doLimit={data => setLimit(data)} doData={getData} />
             </div>
           </div>
         </div>
       </Card>
-
       <ModalUnPublish isConfirmModal={isConfirmModal} onCloseConfirmModal={onCloseConfirmModal} selectedData={selectedData} onUnpublish={(data) => onUnpublish(data)} />
       <ModalDelete isOpen={isOpen} onClose={onClose} onDelete={(data) => onDelete(data)} selectedData={selectedData} />
     </div>
