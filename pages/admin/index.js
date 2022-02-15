@@ -1,17 +1,17 @@
-import Layout from "../../../Layout/Layout";
-import Card from "../../../components/Cards/Card";
+import Layout from "../../Layout/Layout";
+import Card from "../../components/Cards/Card";
 import { useEffect, useState } from 'react'
 import {
   useDisclosure,
   Select
 } from '@chakra-ui/react'
-import Pagination from "../../../components/Pagination/pagination";
-import apiExam from "../../../action/exam";
+import Pagination from "../../components/Pagination/pagination";
+import apiExam from "../../action/exam";
 import Link from "next/link";
-import Button from "../../../components/Button/button";
-import { ModalDelete } from "../../../components/Modal/ModalDelete";
-import ExamPracticeTable from "../../../components/Table/ExamsPracticeTable";
-import { ModalUnPublish } from "../../../components/Modal/ModalUnpublish";
+import Button from "../../components/Button/button";
+import { ModalDelete } from "../../components/Modal/ModalDelete";
+import ExamPracticeTable from "../../components/Table/ExamsPracticeTable";
+import { ModalUnPublish } from "../../components/Modal/ModalUnpublish";
 
 export default function Index() {
   const [search, setSearch] = useState('')
