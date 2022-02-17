@@ -57,8 +57,8 @@ function Landing(props) {
         props.registerUser(res)
         if (res.status === 201) {
           toast({
-            title: 'Account created.',
-            description: "We've created your account for you. Please Login to Continue",
+            title: 'Email Verification',
+            description: "Please Check Your Email",
             status: 'success',
             position: 'top-right',
             duration: 9000,

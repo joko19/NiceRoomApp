@@ -50,6 +50,7 @@ export default function Operator() {
   const [avatar, setAvatar] = useState('/asset/img/blank_profile.png')
   const [file, setFile] = useState()
   const [render, setRender] = useState(false)
+  
   useEffect(() => {
     const getData = async () => {
       await apiOperator.index(search, limit, page)

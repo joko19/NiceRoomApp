@@ -1,5 +1,3 @@
-import { useRouter } from 'next/router'
-import { useState } from 'react'
 import Link from 'next/link'
 
 function ResetPasswordSuccess() {
