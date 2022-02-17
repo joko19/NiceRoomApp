@@ -327,7 +327,7 @@ export default function Create(props) {
                       setValue("type", "live")
                     }}>
                       <div className="my-auto ml-2" >
-                        <Image src={`${type === 'live' ? "/asset/icon/table/ic_radio_active.svg" : "/asset/icon/table/ic_radio.svg"}`} height={12} width={12} className="flex align-middle my-auto" />
+                        <Image src={`${type === 'live' ? "/asset/icon/table/ic_radio_active.svg" : "/asset/icon/table/ic_radio.svg"}`} height={12} width={12} className="flex align-middle my-auto" alt="icon radio button"/>
                       </div>
                       <p className={`${type === 'live' ? 'text-blue-1' : 'text-black-5'} my-auto`}>
                         Live Exam
@@ -338,7 +338,7 @@ export default function Create(props) {
                       setValue("type", "standard")
                     }}>
                       <div className="my-auto ml-2" >
-                        <Image src={`${type === 'standard' ? "/asset/icon/table/ic_radio_active.svg" : "/asset/icon/table/ic_radio.svg"}`} height={12} width={12} className="flex align-middle my-auto" />
+                        <Image src={`${type === 'standard' ? "/asset/icon/table/ic_radio_active.svg" : "/asset/icon/table/ic_radio.svg"}`} height={12} width={12} className="flex align-middle my-auto" alt="icon radio button"/>
                       </div>
                       <p className={`${type === 'standard' ? 'text-blue-1' : 'text-black-5'} my-auto`}>
                         Standard Exam

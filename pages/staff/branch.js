@@ -64,42 +64,46 @@ export default function Branch() {
   const { register, handleSubmit, setValue, getValues, reset } = useForm();
   const [isBranch, setIsBranch] = useState(true)
   const [cities, setCities] = useState([])
+  const [render, setRender] = useState(false)
+  const [renderBatch, setRenderBatch] = useState(false)
 
-  const getData = async (search, status, limit, page) => {
-    await apiBranch.index(search, status, limit, page)
-      .then((res) => {
-        console.log(res.data.data)
-        setDataInstitute(res.data.data)
-        setList(res.data.data.data)
-        setPage(res.data.data.current_page)
-
-      })
-      .catch((err) => {
-        console.log(err)
-      })
-  }
-  const getBatch = async (search, limit, page) => {
-    await apiBatch.index(search, limit, page)
-      .then((res) => {
-        console.log(res.data.data)
-        setDataInstituteBatch(res.data.data)
-        setListBatch(res.data.data.data)
-        setPageBatch(res.data.data.current_page)
-
-      })
-      .catch((err) => {
-        console.log(err)
-      })
-  }
   useEffect(() => {
-    getData(search, status, limit, page)
-    getBatch(searchBatch, limitBatch, pageBatch)
-  }, [])
+    const getData = async () => {
+      await apiBranch.index(search, status, limit, page)
+        .then((res) => {
+          console.log(res.data.data)
+          setDataInstitute(res.data.data)
+          setList(res.data.data.data)
+          setPage(res.data.data.current_page)
+
+        })
+        .catch((err) => {
+          console.log(err)
+        })
+    }
+    getData()
+  }, [search, status, limit, page, render])
+
+  useEffect(() => {
+    const getBatch = async () => {
+      await apiBatch.index(searchBatch, limitBatch, pageBatch)
+        .then((res) => {
+          console.log(res.data.data)
+          setDataInstituteBatch(res.data.data)
+          setListBatch(res.data.data.data)
+          setPageBatch(res.data.data.current_page)
+
+        })
+        .catch((err) => {
+          console.log(err)
+        })
+    }
+    getBatch()
+  }, [searchBatch, limitBatch, pageBatch, renderBatch])
 
   const getBranch = async () => {
     await apiBranch.all()
       .then((res) => {
-        console.log(res.data.data)
         setBranch(res.data.data)
       })
   }
@@ -136,7 +140,7 @@ export default function Branch() {
         .then((res) => {
           reset(res)
           onCloseCreateModal()
-          getData(search, status, limit, page)
+          setRender(!render)
           onOpenSuccessModal()
         })
         .catch((err) => {
@@ -147,7 +151,7 @@ export default function Branch() {
             reset(res)
             onCloseCreateModal()
             setUpdate(false)
-            getData(search, status, limit, page)
+            setRender(!render)
             onOpenSuccessModal()
           })
           .catch((err) => {
@@ -157,7 +161,7 @@ export default function Branch() {
       updateBatch ? await apiBatch.update(selectedDataBatch, data)
         .then((res) => {
           reset(res)
-          getBatch(searchBatch, limitBatch, pageBatch)
+          setRenderBatch(!renderBatch)
           onCloseCreateModalBatch()
         })
         .catch((err) => {
@@ -167,7 +171,7 @@ export default function Branch() {
           .then((res) => {
             reset(res)
             setUpdateBatch(false)
-            getBatch(searchBatch, limitBatch, pageBatch)
+            setRenderBatch(!renderBatch)
             onCloseCreateModalBatch()
           })
           .catch((err) => {
@@ -179,17 +183,13 @@ export default function Branch() {
   const onDelete = async (id) => {
     if (isBranch) {
       await apiBranch.deleted(id)
-        .then(() => {
-          getData(search, status, limit, page)
-        })
+        .then(() => setRender(!render))
         .catch((err) => {
           console.log(err)
         })
     } else {
       await apiBatch.deleted(id)
-        .then(() => {
-          getBatch(search, limit, page)
-        })
+        .then(() => setRenderBatch(!renderBatch))
         .catch((err) => {
           console.log(err)
         })
@@ -230,13 +230,11 @@ export default function Branch() {
             <div className="flex gap-4 mb-4">
               <input type="text" className=" border rounded-lg w-1/2 p-2" value={search} placeholder="Search Branch" onChange={(e) => {
                 setSearch(e.target.value)
-                getData(e.target.value, status, limit, page)
               }} />
 
               <div className=" w-1/2 h-full  ">
                 <Select placeholder='All Status' className="h-full" size="md" onChange={(e) => {
                   setStatus(e.target.value)
-                  getData(search, e.target.value, limit, page)
                 }}>
                   <option value='Pending'>Pending</option>
                   <option value='Approve'>Approve</option>
@@ -273,7 +271,7 @@ export default function Branch() {
                                 {item.city}
                               </span>
                             </td>
-                            <td className={`${item.status === 'pending' && 'text-yellow-1'} ${item.status === 'approve' && 'text-green-1'} ${item.status === 'reject' && 'text-red-1'} px-6 h-12 whitespace-nowrap`}>
+                            <td className={`${item.status === 'pending' && 'text-yellow-1'} ${item.status === 'approve' && 'text-green-1'} ${item.status === 'reject' && 'text-red-1'} px-6 h-12 font-bold whitespace-nowrap`}>
                               <div>
                                 {item.status.charAt(0).toUpperCase() + item.status.slice(1)}
                               </div>
@@ -301,7 +299,7 @@ export default function Branch() {
                       </tbody>
                     </table>
                   </div>
-                  <Pagination page={page} lastPage={dataInstitute.last_page} limit={limit} search={search} status={status} total={dataInstitute.total} doLimit={data => setLimit(data)} doData={getData} />
+                  <Pagination page={page} lastPage={dataInstitute.last_page} limit={limit} search={search} status={status} total={dataInstitute.total} doLimit={data => setLimit(data)} doPage={data => setPage(data)} />
                 </div>
               </div>
             </div>
@@ -323,7 +321,6 @@ export default function Branch() {
           >
             <input type="text" className="p-2 border rounded w-1/2 mb-4" value={searchBatch} placeholder="Search Batch" onChange={(e) => {
               setSearchBatch(e.target.value)
-              getBatch(e.target.value, limit, page)
             }} />
             <div className="flex flex-col">
               <div className="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
@@ -378,7 +375,7 @@ export default function Branch() {
                       </tbody>
                     </table>
                   </div>
-                  <Pagination page={pageBatch} lastPage={dataInstituteBatch.last_page} limit={limitBatch} search={searchBatch} total={dataInstituteBatch.total} doLimit={data => setLimitBatch(data)} doData={getBatch} />
+                  <Pagination page={pageBatch} lastPage={dataInstituteBatch.last_page} limit={limitBatch} search={searchBatch} total={dataInstituteBatch.total} doLimit={data => setLimitBatch(data)} doPage={data => setPageBatch(data)} />
                 </div>
               </div>
             </div>

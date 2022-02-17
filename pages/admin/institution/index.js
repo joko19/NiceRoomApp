@@ -43,22 +43,22 @@ export default function Institute() {
   const [errors, setErrors] = useState()
   const TableHead = ['Institute Name', 'State', ' City', 'Year Established', 'Action']
   const { register, handleSubmit, setValue, getValues, reset } = useForm();
-
-  const getData = async (search, limit, page) => {
-    await apiInstitute.all(search, limit, page)
-      .then((res) => {
-        setDataInstitute(res.data.data)
-        setList(res.data.data.data)
-        setPage(res.data.data.current_page)
-
-      })
-      .catch((err) => {
-        console.log(err)
-      })
-  }
+  const [render, setRender] = useState(false)
   useEffect(() => {
-    getData(search, limit, page)
-  }, [])
+    const getData = async () => {
+      await apiInstitute.all(search, limit, page)
+        .then((res) => {
+          setDataInstitute(res.data.data)
+          setList(res.data.data.data)
+          setPage(res.data.data.current_page)
+
+        })
+        .catch((err) => {
+          console.log(err)
+        })
+    }
+    getData()
+  }, [search, limit, page, render])
 
   const getDetail = async (id) => {
     await apiInstitute.detail(id)
@@ -86,6 +86,7 @@ export default function Institute() {
       .then((res) => {
         reset(res)
         onCloseCreateModal()
+        setRender(!render)
         onOpenSuccessModal()
       })
       .catch((err) => {
@@ -94,18 +95,18 @@ export default function Institute() {
       }) : await apiInstitute.create(data)
         .then((res) => {
           onCloseCreateModal()
+          setRender(!render)
           onOpenSuccessModal()
         })
         .catch((err) => {
           setErrors(err.response.data.data)
         })
-    getData(search, limit, page)
   }
 
   const onDelete = async (id) => {
     await apiInstitute.deleted(id)
       .then(() => {
-        getData(search, limit, page)
+        setRender(!render)
       })
       .catch((err) => {
         console.log(err)
@@ -133,7 +134,6 @@ export default function Institute() {
       >
         <input type="text" className="p-2 border rounded w-1/2 mb-4" placeholder="Search Institute" onChange={(e) => {
           setSearch(e.target.value)
-          getData(e.target.value, limit, page)
         }} />
 
         <div className="flex flex-col">
@@ -194,7 +194,7 @@ export default function Institute() {
                   </tbody>
                 </table>
               </div>
-              <Pagination page={page} lastPage={dataInstitute.last_page} limit={limit} search={search} total={dataInstitute.total} doLimit={data => setLimit(data)} doData={getData} />
+              <Pagination page={page} lastPage={dataInstitute.last_page} limit={limit} total={dataInstitute.total} doLimit={data => setLimit(data)} doPage={data => setPage(data)} />
             </div>
           </div>
         </div>

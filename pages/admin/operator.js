@@ -49,22 +49,22 @@ export default function Operator() {
   const { register, handleSubmit, setValue, getValues, reset } = useForm();
   const [avatar, setAvatar] = useState('/asset/img/blank_profile.png')
   const [file, setFile] = useState()
-
-  const getData = async (search, limit, page) => {
-    await apiOperator.index(search, limit, page)
-      .then((res) => {
-        setDataInstitute(res.data.data)
-        setList(res.data.data.data)
-        setPage(res.data.data.current_page)
-
-      })
-      .catch((err) => {
-        console.log(err)
-      })
-  }
+  const [render, setRender] = useState(false)
   useEffect(() => {
-    getData(search, limit, page)
-  }, [])
+    const getData = async () => {
+      await apiOperator.index(search, limit, page)
+        .then((res) => {
+          setDataInstitute(res.data.data)
+          setList(res.data.data.data)
+          setPage(res.data.data.current_page)
+
+        })
+        .catch((err) => {
+          console.log(err)
+        })
+    }
+    getData()
+  }, [search, limit, page, render])
 
   const getBranch = async () => {
     await apiBranch.all()
@@ -115,7 +115,7 @@ export default function Operator() {
       .then((res) => {
         reset(res)
         onCloseCreateModal()
-        getData(search, limit, page)
+        setRender(!render)
         onOpenSuccessModal()
         setAvatar('/asset/img/blank_profile.png')
         setFile(null)
@@ -128,7 +128,7 @@ export default function Operator() {
           reset(res)
           onCloseCreateModal()
           setUpdate(false)
-          getData(search, limit, page)
+          setRender(!render)
           onOpenSuccessModal()
           setAvatar('/asset/img/blank_profile.png')
           setFile(null)
@@ -136,14 +136,11 @@ export default function Operator() {
         .catch((err) => {
           setErrors(err.response.data.data)
         })
-    getData(search, limit, page)
   }
 
   const onDelete = async (id) => {
     await apiOperator.deleted(id)
-      .then(() => {
-        getData(search, limit, page)
-      })
+      .then(() => setRender(!render))
       .catch((err) => {
         console.log(err)
       })
@@ -174,7 +171,6 @@ export default function Operator() {
         >
           <input type="text" className="p-2 border rounded w-1/2 mb-4 text-sm" placeholder="Search Operator" onChange={(e) => {
             setSearch(e.target.value)
-            getData(e.target.value, limit, page)
           }} />
 
           <div className="flex flex-col">
@@ -230,7 +226,7 @@ export default function Operator() {
                     </tbody>
                   </table>
                 </div>
-                <Pagination page={page} lastPage={dataInstitute.last_page} limit={limit} search={search} total={dataInstitute.total} doLimit={data => setLimit(data)} doData={getData} />
+                <Pagination page={page} lastPage={dataInstitute.last_page} limit={limit} total={dataInstitute.total} doLimit={data => setLimit(data)} doPage={data => setPage(data)} />
               </div>
             </div>
           </div>
@@ -327,7 +323,7 @@ export default function Operator() {
           </ModalBody>
         </ModalContent>
       </Modal>
-      
+
       <ModalSuccessCreateEdit isSuccessModal={isSuccessModal} onCloseSuccessModal={onCloseSuccessModal} update={update} setUpdate={(data) => setUpdate(data)} />
       <ModalDelete isOpen={isOpen} onClose={onClose} onDelete={(data) => onDelete(data)} selectedData={selectedData} />
     </div>

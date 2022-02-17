@@ -23,7 +23,7 @@ export default function Index() {
   const [selectedData, setSelectedData] = useState(null)
   const [dataInstitute, setDataInstitute] = useState([])
   const [list, setList] = useState([])
-
+  const [render, setRender] = useState(false)
   const TableHead = ['Exam Name', 'Type', 'Date', 'Total Question', 'Status', 'Action']
   const {
     isOpen: isConfirmModal,
@@ -31,29 +31,27 @@ export default function Index() {
     onClose: onCloseConfirmModal
   } = useDisclosure()
 
-  const getData = async (search, type, status, limit, page) => {
-    await apiExam.index(search, type, status, limit, page)
-      .then((res) => {
-        console.log(res.data.data)
-        setDataInstitute(res.data.data)
-        setList(res.data.data.data)
-        setPage(res.data.data.current_page)
-
-      })
-      .catch((err) => {
-        // console.log(err)
-      })
-  }
   useEffect(() => {
-    getData(search, type, status, limit, page)
-  }, [])
+    const getData = async () => {
+      await apiExam.index(search, type, status, limit, page)
+        .then((res) => {
+          console.log(res.data.data)
+          setDataInstitute(res.data.data)
+          setList(res.data.data.data)
+          setPage(res.data.data.current_page)
+  
+        })
+        .catch((err) => {
+          // console.log(err)
+        })
+    }
+    getData()
+  }, [search, type, status, limit, page, render])
 
 
   const onDelete = async (id) => {
     await apiExam.deleted(id)
-      .then(() => {
-        getData(search, type, status, limit, page)
-      })
+      .then(() => setRender(!render))
       .catch((err) => {
         // console.log(err)
       })
@@ -61,9 +59,7 @@ export default function Index() {
 
   const onUnpublish = async (id) => {
     await apiExam.unpublish(id)
-      .then(() => {
-        getData(search, type, status, limit, page)
-      })
+      .then(() => setRender(!render))
       .catch((err) => {
         // console.log(err)
       })
@@ -84,14 +80,12 @@ export default function Index() {
         <div className="flex gap-4 mb-4">
           <input type="text" className=" border rounded w-1/2 p-2 text-sm" value={search} placeholder="Search Exam" onChange={(e) => {
             setSearch(e.target.value)
-            getData(e.target.value, type, status, limit, page)
           }} />
 
           <div className="flex gap-4 w-1/2 h-full  ">
             <div className="w-full rounded py-2 pl-2 border">
               <Select placeholder='All Type' size="sm" variant="unstyled" onChange={(e) => {
                 setType(e.target.value)
-                getData(search, e.target.value, status, limit, page)
               }}>
                 <option value='live'>Live</option>
                 <option value='standard'>Standard</option>
@@ -100,7 +94,6 @@ export default function Index() {
             <div className="w-full rounded py-2 pl-2 border">
               <Select placeholder='All Status' size="sm" variant="unstyled" onChange={(e) => {
                 setStatus(e.target.value)
-                getData(search, type, e.target.value, limit, page)
               }}>
               <option value='waiting'>Waiting</option>
                 <option value='published'>Published</option>
@@ -116,7 +109,7 @@ export default function Index() {
               <div className="shadow overflow-hidden border-b border-gray-200 sm:rounded-lg">
                 <ExamPracticeTable TableHead={TableHead} list={list} onOpen={onOpen} setSelectedData={(id) => setSelectedData(id)} type="exams" onOpenPublish={onOpenConfirmModal} />
               </div>
-              <Pagination page={page} lastPage={dataInstitute.last_page} limit={limit} search={search} type={type} status={status} total={dataInstitute.total} doLimit={data => setLimit(data)} doData={getData} />
+              <Pagination page={page} lastPage={dataInstitute.last_page} limit={limit} search={search} type={type} status={status} total={dataInstitute.total} doLimit={data => setLimit(data)} doPage={data => setPage(data)} />
             </div>
           </div>
         </div>

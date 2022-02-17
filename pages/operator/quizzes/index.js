@@ -23,35 +23,34 @@ export default function Create() {
   const [selectedData, setSelectedData] = useState(null)
   const [dataInstitute, setDataInstitute] = useState([])
   const [list, setList] = useState([])
+  const [render, setRender] = useState(false)
   const {
     isOpen: isConfirmModal,
     onOpen: onOpenConfirmModal,
     onClose: onCloseConfirmModal
   } = useDisclosure()
 
-  const getData = async (search, type, status, limit, page) => {
-    await apiQuiz.index(search, type, status, limit, page)
-      .then((res) => {
-        setDataInstitute(res.data.data)
-        setList(res.data.data.data)
-        setPage(res.data.data.current_page)
-
-        console.log(res.data.data)
-      })
-      .catch((err) => {
-        // console.log(err)
-      })
-  }
   useEffect(() => {
-    getData(search, type, status, limit, page)
-  }, [])
+    const getData = async () => {
+      await apiQuiz.index(search, type, status, limit, page)
+        .then((res) => {
+          setDataInstitute(res.data.data)
+          setList(res.data.data.data)
+          setPage(res.data.data.current_page)
+  
+          console.log(res.data.data)
+        })
+        .catch((err) => {
+          // console.log(err)
+        })
+    }
+    getData()
+  }, [search, type, status, limit, page, render])
 
 
   const onDelete = async (id) => {
     await apiQuiz.deleted(id)
-      .then(() => {
-        getData(search, type, status, limit, page)
-      })
+      .then(() => setRender(!render))
       .catch((err) => {
         // console.log(err)
       })
@@ -59,9 +58,7 @@ export default function Create() {
 
   const onUnpublish = async (id) => {
     await apiQuiz.unpublish(id)
-      .then(() => {
-        getData(search, type, status, limit, page)
-      })
+      .then(() => setRender(!render))
       .catch((err) => {
         // console.log(err)
       })
@@ -81,14 +78,12 @@ export default function Create() {
           <div className="flex gap-4 mb-4">
             <input type="text" className=" border rounded w-1/2 p-2 text-sm" value={search} placeholder="Search Quiz" onChange={(e) => {
               setSearch(e.target.value)
-              getData(e.target.value, type, status, limit, page)
             }} />
 
             <div className="flex gap-4 w-1/2 h-full  ">
               <div className="w-full rounded py-2 pl-2 border">
                 <Select placeholder='All Type' size="sm" variant="unstyled" onChange={(e) => {
                   setType(e.target.value)
-                  getData(search, e.target.value, status, limit, page)
                 }}>
                   <option value='live'>Live</option>
                   <option value='mixed'>Mixed</option>
@@ -97,7 +92,6 @@ export default function Create() {
               <div className="py-2 pl-2 w-full border rounded">
                 <Select placeholder='All Status' size="sm" variant="unstyled" onChange={(e) => {
                   setStatus(e.target.value)
-                  getData(search, type, e.target.value, limit, page)
                 }}>
                   <option value='published'>Published</option>
                   <option value='draft'>Draft</option>
@@ -151,7 +145,7 @@ export default function Create() {
                           </td>
                           <td className="px-6 py-4 whitespace-nowrap flex text-right gap-2 text-sm font-medium">
                             <div className="flex m-auto gap-4">
-                              <Link href={`/operator/quizzes/view/${item.id}`}>
+                              <Link href={`/admin/quizzes/view/${item.id}`}>
                                 <a className="text-indigo-600 hover:text-indigo-900 ">
                                   <Image src="/asset/icon/table/fi_eye.svg" width={16} height={16} alt="icon edit" />
                                 </a>
@@ -189,7 +183,7 @@ export default function Create() {
                     </tbody>
                   </table>
                 </div>
-                <Pagination page={page} lastPage={dataInstitute.last_page} limit={limit} search={search} type={type} status={status} total={dataInstitute.total} doLimit={data => setLimit(data)} doData={getData} />
+                <Pagination page={page} lastPage={dataInstitute.last_page} limit={limit} search={search} type={type} status={status} total={dataInstitute.total} doLimit={data => setLimit(data)} doPage={data => setPage(data)}/>
               </div>
             </div>
           </div>

@@ -18,6 +18,7 @@ import {
 import { useForm } from "react-hook-form";
 import { FaAngleLeft, FaAngleRight, FaAngleDoubleLeft, FaAngleDoubleRight } from "react-icons/fa";
 import { BackButton } from "../../../components/Button/button";
+import Pagination from "../../../components/Pagination/pagination";
 
 export default function Institute() {
   const Router = useRouter()
@@ -48,6 +49,7 @@ export default function Institute() {
       .then((res) => {
         setDataInstitute(res.data.data)
         setList(res.data.data.branches)
+        console.log(res.data.data.branches)
         setPage(res.data.data.current_page)
 
       })
@@ -118,11 +120,11 @@ export default function Institute() {
             </div>
           </div>
           <h1 className="font-bold text-1xl my-2">List Branch</h1>
-          <input type="text" className="p-2 border rounded-lg w-1/2 mb-4" placeholder="Search Institute" onChange={(e) => {
+          {/* <input type="text" className="p-2 border rounded-lg w-1/2 mb-4" placeholder="Search Institute" onChange={(e) => {
             setSearch(e.target.value)
             searchBranch(e.target.value)
             // getData(e.target.value, limit, page)
-          }} />
+          }} /> */}
 
           <div className="flex flex-col">
             <div className="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
@@ -171,48 +173,7 @@ export default function Institute() {
                     </tbody>
                   </table>
                 </div>
-                <div className="flex mt-8 flex-row-reverse flex-end gap-4">
-                  <button className={`${page !== dataInstitute.last_page ? 'bg-black-6' : 'cursor-default'} rounded-full p-1`} onClick={() => {
-                    if (page !== dataInstitute.last_page) {
-                      getData(search, limit, dataInstitute.last_page)
-                    }
-                  }}>
-                    <FaAngleDoubleRight />
-                  </button>
-                  <button className={`${page < dataInstitute.last_page ? 'bg-black-6' : 'cursor-default'} rounded-full p-1`} onClick={() => {
-                    if (page < dataInstitute.last_page) {
-                      getData(search, limit, page + 1)
-                    }
-                  }}>
-                    <FaAngleRight />
-                  </button>
-                  <button className={`${page > 1 ? 'bg-black-6' : 'cursor-default'} p-1  rounded-full align-middle`} onClick={() => {
-                    if (page > 1) {
-                      getData(search, limit, page - 1)
-                    }
-                  }}>
-                    <FaAngleLeft />
-                  </button>
-                  <button className={`${page !== 1 ? 'bg-black-6' : 'cursor-default'} rounded-full p-1`} onClick={() => {
-                    if (page !== 1) {
-                      getData(search, limit, 1)
-                    }
-                  }}>
-                    <FaAngleDoubleLeft />
-                  </button>
-                  <span> {page < dataInstitute.last_page ? page : dataInstitute.last_page} - {dataInstitute.last_page} from {dataInstitute.total}</span>
-                  <select className="bg-white" value={limit} onChange={(e) => {
-                    setLimit(e.target.value)
-                    getData(search, e.target.value, page)
-                  }}>
-                    <option>1</option>
-                    <option>2</option>
-                    <option>3</option>
-                    <option>4</option>
-                    <option>5</option>
-                  </select>
-                  <span>Data per page : </span>
-                </div>
+                {/* <Pagination page={page} lastPage={dataInstitute.last_page} limit={limit} total={dataInstitute.total} doLimit={data => setLimit(data)} doPage={data => setPage(data)} /> */}
               </div>
             </div>
           </div>

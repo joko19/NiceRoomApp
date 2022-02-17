@@ -27,6 +27,7 @@ export default function News(props) {
   const { isOpen, onOpen, onClose } = useDisclosure()
   const [selectedData, setSelectedData] = useState(null)
   const [isPublish, setIsPublish] = useState()
+  const [render, setRender] = useState(false)
   const [title, setTitle] = useState()
   const tableHead = ['Title', 'Sub-Title', 'Date', 'Status', 'Action']
   const {
@@ -35,27 +36,24 @@ export default function News(props) {
     onClose: onCloseConfirmModal
   } = useDisclosure()
 
-  const getData = async (search, limit, page) => {
-    await apiNews.all(search, limit, page)
-      .then((res) => {
-        setDataNews(res.data.data)
-        setList(res.data.data.data)
-        setPage(res.data.data.current_page)
-      })
-      .catch((err) => {
-        console.log(err)
-      })
-  }
-
   useEffect(() => {
-    getData(search, limit, page)
-  }, [])
+    const getData = async () => {
+      await apiNews.all(search, limit, page)
+        .then((res) => {
+          setDataNews(res.data.data)
+          setList(res.data.data.data)
+          setPage(res.data.data.current_page)
+        })
+        .catch((err) => {
+          console.log(err)
+        })
+    }
+    getData()
+  }, [search, limit, page, render])
 
   const onDelete = async (id) => {
     await apiNews.deleted(id)
-      .then((res) => {
-        getData(search, limit, page)
-      })
+      .then((res) => setRender(!render))
       .catch((err) => {
         console.log(err)
       })
@@ -63,9 +61,7 @@ export default function News(props) {
 
   const onPublish = async (id, status) => {
     await apiNews.publish(id, { status: status })
-      .then((res) => {
-        getData(search, limit, page)
-      })
+      .then(() => setRender(!render))
   }
 
   return (
@@ -81,7 +77,6 @@ export default function News(props) {
       >
         <input type="text" className="p-2 border rounded w-1/2 mb-4 text-sm" placeholder="Search News" onChange={(e) => {
           setSearch(e.target.value)
-          getData(e.target.value, limit, page)
         }} />
 
         <div className="flex flex-col">
@@ -158,7 +153,7 @@ export default function News(props) {
                   </tbody>
                 </table>
               </div>
-              <Pagination page={page} lastPage={dataNews.last_page} limit={limit} search={search} total={dataNews.total} doLimit={data => setLimit(data)} doData={getData} />
+              <Pagination page={page} lastPage={dataNews.last_page} limit={limit} search={search} total={dataNews.total} doLimit={data => setLimit(data)} doPage={data => setPage(data)} />
             </div>
           </div>
         </div>

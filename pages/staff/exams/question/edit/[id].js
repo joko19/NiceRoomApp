@@ -346,7 +346,7 @@ export default function Edit(props) {
                                   }}>
                                     <div className="m-auto" >
                                       {itemAnswer.correct === 1 ? (
-                                        <Image src='/asset/icon/table/ic_radio_active.svg' width={16} height={16} />
+                                        <Image src='/asset/icon/table/ic_radio_active.svg' width={16} height={16} alt="icon radio button" />
                                       ) : (
                                         <div className="border w-4 rounded-full h-4" />
                                       )}
@@ -377,7 +377,7 @@ export default function Edit(props) {
                                   }}>
                                     <div className="m-auto" >
                                       {itemAnswer.correct === 1 ? (
-                                        <Image src='/asset/icon/table/ic_checkbox_active.svg' width={16} height={16} />
+                                        <Image src='/asset/icon/table/ic_checkbox_active.svg' width={16} height={16} alt="icon radio button" />
                                       ) : (
                                         <div className="border w-4 rounded h-4" />
                                       )}

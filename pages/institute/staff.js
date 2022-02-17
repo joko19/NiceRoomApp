@@ -49,8 +49,9 @@ export default function Staff() {
   const { register, handleSubmit, setValue, getValues, reset } = useForm();
   const [avatar, setAvatar] = useState('/asset/img/blank_profile.png')
   const [file, setFile] = useState()
-
-  const getData = async (search, limit, page) => {
+  const [render, setRender] = useState(false)
+  useEffect(() => {
+  const getData = async () => {
     await apiStaff.index(search, limit, page)
       .then((res) => {
         setDataInstitute(res.data.data)
@@ -62,9 +63,8 @@ export default function Staff() {
         console.log(err)
       })
   }
-  useEffect(() => {
-    getData(search, limit, page)
-  }, [])
+    getData()
+  }, [search, limit, page, render])
 
   const getBranch = async () => {
     await apiBranch.all()
@@ -115,7 +115,7 @@ export default function Staff() {
       .then((res) => {
         reset(res)
         onCloseCreateModal()
-        getData(search, limit, page)
+        setRender(!render)
         onOpenSuccessModal()
         setAvatar('/asset/img/blank_profile.png')
         setFile(null)
@@ -128,7 +128,7 @@ export default function Staff() {
           reset(res)
           onCloseCreateModal()
           setUpdate(false)
-          getData(search, limit, page)
+          setRender(!render)
           onOpenSuccessModal()
           setAvatar('/asset/img/blank_profile.png')
           setFile(null)
@@ -136,14 +136,11 @@ export default function Staff() {
         .catch((err) => {
           setErrors(err.response.data.data)
         })
-    getData(search, limit, page)
   }
 
   const onDelete = async (id) => {
     await apiStaff.deleted(id)
-      .then(() => {
-        getData(search, limit, page)
-      })
+      .then(() => setRender(!render))
       .catch((err) => {
         console.log(err)
       })
@@ -174,7 +171,6 @@ export default function Staff() {
         >
           <input type="text" className="p-2 border rounded w-1/2 mb-4" placeholder="Search Staff" onChange={(e) => {
             setSearch(e.target.value)
-            getData(e.target.value, limit, page)
           }} />
 
           <div className="flex flex-col">
@@ -230,7 +226,7 @@ export default function Staff() {
                     </tbody>
                   </table>
                 </div>
-                <Pagination page={page} lastPage={dataInstitute.last_page} limit={limit} search={search} total={dataInstitute.total} doLimit={data => setLimit(data)} doData={getData} />
+                <Pagination page={page} lastPage={dataInstitute.last_page} limit={limit} search={search} total={dataInstitute.total} doLimit={data => setLimit(data)} doPage={data => setPage(data)} />
               </div>
             </div>
           </div>

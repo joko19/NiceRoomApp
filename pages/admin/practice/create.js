@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import Image from "next/image";
 import Card from "../../../components/Cards/Card";
 import Layout from "../../../Layout/Layout";
 import { useForm } from "react-hook-form";
@@ -14,7 +13,6 @@ import {
   useDisclosure,
 } from '@chakra-ui/react'
 import QuillCreated from "../../../components/Editor/QuillCreated";
-import { Select } from '@chakra-ui/react'
 import apiPractice from "../../../action/practice";
 import apiExam from "../../../action/exam";
 import apiTopic from "../../../action/topics";

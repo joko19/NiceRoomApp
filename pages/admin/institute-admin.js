@@ -34,6 +34,7 @@ export default function InstituteAdmin(props) {
   const [passwdLogin, setPasswdLogin] = useState(true)
   const tableHead = ['Employee ID', 'Name', 'Email', 'Phone', 'Institute', 'Action']
   const [errors, setErrors] = useState()
+  const [render, setRender] = useState(false)
   const { register, handleSubmit, setValue, getValues, reset } = useForm();
   const {
     isOpen: isCreateModal,
@@ -58,34 +59,34 @@ export default function InstituteAdmin(props) {
   } = useDisclosure()
 
 
-  const getData = async (search, limit, page) => {
-    await apiAdmin.all(search, limit, page)
-      .then((res) => {
-        setDataInstitute(res.data.data)
-        setList(res.data.data.data)
-        setPage(res.data.data.current_page)
-
-      })
-      .catch((err) => {
-        console.log(err)
-      })
-  }
-
   const getInstitute = async () => {
     await apiInstitute.index()
       .then((res) => setAllInstitute(res.data.data))
   }
 
   useEffect(() => {
-    getData(search, limit, page)
     getInstitute()
   }, [])
 
+  useEffect(() => {
+    const getData = async () => {
+      await apiAdmin.all(search, limit, page)
+        .then((res) => {
+          setDataInstitute(res.data.data)
+          setList(res.data.data.data)
+          setPage(res.data.data.current_page)
+
+        })
+        .catch((err) => {
+          console.log(err)
+        })
+    }
+    getData()
+  }, [search, limit, page, render])
+
   const onDelete = async (id) => {
     await apiAdmin.deleted(id)
-      .then((res) => {
-        getData(search, limit, page)
-      })
+      .then(() => setRender(!render))
       .catch((err) => {
         console.log(err)
       })
@@ -94,7 +95,7 @@ export default function InstituteAdmin(props) {
   const onSubmit = async (data) => {
     await apiAdmin.create(data)
       .then((res) => {
-        getData(search, limit, page)
+        setRender(!render)
         onCloseCreateModal()
         onOpenSuccessModal()
         setErrors(null)
@@ -109,7 +110,7 @@ export default function InstituteAdmin(props) {
   const onUpdate = async (data) => {
     await apiAdmin.update(selectedData, data)
       .then((res) => {
-        getData(search, limit, page)
+        setRender(!render)
         onCloseCreateModal()
         onOpenSuccessModal()
         setErrors(null)
@@ -152,7 +153,6 @@ export default function InstituteAdmin(props) {
       >
         <input type="text" className="p-2 border rounded w-1/2 mb-4" placeholder="Search Admin" onChange={(e) => {
           setSearch(e.target.value)
-          getData(e.target.value, limit, page)
         }} />
         <div className="flex flex-col">
           <div className="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
@@ -220,7 +220,7 @@ export default function InstituteAdmin(props) {
                   </tbody>
                 </table>
               </div>
-              <Pagination page={page} lastPage={dataInstitute.last_page} limit={limit} search={search} total={dataInstitute.total} doLimit={data => setLimit(data)} doData={getData} />
+              <Pagination page={page} lastPage={dataInstitute.last_page} limit={limit} total={dataInstitute.total} doLimit={data => setLimit(data)} doPage={data => setPage(data)} />
             </div>
           </div>
         </div>

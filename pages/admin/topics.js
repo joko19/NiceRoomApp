@@ -32,38 +32,38 @@ export default function Topics() {
     onClose: onCloseCreateModal
   } = useDisclosure()
   const { register, handleSubmit, setValue, getValues, reset } = useForm();
+  const [render, setRender] = useState(false)
 
-
-  const getData = async (search, limit, page) => {
-    await apiTopic.all(search, limit, page)
-      .then((res) => {
-        setTopics(res.data.data)
-        setList(res.data.data.data)
-        setPage(res.data.data.current_page)
-
-      })
-      .catch((err) => {
-        console.log(err)
-      })
-  }
   useEffect(async () => {
-    getData(search, limit, page)
-  }, [])
+    const getData = async () => {
+      await apiTopic.all(search, limit, page)
+        .then((res) => {
+          setTopics(res.data.data)
+          setList(res.data.data.data)
+          setPage(res.data.data.current_page)
+
+        })
+        .catch((err) => {
+          console.log(err)
+        })
+    }
+    getData()
+  }, [search, limit, page, render])
 
   const onSubmit = async (data) => {
     update ? await apiTopic.update(selectedData, data)
-      .then((res) => setUpdate(false)) :
+      .then((res) => {
+        setUpdate(false)
+        setRender(!render)
+      }) :
       await apiTopic.create(data)
-        .then((res) => getData(search, limit, page))
-    getData(search, limit, page)
+        .then(() => setRender(!render))
     onCloseCreateModal()
   }
 
   const onDelete = async (id) => {
     await apiTopic.deleted(id)
-      .then((res) => {
-        getData(search, limit, page)
-      })
+      .then((res) => setRender(!render))
       .catch((err) => {
         console.log(err)
       })
@@ -84,7 +84,6 @@ export default function Topics() {
       >
         <input type="text" className="p-2 border rounded w-1/2 mb-4 text-sm" placeholder="Search Topic" onChange={(e) => {
           setSearch(e.target.value)
-          getData(e.target.value, limit, page)
         }} />
 
         <div className="flex flex-col">
@@ -132,7 +131,7 @@ export default function Topics() {
                   </tbody>
                 </table>
               </div>
-              <Pagination page={page} lastPage={topics.last_page} limit={limit} search={search} total={topics.total} doLimit={data => setLimit(data)} doData={getData} />
+              <Pagination page={page} lastPage={topics.last_page} limit={limit} search={search} total={topics.total} doLimit={data => setLimit(data)} doPage={data => setPage(data)} />
             </div>
           </div>
         </div>

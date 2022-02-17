@@ -55,22 +55,26 @@ export default function Student() {
   const { register, handleSubmit, setValue, getValues, reset } = useForm();
   const [avatar, setAvatar] = useState('/asset/img/blank_profile.png')
   const [file, setFile] = useState()
-
-  const getData = async (search, branch, batch, status, limit, page) => {
-    await apiStudent.index(search, branch, batch, status, limit, page)
-      .then((res) => {
-        console.log(branch)
-        setDataInstitute(res.data.data)
-        setList(res.data.data.data)
-        setPage(res.data.data.current_page)
-
-      })
-      .catch((err) => {
-        console.log(err)
-      })
-  }
+  const [render, setRender] = useState(false)
+  
   useEffect(() => {
-    getData(search, branch, batch, status, limit, page)
+    const getData = async () => {
+      await apiStudent.index(search, branch, batch, status, limit, page)
+        .then((res) => {
+          console.log(branch)
+          setDataInstitute(res.data.data)
+          setList(res.data.data.data)
+          setPage(res.data.data.current_page)
+  
+        })
+        .catch((err) => {
+          console.log(err)
+        })
+    }
+    getData()
+  }, [search, branch, batch, status, limit, page, render])
+
+  useEffect(() => {
     getBranch()
     getBatch()
   }, [])
@@ -128,20 +132,19 @@ export default function Student() {
       .then((res) => {
         reset(res)
         onCloseCreateModal()
-        getData(search, branch, batch, status, limit, page)
+        setRender(!render)
         onOpenSuccessModal()
         setAvatar('/asset/img/blank_profile.png')
         setFile(null)
       })
       .catch((err) => {
         setErrors(err.response.data.data)
-        console.log(err)
       }) : await apiStudent.create(data)
         .then((res) => {
           reset(res)
           onCloseCreateModal()
           setUpdate(false)
-          getData(search, branch, batch, status, limit, page)
+          setRender(!render)
           onOpenSuccessModal()
           setAvatar('/asset/img/blank_profile.png')
           setFile(null)
@@ -149,14 +152,11 @@ export default function Student() {
         .catch((err) => {
           setErrors(err.response.data.data)
         })
-    getData(search, branch, batch, status, limit, page)
   }
 
   const onDelete = async (id) => {
     await apiStudent.deleted(id)
-      .then(() => {
-        getData(search, branch, batch, status, limit, page)
-      })
+      .then(() => setRender(!render))
       .catch((err) => {
         console.log(err)
       })
@@ -210,13 +210,11 @@ export default function Student() {
           <div className="flex gap-4 mb-4">
             <input type="text" className=" border rounded-lg w-full p-2" placeholder="Search Student" onChange={(e) => {
               setSearch(e.target.value)
-              getData(e.target.value, branch, batch, status, limit, page)
             }} />
 
             <div className="w-full h-full  ">
               <Select placeholder='All Branch' className="h-full" size="md" onChange={(e) => {
                 setBranch(e.target.value)
-                getData(search, e.target.value, batch, status, limit, page)
               }}>
                 {listBranch.map((item) => (
                   <option key={item} value={item.name}>{item.name}</option>
@@ -226,7 +224,6 @@ export default function Student() {
             <div className="w-full h-full  ">
               <Select placeholder='All Batch' className="h-full" size="md" onChange={(e) => {
                 setBatch(e.target.value)
-                getData(search, branch, e.target.value, status, limit, page)
               }}>
                 {listBatch.map((item) => (
                   <option key={item} value={item.name}>{item.name}</option>
@@ -236,7 +233,6 @@ export default function Student() {
             <div className="w-full h-full  ">
               <Select placeholder='All Status' className="h-full" size="md" onChange={(e) => {
                 setStatus(e.target.value)
-                getData(search, branch, batch, e.target.value, limit, page)
               }}>
                 <option value='Pending'>Pending</option>
                 <option value='Approve'>Approve</option>
@@ -306,7 +302,7 @@ export default function Student() {
                     </tbody>
                   </table>
                 </div>
-                <Pagination page={page} lastPage={dataInstitute.last_page} limit={limit} search={search} total={dataInstitute.total} status={status} branch={branch} batch={batch} doLimit={data => setLimit(data)} doData={getData} />
+                <Pagination page={page} lastPage={dataInstitute.last_page} limit={limit} search={search} total={dataInstitute.total} status={status} branch={branch} batch={batch} doLimit={data => setLimit(data)} doPage={data => setPage(data)} />
               </div>
             </div>
           </div>

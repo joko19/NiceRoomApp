@@ -52,7 +52,7 @@ export default function Announcement() {
   const [dataInstitute, setDataInstitute] = useState([])
   const [list, setList] = useState([])
   const [errors, setErrors] = useState()
-  const TableHead = ['Name', 'Branch', 'Status', 'Action']
+  const [render, setRender] = useState(false)
   const { register, handleSubmit, setValue, getValues, reset } = useForm();
   const [file, setFile] = useState()
   const [fileName, setFileName] = useState("Upload Your File")
@@ -60,22 +60,25 @@ export default function Announcement() {
   const [batchItem, setBatchItem] = useState([])
   const [branchItem, setBranchItem] = useState([])
 
-  const getData = async (search, branch, status, limit, page) => {
-    await apiAnnouncement.index(search, branch, status, limit, page)
-      .then((res) => {
-        setDataInstitute(res.data.data)
-        setList(res.data.data.data)
-        setPage(res.data.data.current_page)
-      })
-      .catch((err) => {
-        console.log(err)
-      })
-  }
   useEffect(() => {
-    getData(search, branch, status, limit, page)
     getBranch()
     getBatch()
   }, [])
+
+  useEffect(() => {
+    const getData = async () => {
+      await apiAnnouncement.index(search, branch, status, limit, page)
+        .then((res) => {
+          setDataInstitute(res.data.data)
+          setList(res.data.data.data)
+          setPage(res.data.data.current_page)
+        })
+        .catch((err) => {
+          console.log(err)
+        })
+    }
+    getData()
+  }, [search, branch, status, limit, page, render])
 
   const getBranch = async () => {
     await apiBranch.all()
@@ -138,7 +141,7 @@ export default function Announcement() {
       .then((res) => {
         reset(res)
         onCloseCreateModal()
-        getData(search, branch, status, limit, page)
+        setRender(!render)
         onOpenSuccessModal()
         setFile(null)
       })
@@ -151,7 +154,7 @@ export default function Announcement() {
           reset(res)
           onCloseCreateModal()
           setUpdate(false)
-          getData(search, branch, status, limit, page)
+          setRender(!render)
           onOpenSuccessModal()
           setFile(null)
         })
@@ -163,8 +166,7 @@ export default function Announcement() {
   const onDelete = async (id) => {
     await apiAnnouncement.deleted(id)
       .then((res) => {
-        console.log(res)
-        getData(search, branch, status, limit, page)
+        setRender(!render)
       })
       .catch((err) => {
         console.log(err)
@@ -202,11 +204,7 @@ export default function Announcement() {
   const onPublish = async () => {
     console.log(selectedData)
     await apiAnnouncement.updateStatus(selectedData)
-      .then(() => {
-        console.log("berhasil publish")
-        console.log(search)
-        getData(search, branch, status, limit, page)
-      })
+      .then(() => setRender(!render))
       .catch((err) => {
         console.log(err)
       })
@@ -234,13 +232,11 @@ export default function Announcement() {
           <div className="flex gap-4 mb-4">
             <input type="text" className="border rounded w-full p-2 " placeholder="Search Announcement" onChange={(e) => {
               setSearch(e.target.value)
-              getData(e.target.value, branch, status, limit, page)
             }} />
 
             <div className="w-full h-full  ">
               <Select placeholder='All Branch' className="h-full" size="md" onChange={(e) => {
                 setBranch(e.target.value)
-                getData(search, e.target.value, status, limit, page)
               }}>
                 {listBranch.map((item, index) => (
                   <option key={index} value={item.name}>{item.name}</option>
@@ -251,7 +247,6 @@ export default function Announcement() {
             <div className="w-full h-full  ">
               <Select placeholder='All Status' className="h-full" size="md" onChange={(e) => {
                 setStatus(e.target.value)
-                getData(search, branch, e.target.value, limit, page)
               }}>
                 <option value='draft'>Draft</option>
                 <option value='published'>Published</option>
@@ -334,7 +329,7 @@ export default function Announcement() {
                     </tbody>
                   </table>
                 </div>
-                <Pagination page={page} lastPage={dataInstitute.last_page} limit={limit} search={search} branch={branch} status={status} total={dataInstitute.total} doLimit={data => setLimit(data)} doData={getData} />
+                <Pagination page={page} lastPage={dataInstitute.last_page} limit={limit} search={search} branch={branch} status={status} total={dataInstitute.total} doLimit={data => setLimit(data)} doPage={data => setPage(data)} />
               </div>
             </div>
           </div>
