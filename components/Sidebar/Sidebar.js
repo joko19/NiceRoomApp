@@ -138,6 +138,43 @@ function Sidebar() {
     path: '/operator/quizzes'
   },
   ]
+  const student = [{
+    icon: uri + 'ic_home.svg',
+    active: uri + 'ic_home_active.svg',
+    name: 'Home',
+    path: '/student/home'
+  }, {
+    icon: uri + 'ic_goals.svg',
+    active: uri + 'ic_goals_active.svg',
+    name: 'My Goals',
+    path: '/student/goals'
+  }, {
+    icon: uri + 'ic_practice.svg',
+    active: uri + 'ic_practice_active.svg',
+    name: 'Practice Test',
+    path: '/student/practice'
+  }, {
+    icon: uri + 'ic_exams.svg',
+    active: uri + 'ic_exams_active.svg',
+    name: 'Exams',
+    path: '/student/exams'
+  }, {
+    icon: uri + 'ic_quizzes.svg',
+    active: uri + 'ic_quizzes_active.svg',
+    name: 'Quizzes',
+    path: '/student/quizzes'
+  }, {
+    icon: uri + 'ic_attemped.svg',
+    active: uri + 'ic_attemped_active.svg',
+    name: 'Attemped',
+    path: '/student/attemped'
+  }, {
+    icon: uri + 'ic_news.svg',
+    active: uri + 'ic_news_active.svg',
+    name: 'News',
+    path: '/student/news'
+  },
+  ]
   useEffect(() => {
     if (roleStore === role.admin)
       setItemList(admin)
@@ -147,6 +184,8 @@ function Sidebar() {
       setItemList(operator)
     if (roleStore === role.staff)
       setItemList(staff)
+    if (roleStore === role.student)
+      setItemList(student)
   }, [])
   return (
     <div className="py-16 bg-white fixed h-screen">

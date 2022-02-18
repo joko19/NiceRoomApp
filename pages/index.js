@@ -18,7 +18,7 @@ function Index(props) {
       else if (props.auth.user.user.roles[0].name === role.staff)
         window.location.href = '/staff/home'
       else if (props.auth.user.user.roles[0].name === role.student)
-        window.location.href = '/student'
+        window.location.href = '/student/home'
     }
   }, [])
   return (
