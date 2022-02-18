@@ -201,7 +201,7 @@ function Sidebar() {
           <span className="text-black-1 m-auto">Hardvard Campus</span>
         </div>
       )}
-      <ul className="px-4 inline-block w-60 lg:inline-block hidden">
+      <ul className="px-4 inline-block w-60 md:inline-block hidden">
         {itemList.map((item, index) => {
           const isActive = router.pathname.indexOf(item.path) !== -1
           return (

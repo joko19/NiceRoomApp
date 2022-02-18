@@ -18,7 +18,6 @@ export default function AdminNavbar() {
   const router = useRouter();
   const [itemList, setItemList] = useState([])
   const uri = "/asset/icon/sidebar/"
-  const roleStore = store.getState().auth.user.user.roles[0].name
   const admin = [{
     icon: uri + 'ic_home.svg',
     active: uri + 'ic_home_active.svg',
