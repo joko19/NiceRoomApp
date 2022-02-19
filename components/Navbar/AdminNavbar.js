@@ -173,8 +173,8 @@ export default function AdminNavbar() {
     path: '/student/quizzes'
   }, {
     icon: uri + 'ic_attemped.svg',
-    active: uri + 'ic_attemped_active.svg',
-    name: 'Attemped',
+    active: uri + 'ic_attempted_active.svg',
+    name: 'Attempted',
     path: '/student/attemped'
   }, {
     icon: uri + 'ic_news.svg',
@@ -257,7 +257,7 @@ export default function AdminNavbar() {
           {itemList.map((item, index) => {
             const isActive = router.pathname.indexOf(item.path) !== -1
             return (
-              <li key={index} className={` ${isActive ? 'bg-blue-1 text-white shadow-lg' : 'bg-white'} flex px-2 gap-4 mt-1 rounded-lg  inline-block block py-2 text-black-3 `}>
+              <li key={index} className={` ${isActive ? 'bg-blue-1 text-white shadow-lg' : 'bg-white'} flex px-2 gap-4 mt-1 rounded-lg  inline-block block py-2 text-black-3 `} onClick={() => setActiveSidebar(!activeSidebar)}>
                 <Link href={item.path}>
                   <a className="flex gap-4 inline-block cursor-pointer p-1 rounded">
                     {isActive ? (

@@ -25,13 +25,13 @@ export default function Card({ children, ArrowColor }) {
     }
   };
   return (
-    <div className='flex -mx-8'>
-      <FaAngleLeft size={32} color={ArrowColor} className='my-auto mr-4 cursor-pointer'
+    <div className='flex '>
+      <FaAngleLeft size={32} color={ArrowColor} className='my-auto hidden md:flex mr-4 cursor-pointer'
         onClick={scrollLeft} />
-      <div className='flex overflow-x-hidden' ref={listRef}>
+      <div className='flex overflow-x-scroll md:overflow-x-hidden' ref={listRef}>
         {children}
       </div>
-      <FaAngleRight size={32} color={ArrowColor} className='my-auto ml-4 cursor-pointer'
+      <FaAngleRight size={32} color={ArrowColor} className='my-auto hidden md:flex ml-4 cursor-pointer'
         onClick={scrollRight} />
     </div>
   )

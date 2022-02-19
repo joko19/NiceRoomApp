@@ -165,8 +165,8 @@ function Sidebar() {
     path: '/student/quizzes'
   }, {
     icon: uri + 'ic_attemped.svg',
-    active: uri + 'ic_attemped_active.svg',
-    name: 'Attemped',
+    active: uri + 'ic_attempted_active.svg',
+    name: 'Attempted',
     path: '/student/attemped'
   }, {
     icon: uri + 'ic_news.svg',

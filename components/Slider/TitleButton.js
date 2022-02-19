@@ -1,9 +1,8 @@
-import Image from "next/image"
 import Link from "next/link"
 
 export function TitleButton({ title, url, isLive = false }) {
   return (
-    <div className='flex justify-between'>
+    <div className='flex md:px-8 justify-between'>
       <div className="flex">
         {isLive && (<img src="/asset/icon/ic_live_transparent.png" alt="icon live" className='w-8 h-8 mr-2' />)}
         <span className="text-2xl mr-2">{title}</span>
