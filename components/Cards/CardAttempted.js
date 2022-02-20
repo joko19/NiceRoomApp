@@ -29,7 +29,7 @@ export default function CardAttempted({ isLive = false, type = false }) {
           <span>12 Jan ~ 20 Feb 2020</span>
         </div>
       </div>
-      <button className={`bg-white text-blue-1 border border-blue-1 w-full mt-2 text-white py-2 px-4 font-semibold rounded hover:bg-blue-6 hover:filter hover:drop-shadow-xl`}>View Score</button>
+      <button className={`bg-white text-blue-1 border w-full border-blue-1 mt-2 py-2 px-4 font-semibold text-sm rounded hover:bg-blue-6 hover:filter hover:drop-shadow-xl`}>View Score</button>
       <Button title="Re-attempt" className="w-full my-2" />
     </div>
   )

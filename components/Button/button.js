@@ -5,7 +5,7 @@ function Button({ title, action = false, className, href = false }) {
   return (
     <>
       {!href ? (
-        <button className={`bg-blue-1 text-white py-2 px-4 font-semibold rounded hover:bg-blue-2 hover:filter hover:drop-shadow-xl ${className}`} onClick={() => action !== false && action()}>{title}</button>
+        <button className={`bg-blue-1 text-white py-2 px-4 font-semibold text-sm rounded hover:bg-blue-2 hover:filter hover:drop-shadow-xl ${className}`} onClick={() => action !== false && action()}>{title}</button>
 
       ) : (
         <Link href={href}>
