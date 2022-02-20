@@ -31,7 +31,7 @@ export default function Topics() {
     onOpen: onOpenCreateModal,
     onClose: onCloseCreateModal
   } = useDisclosure()
-  const { register, handleSubmit, setValue, getValues, reset } = useForm();
+  const { register, handleSubmit, setValue} = useForm();
   const [render, setRender] = useState(false)
 
   useEffect(async () => {
