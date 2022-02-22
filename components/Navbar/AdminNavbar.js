@@ -311,8 +311,8 @@ export default function AdminNavbar() {
           <ModalBody>
             <input type="text" className="form border mb-4 w-1/2 p-2 text-sm rounded" placeholder="Input Topic Name" {...register("name", { required: true })} />
             <div className="flex flex-wrap =">
-              {list.map((item) => (
-                <div className="flex flex-wrap gap-4my-2 w-1/2 p-2 text-sm">
+              {list.map((item, index) => (
+                <div key={index} className="flex flex-wrap gap-4my-2 w-1/2 p-2 text-sm">
                   <div className="flex  border rounded  w-full p-2 gap-2 ">
                     <img className="w-8 h-8 my-auto" src="/asset/icon/table/ic_school_orange.svg" />
                     <div>

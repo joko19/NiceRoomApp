@@ -20,7 +20,7 @@ export default function Index() {
       <p className="mt-4 font-bold text-xl">All Quiz</p>
       <div className="flex flex-wrap px-10">
       {list.map((item) => (
-        <CardQuizzes key={item} isLive={true} />
+        <CardQuizzes key={item} url={`/student/quizzes/${item}`}  />
       ))}
       </div>
     </div>
