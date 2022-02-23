@@ -271,12 +271,13 @@ export default function Create(props) {
                     style={{
                       "multiselectContainer": {
                         "padding": "0px",
+                        'height': '36px',
                         "border-width": "1px",
                         "border-radius": "5px"
                       }, "searchBox": {
                         "border": "none",
-
-                      },
+                      }, "chips": {
+                        "padding": "2px" },
                     }}
                     placeholder="Select Topic"
                     // singleSelect
@@ -296,7 +297,7 @@ export default function Create(props) {
               <div className="flex mt-4 gap-4">
                 <div className="w-full">
                   <p>Start Date</p>
-                  <div className="border p-1 rounded">
+                  <div className="border p-1 h-9 rounded">
                     <DatePicker2
                       data={getValues("start_date")}
                       setData={(data) => setValue("start_date", data)}
@@ -315,8 +316,8 @@ export default function Create(props) {
                   <p className="mt-4">Practice Type {errors && (
                     <span className="text-red-1 text-sm">{errors.type}</span>
                   )}</p>
-                  <div className="border p-1 rounded">
-                    <select className="bg-white w-full" {...register('exam_type_id')}>
+                  <div className="border rounded">
+                    <select className="bg-white h-9 w-full" {...register('exam_type_id')}>
                       {examType.map((item, index) => (
                         <option key={index} value={item.id}>{item.name}</option>
                       ))}

@@ -62,8 +62,8 @@ export default function ReadNews() {
         <div className="text-container mt-4" dangerouslySetInnerHTML={{ __html: dataNews?.description }} />
         <p className="mt-4 font-bold">Tags</p>
         <div className="flex gap-2 mt-2">
-          {tags.map((item) => (
-            <div className="text-blue-1 p-2 rounded bg-blue-6 inline-block">{item}</div>
+          {tags.map((item, index) => (
+            <div key={index} className="text-blue-1 p-2 rounded bg-blue-6 inline-block">{item}</div>
           ))}
         </div>
         {/* <p className="mt-4 font-bold">Featured News</p> */}

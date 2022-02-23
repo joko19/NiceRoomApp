@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import Image from "next/image";
 import Card from "../../../components/Cards/Card";
 import Layout from "../../../Layout/Layout";
 import { useForm } from "react-hook-form";
@@ -14,7 +13,6 @@ import {
   useDisclosure,
 } from '@chakra-ui/react'
 import QuillCreated from "../../../components/Editor/QuillCreated";
-import { Select } from '@chakra-ui/react'
 import apiPractice from "../../../action/practice";
 import apiExam from "../../../action/exam";
 import apiTopic from "../../../action/topics";
@@ -204,7 +202,7 @@ export default function Create(props) {
                     <span className="text-red-1 text-sm">{errors.name}</span>
                   )}</p>
                   <div>
-                    <input type="text" className="form border w-full rounded p-2 h-full text-sm" placeholder="Input Practice Name"  {...register("name")} />
+                    <input type="text" className="form border w-full rounded p-2 h-9 text-sm" placeholder="Input Practice Name"  {...register("name")} />
                   </div>
                 </div>
                 <div className="w-full ">
@@ -216,13 +214,14 @@ export default function Create(props) {
                     options={listTopic}
                     style={{
                       "multiselectContainer": {
+                        'height': '36px',
                         "padding": "0px",
                         "border-width": "1px",
                         "border-radius": "5px"
                       }, "searchBox": {
                         "border": "none",
-
-                      },
+                      }, "chips": {
+                         "padding": "2px" },
                     }}
                     placeholder="Select Topic"
                     // singleSelect
@@ -242,7 +241,7 @@ export default function Create(props) {
               <div className="flex mt-4 gap-4">
                 <div className="w-full">
                   <p>Start Date</p>
-                  <div className="border rounded p-1">
+                  <div className="border rounded p-1 h-9">
                     <DatePicker2
                       setData={(data) => setValue("start_date", data)}
                     />
@@ -260,8 +259,8 @@ export default function Create(props) {
                   <p className="mt-4">Practice Type {errors && (
                     <span className="text-red-1 text-sm">{errors.exam_type_id}</span>
                   )}</p>
-                  <div className="border  p-1 rounded text-sm">
-                    <select className="w-full bg-white" {...register('exam_type_id')}>
+                  <div className="border    rounded text-sm">
+                    <select className="w-full h-9 bg-white" {...register('exam_type_id')}>
                       <option value="" >Choose Type</option>
                       {examType.map((item) => (
                         <option key={item.id} value={item.id}>{item.name}</option>

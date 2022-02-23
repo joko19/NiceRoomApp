@@ -33,7 +33,7 @@ export default function DatePicker2({data = false, setData = false }) {
     data !== false && setUpdateData(data)
   }, [])
   return (
-    <DatePicker dateFormat="yyyy/MM/dd" placeholderText={updateData !== '' ? updateData : data !== false && data} selected={data === false && date} onChange={e => {
+    <DatePicker dateFormat="yyyy/MM/dd" className="w-full" placeholderText={updateData !== '' ? updateData : data !== false && data} selected={data === false && date} onChange={e => {
       setUpdateData(convert(e))
       setDate(e)
       setData(convert(e))

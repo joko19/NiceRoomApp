@@ -1,5 +1,7 @@
-import { useEffect, useState} from "react";
+import { useEffect, useState, useRef } from "react";
 import Link from "next/link";
+import Image from "next/image";
+import { FaAngleLeft } from "react-icons/fa";
 import Card from "../../../../components/Cards/Card";
 import Layout from "../../../../Layout/Layout";
 import { useForm } from "react-hook-form";
@@ -14,10 +16,13 @@ import {
   useToast
 } from '@chakra-ui/react'
 import Quill from "../../../../components/Editor/Quill";
+import { Select } from '@chakra-ui/react'
 import apiPractice from "../../../../action/practice";
 import apiExam from "../../../../action/exam";
 import apiTopic from "../../../../action/topics";
 import Multiselect from 'multiselect-react-dropdown';
+import apiBatch from "../../../../action/batch";
+import apiBranch from "../../../../action/branch";
 import DatePicker2 from "../../../../components/DateTime/Date";
 import { useRouter } from "next/router";
 // import { Date } from "../../../components/DateTime/Date";
@@ -266,12 +271,13 @@ export default function Create(props) {
                     style={{
                       "multiselectContainer": {
                         "padding": "0px",
+                        'height': '36px',
                         "border-width": "1px",
                         "border-radius": "5px"
                       }, "searchBox": {
                         "border": "none",
-
-                      },
+                      }, "chips": {
+                        "padding": "2px" },
                     }}
                     placeholder="Select Topic"
                     // singleSelect
@@ -291,7 +297,7 @@ export default function Create(props) {
               <div className="flex mt-4 gap-4">
                 <div className="w-full">
                   <p>Start Date</p>
-                  <div className="border p-1 rounded">
+                  <div className="border p-1 h-9 rounded">
                     <DatePicker2
                       data={getValues("start_date")}
                       setData={(data) => setValue("start_date", data)}
@@ -310,8 +316,8 @@ export default function Create(props) {
                   <p className="mt-4">Practice Type {errors && (
                     <span className="text-red-1 text-sm">{errors.type}</span>
                   )}</p>
-                  <div className="border p-1 rounded">
-                    <select className="bg-white w-full" {...register('exam_type_id')}>
+                  <div className="border rounded">
+                    <select className="bg-white h-9 w-full" {...register('exam_type_id')}>
                       {examType.map((item, index) => (
                         <option key={index} value={item.id}>{item.name}</option>
                       ))}

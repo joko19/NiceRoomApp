@@ -321,13 +321,13 @@ export default function Create(props) {
               <div className="flex gap-4 ">
                 <div className="w-full gap-4">
                   <p className="mt-4">Held Type</p>
-                  <div className="flex gap-3">
+                  <div className="flex gap-3 h-9">
                     <div className={` ${type === 'live' ? 'bg-blue-6' : 'bg-white'} flex gap-2 w-full border h-8 rounded cursor-pointer`} onClick={() => {
                       setType('live')
                       setValue("type", "live")
                     }}>
                       <div className="my-auto ml-2" >
-                        <Image src={`${type === 'live' ? "/asset/icon/table/ic_radio_active.svg" : "/asset/icon/table/ic_radio.svg"}`} height={12} width={12} className="flex align-middle my-auto" alt="icon radio button"/>
+                        <Image src={`${type === 'live' ? "/asset/icon/table/ic_radio_active.svg" : "/asset/icon/table/ic_radio.svg"}`} height={12} width={12} className="flex align-middle my-auto" alt="icon rario button" />
                       </div>
                       <p className={`${type === 'live' ? 'text-blue-1' : 'text-black-5'} my-auto`}>
                         Live Exam
@@ -338,7 +338,7 @@ export default function Create(props) {
                       setValue("type", "standard")
                     }}>
                       <div className="my-auto ml-2" >
-                        <Image src={`${type === 'standard' ? "/asset/icon/table/ic_radio_active.svg" : "/asset/icon/table/ic_radio.svg"}`} height={12} width={12} className="flex align-middle my-auto" alt="icon radio button"/>
+                        <Image src={`${type === 'standard' ? "/asset/icon/table/ic_radio_active.svg" : "/asset/icon/table/ic_radio.svg"}`} height={12} width={12} className="flex align-middle my-auto" alt="icon radio button" />
                       </div>
                       <p className={`${type === 'standard' ? 'text-blue-1' : 'text-black-5'} my-auto`}>
                         Standard Exam
@@ -353,7 +353,7 @@ export default function Create(props) {
                     <span className="text-red-1 text-sm">{errors.name}</span>
                   )}</p>
                   <div>
-                    <input type="text" className="form border w-full rounded p-2 h-full" placeholder="Input Exam Name"  {...register("name")} />
+                    <input type="text" className="form h-9 border w-full rounded p-2" placeholder="Input Exam Name"  {...register("name")} />
                   </div>
                 </div>
               </div>
@@ -363,8 +363,8 @@ export default function Create(props) {
                   <p className="mt-4">Exam Type {errors && (
                     <span className="text-red-1 text-sm">{errors.type}</span>
                   )}</p>
-                  <div>
-                    <Select bg='white' size="sm" height={9} defaultValue="1" variant='outline'  iconColor="blue" {...register('exam_type_id')}>
+                  <div className="w-full rounded py-2 h-9 pl-2 border">
+                    <Select bg='white'  defaultValue="1" variant='unstyled' iconColor="blue" {...register('exam_type_id')}>
                       <option disabled>Choose Exam Type</option>
                       {examType.map((item) => (
                         <option key={item.id} value={item.id}>{item.name}</option>
@@ -380,6 +380,7 @@ export default function Create(props) {
                     options={listTopic}
                     style={{
                       "multiselectContainer": {
+                        'hieght': '36px',
                         "padding": "0px",
                         "border-width": "1px",
                         "border-radius": "5px"
