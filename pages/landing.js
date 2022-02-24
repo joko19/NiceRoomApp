@@ -251,7 +251,7 @@ function Landing(props) {
           </div>
         </section>
       </section>
-      <section className="grid xl:grid-cols-3 gap-4 md:mx-16 my-20">
+      <section className="grid xl:grid-cols-3 gap-4 mx-4 md:mx-16 my-20">
         <div className="m-2 ">
           <Image src="/asset/icon/ic_question.png" height="48" width="48" alt='icon question' />
           <h1 className="font-semibold text-1xl mt-4 pb-1">Top Quality Questions</h1>
@@ -271,35 +271,35 @@ function Landing(props) {
         </div>
       </section>
 
-      <section className="bg-black-9 grid grid-cols-1 md:grid-cols-2 xl:grid-cols-2 py-20 md:px-20 px-4">
+      <section className="bg-black-9 grid grid-cols-1 md:grid-cols-2 xl:grid-cols-2 py-20 px-4 md:px-20 px-4">
         <div className="self-center mr-4">
           <h1 className="font-bold text-black-1 text-2xl pb-1">Real number can be trusted</h1>
           <p className="text-black-3">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Venenatis scelerisque at quam congue posuere libero in sit quam. Consequat, scelerisque non tincidunt sit lectus senectus. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Venenatis scelerisque at quam congue posuere libero in sit quam. Consequat, scelerisque non tincidunt sit lectus senectus. Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
         </div>
-        <div className="grid  md:grid-cols-1 lg:grid-cols-2 ">
+        <div className="grid  md:grid-cols-1 lg:grid-cols-2 grid-cols-2">
           <div>
-            <div className="bg-white m-5 p-5 rounded-lg h-40  filter drop-shadow-md">
+            <div className="bg-white m-2 p-5 rounded-lg  filter drop-shadow-md">
               <img src="/asset/icon/ic_read.png" alt="icon" />
-              <h1 className="mt-4">1,88,06,292+</h1>
+              <h1 className="mt-4 font-bold">1,88,06,292+</h1>
               <p>Student registered in our platform</p>
             </div>
-            <div className="bg-white m-5 p-5 rounded-lg h-40  filter drop-shadow-md">
+            <div className="bg-white m-2 p-5 rounded-lg   filter drop-shadow-md">
               <img src="/asset/icon/ic_ball.png" alt="icon" />
-              <h1 className="mt-4">14,54,74,962+</h1>
+              <h1 className="mt-4 font-bold">14,54,74,962+</h1>
               <p>Quiz atempted by our student</p>
             </div>
           </div>
 
           <div>
-            <div className="bg-white m-5 p-5 rounded-lg h-40 filter drop-shadow-md">
+            <div className="bg-white m-2 p-5 rounded-lg filter drop-shadow-md">
               <img src="/asset/icon/ic_a+.png" alt="icon" />
-              <h1 className="mt-4">14,54,74,962+</h1>
+              <h1 className="mt-4 font-bold">14,54,74,962+</h1>
               <p>Test atempted by our student</p>
             </div>
-            <div className="bg-white m-5 p-5 rounded-lg h-40  filter drop-shadow-md">
+            <div className="bg-white m-2 p-5 rounded-lg   filter drop-shadow-md">
               <img src="/asset/icon/ic_ask.png" alt="icon" />
-              <h1 className="mt-4">59,88,26,242+</h1>
-              <p>Question answered in our platform</p>
+              <h1 className="mt-4 font-bold">59,88,26,242+</h1>
+              <p>Question in our platform</p>
             </div>
           </div>
         </div>
@@ -342,7 +342,7 @@ function Landing(props) {
         </div>
       </section>
 
-      <section className="bg-blue-1 py-20 px-20">
+      <section className="bg-blue-1 py-4 md:py-20 px-4 md:px-20">
         <div className='flex justify-between'>
           <span className="text-white font-bold text-2xl ml-4">Upcoming Exams</span>
           <Link href="/upcoming-exam">
