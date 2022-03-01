@@ -8,6 +8,7 @@ import { useEffect, useState } from "react";
 import { store } from './../../redux/store'
 import role from "../../redux/role";
 import { FiMenu } from "react-icons/fi";
+import { BsChevronDown, BsChevronUp } from "react-icons/bs";
 import { useRouter } from "next/router";
 import {
   Modal,
@@ -20,6 +21,8 @@ import {
 } from '@chakra-ui/react'
 import { useForm } from "react-hook-form";
 import Button from "../Button/button.js";
+import { useDispatch } from "react-redux";
+import { reSetCurrentUser } from "../../action/auth/authAction";
 
 export default function AdminNavbar() {
   const [avatar, setAvatar] = useState('/asset/img/blank_profile.png')
@@ -28,6 +31,9 @@ export default function AdminNavbar() {
   const [activeSidebar, setActiveSidebar] = useState(false)
   const router = useRouter();
   const list = [1, 2, 3, 4, 5, 6]
+  const Router = useRouter()
+  const dispatch = useDispatch()
+  const [openProfile, setOpenProfile] = useState(false)
   const { register, handleSubmit, setValue } = useForm();
   const {
     isOpen: isCreateModal,
@@ -232,7 +238,10 @@ export default function AdminNavbar() {
     <>
       <div className="flex bg-blue-1 md:px-12 py-2 gap-8 justify-between fixed w-full top-0 z-50">
         <div className="flex">
-          <div className="md:hidden my-auto mx-2" onClick={() => setActiveSidebar(!activeSidebar)}>
+          <div className="md:hidden my-auto mx-2" onClick={() => {
+            setActiveSidebar(!activeSidebar)
+            setOpenProfile(!openProfile)
+          }}>
             <FiMenu color="white" />
           </div>
           <h1 className="text-white text-2xl md:mx-4 my-auto"><Link href="/"><a> Examz.</a></Link></h1>
@@ -246,19 +255,26 @@ export default function AdminNavbar() {
                   Join Institute
                 </button>
               </div>
-              <div className="flex mr-4 md:mr-0">
-                <div className="my-auto inline-flex align-middle">
-                  <Link href="/student/notification">
-                    <a>
-                      <Image src="/asset/icon/sidebar/ic_notification.svg" className="rounded-full inline-block align-middle mt-2 object-cover" height={32} width={32} alt="avatar" />
-                    </a>
-                  </Link>
+              <div className={`flex mr-4  md:mr-0  `}>
+                <div className="my-auto inline-flex cursor-pointer" onClick={() => { window.location.href = "/student/notification" }}>
+                  <Image src="/asset/icon/sidebar/ic_notification.svg" className=" rounded-full object-cover" height={32} width={32} alt="avatar" />
                 </div>
               </div>
-
+              {/* <div className="flex mr-4 md:mr-0 bg-yellow-700 ">
+                <div className="">
+                  <div className="my-auto inline-flex ">
+                    <Link href="/student/notification">
+                      <a>
+                        <Image src="/asset/icon/sidebar/ic_notification.svg" className="rounded-full my-auto  align-middle  object-cover" height={32} width={32} alt="avatar" />
+                      </a>
+                    </Link>
+                  </div>
+                </div>
+              </div> */}
             </>
           )}
-          <div className="md:flex hidden">
+          {/* <div className={`flex `}> */}
+          <div className={`md:flex ${roleStore === role.student && 'hidden'} flex `}>
             <div className="my-auto inline-flex">
               <Image src={avatar} className=" rounded-full object-cover" height={32} width={32} alt="avatar" />
             </div>
@@ -266,7 +282,6 @@ export default function AdminNavbar() {
           </div>
         </div>
       </div >
-
 
       <div className={`py-16 bg-white fixed z-40 h-screen ${activeSidebar ? '' : 'hidden'}`}>
         {roleStore === role.instituteAdmin && (
@@ -299,6 +314,67 @@ export default function AdminNavbar() {
               </li>
             )
           })}
+          <div className={`md:hidden ${roleStore !== role.student && 'hidden'} flex gap-2 mt-4 justify-between `} onClick={() => setOpenProfile(!openProfile)}>
+            <div className="flex gap-2">
+              <div className="my-auto inline-flex">
+                <Image src={avatar} className=" rounded-full object-cover" height={32} width={32} alt="avatar" />
+              </div>
+              <div className="my-auto">
+                {username}
+              </div>
+
+            </div>
+
+            <div className="my-auto right-0">
+              {openProfile ? <BsChevronDown /> : <BsChevronUp />}
+
+            </div>
+          </div>
+          {openProfile && (
+            <>
+              <section
+                className={
+                  " bg-white  mr-4 text-base z-50 right-0 pl-10 py-2 list-none rounded   min-w-48 flex flex-col p-4 gap-1 "
+                  // (open ? " translate-x-0 " : " translate-x-full ")
+                }
+              >
+                <Link href='/account/profile' >
+                  <a onClick={() => {
+                    setActiveSidebar(false)
+                  }}>
+                    <button className="text-left font-medium" >Edit Profile</button>
+                  </a>
+                </Link>
+                <Link href='/account/password'>
+                  <a onClick={() => {
+                    setActiveSidebar(false)
+                  }}>
+                    <button className="font-medium">Change Password</button>
+                  </a>
+                </Link>
+                <button
+                  className={
+                    "font-medium block w-full whitespace-nowrap bg-transparent text-red-1 text-left"
+                  }
+                  onClick={(e) => {
+                    if (window !== undefined) {
+                      dispatch(reSetCurrentUser({}));
+                      localStorage.removeItem('ACCESS_TOKEN')
+                      Router.replace('/')
+                    }
+                  }}
+                >
+                  Logout
+                </button>
+              </section>
+              <section
+                className=" w-screen h-full cursor-pointer "
+                onClick={() => {
+                  setOpen(false);
+                }}
+              ></section>
+            </>
+          )}
         </ul>
       </div>
 

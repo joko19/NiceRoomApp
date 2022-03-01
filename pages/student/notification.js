@@ -37,7 +37,7 @@ export default function Notification() {
         </div>
       )}>
         {notificationData.map((item, index) => (
-          <div className={`${item.read_at === null ? 'bg-black-7' : 'bg-white'} flex border rounded-lg p-4 gap-4 my-2`}>
+          <div key={index} className={`${item.read_at === null ? 'bg-black-7' : 'bg-white'} flex border rounded-lg p-4 gap-4 my-2`}>
             <img src="/asset/icon/ic_quiz.png" className="h-12 w-12" alt="icon" />
             <div className="my-auto">
               <h1 className="font-bold">{item.data.announcement_title}</h1>
