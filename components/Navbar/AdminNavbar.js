@@ -334,7 +334,7 @@ export default function AdminNavbar() {
             <>
               <section
                 className={
-                  " bg-white  mr-4 text-base z-50 right-0 pl-10 py-2 list-none rounded   min-w-48 flex flex-col p-4 gap-1 "
+                  " bg-white  mr-4 text-base z-50 right-0 pl-10 py-2 list-none rounded md:hidden   min-w-48 flex flex-col p-4 gap-1 "
                   // (open ? " translate-x-0 " : " translate-x-full ")
                 }
               >

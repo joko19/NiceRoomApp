@@ -7,16 +7,26 @@ import { useState, useEffect } from "react";
 
 export default function Index() {
   const [liveAll, setLiveAll] = useState([])
+  const [liveTake, setLiveTake] = useState([])
   const list = [1, 2, 3, 4, 5, 6, 7, 8, 9]
 
   useEffect(async () => {
     const getData = async () => {
       await apiStudentPage.examsLiveAll()
         .then((res) => {
-          console.log(res.data)
+          setLiveAll(res.data.data)
+        })
+    }
+    const getLive = async () => {
+      await apiStudentPage.examsLiveTake(8)
+        .then((res) => {
+          // console.log("live")
+          console.log(res.data.data)
+          setLiveTake(res.data.data)
         })
     }
     getData()
+    getLive()
   }, [])
   return (
     <div className="mt-12 min-w-full overflow-x-hidden">
@@ -24,16 +34,18 @@ export default function Index() {
       <div>
         <TitleButton title="Live Exam" url="#" />
         <Slider ArrowColor="blue" >
-          {list.map((item) => (
-            <CardExams type="exam" key={item} isLive={true} />
-          ))}
+          {liveTake.map((item, index) => {
+            return (
+              <CardExams key={index} isLive={true} data={item} url={`/student/exams/${item.id}`} />
+            )
+          })}
         </Slider>
       </div>
       <p className="mt-4 font-bold text-xl">All Exam</p>
       <div className="flex flex-wrap px-10">
-      {list.map((item) => (
-        <CardExams key={item}  />
-      ))}
+        {liveAll.map((item, index) => (
+          <CardExams key={index} data={item} url={`/student/exams/${item.id}`} />
+        ))}
       </div>
     </div>
   )
