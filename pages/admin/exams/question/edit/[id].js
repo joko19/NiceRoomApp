@@ -274,7 +274,6 @@ export default function Edit(props) {
                           <span className="text-red-1 text-sm">{errors[`options`]}</span>
                         )}</p>
                         <Select bg='white' onClick={(e) => {
-
                           const temp = questions
                           temp.map((itemQ) => {
                             if (itemQ.id === itemQuestion.id) {
@@ -308,7 +307,6 @@ export default function Edit(props) {
                               setValue(`question_items[${indexEachQuestion}].options[${indexAnswer}].correct`, 0)
                             }
                           }
-
                           return (
                             <div className={`${itemAnswer.correct === 1 ? 'bg-blue-6 border-blue-1' : 'bg-white'} my-2  p-4 border rounded-lg`} key={indexAnswer}>
                               {errors && (
@@ -333,7 +331,6 @@ export default function Edit(props) {
                                                     setValue(`question_items[${indexEachQuestion}].options[${i}].correct`, 0)
                                                   }
                                                 }
-
                                               }
                                             })
                                           }

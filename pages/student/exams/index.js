@@ -36,7 +36,7 @@ export default function Index() {
         <Slider ArrowColor="blue" >
           {liveTake.map((item, index) => {
             return (
-              <CardExams key={index} isLive={true} data={item} url={`/student/exams/${item.id}`} />
+              <CardExams key={index} isLive={true} data={item} url={`/student/exams/${item.slug}`} />
             )
           })}
         </Slider>
@@ -44,7 +44,7 @@ export default function Index() {
       <p className="mt-4 font-bold text-xl">All Exam</p>
       <div className="flex flex-wrap px-10">
         {liveAll.map((item, index) => (
-          <CardExams key={index} data={item} url={`/student/exams/${item.id}`} />
+          <CardExams key={index} data={item} url={`/student/exams/${item.slug}`} />
         ))}
       </div>
     </div>
