@@ -4,10 +4,28 @@ const notification = (limit, page) => instance.auth.get('/students/notifications
 const notificationRead = () => instance.auth.get('/students/notifications/read')
 const indexNews = () => instance.auth.get('/students/news')
 const showNews = (id) => instance.auth.get('/students/news/' + id)
-const showExams = (id) => instance.auth.get('/students/exams/' + id)
+const showExams = (slug) => instance.auth.get('/students/exams/' + slug)
 const examsLiveAll = () => instance.auth.get('/students/exams-live')
 const examsLiveTake = (total) => instance.auth.get('/students/exams-live?take=' + total)
+const examsRecomendedAll = () => instance.auth.get('/students/exams-recommended')
+const examsRecomendedTake = (total) => instance.auth.get('/students/exams-recommended?take=' + total)
+const examsUpcomingAll = () => instance.auth.get('/students/exams-upcoming')
+const examsUpcomingTake = (total) => instance.auth.get('/students/exams-upcoming?take=' + total)
+const examsAttemptedAll = () => instance.auth.get('/students/exams-attempted')
+const examsAttemptedTake = (total) => instance.auth.get('/students/exams-attempted?take=' + total)
+const examsPrevious = () => instance.auth.get('/students/exams-previous')
+const examsGraph = () => instance.auth.get('/students/exams-graph')
+const examsGraphFilterDate = (date) => instance.auth.get('/students/exams-graph?date=' + date)
 const storeExams = (slug, data) => instance.auth.post('/students/exams/' + slug, data)
+const showExamsResult = (slug, id) => instance.auth.get('/students/exams/'+slug+'/result/'+id)
+
+const storePractice = (slug, data) => instance.auth.post('/students/practice/' + slug, data)
+const showPractice = (slug) => instance.auth.get('/students/practices/' + slug)
+const practiceAll = () => instance.auth.get('/students/practices')
+const practiceTake = (total) => instance.auth.get('/students/practices?take=' + total)
+const practiceAttemptedAll = () => instance.auth.get('/students/practices-attempted')
+const practiceAttemptedTake = (total) => instance.auth.get('/students/practices-attempted?take=' + total)
+const showPracticeResult = (slug, id) => instance.auth.get('/students/practices/'+slug+'/result/'+id)
 
 const apiStudentPage = {
   notification,
@@ -17,7 +35,25 @@ const apiStudentPage = {
   showNews,
   examsLiveAll,
   examsLiveTake,
-  storeExams
+  storeExams,
+  examsRecomendedAll,
+  examsRecomendedTake,
+  examsUpcomingAll,
+  examsUpcomingTake,
+  examsAttemptedAll,
+  examsAttemptedTake,
+  examsPrevious,
+  examsGraph,
+  examsGraphFilterDate,
+  showExamsResult,
+  storePractice,
+  showPractice,
+  practiceAll,
+  practiceTake,
+  practiceAttemptedAll,
+  practiceAttemptedAll,
+  practiceAttemptedTake,
+  showPracticeResult
 }
 
 export default apiStudentPage
