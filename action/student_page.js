@@ -7,6 +7,7 @@ const showNews = (id) => instance.auth.get('/students/news/' + id)
 const showExams = (id) => instance.auth.get('/students/exams/' + id)
 const examsLiveAll = () => instance.auth.get('/students/exams-live')
 const examsLiveTake = (total) => instance.auth.get('/students/exams-live?take=' + total)
+const storeExams = (slug, data) => instance.auth.post('/students/exams/' + slug, data)
 
 const apiStudentPage = {
   notification,
@@ -15,7 +16,8 @@ const apiStudentPage = {
   showExams,
   showNews,
   examsLiveAll,
-  examsLiveTake
+  examsLiveTake,
+  storeExams
 }
 
 export default apiStudentPage

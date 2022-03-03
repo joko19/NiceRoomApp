@@ -25,7 +25,6 @@ export default function Index() {
   const [activeSection, setActiveSection] = useState()
   const [activeSectionId, setActiveSectionId] = useState(0)
   const [activeQuestionId, setActiveQuestionId] = useState(0)
-  const [errors, setErrors] = useState()
   const markAnswer = [
     {
       icon: "/asset/icon/table/ic_not_visited.svg",
@@ -48,7 +47,6 @@ export default function Index() {
       desc: "Marked and Answered"
     },
   ]
-  const [indexActiveSection, setIndexActiveSection] = useState(0)
 
   useEffect(async () => {
     const getData = async () => {
@@ -61,6 +59,19 @@ export default function Index() {
     }
     getData()
   }, [])
+
+  const submitTest = async () => {
+    const data = JSON.stringify(dataExams)
+    const res = {
+      data : data
+    }
+    console.log(data)
+    await apiStudentPage.storeExams(id, res)
+      .then((res) => {
+        console.log(res.data.data)
+      })
+  }
+
   return (
     <div className="mt-12 min-w-full overflow-x-hidden">
       {currentStep === 1 && (<GeneralInstruction />)}
@@ -89,6 +100,24 @@ export default function Index() {
               {dataExams.sections.map((item, index) => (
                 <div key={index} className={` ${activeSection === item.name ? 'text-blue-1 border-b-2 border-blue-1 font-bold' : 'text-black-5'}  pb-4`}>
                   {item?.name}
+                </div>
+              ))}
+            </div>
+            <div className="flex overflow-x-hidden p-2 md:hidden flex-wrap gap-4">
+              {dataExams.sections[activeSectionId].question_items.map((item, index) => (
+                <div key={index} className={` 
+                    ${index === activeQuestionId && item.status !== 'marked' && item.status !== 'marked_and_answered' && item.status !== 'answered' && item.status !== 'not_answered' && 'rounded-full'} 
+                    ${item.status === 'marked' && 'bg-purple-1 rounded-full border-1 border-purple-2'} 
+                    ${item.status === 'marked_and_answered' && 'relative bg-purple-100 rounded-full border-1 border-purple-2'} 
+                    ${item.status === 'answered' && 'bg-green-3 rounded-t-full border-1 border-green-1'}
+                    ${item.status === 'not_answered' && 'bg-red-2 rounded-b-full border-1 border-red-1'}
+                    cursor-pointer flex w-12 h-12 border rounded`} onClick={() => setActiveQuestionId(index)}>
+                  {item.status === 'marked_and_answered' && (
+                    <div className="absolute bottom-2 right-0 rounded-full bg-green-1 w-2 h-2" />
+                  )}
+                  <div className="flex align-middle text-center m-auto">
+                    {index + 1}
+                  </div>
                 </div>
               ))}
             </div>
@@ -188,17 +217,79 @@ export default function Index() {
                   </div>
                 )
               })}
-              <div className="flex gap-4 mt-4">
-                <div className="w-full">
-                  <button className={`text-blue-1 py-2 px-4 border border-blue-1 w-full font-semibold text-sm rounded hover:bg-blue-6 hover:filter hover:drop-shadow-xl`} >Mark Question and Next</button>
+              <div className="md:flex flex-row gap-4 ">
+                <div className="w-full mt-4">
+                  <button className={`text-blue-1 py-2 px-4 border border-blue-1 w-full font-semibold text-sm rounded hover:bg-blue-6 hover:filter hover:drop-shadow-xl`} onClick={() => {
+                    const temp = dataExams.sections[activeSectionId].question_items
+                    temp.map((itemQ) => {
+                      if (itemQ.id === dataExams.sections[activeSectionId].question_items[activeQuestionId].id) {
+                        itemQ.status = 'marked'
+                        itemQ.options.map((optionQ) => {
+                          if (optionQ.selected === 1) {
+                            optionQ.selected = 1
+                            itemQ.status = 'marked_and_answered'
+                          }
+                        })
+                      } else {
+                        itemQ
+                      }
+                    })
+                    const tempExam = dataExams
+                    tempExam.sections.map((itemSection) => {
+                      if (itemSection.id === dataExams.sections[activeSectionId].id) {
+                        itemSection.question_items = temp
+                      }
+                    })
+                    setDataExams({ ...tempExam })
+                    setActiveQuestionId(activeQuestionId + 1)
+                  }} >Mark Question and Next</button>
                 </div>
-                <div className="w-full">
-                  <button className={`text-white bg-blue-1 py-2 px-4 border border-blue-1 w-full font-semibold text-sm rounded hover:bg-blue-2 hover:filter hover:drop-shadow-xl`} >Save and Next Question</button>
+                <div className="w-full mt-4">
+                  {dataExams.sections[activeSectionId].question_items.length !== activeQuestionId + 1 && (
+                    <button className={`text-white bg-blue-1 py-2 px-4 border border-blue-1 w-full font-semibold text-sm rounded hover:bg-blue-2 hover:filter hover:drop-shadow-xl`}
+                      onClick={() => {
+                        const temp = dataExams.sections[activeSectionId].question_items
+                        temp.map((itemQ) => {
+                          if (itemQ.id === dataExams.sections[activeSectionId].question_items[activeQuestionId].id) {
+                            itemQ.status = 'not_answered'
+                            itemQ.options.map((optionQ) => {
+                              if (optionQ.selected === 1) {
+                                optionQ.selected = 1
+                                itemQ.status = 'answered'
+                              }
+                            })
+                          } else {
+                            itemQ
+                          }
+                        })
+                        const tempExam = dataExams
+                        tempExam.sections.map((itemSection) => {
+                          if (itemSection.id === dataExams.sections[activeSectionId].id) {
+                            itemSection.question_items = temp
+                          }
+                        })
+                        setDataExams({ ...tempExam })
+                        setActiveQuestionId(activeQuestionId + 1)
+                      }}>Save and Next Question</button>
+                  )}
+                  {dataExams.sections[activeSectionId].question_items.length === activeQuestionId + 1 && dataExams.sections.length !== activeSectionId + 1 && (
+                    <button className={`text-white bg-blue-1 py-2 px-4 border border-blue-1 w-full font-semibold text-sm rounded hover:bg-blue-2 hover:filter hover:drop-shadow-xl`}
+                      onClick={() => {
+                        setActiveSectionId(activeSectionId + 1)
+                        setActiveSection(dataExams.sections[activeSectionId + 1].name)
+                        setActiveQuestionId(0)
+                        setCurrentStep(2)
+                      }}>Save and Continue to Next Section</button>
+                  )}
+                  {dataExams.sections[activeSectionId].question_items.length === activeQuestionId + 1 && dataExams.sections.length === activeSectionId + 1 && (
+                    <button className={`text-white bg-blue-1 py-2 px-4 border border-blue-1 w-full font-semibold text-sm rounded hover:bg-blue-2 hover:filter hover:drop-shadow-xl`}
+                      onClick={submitTest}>Submit Test</button>
+                  )}
                 </div>
               </div>
             </Card>
           </div>
-          <div className="md:w-1/4 flex md:flex">
+          <div className="md:w-1/2 lg:w-1/4 hidden lg:flex">
             <Card>
               <div className="bg-black-9 rounded">
                 Remaining time
@@ -217,16 +308,29 @@ export default function Index() {
                   {dataExams.sections[activeSectionId].question_items.length} Question Answered</h1>
                 <div className="flex flex-wrap gap-4">
                   {dataExams.sections[activeSectionId].question_items.map((item, index) => (
-                    <div className={` ${item.status === 'active' && 'rounded-full'} p-4 border rounded`} onClick={() => setActiveQuestionId(index)}>{index + 1}</div>
+                    <div key={index} className={` 
+                    ${index === activeQuestionId && item.status !== 'marked' && item.status !== 'marked_and_answered' && item.status !== 'answered' && item.status !== 'not_answered' && 'rounded-full'} 
+                    ${item.status === 'marked' && 'bg-purple-1 rounded-full border-1 border-purple-2'} 
+                    ${item.status === 'marked_and_answered' && 'relative bg-purple-100 rounded-full border-1 border-purple-2'} 
+                    ${item.status === 'answered' && 'bg-green-3 rounded-t-full border-1 border-green-1'}
+                    ${item.status === 'not_answered' && 'bg-red-2 rounded-b-full border-1 border-red-1'}
+                    cursor-pointer flex w-12 h-12 border rounded`} onClick={() => setActiveQuestionId(index)}>
+                      {item.status === 'marked_and_answered' && (
+                        <div className="absolute bottom-2 right-0 rounded-full bg-green-1 w-2 h-2" />
+                      )}
+                      <div className="flex align-middle text-center m-auto">
+                        {index + 1}
+                      </div>
+                    </div>
                   ))}
                 </div>
               </div>
+              <button className={`text-white bg-blue-1 py-2 px-4 border border-blue-1 w-full font-semibold text-sm rounded hover:bg-blue-2 hover:filter hover:drop-shadow-xl mt-4`}
+                onClick={submitTest}>Submit Test</button>
             </Card>
           </div>
         </div>
       )}
-
-
 
       {/* previous next */}
       <div className="flex -z-10 gap-4 flex-row-reverse my-4">

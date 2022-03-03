@@ -21,6 +21,7 @@ module.exports = {
         green: {
           1: '#00BB1D',
           2: '#EBFFEE',
+          3: '#D3FFDA',
         },
         blue: {
           1: '#324ECF',
@@ -37,6 +38,10 @@ module.exports = {
         yellow: {
           1: '#FFC431',
           2: '#FFDC85'
+        },
+        purple: {
+          1: '#F3F0FA',
+          2: '#7348C3'
         }
       }
     },
