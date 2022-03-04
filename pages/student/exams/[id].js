@@ -6,8 +6,9 @@ import Image from "next/image"
 import GeneralInstruction from "../../../components/Section/generalInstruction"
 import Button from "../../../components/Button/button";
 import Link from "next/link";
-
+import MyTimer from '../../../components/Timer/MyTimer'
 import { useRouter } from "next/router";
+
 export default function Index() {
   const Router = useRouter()
   const { id } = Router.query
@@ -27,6 +28,9 @@ export default function Index() {
   const [activeQuestionId, setActiveQuestionId] = useState(0)
   const [sectionInstruction, setSectionInstruction] = useState(false)
   const [questionPaper, setQuestionPaper] = useState(false)
+  const [duration, setDuration] = useState()
+  const time = new Date();
+  const newTime = new Date()
   const markAnswer = [
     {
       icon: "/asset/icon/table/ic_not_visited.svg",
@@ -50,6 +54,7 @@ export default function Index() {
     },
   ]
 
+
   useEffect(async () => {
     const getData = async () => {
       await apiStudentPage.showExams(id)
@@ -57,10 +62,16 @@ export default function Index() {
           console.log(res.data.data)
           setDataExams(res.data.data)
           setActiveSection(res.data.data.sections[0].name)
+          // setDuration(res.data.data.sections[0].duration)
+          // time.setSeconds(time.getSeconds() + res.data.data.sections[0].duration * 60);
         })
     }
     getData()
   }, [])
+
+  useEffect(async () => {
+    time.setSeconds(time.getSeconds() + dataExams.sections[activeSectionId].duration * 60);
+  }, [duration])
 
   const submitTest = async () => {
     const data = JSON.stringify(dataExams)
@@ -140,7 +151,7 @@ export default function Index() {
 
               {questionPaper && (
                 <div>
-                <center className="font-bold">Question Paper</center>
+                  <center className="font-bold">Question Paper</center>
                   {dataExams.sections[activeSectionId].question_items.map((item, index) => (
                     <div key={index} className="flex border-b my-2 p-2">
                       <div>{index + 1}) &nbsp; </div>
@@ -255,30 +266,32 @@ export default function Index() {
                   })}
                   <div className="md:flex flex-row gap-4 ">
                     <div className="w-full mt-4">
-                      <button className={`text-blue-1 py-2 px-4 border border-blue-1 w-full font-semibold text-sm rounded hover:bg-blue-6 hover:filter hover:drop-shadow-xl`} onClick={() => {
-                        const temp = dataExams.sections[activeSectionId].question_items
-                        temp.map((itemQ) => {
-                          if (itemQ.id === dataExams.sections[activeSectionId].question_items[activeQuestionId].id) {
-                            itemQ.status = 'marked'
-                            itemQ.options.map((optionQ) => {
-                              if (optionQ.selected === 1) {
-                                optionQ.selected = 1
-                                itemQ.status = 'marked_and_answered'
-                              }
-                            })
-                          } else {
-                            itemQ
-                          }
-                        })
-                        const tempExam = dataExams
-                        tempExam.sections.map((itemSection) => {
-                          if (itemSection.id === dataExams.sections[activeSectionId].id) {
-                            itemSection.question_items = temp
-                          }
-                        })
-                        setDataExams({ ...tempExam })
-                        setActiveQuestionId(activeQuestionId + 1)
-                      }} >Mark Question and Next</button>
+                      {dataExams.sections[activeSectionId].question_items.length !== activeQuestionId + 1 && (
+                        <button className={`text-blue-1 py-2 px-4 border border-blue-1 w-full font-semibold text-sm rounded hover:bg-blue-6 hover:filter hover:drop-shadow-xl`} onClick={() => {
+                          const temp = dataExams.sections[activeSectionId].question_items
+                          temp.map((itemQ) => {
+                            if (itemQ.id === dataExams.sections[activeSectionId].question_items[activeQuestionId].id) {
+                              itemQ.status = 'marked'
+                              itemQ.options.map((optionQ) => {
+                                if (optionQ.selected === 1) {
+                                  optionQ.selected = 1
+                                  itemQ.status = 'marked_and_answered'
+                                }
+                              })
+                            } else {
+                              itemQ
+                            }
+                          })
+                          const tempExam = dataExams
+                          tempExam.sections.map((itemSection) => {
+                            if (itemSection.id === dataExams.sections[activeSectionId].id) {
+                              itemSection.question_items = temp
+                            }
+                          })
+                          setDataExams({ ...tempExam })
+                          setActiveQuestionId(activeQuestionId + 1)
+                        }} >Mark Question and Next</button>
+                      )}
                     </div>
                     <div className="w-full mt-4">
                       {dataExams.sections[activeSectionId].question_items.length !== activeQuestionId + 1 && (
@@ -314,7 +327,8 @@ export default function Index() {
                             setActiveSectionId(activeSectionId + 1)
                             setActiveSection(dataExams.sections[activeSectionId + 1].name)
                             setActiveQuestionId(0)
-                            setCurrentStep(2)
+                            setDuration(dataExams.sections[activeSectionId + 1].duration)
+                            newTime.setSeconds(time.getSeconds() + dataExams.sections[activeSectionId].duration * 60);
                           }}>Save and Continue to Next Section</button>
                       )}
                       {dataExams.sections[activeSectionId].question_items.length === activeQuestionId + 1 && dataExams.sections.length === activeSectionId + 1 && (
@@ -329,9 +343,13 @@ export default function Index() {
           </div>
           <div className="md:w-1/2 lg:w-1/3 hidden lg:flex">
             <Card>
-              <div className="bg-black-9 rounded">
+              <div className="bg-black-9 text-center p-2 rounded">
                 Remaining time
-                00:59
+                {activeSectionId === 0 ? (
+                  <MyTimer expired={time} />
+                ) : (
+                  <MyTimer newExpiry={time} />
+                )}
               </div>
               <div className="flex flex-wrap gap-4 mt-2">
                 {markAnswer.map((item, index) => (
@@ -397,6 +415,7 @@ export default function Index() {
             <div className={`${agree ? 'cursor-pointer' : 'cursor-default'}`} onClick={() => {
               setCurrentStep(3)
               setSectionInstruction(true)
+              setDuration(dataExams.sections[activeSectionId].duration)
             }} ><Button title="Begin Exam" /></div>
             <button className={`text-blue-1 border border-blue-1 py-2 px-4 font-semibold text-sm rounded hover:bg-blue-6 hover:filter hover:drop-shadow-xl`} onClick={() => setCurrentStep(1)} >Back</button>
           </>
@@ -405,6 +424,5 @@ export default function Index() {
     </div>
   )
 }
-
 
 Index.layout = Layout
