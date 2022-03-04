@@ -8,6 +8,16 @@ import Button from "../../../components/Button/button";
 import Link from "next/link";
 import MyTimer from '../../../components/Timer/MyTimer'
 import { useRouter } from "next/router";
+import {
+  Modal,
+  ModalOverlay,
+  ModalContent,
+  ModalHeader,
+  ModalBody,
+  ModalFooter,
+  ModalCloseButton,
+  useDisclosure,
+} from '@chakra-ui/react'
 
 export default function Index() {
   const Router = useRouter()
@@ -29,6 +39,9 @@ export default function Index() {
   const [sectionInstruction, setSectionInstruction] = useState(false)
   const [questionPaper, setQuestionPaper] = useState(false)
   const [duration, setDuration] = useState()
+  const [reviewSubmit, setReviewSubmit] = useState([])
+  const [result, setResult] = useState()
+  const [renderCount, setRenderCount] = useState(false)
   const time = new Date();
   const newTime = new Date()
   const markAnswer = [
@@ -53,7 +66,16 @@ export default function Index() {
       desc: "Marked and Answered"
     },
   ]
-
+  const {
+    isOpen: isSuccessModal,
+    onOpen: onOpenSuccessModal,
+    onClose: onCloseSuccessModal
+  } = useDisclosure()
+  const {
+    isOpen: isResultModal,
+    onOpen: onOpenResultsModal,
+    onClose: onCloseResultModal
+  } = useDisclosure()
 
   useEffect(async () => {
     const getData = async () => {
@@ -62,8 +84,18 @@ export default function Index() {
           console.log(res.data.data)
           setDataExams(res.data.data)
           setActiveSection(res.data.data.sections[0].name)
-          // setDuration(res.data.data.sections[0].duration)
-          // time.setSeconds(time.getSeconds() + res.data.data.sections[0].duration * 60);
+          const Rsubmit = []
+          res.data.data.sections.map((item) => {
+            const dataResult = {
+              name: item.name,
+              total: item.question_items.length,
+              answered: 0,
+              notAnswered: 0,
+              marked: 0
+            }
+            Rsubmit.push(dataResult)
+          })
+          setReviewSubmit(Rsubmit)
         })
     }
     getData()
@@ -82,8 +114,54 @@ export default function Index() {
     await apiStudentPage.storeExams(id, res)
       .then((res) => {
         console.log(res.data.data)
+        setResult(res.data.data)
       })
   }
+
+  useEffect(() => {
+    console.log("start")
+    const countReviewResult = () => {
+
+      dataExams.sections.map((itemSection) => {
+        console.log("pertanyaan")
+        let answerCount = []
+        let marked = []
+        itemSection.question_items.map((itemQuestion) => {
+          if (itemQuestion.status === 'answered') {
+            answerCount.push("answer")
+
+          }
+          if (itemQuestion.status === 'marked') {
+            marked.push("marked")
+          }
+          if (itemQuestion.status === 'marked_and_answered') {
+            marked.push("marked")
+            answerCount.push("answer")
+          }
+        })
+        let temp = reviewSubmit
+        console.log(answerCount.length)
+        let totalAnswer = answerCount.length
+        const result = []
+        const Rsubmit = []
+        temp.map((item) => {
+          if (item.name === itemSection.name) {
+            item.name = item.name,
+              item.total = item.total,
+              item.answered = answerCount.length,
+              item.notAnswered = item.total - answerCount.length,
+              item.marked = marked.length
+          } else {
+            item
+          }
+        })
+        console.log(temp)
+        setReviewSubmit([...temp])
+      })
+    }
+    // console.log(reviewSubmit)
+    countReviewResult()
+  }, [renderCount])
 
   return (
     <div className="mt-12 min-w-full overflow-x-hidden">
@@ -290,6 +368,7 @@ export default function Index() {
                           })
                           setDataExams({ ...tempExam })
                           setActiveQuestionId(activeQuestionId + 1)
+                          setRenderCount(!renderCount)
                         }} >Mark Question and Next</button>
                       )}
                     </div>
@@ -319,6 +398,7 @@ export default function Index() {
                             })
                             setDataExams({ ...tempExam })
                             setActiveQuestionId(activeQuestionId + 1)
+                            setRenderCount(!renderCount)
                           }}>Save and Next Question</button>
                       )}
                       {dataExams.sections[activeSectionId].question_items.length === activeQuestionId + 1 && dataExams.sections.length !== activeSectionId + 1 && (
@@ -328,12 +408,13 @@ export default function Index() {
                             setActiveSection(dataExams.sections[activeSectionId + 1].name)
                             setActiveQuestionId(0)
                             setDuration(dataExams.sections[activeSectionId + 1].duration)
-                            newTime.setSeconds(time.getSeconds() + dataExams.sections[activeSectionId].duration * 60);
+                            newTime.setSeconds(time.getSeconds() + dataExams.sections[activeSectionId].duration * 60)
+                            setRenderCount(!renderCount)
                           }}>Save and Continue to Next Section</button>
                       )}
                       {dataExams.sections[activeSectionId].question_items.length === activeQuestionId + 1 && dataExams.sections.length === activeSectionId + 1 && (
                         <button className={`text-white bg-blue-1 py-2 px-4 border border-blue-1 w-full font-semibold text-sm rounded hover:bg-blue-2 hover:filter hover:drop-shadow-xl`}
-                          onClick={submitTest}>Submit Test</button>
+                          onClick={onOpenSuccessModal}>Submit Test</button>
                       )}
                     </div>
                   </div>
@@ -348,7 +429,7 @@ export default function Index() {
                 {activeSectionId === 0 ? (
                   <MyTimer expired={time} />
                 ) : (
-                  <MyTimer newExpiry={time} />
+                  <MyTimer newExpiry={time} rerender={duration} />
                 )}
               </div>
               <div className="flex flex-wrap gap-4 mt-2">
@@ -360,7 +441,7 @@ export default function Index() {
                 ))}
               </div>
               <div className="bg-black-9 p-2 mt-4">
-                <h1 className="font-bold my-2">0 of &nbsp;
+                <h1 className="font-bold my-2">{reviewSubmit[activeSectionId].answered} of &nbsp;
                   {dataExams.sections[activeSectionId].question_items.length} Question Answered</h1>
                 <div className="flex flex-wrap gap-2">
                   {dataExams.sections[activeSectionId].question_items.map((item, index) => (
@@ -392,7 +473,7 @@ export default function Index() {
                 }} >Instruction</button>
               </div>
               <button className={`text-white bg-blue-1 py-2 px-4 border border-blue-1 w-full font-semibold text-sm rounded hover:bg-blue-2 hover:filter hover:drop-shadow-xl mt-4`}
-                onClick={submitTest}>Submit Test</button>
+                onClick={onOpenSuccessModal}>Submit Test</button>
             </Card>
           </div>
         </div>
@@ -421,6 +502,96 @@ export default function Index() {
           </>
         )}
       </div>
+      <Modal isOpen={isSuccessModal} onClose={onCloseSuccessModal} size={"lg"} isCentered>
+        <ModalOverlay />
+        <ModalContent>
+          <ModalHeader fontSize="medium"><center>Submit Test</center></ModalHeader>
+          <ModalCloseButton />
+          <ModalBody>
+            <div className="bg-red-100 overflow-auto">
+              <table className="table min-w-full divide-y divide-gray-200 text-sm">
+                <thead className="bg-black-9" >
+                  <th
+                    scope="col"
+                    className="px-6 h-12 text-left tracking-wider"
+                  >Section
+                  </th>
+                  <th scope="col" className="text-left px-6 tracking-wider h-12">
+                    No.of Question
+                  </th>
+                  <th scope="col" className="text-left px-6 tracking-wider h-12">
+                    Answered
+                  </th>
+                  <th scope="col" className="text-left px-6 tracking-wider h-12">
+                    Not Answered
+                  </th>
+                  <th scope="col" className="text-left px-6 tracking-wider h-12">
+                    Marked for Review
+                  </th>
+                  {/* </tr> */}
+                </thead>
+                <tbody className="bg-white divide-y divide-gray-200">
+                  {reviewSubmit.map((item) => (
+                    <tr key={item.id}>
+                      <td className="px-6 h-12 whitespace-nowrap">
+                        <div>{item.name}</div>
+                      </td>
+                      <td className="px-6 h-12 whitespace-nowrap">
+                        <div>{item.total}</div>
+                      </td>
+                      <td className="px-6 h-12 whitespace-nowrap">
+                        <div>{item.answered}</div>
+                      </td>
+                      <td className="px-6 h-12 whitespace-nowrap">
+                        <div>{item.notAnswered}</div>
+                      </td>
+                      <td className="px-6 h-12 whitespace-nowrap">
+                        <div>{item.marked}</div>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </ModalBody>
+          <ModalFooter>
+            <div className="mr-4 test-sm cursor-pointer" onClick={onCloseSuccessModal}>
+              Cancel
+            </div>
+            <div onClick={() => {
+              submitTest()
+              onCloseSuccessModal()
+              onOpenResultsModal()
+            }}><Button title="Submit Test" /></div>
+          </ModalFooter>
+        </ModalContent>
+      </Modal>
+
+      <Modal isOpen={isResultModal} onClose={onCloseResultModal} size={"lg"} isCentered>
+        <ModalOverlay />
+        <ModalContent>
+          <ModalHeader fontSize="medium"><center>Test Result</center></ModalHeader>
+          <ModalCloseButton />
+          <ModalBody>
+            <div className="flex">
+              <div className="text-center mx-auto text-blue-1 bg-blue-6 border-blue-1 rounded border p-2">
+                {result.score}/{result.exam.total_score}
+              </div>
+            </div>
+          </ModalBody>
+          <ModalFooter>
+            {/* <div onClick={() => {
+              onCloseResultModal()
+            }}><Button title="Close" />
+            </div> */}
+            <Link href="/student/exams">
+              <a>
+                <Button title="Close" />
+              </a>
+            </Link>
+          </ModalFooter>
+        </ModalContent>
+      </Modal>
     </div>
   )
 }
