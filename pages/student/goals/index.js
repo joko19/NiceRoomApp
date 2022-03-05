@@ -55,7 +55,7 @@ export default function Index() {
           <TitleButton title="Your Preferred Exam" url="#" />
           <Slider ArrowColor="blue" count={dataPreferred.length} >
             {dataPreferred.map((item, index) => (
-              <CardExam type="exam" key={index} data={item} />
+              <CardExam type="exam" key={index} data={item} url={`/student/exams/${item.slug}`} />
             ))}
           </Slider>
         </div>
@@ -74,7 +74,7 @@ export default function Index() {
         <div className="mt-4">
           <TitleButton title="Quizzes" url="#" />
           <Slider ArrowColor="blue" count={list.length} >
-            {list.map((index) => (
+            {quiz.map((index) => (
               <CardQuizzes key={index} />
             ))}
           </Slider>

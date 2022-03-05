@@ -3,7 +3,7 @@ import Button from "../Button/button";
 import Image from 'next/image'
 import Link from "next/link";
 
-export default function CardExams({ isLive = false, data = false, url="#" }) {
+export default function CardExams({ isLive = false, data = false, url = "#" }) {
   console.log(data)
   return (
     <div className="flex-nowrap min-w-max m-2 bg-white rounded-lg pt-4 px-4">
@@ -25,10 +25,12 @@ export default function CardExams({ isLive = false, data = false, url="#" }) {
           <Image height={16} width={16} src="/asset/icon/ic_volume.svg" alt="icon paper" />
           <span>{data?.total_section} Section</span>
         </div>
-        <div className="flex gap-2 text-black-3 gap-4">
-          <Image height={16} width={16} src="/asset/icon/ic_date.svg" alt="icon paper" />
-          <span>{data?.started}</span>
-        </div>
+        {data?.started && (
+          <div className="flex gap-2 text-black-3 gap-4">
+            <Image height={16} width={16} src="/asset/icon/ic_date.svg" alt="icon paper" />
+            <span>{data?.started}</span>
+          </div>
+        )}
       </div>
       <Link href={url} >
         <a>

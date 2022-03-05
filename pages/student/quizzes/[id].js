@@ -3,7 +3,6 @@ import apiStudentPage from "../../../action/student_page"
 import { useState, useEffect } from "react";
 import Card from '../../../components/Cards/Card'
 import Image from "next/image"
-import GeneralInstruction from "../../../components/Section/generalInstruction"
 import Button from "../../../components/Button/button";
 import Link from "next/link";
 import MyTimer from '../../../components/Timer/MyTimer'
@@ -81,8 +80,7 @@ export default function Index() {
         .then((res) => {
           console.log(res.data.data)
           setDataExams(res.data.data)
-          // setDuration(res.data.data.duration)
-
+          setDuration(res.data.data.duration)
           time.setSeconds(time.getSeconds() + res.data.data.duration * 60);
           console.log(res.data.data.duration)
           const dataResult = {
@@ -98,11 +96,21 @@ export default function Index() {
   }, [])
 
   useEffect(async () => {
-    time.setSeconds(time.getSeconds() + dataExams.duration * 60);
+    // time.setSeconds(time.getSeconds() + dataExams.duration * 60);
   }, [duration])
 
   const submitTest = async () => {
-    const data = JSON.stringify(dataExams)
+    const temp = dataExams
+    dataExams.questions.map((item) => {
+      if (item.answer_type === 'multiple') {
+        if (item.status === 'answered' || item.status === 'marked_and_answered') {
+          item.options.map((itemOption) => {
+            itemOption.selected = itemOption.selected === 1 ? 1 : 0
+          })
+        }
+      }
+    })
+    const data = JSON.stringify(temp)
     const res = {
       data: data
     }

@@ -23,6 +23,7 @@ import { useForm } from "react-hook-form";
 import Button from "../Button/button.js";
 import { useDispatch } from "react-redux";
 import { reSetCurrentUser } from "../../action/auth/authAction";
+import apiStudentPage from '../../action/student_page'
 
 export default function AdminNavbar() {
   const [avatar, setAvatar] = useState('/asset/img/blank_profile.png')
@@ -34,6 +35,8 @@ export default function AdminNavbar() {
   const Router = useRouter()
   const dispatch = useDispatch()
   const [openProfile, setOpenProfile] = useState(false)
+  const [listInstitute, setListInstitute] = useState([])
+  const [instituteSelect, setInstituteSelect] = useState({})
   const { register, handleSubmit, setValue } = useForm();
   const {
     isOpen: isCreateModal,
@@ -219,6 +222,7 @@ export default function AdminNavbar() {
     if (roleStore === role.student)
       setItemList(student)
   }, [])
+
   useEffect(async () => {
     await apiAccount.detail()
       .then((res) => {
@@ -233,6 +237,29 @@ export default function AdminNavbar() {
     // code
   }
 
+  useEffect(() => {
+    const getInstitute = async () => {
+      await apiStudentPage.listInstitute()
+        .then((res) => {
+          console.log(res.data.data)
+          setListInstitute(res.data.data)
+        })
+    }
+    getInstitute()
+  }, [])
+
+  const joinInstitute = async () => {
+    console.log(instituteSelect)
+    const data = {
+      institute_id: instituteSelect.institute_id,
+      branch_id: 4
+    }
+    await apiStudentPage.joinInstitute(data)
+      .then((res) => {
+        console.log(res.data.data)
+        onCloseCreateModal()
+      })
+  }
 
   return (
     <>
@@ -385,22 +412,24 @@ export default function AdminNavbar() {
           <ModalHeader fontSize="md"><center>Join Institute</center></ModalHeader>
           <ModalCloseButton />
           <ModalBody>
-            <input type="text" className="form border mb-4 w-1/2 p-2 text-sm rounded" placeholder="Input Topic Name" {...register("name", { required: true })} />
+            {/* <input type="text" className="form border mb-4 w-1/2 p-2 text-sm rounded" placeholder="Input Topic Name" {...register("name", { required: true })} /> */}
             <div className="flex flex-wrap =">
-              {list.map((item, index) => (
-                <div key={index} className="flex flex-wrap gap-4my-2 w-1/2 p-2 text-sm">
-                  <div className="flex  border rounded  w-full p-2 gap-2 ">
+              {listInstitute.map((item, index) => (
+                <div key={index} className={`flex flex-wrap gap-4my-2 w-1/2 p-2 text-sm`} onClick={() => setInstituteSelect(item)}>
+                  <div className={`${item === instituteSelect ? 'bg-blue-6' : 'bg-white'}  flex  border rounded  w-full p-2 gap-2`}>
                     <img className="w-8 h-8 my-auto" src="/asset/icon/table/ic_school_orange.svg" />
                     <div>
-                      <h1 className="font-bold">Institute 1</h1>
-                      <p>Yogyakarta</p>
+                      <h1 className="font-bold">{item.name}</h1>
+                      <p>{item.city}</p>
                     </div>
                   </div>
                 </div>
               ))}
             </div>
             <div className="flex flex-row-reverse gap-4 mt-4">
-              <Button title="Join Institute" />
+              <div onClick={joinInstitute}>
+                <Button title="Join Institute" />
+              </div>
               <button type="button" className="text-black-4 px-2 hover:bg-blue-6 rounded border-blue-1 border" onClick={onCloseCreateModal}>Discard</button>
             </div>
           </ModalBody>

@@ -34,9 +34,18 @@ const QuizLiveAll = (take, topic) => instance.auth.get('/students/quizzes-live?t
 const QuizAttemptedAll = (take) => instance.auth.get('/students/quizzes-attempted?take=' + take)
 const showQuizResult = (slug, id) => instance.auth.get('/students/quizzes/' + slug + '/result/' + id)
 
-
+const instituteExams = (take) => instance.auth.get('/students/institutes/exams?take=' + take)
+const instituteExamsPast = (take) => instance.auth.get('/students/institutes/exams-past?take=' + take)
+const listInstitute = () => instance.auth.get('/students/institutes')
+const listProposalInstitute = (take) => instance.auth.get('/students/institutes/proposal?take=' + take)
+const joinInstitute = (data) => instance.auth.post('/students/institutes/join', data)
 
 const apiStudentPage = {
+  instituteExams,
+  instituteExamsPast,
+  listInstitute,
+  listProposalInstitute,
+  joinInstitute,
   notification,
   notificationRead,
   indexNews,

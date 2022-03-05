@@ -14,6 +14,7 @@ export default function Index() {
     const getDataExams = async () => {
       await apiStudentPage.examsAttemptedTake(8)
         .then((res) => {
+          console.log(res.data.data)
           setDataExamsAttempted(res.data.data)
         })
     }
@@ -21,7 +22,7 @@ export default function Index() {
       await apiStudentPage.QuizAttemptedAll(8)
         .then((res) => {
           console.log(res.data.data)
-          // setDataQuizAttempted(res.data.data)
+          setDataQuizAttempted(res.data.data)
         })
     }
     getDataExams()
@@ -29,21 +30,23 @@ export default function Index() {
   }, [])
   return (
     <div className="mt-12 min-w-full overflow-x-hidden">
-      <input type="text" className="p-2 border text-sm rounded  md:ml-8 mb-4 md:w-1/2 w-full" placeholder="Search" />
-      <div>
-        <TitleButton title="Attempted Exam" url="#" />
-        <Slider ArrowColor="blue" >
-          {dataExamsAttempted.map((item, index) => (
-            <CardAttempted type="exam" key={index} data={item.exam} isLive={true} />
-          ))}
-        </Slider>
-      </div>
+      {/* <input type="text" className="p-2 border text-sm rounded  md:ml-8 mb-4 md:w-1/2 w-full" placeholder="Search" /> */}
+      {dataExamsAttempted.length > 0 && (
+        <div>
+          <TitleButton title="Attempted Exam" url="#" />
+          <Slider ArrowColor="blue" >
+            {dataExamsAttempted.map((item, index) => (
+              <CardAttempted type="exam" key={index} data={item.exam} isLive={true} url={`/student/exams/${item.slug}`} />
+            ))}
+          </Slider>
+        </div>
+      )}
       {dataQuizAttempted.length > 0 && (
         <div className="mt-4">
           <TitleButton title="Attempted Quizzes" url="#" />
           <Slider ArrowColor="blue" >
-            {dataQuizAttempted.map((item) => (
-              <CardAttempted key={item} isLive={true} />
+            {dataQuizAttempted.map((item, index) => (
+              <CardAttempted key={index} data={item.quiz} isLive={true} />
             ))}
           </Slider>
         </div>

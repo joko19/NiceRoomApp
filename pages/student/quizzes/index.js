@@ -33,8 +33,8 @@ export default function Index() {
         <div>
           <TitleButton title="Live Quiz" url="#" />
           <Slider ArrowColor="blue" >
-            {liveQuiz.map((item) => (
-              <CardQuizzes type="exam" key={item} isLive={true} />
+            {liveQuiz.map((item, index) => (
+              <CardQuizzes type="exam" key={index} data={item} isLive={true} />
             ))}
           </Slider>
         </div>

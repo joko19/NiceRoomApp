@@ -1,8 +1,9 @@
 import React from "react";
 import Button from "../Button/button";
 import Image from 'next/image'
+import Link from "next/link";
 
-export default function CardAttempted({ isLive = false, type = false, data }) {
+export default function CardAttempted({ isLive = false, type = false, data, url='#' }) {
   console.log(data)
   return (
     <div className="flex-nowrap min-w-max m-2 bg-white rounded-lg pt-4 px-4 ">
@@ -25,13 +26,22 @@ export default function CardAttempted({ isLive = false, type = false, data }) {
             <span>{data?.total_section} Section</span>
           </div>
         )}
-        <div className="flex gap-2 text-black-3 gap-4">
-          <img  src="/asset/icon/ic_date.svg" alt="icon paper" className="z-0 " />
-          <span>{data?.started}</span>
-        </div>
+        {data?.started && (
+          <div className="flex gap-2 text-black-3 gap-4">
+            <img src="/asset/icon/ic_date.svg" alt="icon paper" className="z-0 " />
+            <span>{data?.started}</span>
+          </div>
+        )}
+
       </div>
       <button className={`bg-white text-blue-1 border w-full border-blue-1 mt-2 py-2 px-4 font-semibold text-sm rounded hover:bg-blue-6 hover:filter hover:drop-shadow-xl`}>View Score</button>
-      <Button title="Re-attempt" className="w-full my-2" />
+      <Link href={url} >
+        <a>
+          <Button title="Re-attempt" className="w-full my-4" />
+        </a>
+      </Link>
+      {/* <Button title="Re-attempt" className="w-full my-2" />
+       */}
     </div>
   )
 }
