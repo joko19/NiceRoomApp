@@ -217,11 +217,7 @@ export default function Index() {
                               }
                             })
                             const tempExam = dataExams
-                            tempExam.map((itemSection) => {
-                              if (itemSection.id === dataExams.id) {
-                                itemSection.questions = temp
-                              }
-                            })
+                            tempExam.questions = temp
                             setDataExams({ ...tempExam })
                           }}>
                             <div className="m-auto" >
@@ -322,7 +318,27 @@ export default function Index() {
                     )}
                     {dataExams.questions.length === activeQuestionId + 1 && (
                       <button className={`text-white bg-blue-1 py-2 px-4 border border-blue-1 w-full font-semibold text-sm rounded hover:bg-blue-2 hover:filter hover:drop-shadow-xl`}
-                        onClick={onOpenSuccessModal}>Submit Test</button>
+                        onClick={() => {
+                          const temp = dataExams.questions
+                          temp.map((itemQ) => {
+                            if (itemQ.id === dataExams.questions[activeQuestionId].id) {
+                              itemQ.status = 'not_answered'
+                              itemQ.options.map((optionQ) => {
+                                if (optionQ.selected === 1) {
+                                  optionQ.selected = 1
+                                  itemQ.status = 'answered'
+                                }
+                              })
+                            } else {
+                              itemQ
+                            }
+                          })
+                          const tempExam = dataExams
+                          tempExam.questions = temp
+                          setDataExams({ ...tempExam })
+                          setRenderCount(!renderCount)
+                          onOpenSuccessModal()
+                        }}>Submit Test</button>
                     )}
                   </div>
                 </div>
@@ -367,7 +383,27 @@ export default function Index() {
               </div>
             </div>
             <button className={`text-white bg-blue-1 py-2 px-4 border border-blue-1 w-full font-semibold text-sm rounded hover:bg-blue-2 hover:filter hover:drop-shadow-xl mt-4`}
-              onClick={onOpenSuccessModal}>Submit Test</button>
+              onClick={() => {
+                const temp = dataExams.questions
+                temp.map((itemQ) => {
+                  if (itemQ.id === dataExams.questions[activeQuestionId].id) {
+                    itemQ.status = 'not_answered'
+                    itemQ.options.map((optionQ) => {
+                      if (optionQ.selected === 1) {
+                        optionQ.selected = 1
+                        itemQ.status = 'answered'
+                      }
+                    })
+                  } else {
+                    itemQ
+                  }
+                })
+                const tempExam = dataExams
+                tempExam.questions = temp
+                setDataExams({ ...tempExam })
+                setRenderCount(!renderCount)
+                onOpenSuccessModal()
+              }}>Submit Test</button>
           </Card>
         </div>
       </div>
@@ -432,9 +468,49 @@ export default function Index() {
           <ModalHeader fontSize="medium"><center>Test Result</center></ModalHeader>
           <ModalCloseButton />
           <ModalBody>
-            <div className="flex">
-              <div className="text-center mx-auto text-blue-1 bg-blue-6 border-blue-1 rounded border p-2">
-                {result.score}/{result.exam.total_score}
+            <div className="flex flex-wrap" >
+              <div className="flex md:w-1/2 w-full">
+                <div className="bg-blue-6 w-full rounded m-2 p-2">
+                  <img src="/asset/icon/table/ic_trophy.svg" className="m-auto" />
+                </div>
+              </div>
+
+              <div className="flex w-full md:w-1/2 ">
+                <div className="flex w-full p-2 bg-blue-6 rounded m-2">
+                  <div className="w-full">
+                    <div className="flex gap-4">
+                      <Image src="/asset/icon/table/ic_correct.svg" height={24} width={24} alt="icon correct" />
+                      <div>
+                        <p className="text-black-4">Correct</p>
+                        <p className="font-bold">{result.correct}</p>
+                      </div>
+                    </div>
+                    <div className="flex gap-4">
+                      <Image src="/asset/icon/table/ic_incorrect.svg" height={24} width={24} alt="icon correct" />
+                      <div>
+                        <p className="text-black-4">Incorrecy</p>
+                        <p className="font-bold">{result.incorrect}</p>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="w-full">
+                    <div className="flex gap-4">
+                      <Image src="/asset/icon/table/ic_score.svg" height={24} width={24} alt="icon correct" />
+                      <div>
+                        <p className="text-black-4">Score</p>
+                        <p className="font-bold">{result.score}</p>
+                      </div>
+                    </div>
+                    <div className="flex gap-4">
+                      <Image src="/asset/icon/table/ic_accuracy.svg" height={24} width={24} alt="icon correct" />
+                      <div>
+                        <p className="text-black-4">Accuracy</p>
+                        <p className="font-bold">{result.accuracy}</p>
+                      </div>
+                    </div>
+                  </div>
+
+                </div>
               </div>
             </div>
           </ModalBody>
@@ -443,7 +519,7 @@ export default function Index() {
               onCloseResultModal()
             }}><Button title="Close" />
             </div> */}
-            <Link href="/student/exams">
+            <Link href="/student/quizzes">
               <a>
                 <Button title="Close" />
               </a>

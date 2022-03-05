@@ -41,6 +41,7 @@ export default function Index() {
           console.log(res.data)
           setExamPrevious(res.data.data)
         })
+        
     }
     const getDataGraph = async () => {
       await apiStudentPage.examsGraph()
@@ -74,7 +75,7 @@ export default function Index() {
       await apiStudentPage.examsRecomendedAll(8)
         .then((res) => {
           setRecommended(res.data.data)
-          setIsLoading(false)
+          // setIsLoading(false)
         })
         .catch((err) => {
           console.log(err)
@@ -84,7 +85,7 @@ export default function Index() {
       await apiStudentPage.examsUpcomingTake()
         .then((res) => {
           setUpcoming(res.data.data)
-          setIsLoading(false)
+          // setIsLoading(false)
         })
         .catch((err) => {
           console.log(err)
@@ -94,7 +95,7 @@ export default function Index() {
       await apiStudentPage.QuizLiveAll(8, '')
         .then((res) => {
           setQuiz(res.data.data)
-          setIsLoading(false)
+          // setIsLoading(false)
         })
         .catch((err) => {
           console.log(err)
@@ -103,8 +104,8 @@ export default function Index() {
     const getNews = async () => {
       await apiStudentPage.indexNews()
         .then((res) => {
-          setDataNews(res.data.data)
-          setIsLoading(false)
+          setNews(res.data.data)
+          // setIsLoading(false)
         })
         .catch((err) => {
           console.log(err)
