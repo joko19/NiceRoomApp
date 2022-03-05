@@ -17,7 +17,7 @@ const examsPrevious = () => instance.auth.get('/students/exams-previous')
 const examsGraph = () => instance.auth.get('/students/exams-graph')
 const examsGraphFilterDate = (date) => instance.auth.get('/students/exams-graph?date=' + date)
 const storeExams = (slug, data) => instance.auth.post('/students/exams/' + slug, data)
-const showExamsResult = (slug, id) => instance.auth.get('/students/exams/'+slug+'/result/'+id)
+const showExamsResult = (slug, id) => instance.auth.get('/students/exams/' + slug + '/result/' + id)
 
 const storePractice = (slug, data) => instance.auth.post('/students/practice/' + slug, data)
 const showPractice = (slug) => instance.auth.get('/students/practices/' + slug)
@@ -25,7 +25,16 @@ const practiceAll = () => instance.auth.get('/students/practices')
 const practiceTake = (total) => instance.auth.get('/students/practices?take=' + total)
 const practiceAttemptedAll = () => instance.auth.get('/students/practices-attempted')
 const practiceAttemptedTake = (total) => instance.auth.get('/students/practices-attempted?take=' + total)
-const showPracticeResult = (slug, id) => instance.auth.get('/students/practices/'+slug+'/result/'+id)
+const showPracticeResult = (slug, id) => instance.auth.get('/students/practices/' + slug + '/result/' + id)
+
+const storeQuiz = (slug, data) => instance.auth.post('/students/quizzes/' + slug, data)
+const showQuiz = (slug) => instance.auth.get('/students/quizzes/' + slug)
+const QuizAll = (take, topic) => instance.auth.get('/students/quizzes?take=' + take + '&topic=' + topic)
+const QuizLiveAll = (take, topic) => instance.auth.get('/students/quizzes-live?take=' + take + '&topic=' + topic)
+const QuizAttemptedAll = (take) => instance.auth.get('/students/quizzes-attempted?take=' + take)
+const showQuizResult = (slug, id) => instance.auth.get('/students/quizzes/' + slug + '/result/' + id)
+
+
 
 const apiStudentPage = {
   notification,
@@ -53,7 +62,13 @@ const apiStudentPage = {
   practiceAttemptedAll,
   practiceAttemptedAll,
   practiceAttemptedTake,
-  showPracticeResult
+  showPracticeResult,
+  storeQuiz,
+  showQuiz,
+  showQuizResult,
+  QuizAttemptedAll,
+  QuizAll,
+  QuizLiveAll,
 }
 
 export default apiStudentPage

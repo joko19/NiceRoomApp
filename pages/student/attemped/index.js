@@ -17,7 +17,15 @@ export default function Index() {
           setDataExamsAttempted(res.data.data)
         })
     }
+    const getQuiz = async () => {
+      await apiStudentPage.QuizAttemptedAll(8)
+        .then((res) => {
+          console.log(res.data.data)
+          // setDataQuizAttempted(res.data.data)
+        })
+    }
     getDataExams()
+    getQuiz()
   }, [])
   return (
     <div className="mt-12 min-w-full overflow-x-hidden">
@@ -30,15 +38,16 @@ export default function Index() {
           ))}
         </Slider>
       </div>
-      <div className="mt-4">
-        <TitleButton title="Attempted Quizzes" url="#" />
-        <Slider ArrowColor="blue" >
-          {list.map((item) => (
-            <CardAttempted key={item} isLive={true} />
-          ))}
-        </Slider>
-      </div>
-
+      {dataQuizAttempted.length > 0 && (
+        <div className="mt-4">
+          <TitleButton title="Attempted Quizzes" url="#" />
+          <Slider ArrowColor="blue" >
+            {dataQuizAttempted.map((item) => (
+              <CardAttempted key={item} isLive={true} />
+            ))}
+          </Slider>
+        </div>
+      )}
     </div>
   )
 }

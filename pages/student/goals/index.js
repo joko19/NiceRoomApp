@@ -29,9 +29,9 @@ export default function Index() {
         })
     }
     const getQuiz = async () => {
-      await apiStudentPage.examsLiveTake(8)
+      await apiStudentPage.QuizAll(8, '')
         .then((res) => {
-          // setLiveExam(res.data.data)
+          setQuiz(res.data.data)
           // setIsLoading(false)
         })
     }
@@ -70,14 +70,16 @@ export default function Index() {
           </Slider>
         </div>
       )}
-      <div className="mt-4">
-        <TitleButton title="Quizzes" url="#" />
-        <Slider ArrowColor="blue" count={list.length} >
-          {list.map((index) => (
-            <CardQuizzes key={index} />
-          ))}
-        </Slider>
-      </div>
+      {quiz.length > 0 && (
+        <div className="mt-4">
+          <TitleButton title="Quizzes" url="#" />
+          <Slider ArrowColor="blue" count={list.length} >
+            {list.map((index) => (
+              <CardQuizzes key={index} />
+            ))}
+          </Slider>
+        </div>
+      )}
       {news.length > 0 && (
         <div className="mt-4">
           <TitleButton title="News" url="#" />
