@@ -1,7 +1,7 @@
 import React, { useRef } from "react";
 import { FaAngleLeft, FaAngleRight } from "react-icons/fa";
 
-export default function Card({ children, ArrowColor }) {
+export default function Card({ children, ArrowColor, count = 0 }) {
 
   const listRef = useRef(null);
 
@@ -26,13 +26,17 @@ export default function Card({ children, ArrowColor }) {
   };
   return (
     <div className='flex '>
-      <FaAngleLeft size={32} color={ArrowColor} className='my-auto hidden md:flex mr-4 cursor-pointer'
-        onClick={scrollLeft} />
+      {count > 4 && (
+        <FaAngleLeft size={32} color={ArrowColor} className='my-auto hidden md:flex mr-4 cursor-pointer'
+          onClick={scrollLeft} />
+      )}
       <div className='flex overflow-x-scroll md:overflow-x-hidden' ref={listRef}>
         {children}
       </div>
-      <FaAngleRight size={32} color={ArrowColor} className='my-auto hidden md:flex ml-4 cursor-pointer'
-        onClick={scrollRight} />
+      {count > 4 && (
+        <FaAngleRight size={32} color={ArrowColor} className='my-auto hidden md:flex ml-4 cursor-pointer'
+          onClick={scrollRight} />
+      )}
     </div>
   )
 }
