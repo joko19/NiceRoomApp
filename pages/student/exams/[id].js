@@ -215,7 +215,7 @@ export default function Index() {
             <div className="flex overflow-x-scroll p-2 md:hidden ">
 
               {dataExams.sections[activeSectionId].question_items.map((item, index) => (
-                <div id={index}>
+                <div key={index} id={index}>
                   <div key={index} className={` 
                     ${index === activeQuestionId && item.status !== 'marked' && item.status !== 'marked_and_answered' && item.status !== 'answered' && item.status !== 'not_answered' && 'rounded-full'} 
                     ${item.status === 'marked' && 'bg-purple-1 rounded-full border-1 border-purple-2'} 
