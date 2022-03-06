@@ -41,7 +41,7 @@ export default function CardAttempted({ isLive = false, type = false, data, url 
         </a>
       </Link><Link href={url} >
         <a>
-          <Button title="Re-attempt" className="w-full my-4" />
+          <Button title="Re-attempt" className="w-full my-2" />
         </a>
       </Link>
       {/* <Button title="Re-attempt" className="w-full my-2" />

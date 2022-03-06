@@ -1,11 +1,11 @@
-import Layout from "../../../Layout/Layout"
-import apiStudentPage from "../../../action/student_page"
+import Layout from "../../../../Layout/Layout"
+import apiStudentPage from "../../../../action/student_page"
 import { useState, useEffect } from "react";
-import Card from '../../../components/Cards/Card'
+import Card from '../../../../components/Cards/Card'
 import Image from "next/image"
-import Button from "../../../components/Button/button";
+import Button from "../../../../components/Button/button";
 import Link from "next/link";
-import MyTimer from '../../../components/Timer/MyTimer'
+import MyTimer from '../../../../components/Timer/MyTimer'
 import { useRouter } from "next/router";
 import {
   Modal,
@@ -192,11 +192,6 @@ export default function Index() {
 
             {sectionInstruction === false && questionPaper === false && (
               <>
-                {dataExams.questions[activeQuestionId]?.count && (
-                  <div className="font-bold">Questions {activeQuestionId + 1}-{activeQuestionId + dataExams.questions[activeQuestionId]?.count} refer to the following passage</div>
-                )}
-                <div className="text-container ml-3" dangerouslySetInnerHTML={{ __html: dataExams.questions[activeQuestionId]?.q_instruction }} />
-                <div className="text-container ml-3" dangerouslySetInnerHTML={{ __html: dataExams.questions[activeQuestionId]?.q_paragraph }} />
                 <h1 className="font-bold my-2">Question {activeQuestionId + 1}</h1>
                 <div className="text-container" dangerouslySetInnerHTML={{ __html: dataExams.questions[activeQuestionId]?.question }} />
                 {dataExams.questions[activeQuestionId].options.map((itemAnswer, indexAnswer) => {

@@ -3,7 +3,6 @@ import apiStudentPage from "../../../../action/student_page"
 import { useState, useEffect } from "react";
 import Card from '../../../../components/Cards/Card'
 import Image from "next/image"
-import Button from "../../../../components/Button/button";
 import Link from "next/link";
 import { useRouter } from "next/router";
 
@@ -138,33 +137,7 @@ export default function Index() {
                 <div className={`${dataExams.sections[activeSectionId].question_items[activeQuestionId]?.options[indexAnswer].correct === 1 ? 'bg-blue-6 border-blue-1' : 'bg-white'} my-2  p-3 border rounded-lg`} key={indexAnswer}>
                   <div className='flex  gap-2'>
                     {dataExams.sections[activeSectionId].question_items[activeQuestionId].answer_type === 'single' ? (
-                      <div className="flex cursor-pointer" onClick={() => {
-                        const temp = dataExams.sections[activeSectionId].question_items
-                        temp.map((itemQ) => {
-                          if (itemQ.id === dataExams.sections[activeSectionId].question_items[activeQuestionId].id) {
-                            itemQ.options.map((optionQ) => {
-                              if (optionQ.id === itemAnswer.id) {
-                                optionQ.selected = 1
-                              } else {
-                                for (let i = 0; i < itemQ.options.length; i++) {
-                                  if (i !== indexAnswer) {
-                                    optionQ.selected = 0
-                                  }
-                                }
-                              }
-                            })
-                          } else {
-                            itemQ
-                          }
-                        })
-                        const tempExam = dataExams
-                        tempExam.sections.map((itemSection) => {
-                          if (itemSection.id === dataExams.sections[activeSectionId].id) {
-                            itemSection.question_items = temp
-                          }
-                        })
-                        setDataExams({ ...tempExam })
-                      }}>
+                      <div className="flex">
                         <div className="m-auto" >
                           {itemAnswer.correct === 1 ? (
                             <Image src='/asset/icon/table/ic_radio_active.svg' width={16} height={16} alt="icon radio button" />
@@ -175,28 +148,7 @@ export default function Index() {
                       </div>
                     ) : (
                       // if multiple answer
-                      <div className="flex cursor-pointer" onClick={() => {
-                        const temp = dataExams.sections[activeSectionId].question_items
-                        temp.map((itemQ) => {
-                          if (itemQ.id === dataExams.sections[activeSectionId].question_items[activeQuestionId].id) {
-                            itemQ.options.map((optionQ) => {
-                              if (optionQ.id === itemAnswer.id) {
-                                const tempCorrect = optionQ.selected
-                                optionQ.selected = tempCorrect === 1 ? 0 : 1
-                              }
-                            })
-                          } else {
-                            itemQ
-                          }
-                        })
-                        const tempExam = dataExams
-                        tempExam.sections.map((itemSection) => {
-                          if (itemSection.id === dataExams.sections[activeSectionId].id) {
-                            itemSection.question_items = temp
-                          }
-                        })
-                        setDataExams({ ...tempExam })
-                      }}>
+                      <div className="flex">
                         <div className="m-auto" >
                           {itemAnswer.correct === 1 ? (
                             <Image src='/asset/icon/table/ic_checkbox_active.svg' width={16} height={16} alt="icon radio button" />
