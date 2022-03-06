@@ -1,12 +1,12 @@
-import Layout from "../../../Layout/Layout"
-import apiStudentPage from "../../../action/student_page"
+import Layout from "../../../../Layout/Layout"
+import apiStudentPage from "../../../../action/student_page"
 import { useState, useEffect } from "react";
-import Card from '../../../components/Cards/Card'
+import Card from '../../../../components/Cards/Card'
 import Image from "next/image"
-import GeneralInstruction from "../../../components/Section/generalInstruction"
-import Button from "../../../components/Button/button";
+import GeneralInstruction from "../../../../components/Section/generalInstruction"
+import Button from "../../../../components/Button/button";
 import Link from "next/link";
-import MyTimer from '../../../components/Timer/MyTimer'
+import MyTimer from '../../../../components/Timer/MyTimer'
 import { useRouter } from "next/router";
 import {
   Modal,
@@ -40,7 +40,7 @@ export default function Index() {
   const [questionPaper, setQuestionPaper] = useState(false)
   const [duration, setDuration] = useState()
   const [reviewSubmit, setReviewSubmit] = useState([])
-  const [numberQuestion, setNumberQuestion] = useState()
+  const [idResult, setIdResult] = useState()
   const [result, setResult] = useState({
     score: 0,
     exam: {
@@ -132,6 +132,7 @@ export default function Index() {
     await apiStudentPage.storeExams(id, res)
       .then((res) => {
         console.log(res.data.data)
+        setIdResult(res.data.data.id)
         setResult(res.data.data)
       })
   }
@@ -352,8 +353,6 @@ export default function Index() {
                                 )}
                               </div>
                             </div>
-
-                            // <input className="m-auto" type="checkbox" id="html" {...register(`question_items[${indexEachQuestion}].options[${indexAnswer}].correct`)} value="1" />
                           )}
                           <span>{alphabet[indexAnswer]}.</span>
                           <div>{itemAnswer.title}</div>
@@ -423,6 +422,28 @@ export default function Index() {
                       {dataExams.sections[activeSectionId].question_items.length === activeQuestionId + 1 && dataExams.sections.length !== activeSectionId + 1 && (
                         <button className={`text-white bg-blue-1 py-2 px-4 border border-blue-1 w-full font-semibold text-sm rounded hover:bg-blue-2 hover:filter hover:drop-shadow-xl`}
                           onClick={() => {
+                            const temp = dataExams.sections[activeSectionId].question_items
+                            temp.map((itemQ) => {
+                              if (itemQ.id === dataExams.sections[activeSectionId].question_items[activeQuestionId].id) {
+                                itemQ.status = 'not_answered'
+                                itemQ.options.map((optionQ) => {
+                                  if (optionQ.selected === 1) {
+                                    optionQ.selected = 1
+                                    itemQ.status = 'answered'
+                                  }
+                                })
+                              } else {
+                                itemQ
+                              }
+                            })
+                            const tempExam = dataExams
+                            tempExam.sections.map((itemSection) => {
+                              if (itemSection.id === dataExams.sections[activeSectionId].id) {
+                                itemSection.question_items = temp
+                              }
+                            })
+                            setDataExams({ ...tempExam })
+                            setRenderCount(!renderCount)
                             setActiveSectionId(activeSectionId + 1)
                             setActiveSection(dataExams.sections[activeSectionId + 1].name)
                             setActiveQuestionId(0)
@@ -433,7 +454,31 @@ export default function Index() {
                       )}
                       {dataExams.sections[activeSectionId].question_items.length === activeQuestionId + 1 && dataExams.sections.length === activeSectionId + 1 && (
                         <button className={`text-white bg-blue-1 py-2 px-4 border border-blue-1 w-full font-semibold text-sm rounded hover:bg-blue-2 hover:filter hover:drop-shadow-xl`}
-                          onClick={onOpenSuccessModal}>Submit Test</button>
+                          onClick={() => {
+                            const temp = dataExams.sections[activeSectionId].question_items
+                            temp.map((itemQ) => {
+                              if (itemQ.id === dataExams.sections[activeSectionId].question_items[activeQuestionId].id) {
+                                itemQ.status = 'not_answered'
+                                itemQ.options.map((optionQ) => {
+                                  if (optionQ.selected === 1) {
+                                    optionQ.selected = 1
+                                    itemQ.status = 'answered'
+                                  }
+                                })
+                              } else {
+                                itemQ
+                              }
+                            })
+                            const tempExam = dataExams
+                            tempExam.sections.map((itemSection) => {
+                              if (itemSection.id === dataExams.sections[activeSectionId].id) {
+                                itemSection.question_items = temp
+                              }
+                            })
+                            setDataExams({ ...tempExam })
+                            setRenderCount(!renderCount)
+                            onOpenSuccessModal()
+                          }}>Submit Test</button>
                       )}
                     </div>
                   </div>
@@ -603,7 +648,7 @@ export default function Index() {
               onCloseResultModal()
             }}><Button title="Close" />
             </div> */}
-            <Link href="/student/exams">
+            <Link href={`/student/exams/` + id + "/" + idResult}>
               <a>
                 <Button title="Close" />
               </a>

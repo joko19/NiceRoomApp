@@ -21,7 +21,7 @@ export default function Index() {
     <div className="mt-12">
       {data.length > 0 && (
         <>
-          <p className="font-bold text-xl">Exams Live </p>
+          <p className="font-bold text-xl">Quizzes Live </p>
           <div className="flex flex-wrap">
             {data.map((item, index) => (
               <CardQuizzes key={index} data={item} />

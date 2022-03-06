@@ -3,7 +3,7 @@ import Button from "../Button/button";
 import Image from 'next/image'
 import Link from "next/link";
 
-export default function CardAttempted({ isLive = false, type = false, data, url='#' }) {
+export default function CardAttempted({ isLive = false, type = false, data, url = '#', score = '#' }) {
   console.log(data)
   return (
     <div className="flex-nowrap min-w-max m-2 bg-white rounded-lg pt-4 px-4 ">
@@ -34,8 +34,12 @@ export default function CardAttempted({ isLive = false, type = false, data, url=
         )}
 
       </div>
-      <button className={`bg-white text-blue-1 border w-full border-blue-1 mt-2 py-2 px-4 font-semibold text-sm rounded hover:bg-blue-6 hover:filter hover:drop-shadow-xl`}>View Score</button>
-      <Link href={url} >
+
+      <Link href={score} >
+        <a>
+          <button className={`bg-white text-blue-1 border w-full border-blue-1 mt-2 py-2 px-4 font-semibold text-sm rounded hover:bg-blue-6 hover:filter hover:drop-shadow-xl`}>View Score</button>
+        </a>
+      </Link><Link href={url} >
         <a>
           <Button title="Re-attempt" className="w-full my-4" />
         </a>

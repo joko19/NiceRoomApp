@@ -23,7 +23,7 @@ export default function Index() {
           <p className="font-bold text-xl">Attempted Quiz </p>
           <div className="flex flex-wrap">
             {data.map((item, index) => (
-              <CardAttempted key={index} data={item.quiz} />
+              <CardAttempted key={index} data={item.quiz}  url={`/student/exams/${item.exam.slug}`} />
             ))}
           </div>
         </>

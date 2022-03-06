@@ -65,18 +65,18 @@ export default function Index() {
         <div className="mt-4">
           <TitleButton title="Live Exam" isLive={true} url="/student/exams/live" />
           <Slider ArrowColor="blue" count={liveExam.length} >
-            {liveExam.map((index) => (
-              <CardExam key={index} />
+            {liveExam.map((item, index) => (
+              <CardExam key={index} data={item} url={`/student/exams/${item.slug}`}/>
             ))}
           </Slider>
         </div>
       )}
       {quiz.length > 0 && (
         <div className="mt-4">
-          <TitleButton title="Quizzes" url="#" />
+          <TitleButton title="Quizzes" url="/student/quizzes" />
           <Slider ArrowColor="blue" count={list.length} >
-            {quiz.map((index) => (
-              <CardQuizzes key={index} />
+            {quiz.map((item, index) => (
+              <CardQuizzes key={index} data={item}  url={`/student/quizzes/${item.slug}`}/>
             ))}
           </Slider>
         </div>

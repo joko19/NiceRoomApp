@@ -14,6 +14,7 @@ export default function Index() {
     const getDataExams = async () => {
       await apiStudentPage.examsAttemptedTake(8)
         .then((res) => {
+          console.log(res.data.data)
           setDataExamsAttempted(res.data.data)
         })
     }
@@ -35,7 +36,7 @@ export default function Index() {
           <TitleButton title="Attempted Exam" url="/student/attempted/exams" />
           <Slider ArrowColor="blue" >
             {dataExamsAttempted.map((item, index) => (
-              <CardAttempted type="exam" key={index} data={item.exam} isLive={true} url={`/student/exams/${item.slug}`} />
+              <CardAttempted type="exam" key={index} data={item.exam} isLive={true} url={`/student/exams/${item.exam.slug}`} score={`/student/exams/${item.exam.slug}/${item.id}`} />
             ))}
           </Slider>
         </div>
@@ -45,7 +46,7 @@ export default function Index() {
           <TitleButton title="Attempted Quizzes" url="/student/attempted/quizzes" />
           <Slider ArrowColor="blue" >
             {dataQuizAttempted.map((item, index) => (
-              <CardAttempted key={index} data={item.quiz} isLive={true} />
+              <CardAttempted key={index} data={item.quiz} isLive={true}  url={`/student/exams/${item.quiz.slug}`} score={`/student/quizzes/${item.quiz.slug}/${item.id}`}/>
             ))}
           </Slider>
         </div>
