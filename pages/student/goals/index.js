@@ -63,7 +63,7 @@ export default function Index() {
       )}
       {liveExam.length > 0 && (
         <div className="mt-4">
-          <TitleButton title="Live Exam" isLive={true} url="#" />
+          <TitleButton title="Live Exam" isLive={true} url="/student/exams/live" />
           <Slider ArrowColor="blue" count={liveExam.length} >
             {liveExam.map((index) => (
               <CardExam key={index} />
@@ -77,16 +77,6 @@ export default function Index() {
           <Slider ArrowColor="blue" count={list.length} >
             {quiz.map((index) => (
               <CardQuizzes key={index} />
-            ))}
-          </Slider>
-        </div>
-      )}
-      {news.length > 0 && (
-        <div className="mt-4">
-          <TitleButton title="News" url="#" />
-          <Slider ArrowColor="blue" >
-            {news.map((index) => (
-              <CardNews key={index} />
             ))}
           </Slider>
         </div>

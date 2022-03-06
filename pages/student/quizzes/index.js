@@ -30,12 +30,12 @@ export default function Index() {
   return (
     <div className="mt-12 min-w-full overflow-x-hidden">
       {/* <input type="text" className="p-2 border text-sm rounded  md:ml-8 mb-4 md:w-1/2 w-full" placeholder="Search" /> */}
-      {liveQuiz.length > 4 && (
+      {liveQuiz.length > 0 && (
         <div>
-          <TitleButton title="Live Quiz" url="#" />
+          <TitleButton title="Live Quiz" url="/student/quizzes/live" />
           <Slider ArrowColor="blue" >
             {liveQuiz.map((item, index) => (
-              <CardQuizzes type="exam" key={index} data={item} isLive={true} />
+              <CardQuizzes type="exam" key={index} data={item} isLive={true} url={`/student/quizzes/${item.slug}`} />
             ))}
           </Slider>
         </div>
@@ -43,7 +43,7 @@ export default function Index() {
       {QuizAll.length > 0 && (
         <>
           <p className="mt-4 font-bold text-xl">All Quiz</p>
-          <div className="flex flex-wrap px-10">
+          <div className="flex flex-wrap ">
             {QuizAll.map((item, index) => (
               <CardQuizzes key={index} data={item} url={`/student/quizzes/${item.slug}`} />
             ))}

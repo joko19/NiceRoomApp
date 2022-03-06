@@ -38,6 +38,7 @@ export default function AdminNavbar() {
   const [listInstitute, setListInstitute] = useState([])
   const [instituteSelect, setInstituteSelect] = useState({})
   const { register, handleSubmit, setValue } = useForm();
+  const [renderistInstitute, setRenderListInstitute] = useState(false)
   const {
     isOpen: isCreateModal,
     onOpen: onOpenCreateModal,
@@ -242,13 +243,12 @@ export default function AdminNavbar() {
       if (roleStore === role.student) {
         await apiStudentPage.listInstitute()
           .then((res) => {
-            console.log(res.data.data)
             setListInstitute(res.data.data)
           })
       }
     }
     getInstitute()
-  }, [])
+  }, [renderistInstitute])
 
   const joinInstitute = async () => {
     console.log(instituteSelect)
@@ -260,7 +260,6 @@ export default function AdminNavbar() {
     if (roleStore === role.student) {
       await apiStudentPage.joinInstitute(data)
         .then((res) => {
-          console.log(res.data)
           onCloseCreateModal()
         })
     }
@@ -282,8 +281,10 @@ export default function AdminNavbar() {
           {roleStore === role.student && (
             <>
               <div className="flex bg-white text-blue-1 px-2 hover:bg-black-7 rounded">
-                <button className="my-auto" onClick={() =>
-                  onOpenCreateModal()}>
+                <button className="my-auto" onClick={() => {
+                  setRenderListInstitute(!renderistInstitute)
+                  onOpenCreateModal()
+                }}>
                   Join Institute
                 </button>
               </div>

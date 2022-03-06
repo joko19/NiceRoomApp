@@ -10,6 +10,7 @@ export default function Index() {
     const getData = async () => {
       await apiStudentPage.practiceAll()
         .then((res) => {
+          console.log(res.data.data)
           setPracticeData(res.data.data)
           setIsLoading(false)
         })
@@ -20,16 +21,16 @@ export default function Index() {
   return (
     <div className="mt-12">
       {practiceData.length > 0 && (
-        <>
+        <div className="">
           <p className="font-bold text-xl">Practice Test </p>
           <div className="flex flex-wrap">
-            {practiceData.map((item) => (
-              <CardPractice key={item} />
+            {practiceData.map((item, index) => (
+              <CardPractice key={index} data={item} />
             ))}
           </div>
-        </>
+        </div>
       )}
-      {!isLoading & practiceData.length === 0 && (
+      {!isLoading && practiceData.length === 0 && (
         <div className="text-center">
           Nothing Practice Test
         </div>

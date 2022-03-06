@@ -129,19 +129,17 @@ export default function Index() {
 
       <div className="flex flex-wrap">
 
-        <div className="md:w-2/3 w-full p-4">
-          {viewGraph && (
-            <>
-              <h1 className="font-bold text-xl">Graph Performance</h1>
-              <Chart
-                options={dataChart?.options}
-                series={dataChart?.series}
-                type="bar"
-                height={360}
-              />
-            </>
-          )}
-        </div>
+        {viewGraph && (
+          <div className="md:w-2/3 w-full p-4">
+            <h1 className="font-bold text-xl">Graph Performance</h1>
+            <Chart
+              options={dataChart?.options}
+              series={dataChart?.series}
+              type="bar"
+              height={360}
+            />
+          </div>
+        )}
 
         {examPrevious?.exam?.name && (<div className="md:w-1/3 w-full bg-white p-4 rounded-lg">
           <h1 className="font-bold text-xl">{examPrevious?.exam?.name}</h1>
@@ -193,8 +191,8 @@ export default function Index() {
       </div>
       {recommended.length > 0 && (
         <div>
-          <TitleButton title="Recomended Exam" url="#" />
-          <Slider ArrowColor="blue" >
+          <TitleButton title="Recomended Exam" url="/student/exams/recommended" />
+          <Slider ArrowColor="blue" count={recommended.length} >
             {recommended.map((item, index) => (
               <CardExam type="exam" key={index} data={item} />
             ))}
@@ -203,8 +201,8 @@ export default function Index() {
       )}
       {upcoming.length > 0 && (
         <div className="mt-4">
-          <TitleButton title="Upcoming Exam" url="#" />
-          <Slider ArrowColor="blue" >
+          <TitleButton title="Upcoming Exam" url="/student/exams/upcoming" />
+          <Slider ArrowColor="blue" count={upcoming.length}>
             {upcoming.map((item, index) => (
               <CardExam type="exam" key={index} data={item} />
             ))}
@@ -213,18 +211,18 @@ export default function Index() {
       )}
       {quiz.length > 0 && (
         <div className="mt-4">
-          <TitleButton title="Live Quiz" isLive={true} url="#" />
-          <Slider ArrowColor="blue" >
-            {list.map((index) => (
-              <CardQuizzes key={index} />
+          <TitleButton title="Live Quiz" isLive={true} url="/student/quizzes/live" />
+          <Slider ArrowColor="blue" count={quiz.length} >
+            {quiz.map((item, index) => (
+              <CardQuizzes key={index} data={item} />
             ))}
           </Slider>
         </div>
       )}
       {news.length > 0 && (
         <div className="mt-4">
-          <TitleButton title="News" url="#" />
-          <Slider ArrowColor="blue" >
+          <TitleButton title="News" url="/student/news" />
+          <Slider ArrowColor="blue" count={news.length} >
             {news.map((item, index) => (
               <CardNews2 key={index} data={item} />
             ))}

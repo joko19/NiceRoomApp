@@ -273,7 +273,7 @@ export default function Index() {
                   <div className="text-container ml-3" dangerouslySetInnerHTML={{ __html: dataExams.sections[activeSectionId].question_items[activeQuestionId]?.q_paragraph }} />
                   <h1 className="font-bold my-2">Question {activeQuestionId + 1}</h1>
                   <div className="text-container" dangerouslySetInnerHTML={{ __html: dataExams.sections[activeSectionId].question_items[activeQuestionId]?.question }} />
-                  {dataExams.sections[activeSectionId].question_items[activeQuestionId].options.map((itemAnswer, indexAnswer) => {
+                  {dataExams.sections[activeSectionId].question_items[activeQuestionId]?.options.map((itemAnswer, indexAnswer) => {
                     const alphabet = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z']
                     if (itemAnswer.new) {
                       setValue(`question_items[${indexEachQuestion}].options[${indexAnswer}].new`, true)
@@ -282,7 +282,7 @@ export default function Index() {
                       }
                     }
                     return (
-                      <div className={`${dataExams.sections[activeSectionId].question_items[activeQuestionId].options[indexAnswer].selected === 1 ? 'bg-blue-6 border-blue-1' : 'bg-white'} my-2  p-3 border rounded-lg`} key={indexAnswer}>
+                      <div className={`${dataExams.sections[activeSectionId].question_items[activeQuestionId]?.options[indexAnswer].selected === 1 ? 'bg-blue-6 border-blue-1' : 'bg-white'} my-2  p-3 border rounded-lg`} key={indexAnswer}>
                         <div className='flex  gap-2'>
                           {dataExams.sections[activeSectionId].question_items[activeQuestionId].answer_type === 'single' ? (
                             <div className="flex cursor-pointer" onClick={() => {

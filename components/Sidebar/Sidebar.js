@@ -167,7 +167,7 @@ function Sidebar() {
     icon: uri + 'ic_attemped.svg',
     active: uri + 'ic_attempted_active.svg',
     name: 'Attempted',
-    path: '/student/attemped'
+    path: '/student/attempted'
   }, {
     icon: uri + 'ic_news.svg',
     active: uri + 'ic_news_active.svg',

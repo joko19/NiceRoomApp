@@ -32,11 +32,11 @@ export default function Index() {
     <div className="mt-12 min-w-full overflow-x-hidden">
       {(live.length > 0 || recommended.length > 0) && (
         <>
-          <input type="text" className="p-2 border text-sm rounded  md:ml-8 mb-4 md:w-1/2 w-full" placeholder="Search" />
+          {/* <input type="text" className="p-2 border text-sm rounded  md:ml-8 mb-4 md:w-1/2 w-full" placeholder="Search" /> */}
           {live.length > 0 && (
-            <div>
-              <TitleButton title="Live Exam" url="#" />
-              <Slider ArrowColor="blue" >
+            <div className="">
+              <TitleButton title="Live Exam" url="/student/exams/live" />
+              <Slider ArrowColor="blue" count={live.length} >
                 {live.map((item, index) => {
                   return (
                     <CardExams key={index} isLive={true} data={item} url={`/student/exams/${item.slug}`} />
@@ -46,9 +46,9 @@ export default function Index() {
             </div>
           )}
           {recommended.length > 0 && (
-            <div>
-              <TitleButton title="Recomended Exam" url="#" />
-              <div className="flex flex-wrap px-10">
+            <div className="mt-4">
+              <TitleButton title="Recomended Exam" url="/student/exams/recommended" />
+              <div className="flex flex-wrap ">
                 {recommended.map((item, index) => (
                   <CardExams key={index} data={item} url={`/student/exams/${item.slug}`} />
                 ))}

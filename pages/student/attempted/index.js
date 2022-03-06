@@ -32,7 +32,7 @@ export default function Index() {
       {/* <input type="text" className="p-2 border text-sm rounded  md:ml-8 mb-4 md:w-1/2 w-full" placeholder="Search" /> */}
       {dataExamsAttempted.length > 0 && (
         <div>
-          <TitleButton title="Attempted Exam" url="#" />
+          <TitleButton title="Attempted Exam" url="/student/attempted/exams" />
           <Slider ArrowColor="blue" >
             {dataExamsAttempted.map((item, index) => (
               <CardAttempted type="exam" key={index} data={item.exam} isLive={true} url={`/student/exams/${item.slug}`} />
@@ -42,7 +42,7 @@ export default function Index() {
       )}
       {dataQuizAttempted.length > 0 && (
         <div className="mt-4">
-          <TitleButton title="Attempted Quizzes" url="#" />
+          <TitleButton title="Attempted Quizzes" url="/student/attempted/quizzes" />
           <Slider ArrowColor="blue" >
             {dataQuizAttempted.map((item, index) => (
               <CardAttempted key={index} data={item.quiz} isLive={true} />
