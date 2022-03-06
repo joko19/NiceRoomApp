@@ -1,8 +1,9 @@
 import React from "react";
 import Button from "../Button/button";
 import Image from 'next/image'
+import Link from "next/link";
 
-export default function CardPractice({isLive= false, data}) {
+export default function CardPractice({isLive= false, data, url="#"}) {
   return (
     <div className="flex-nowrap min-w-max  mr-2 mt-2 md:inline-block  bg-white rounded-lg pt-4 px-4 ">
       <div className="flex flex-row gap-4">
@@ -24,7 +25,11 @@ export default function CardPractice({isLive= false, data}) {
           <span>{data?.total_section} Section</span>
         </div>
       </div>
-      <Button title="Start Practice" className="w-full my-4" />
+      <Link href={url} >
+        <a>
+          <Button title="Start Practice" className="w-full my-4" />
+        </a>
+      </Link>
       {/* <p className="text-black-3 text-sm text-center my-4">200 Student are writing this exam</p> */}
     </div>
   )

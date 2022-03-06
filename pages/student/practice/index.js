@@ -23,10 +23,12 @@ export default function Index() {
       {practiceData.length > 0 && (
         <div className="">
           <p className="font-bold text-xl">Practice Test </p>
-          <div className="flex flex-wrap">
-            {practiceData.map((item, index) => (
-              <CardPractice key={index} data={item} />
-            ))}
+          <div className="flex mx-auto bg-red-100">
+            <div className="flex  flex-wrap">
+              {practiceData.map((item, index) => (
+                <CardPractice key={index} data={item} url={`/student/practice/${item.slug}`} />
+              ))}
+            </div>
           </div>
         </div>
       )}
