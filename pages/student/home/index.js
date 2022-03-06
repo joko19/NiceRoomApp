@@ -41,7 +41,7 @@ export default function Index() {
           console.log(res.data)
           setExamPrevious(res.data.data)
         })
-        
+
     }
     const getDataGraph = async () => {
       await apiStudentPage.examsGraph()
@@ -131,7 +131,7 @@ export default function Index() {
             height={360}
           />
         </div>
-        <div className="md:w-1/3 w-full bg-white p-4 rounded-lg">
+        {examPrevious?.exam?.name && (<div className="md:w-1/3 w-full bg-white p-4 rounded-lg">
           <h1 className="font-bold text-xl">{examPrevious?.exam?.name}</h1>
           <div className="flex justify-between mt-4">
             <div className="text-black-4">Duration</div>
@@ -147,14 +147,14 @@ export default function Index() {
                 <Image src="/asset/icon/table/ic_correct.svg" height={24} width={24} alt="icon correct" />
                 <div>
                   <p className="text-black-4">Correct</p>
-                  <p className="font-bold">{examPrevious.correct}</p>
+                  <p className="font-bold">{examPrevious?.correct}</p>
                 </div>
               </div>
               <div className="flex gap-4">
                 <Image src="/asset/icon/table/ic_incorrect.svg" height={24} width={24} alt="icon correct" />
                 <div>
                   <p className="text-black-4">Incorrecy</p>
-                  <p className="font-bold">{examPrevious.incorrect}</p>
+                  <p className="font-bold">{examPrevious?.incorrect}</p>
                 </div>
               </div>
             </div>
@@ -163,19 +163,21 @@ export default function Index() {
                 <Image src="/asset/icon/table/ic_score.svg" height={24} width={24} alt="icon correct" />
                 <div>
                   <p className="text-black-4">Score</p>
-                  <p className="font-bold">{examPrevious.score}</p>
+                  <p className="font-bold">{examPrevious?.score}</p>
                 </div>
               </div>
               <div className="flex gap-4">
                 <Image src="/asset/icon/table/ic_accuracy.svg" height={24} width={24} alt="icon correct" />
                 <div>
                   <p className="text-black-4">Accuracy</p>
-                  <p className="font-bold">{examPrevious.accuracy}</p>
+                  <p className="font-bold">{examPrevious?.accuracy}</p>
                 </div>
               </div>
             </div>
           </div>
         </div>
+        )}
+
       </div>
       {recommended.length > 0 && (
         <div>

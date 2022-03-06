@@ -6,14 +6,13 @@ import { connect } from "react-redux";
 import Sidebar from "../components/Sidebar/Sidebar";
 import AdminNavbar from "../components/Navbar/AdminNavbar";
 import privateRoute from '../redux/privateRoute'
-import Footer from "../components/footer/footer";
 import { store } from "../redux/store";
 
 function Layout(props) {
   return (
     <>
       <div className="wrapper bg-black-8 min-h-screen">
-        <AdminNavbar user={props.auth.isAuthenticated ? props.auth.user.user.name : ''} avatar={props.auth.isAuthenticated && props.auth.user.user.avatar}/>
+        <AdminNavbar user={props.auth.isAuthenticated ? props.auth.user.user.name : ''} avatar={props.auth.isAuthenticated && props.auth.user.user.avatar} />
         <div className="flex">
           <div className="flex-none grow-0 bg-white h-full">
             <Sidebar />

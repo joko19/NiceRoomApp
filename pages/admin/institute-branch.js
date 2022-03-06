@@ -10,7 +10,6 @@ import {
   ModalCloseButton,
   useDisclosure,
 } from '@chakra-ui/react'
-import { useForm } from "react-hook-form";
 import Pagination from "../../components/Pagination/pagination";
 import apiBranch from "../../action/branch";
 import Layout from "../../Layout/Layout";
@@ -45,7 +44,6 @@ export default function InstituteBranch(props) {
   }, [search, status, limit, page, render])
 
   const onAction = async () => {
-    console.log(selectedId + statusAction)
     await apiBranch.updateStatus(selectedId, { status: statusAction })
       .then(() => setRender(!render))
   }

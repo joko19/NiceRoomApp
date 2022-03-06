@@ -36,6 +36,7 @@ export default function Student() {
   const [nameDeleted, setNameDeleted] = useState()
   const [passwd, setpasswd] = useState(true)
   const [listBranch, setListBranch] = useState([])
+  const [statusAction, setStatusAction] = useState()
   const [listBatch, setListBatch] = useState([])
   const {
     isOpen: isCreateModal,
@@ -47,6 +48,11 @@ export default function Student() {
     onOpen: onOpenSuccessModal,
     onClose: onCloseSuccessModal
   } = useDisclosure()
+  const {
+    isOpen: isUpdateStatusModal,
+    onOpen: onOpenUpdateStatusModal,
+    onClose: onCloseUpdateStatusModal
+  } = useDisclosure()
   const [selectedData, setSelectedData] = useState(null)
   const [dataInstitute, setDataInstitute] = useState([])
   const [list, setList] = useState([])
@@ -55,6 +61,7 @@ export default function Student() {
   const { register, handleSubmit, setValue, getValues, reset } = useForm();
   const [avatar, setAvatar] = useState('/asset/img/blank_profile.png')
   const [file, setFile] = useState()
+  const [selectedId, setSelectedId] = useState()
   const [render, setRender] = useState(false)
   useEffect(() => {
     getBranch()
@@ -167,6 +174,12 @@ export default function Student() {
     setFile(e.target.files[0])
   }
 
+  const onAction = async () => {
+    console.log(selectedId + statusAction)
+    await apiStudent.updateStatus(selectedId, { status: statusAction })
+      .then(() => setRender(!render))
+  }
+
   return (
     <>
       <div className="mt-24 md:mt-12">
@@ -254,27 +267,48 @@ export default function Student() {
                             </div>
                           </td>
                           <td className="px-6 h-12 whitespace-nowrap flex text-right gap-2 text-sm font-medium">
-                            <Link href={`/staff/student/${item.user.id}`}>
-                              <a className="text-indigo-600 hover:text-indigo-900 my-auto">
-                                <Image src="/asset/icon/table/fi_eye.svg" width={16} height={16} alt="icon detail" />
-                              </a>
-                            </Link>
-                            <button className="text-indigo-600 hover:text-indigo-900" onClick={() => {
-                              getDetail(item.user.id)
-                              setSelectedData(item.user.id)
-                              setUpdate(true)
-                              onOpenCreateModal()
-                              setErrors(null)
-                            }}>
-                              <Image src="/asset/icon/table/fi_edit.svg" width={16} height={16} alt="icon edit" />
-                            </button>
-                            <button className="text-indigo-600 hover:text-indigo-900">
-                              <Image src="/asset/icon/table/fi_trash-2.svg" width={16} height={16} alt="icon deleted" onClick={() => {
-                                setNameDeleted(item.user.name)
-                                setSelectedData(item.user.id),
-                                  onOpen()
-                              }} />
-                            </button>
+                            {item.status === 'pending' ? (
+                              <>
+                                <button href="#" className="text-indigo-600 hover:text-indigo-900">
+                                  <Image src="/asset/icon/table/ic_decline.svg" width={32} height={32} alt="icon rejected" onClick={() => {
+                                    setSelectedId(item.id)
+                                    setStatusAction("reject")
+                                    onOpenUpdateStatusModal()
+                                  }} />
+                                </button>
+                                <button href="#" className="text-indigo-600 hover:text-indigo-900">
+                                  <Image src="/asset/icon/table/ic_acc.svg" width={32} height={32} alt="icon approve" onClick={() => {
+                                    setSelectedId(item.id)
+                                    setStatusAction("approve")
+                                    onOpenUpdateStatusModal()
+                                  }} />
+                                </button>
+                              </>
+                            ) : (
+                              <><Link href={`/staff/student/${item.user.id}`}>
+                                <a className="text-indigo-600 hover:text-indigo-900 my-auto">
+                                  <Image src="/asset/icon/table/fi_eye.svg" width={16} height={16} alt="icon detail" />
+                                </a>
+                              </Link>
+                                <button className="text-indigo-600 hover:text-indigo-900" onClick={() => {
+                                  getDetail(item.user.id)
+                                  setSelectedData(item.user.id)
+                                  setUpdate(true)
+                                  onOpenCreateModal()
+                                  setErrors(null)
+                                }}>
+                                  <Image src="/asset/icon/table/fi_edit.svg" width={16} height={16} alt="icon edit" />
+                                </button>
+                                <button className="text-indigo-600 hover:text-indigo-900">
+                                  <Image src="/asset/icon/table/fi_trash-2.svg" width={16} height={16} alt="icon deleted" onClick={() => {
+                                    setNameDeleted(item.user.name)
+                                    setSelectedData(item.user.id),
+                                      onOpen()
+                                  }} />
+                                </button>
+                              </>
+                            )}
+
                           </td>
                         </tr>
                       ))}
@@ -288,6 +322,23 @@ export default function Student() {
         </Card>
       </div>
 
+      <Modal isOpen={isUpdateStatusModal} onClose={onCloseUpdateStatusModal} isCentered>
+        <ModalOverlay />
+        <ModalContent>
+          <ModalHeader>Confirmation</ModalHeader>
+          <ModalCloseButton />
+          <ModalBody>
+            Are you sure to {statusAction} ?
+            <div className="flex flex-row-reverse gap-4 mt-4">
+              <button type="submit" className="bg-blue-1 p-2 rounded text-white" onClick={() => {
+                onAction()
+                onCloseUpdateStatusModal()
+              }}>Okey</button>
+              <button type="button" className="text-black-4 p-2 rounded" onClick={onClose}>Cancel</button>
+            </div>
+          </ModalBody>
+        </ModalContent>
+      </Modal>
 
       <Modal isOpen={isCreateModal} onClose={onCloseCreateModal} size='xl'
         motionPreset='slideInBottom'>

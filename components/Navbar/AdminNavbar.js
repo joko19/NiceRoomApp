@@ -239,11 +239,13 @@ export default function AdminNavbar() {
 
   useEffect(() => {
     const getInstitute = async () => {
-      await apiStudentPage.listInstitute()
-        .then((res) => {
-          console.log(res.data.data)
-          setListInstitute(res.data.data)
-        })
+      if (roleStore === role.student) {
+        await apiStudentPage.listInstitute()
+          .then((res) => {
+            console.log(res.data.data)
+            setListInstitute(res.data.data)
+          })
+      }
     }
     getInstitute()
   }, [])
@@ -252,13 +254,16 @@ export default function AdminNavbar() {
     console.log(instituteSelect)
     const data = {
       institute_id: instituteSelect.institute_id,
-      branch_id: 4
+      branch_id: instituteSelect.id
     }
-    await apiStudentPage.joinInstitute(data)
-      .then((res) => {
-        console.log(res.data.data)
-        onCloseCreateModal()
-      })
+    console.log(roleStore)
+    if (roleStore === role.student) {
+      await apiStudentPage.joinInstitute(data)
+        .then((res) => {
+          console.log(res.data)
+          onCloseCreateModal()
+        })
+    }
   }
 
   return (
@@ -415,7 +420,7 @@ export default function AdminNavbar() {
             {/* <input type="text" className="form border mb-4 w-1/2 p-2 text-sm rounded" placeholder="Input Topic Name" {...register("name", { required: true })} /> */}
             <div className="flex flex-wrap =">
               {listInstitute.map((item, index) => (
-                <div key={index} className={`flex flex-wrap gap-4my-2 w-1/2 p-2 text-sm`} onClick={() => setInstituteSelect(item)}>
+                <div key={index} className={`flex flex-wrap gap-4my-2 w-1/2 p-2 text-sm cursor-pointer`} onClick={() => setInstituteSelect(item)}>
                   <div className={`${item === instituteSelect ? 'bg-blue-6' : 'bg-white'}  flex  border rounded  w-full p-2 gap-2`}>
                     <img className="w-8 h-8 my-auto" src="/asset/icon/table/ic_school_orange.svg" />
                     <div>
