@@ -6,9 +6,9 @@ import apiStudentPage from "../../../action/student_page"
 import { useState, useEffect } from "react";
 
 export default function Index() {
-  const list = [1, 2, 3, 4, 5, 6, 7, 8, 9]
   const [liveQuiz, setLiveQuiz] = useState([])
   const [QuizAll, setQuizAll] = useState([])
+  const [isLoading, setIsLoading] = useState(true)
 
   useEffect(async () => {
     const getLive = async () => {
@@ -21,6 +21,7 @@ export default function Index() {
       await apiStudentPage.QuizAll(8, '')
         .then((res) => {
           setQuizAll(res.data.data)
+          setIsLoading(false)
         })
     }
     getLive()
@@ -48,6 +49,9 @@ export default function Index() {
             ))}
           </div>
         </>
+      )}
+      {!isLoading && liveQuiz.length === 0 && QuizAll.length === 0 && (
+        <div className="text-center">Nothing Quizzes</div>
       )}
     </div>
   )

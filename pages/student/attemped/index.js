@@ -6,23 +6,22 @@ import apiStudentPage from "../../../action/student_page"
 import { useState, useEffect } from "react";
 
 export default function Index() {
-  const list = [1, 2, 3, 4, 5, 6, 7, 8, 9]
   const [dataExamsAttempted, setDataExamsAttempted] = useState([])
   const [dataQuizAttempted, setDataQuizAttempted] = useState([])
+  const [isLoading, setIsLoading] = useState(true)
 
   useEffect(async () => {
     const getDataExams = async () => {
       await apiStudentPage.examsAttemptedTake(8)
         .then((res) => {
-          console.log(res.data.data)
           setDataExamsAttempted(res.data.data)
         })
     }
     const getQuiz = async () => {
       await apiStudentPage.QuizAttemptedAll(8)
         .then((res) => {
-          console.log(res.data.data)
           setDataQuizAttempted(res.data.data)
+          setIsLoading(false)
         })
     }
     getDataExams()
@@ -50,6 +49,9 @@ export default function Index() {
             ))}
           </Slider>
         </div>
+      )}
+      {!isLoading && dataExamsAttempted.length === 0 && dataQuizAttempted.length === 0 && (
+        <div className="text-center">You not yet take test</div>
       )}
     </div>
   )

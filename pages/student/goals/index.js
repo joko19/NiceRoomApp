@@ -13,6 +13,7 @@ export default function Index() {
   const [liveExam, setLiveExam] = useState([])
   const [quiz, setQuiz] = useState([])
   const [news, setNews] = useState([])
+  const [isLoading, setIsLoading] = useState(true)
 
   useEffect(async () => {
     const getPreferred = async () => {
@@ -39,13 +40,13 @@ export default function Index() {
       await apiStudentPage.examsLiveTake(8)
         .then((res) => {
           setNews(res.data.data)
-          // setIsLoading(false)
+          setIsLoading(false)
         })
     }
     getPreferred()
     getLiveExam()
     getQuiz()
-    getNews
+    getNews()
   }, [])
   return (
     <div className="mt-12 min-w-full overflow-x-hidden">
@@ -89,6 +90,9 @@ export default function Index() {
             ))}
           </Slider>
         </div>
+      )}
+      {!isLoading && (dataPreferred.length === 0 && liveExam.length === 0 && quiz.length === 0 && news.length === 0) && (
+        <div className="text-center">Goals is Empty</div>
       )}
     </div>
   )
