@@ -17,8 +17,6 @@ import apiPractice from "../../../action/practice";
 import apiExam from "../../../action/exam";
 import apiTopic from "../../../action/topics";
 import Multiselect from 'multiselect-react-dropdown';
-import apiBatch from "../../../action/batch";
-import apiBranch from "../../../action/branch";
 import DatePicker2 from "../../../components/DateTime/Date";
 import { Time } from "../../../components/DateTime/Time";
 import Button, { BackButton } from "../../../components/Button/button";
@@ -26,78 +24,24 @@ import { Stepper } from "../../../components/Section/Stepper";
 
 export default function Create(props) {
   const [errors, setErrors] = useState()
-  const { register, handleSubmit, setValue, getValues, reset, unregister } = useForm();
+  const { register, handleSubmit, setValue, getValues} = useForm();
   const step = ['Practice Details', 'Instruction', 'Sections']
   const [currentStep, setCurrentStep] = useState(1)
-  const [type, setType] = useState('standard')
   const [consentments, setConsentments] = useState([''])
   const [status, setStatus] = useState()
-  const [listBranch, setListBranch] = useState([])
-  const [listBatch, setListBatch] = useState([])
   const [listTopic, setListTopic] = useState([])
   const [topicItem, setTopicItem] = useState([])
-  const [batchItem, setBatchItem] = useState([])
-  const [branchItem, setBranchItem] = useState([])
   const [examType, setExamType] = useState([])
   const [sections, setsections] = useState([
     {
       id: 0,
     },
   ])
-
-  const getBranch = async () => {
-    await apiBranch.all()
-      .then((res) => {
-        setListBranch(res.data.data)
-      })
-  }
-
-  const getBatch = async () => {
-    await apiBatch.all()
-      .then((res) => {
-        setListBatch(res.data.data)
-      })
-  }
   const getExamType = async () => {
     await apiExam.allType()
       .then((res) => {
         setExamType(res.data.data)
       })
-  }
-
-  const onSelectBranch = (list, item) => {
-    setBranchItem(list)
-    let arr = []
-    for (let i = 0; i < list.length; i++) {
-      arr.push(list[i].id)
-    }
-    setValue("branches[]", arr)
-  }
-  const onRemoveBranch = (list, item) => {
-    setBranchItem(list)
-    let arr = []
-    for (let i = 0; i < list.length; i++) {
-      arr.push(list[i].id)
-    }
-    setValue("branches[]", arr)
-  }
-
-  const onSelectBatch = (list, item) => {
-    setBatchItem(list)
-    let arr = []
-    for (let i = 0; i < list.length; i++) {
-      arr.push(list[i].id)
-    }
-    setValue("batches[]", arr)
-  }
-
-  const onRemoveBatch = (list, item) => {
-    setBatchItem(list)
-    let arr = []
-    for (let i = 0; i < list.length; i++) {
-      arr.push(list[i].id)
-    }
-    setValue("batches[]", arr)
   }
   const onSelectTopic = (list, item) => {
     setTopicItem(list)
@@ -118,8 +62,10 @@ export default function Create(props) {
   }
 
   const getTopics = async () => {
-    await apiTopic.all('', '', '')
-      .then((res) => setListTopic(res.data.data.data))
+    await apiTopic.allTopic()
+      .then((res) => {
+        setListTopic(res.data.data)
+      })
   }
 
   const submitExams = async (data) => {
@@ -177,8 +123,6 @@ export default function Create(props) {
 
   useEffect(() => {
     getTopics()
-    getBatch()
-    getBranch()
     getExamType()
   }, []);
 
@@ -194,7 +138,7 @@ export default function Create(props) {
         title="Create New Practice " >
         <Stepper step={step} currentStep={currentStep} />
         <form onSubmit={handleSubmit(submitExams)} className="text-sm">
-        {currentStep === 1 && (
+          {currentStep === 1 && (
             <div className="mb-8">
               <div className="flex gap-4 ">
                 <div className="w-full">
@@ -221,7 +165,8 @@ export default function Create(props) {
                       }, "searchBox": {
                         "border": "none",
                       }, "chips": {
-                         "padding": "2px" },
+                        "padding": "2px"
+                      },
                     }}
                     placeholder="Select Topic"
                     // singleSelect

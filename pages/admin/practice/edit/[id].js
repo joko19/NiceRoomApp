@@ -1,7 +1,5 @@
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState} from "react";
 import Link from "next/link";
-import Image from "next/image";
-import { FaAngleLeft } from "react-icons/fa";
 import Card from "../../../../components/Cards/Card";
 import Layout from "../../../../Layout/Layout";
 import { useForm } from "react-hook-form";
@@ -16,41 +14,30 @@ import {
   useToast
 } from '@chakra-ui/react'
 import Quill from "../../../../components/Editor/Quill";
-import { Select } from '@chakra-ui/react'
 import apiPractice from "../../../../action/practice";
 import apiExam from "../../../../action/exam";
 import apiTopic from "../../../../action/topics";
 import Multiselect from 'multiselect-react-dropdown';
-import apiBatch from "../../../../action/batch";
-import apiBranch from "../../../../action/branch";
 import DatePicker2 from "../../../../components/DateTime/Date";
 import { useRouter } from "next/router";
-// import { Date } from "../../../components/DateTime/Date";
 import { Time } from "../../../../components/DateTime/Time";
 import Button, { BackButton } from "../../../../components/Button/button";
 import { Stepper } from "../../../../components/Section/Stepper";
 
-export default function Create(props) {
+export default function Create() {
   const Router = useRouter()
   const { id } = Router.query
   const toast = useToast()
   const [errors, setErrors] = useState()
-  const { register, handleSubmit, setValue, getValues, reset, unregister } = useForm();
+  const { register, handleSubmit, setValue, getValues} = useForm();
   const step = ['Practice Details', 'Instruction', 'Sections']
   const [currentStep, setCurrentStep] = useState(1)
-  const [topics, setTopics] = useState([])
   const [type, setType] = useState()
-  const [instruction, setInstruction] = useState('')
   const [startTime, setStartTime] = useState()
-  const [endTime, setEndTime] = useState()
   const [consentments, setConsentments] = useState([0])
   const [status, setStatus] = useState()
-  const [listBranch, setListBranch] = useState([])
-  const [listBatch, setListBatch] = useState([])
   const [listTopic, setListTopic] = useState([])
   const [topicItem, setTopicItem] = useState([])
-  const [batchItem, setBatchItem] = useState([])
-  const [branchItem, setBranchItem] = useState([])
   const [examType, setExamType] = useState([])
   const [sections, setsections] = useState([
     {
@@ -136,8 +123,8 @@ export default function Create(props) {
   }
 
   const getTopics = async () => {
-    await apiTopic.all('', '', '')
-      .then((res) => setListTopic(res.data.data.data))
+    await apiTopic.allTopic()
+      .then((res) => setListTopic(res.data.data))
   }
 
   const submitExams = async (data) => {
@@ -236,6 +223,7 @@ export default function Create(props) {
   useEffect(() => {
     getDetail(id)
     getExamType()
+    getTopics()
   }, [currentStep]);
 
   const setDataForm = (identifier, data) => {
@@ -309,7 +297,6 @@ export default function Create(props) {
                   <Time data={getValues("start_time")} setDate={(data) => setValue("start_time", data)} />
                 </div>
               </div>
-
 
               <div className="flex gap-4" >
                 <div className="w-full">

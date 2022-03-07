@@ -18,8 +18,6 @@ import { Select } from '@chakra-ui/react'
 import apiExam from "../../../action/exam";
 import apiTopic from "../../../action/topics";
 import Multiselect from 'multiselect-react-dropdown';
-import apiBatch from "../../../action/batch";
-import apiBranch from "../../../action/branch";
 import DatePicker2 from "../../../components/DateTime/Date";
 import { Time } from "../../../components/DateTime/Time";
 import Button, { BackButton } from "../../../components/Button/button";
@@ -27,38 +25,21 @@ import { Stepper } from "../../../components/Section/Stepper";
 
 export default function Create(props) {
   const [errors, setErrors] = useState()
-  const { register, handleSubmit, setValue, getValues, reset, unregister } = useForm();
+  const { register, handleSubmit, setValue, getValues} = useForm();
   const step = ['Exams Details', 'Instruction', 'Sections']
   const [currentStep, setCurrentStep] = useState(1)
   const [type, setType] = useState('standard')
   const [consentments, setConsentments] = useState([''])
   const [status, setStatus] = useState()
-  const [listBranch, setListBranch] = useState([])
-  const [listBatch, setListBatch] = useState([])
   const [listTopic, setListTopic] = useState([])
   const [topicItem, setTopicItem] = useState([])
-  const [batchItem, setBatchItem] = useState([])
-  const [branchItem, setBranchItem] = useState([])
   const [examType, setExamType] = useState([])
   const [sections, setsections] = useState([
     {
       id: 0,
     },
   ])
-
-  const getBranch = async () => {
-    await apiBranch.all()
-      .then((res) => {
-        setListBranch(res.data.data)
-      })
-  }
-
-  const getBatch = async () => {
-    await apiBatch.all()
-      .then((res) => {
-        setListBatch(res.data.data)
-      })
-  }
+  
   const getExamType = async () => {
     await apiExam.allType()
       .then((res) => {
@@ -66,40 +47,6 @@ export default function Create(props) {
       })
   }
 
-  const onSelectBranch = (list, item) => {
-    setBranchItem(list)
-    let arr = []
-    for (let i = 0; i < list.length; i++) {
-      arr.push(list[i].id)
-    }
-    setValue("branches[]", arr)
-  }
-  const onRemoveBranch = (list, item) => {
-    setBranchItem(list)
-    let arr = []
-    for (let i = 0; i < list.length; i++) {
-      arr.push(list[i].id)
-    }
-    setValue("branches[]", arr)
-  }
-
-  const onSelectBatch = (list, item) => {
-    setBatchItem(list)
-    let arr = []
-    for (let i = 0; i < list.length; i++) {
-      arr.push(list[i].id)
-    }
-    setValue("batches[]", arr)
-  }
-
-  const onRemoveBatch = (list, item) => {
-    setBatchItem(list)
-    let arr = []
-    for (let i = 0; i < list.length; i++) {
-      arr.push(list[i].id)
-    }
-    setValue("batches[]", arr)
-  }
   const onSelectTopic = (list, item) => {
     setTopicItem(list)
     let arr = []
@@ -119,8 +66,8 @@ export default function Create(props) {
   }
 
   const getTopics = async () => {
-    await apiTopic.all('', '', '')
-      .then((res) => setListTopic(res.data.data.data))
+    await apiTopic.allTopic()
+      .then((res) => setListTopic(res.data.data))
   }
 
   const submitExams = async (data) => {
@@ -178,8 +125,6 @@ export default function Create(props) {
 
   useEffect(() => {
     getTopics()
-    getBatch()
-    getBranch()
     getExamType()
   }, []);
 
@@ -324,64 +269,6 @@ export default function Create(props) {
                   </div>
                 </>
               )}
-
-              <div className="flex gap-4 mt-4 flex-col md:flex-row" >
-                <div className="w-full ">
-                  <p>Batch {errors && (
-                    <span className="text-red-1 text-sm">{errors.batches}</span>
-                  )}</p>
-                  <Multiselect
-                    className="z-100 "
-                    options={listBatch}
-                    style={{
-                      "multiselectContainer": {
-                        "padding": "0px",
-                        "border-width": "1px",
-                        "border-radius": "5px"
-                      }, "searchBox": {
-                        "border": "none",
-                      },  "chips": {
-                        "padding": "2px" },
-                    }}
-                    placeholder="Select Batch"
-                    // singleSelect
-                    // options={listTag} // Options to display in the dropdown
-                    selectedValues={batchItem} // Preselected value to persist in dropdown
-                    onSelect={onSelectBatch} // Function will trigger on select event
-                    onRemove={onRemoveBatch} // Function will trigger on remove event
-                    displayValue="name" // Property name to display in the dropdown options
-                  />
-                </div>
-                <div className="w-full ">
-                  <p>Branch {errors && (
-                    <span className="text-red-1 text-sm">{errors.branches}</span>
-                  )}</p>
-                  <div>
-                    <Multiselect
-                      className="z-100 "
-                      options={listBranch}
-                      style={{
-                        "multiselectContainer": {
-                          "padding": "0px",
-                          "border-width": "1px",
-                          "border-radius": "5px"
-                        }, "searchBox": {
-                          "border": "none",
-                        },  "chips": {
-                          "padding": "2px" },
-                      }}
-                      placeholder="Select Branch"
-                      // singleSelect
-                      // options={listTag} // Options to display in the dropdown
-                      selectedValues={branchItem} // Preselected value to persist in dropdown
-                      onSelect={onSelectBranch} // Function will trigger on select event
-                      onRemove={onRemoveBranch} // Function will trigger on remove event
-                      displayValue="name" // Property name to display in the dropdown options
-                    />
-
-                  </div>
-                </div>
-              </div>
             </div>
           )}
 

@@ -21,7 +21,6 @@ import apiTopic from "../../../../action/topics";
 import Multiselect from 'multiselect-react-dropdown';
 import DatePicker2 from "../../../../components/DateTime/Date";
 import { useRouter } from "next/router";
-// import { Date } from "../../../components/DateTime/Date";
 import { Time } from "../../../../components/DateTime/Time";
 import Button, { BackButton } from "../../../../components/Button/button";
 import { Stepper } from "../../../../components/Section/Stepper";
@@ -34,9 +33,7 @@ export default function Create(props) {
   const { register, handleSubmit, setValue, getValues} = useForm();
   const step = ['Exams Details', 'Instruction', 'Sections']
   const [currentStep, setCurrentStep] = useState(1)
-  const [topics, setTopics] = useState([])
   const [type, setType] = useState()
-  const [instruction, setInstruction] = useState('')
   const [startTime, setStartTime] = useState()
   const [endTime, setEndTime] = useState()
   const [consentments, setConsentments] = useState([0])
@@ -140,8 +137,8 @@ export default function Create(props) {
   }
 
   const getTopics = async () => {
-    await apiTopic.all('', '', '')
-      .then((res) => setListTopic(res.data.data.data))
+    await apiTopic.allTopic()
+      .then((res) => setListTopic(res.data.data))
   }
 
   const submitExams = async (data) => {

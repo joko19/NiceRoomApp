@@ -17,7 +17,7 @@ function Quizzes() {
       await apiLanding.quizLive(4)
         .then((res) => {
           console.log(res.data.data)
-          setDataUpcoming(res.data.data)
+          setDataQuiz(res.data.data)
           if (res.data.data.length === 0) {
             setIsEmpty(true)
           }
@@ -31,7 +31,7 @@ function Quizzes() {
   return (
     <>
       <Header />
-      <div className=" bg-black-8 pt-20 px-4" >
+      <div className=" bg-black-8 pt-20 px-4 min-h-screen" >
         <div className="py-4 md:mx-32">
           <div className='flex gap-1'>
             <Link href="/landing">
@@ -41,7 +41,7 @@ function Quizzes() {
           </div>
           {dataQuiz.length > 0 && (
             <>
-              <TitleButton title="Live Quiz" url="/quizzes/1" isLive={true} />
+              <TitleButton title="Live Quiz" url="/quizzes/1" isLive={true} count={dataQuiz.length} />
               <Slider ArrowColor="blue" >
                 {dataQuiz.map((item) => (
                   <CardQuizzes key={item} isLive={true} />
@@ -72,7 +72,7 @@ function Quizzes() {
       {isEmpty && (
         <div>Nothing Quiz</div>
       )}
-      {/* <Footer /> */}
+      <Footer />
     </>
   )
 }

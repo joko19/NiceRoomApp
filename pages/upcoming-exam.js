@@ -7,7 +7,6 @@ import { useState, useEffect } from 'react'
 import apiLanding from "../action/landingPage";
 
 function UpcomingExam() {
-  const list = [1, 2, 3, 4, 5, 6, 7, 8, 9]
   const [dataUpcoming, setDataUpcoming] = useState([])
   const [isEmpty, setIsEmpty] = useState(false)
   useEffect(() => {

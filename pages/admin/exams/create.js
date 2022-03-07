@@ -25,7 +25,7 @@ import { Stepper } from "../../../components/Section/Stepper";
 
 export default function Create(props) {
   const [errors, setErrors] = useState()
-  const { register, handleSubmit, setValue, getValues, reset, unregister } = useForm();
+  const { register, handleSubmit, setValue, getValues} = useForm();
   const step = ['Exams Details', 'Instruction', 'Sections']
   const [currentStep, setCurrentStep] = useState(1)
   const [type, setType] = useState('standard')
@@ -66,8 +66,8 @@ export default function Create(props) {
   }
 
   const getTopics = async () => {
-    await apiTopic.all('', '', '')
-      .then((res) => setListTopic(res.data.data.data))
+    await apiTopic.allTopic()
+      .then((res) => setListTopic(res.data.data))
   }
 
   const submitExams = async (data) => {
