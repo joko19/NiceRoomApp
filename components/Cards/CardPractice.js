@@ -12,7 +12,7 @@ export default function CardPractice({isLive= false, data, url="#"}) {
           <div className='flex justify-between'>
             <p className="font-bold self-center">{data?.name}</p> 
           </div>
-          <p className="text-black-3 text-sm">By <span className='text-blue-1'>Student University</span></p>
+          <p className="text-black-3 text-sm">By <span className='text-blue-1'>{data?.institute === null ? 'Examz' : data?.institute?.name}</span></p>
         </div>
       </div>
       <div className="flex flex-col mt-4 text-sm">

@@ -196,14 +196,7 @@ export default function Index() {
         <MainSlider title="Upcoming Exams" data={upcoming} urlSeeAll="/student/exams/upcoming" type="exams" />
       )}
       {quiz.length > 0 && (
-        <div className="mt-4">
-          <TitleButton title="Live Quiz" isLive={true} url="/student/quizzes/live" />
-          <Slider ArrowColor="blue" count={quiz.length} >
-            {quiz.map((item, index) => (
-              <CardQuizzes key={index} data={item} />
-            ))}
-          </Slider>
-        </div>
+        <MainSlider title="Live Quizzes" isLive={true} data={quiz} urlSeeAll="/student/quizzes/live" type="quiz" />
       )}
       {news.length > 0 && (
         <div className="mt-4">

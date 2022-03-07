@@ -58,14 +58,7 @@ export default function Index() {
         <MainSlider title="Live Exams" isLive={true} data={liveExam} urlSeeAll="/student/exams/live" type="exams" />
       )}
       {quiz.length > 0 && (
-        <div className="mt-4">
-          <TitleButton title="Quizzes" url="/student/quizzes" />
-          <Slider ArrowColor="blue" count={list.length} >
-            {quiz.map((item, index) => (
-              <CardQuizzes key={index} data={item} url={`/student/quizzes/${item.slug}`} />
-            ))}
-          </Slider>
-        </div>
+        <MainSlider title="Quizzes" data={quiz} urlSeeAll="/student/quizzes" type="quiz" />
       )}
       {!isLoading && (dataPreferred.length === 0 && liveExam.length === 0 && quiz.length === 0 && news.length === 0) && (
         <div className="text-center">Goals is Empty</div>

@@ -4,6 +4,7 @@ import Slider from '../../../components/Slider/Slider'
 import CardQuizzes from '../../../components/Cards/CardQuizzes'
 import apiStudentPage from "../../../action/student_page"
 import { useState, useEffect } from "react";
+import MainSlider from "../../../components/Slider/MainSlider"
 
 export default function Index() {
   const [liveQuiz, setLiveQuiz] = useState([])
@@ -31,14 +32,7 @@ export default function Index() {
     <div className="mt-12 min-w-full overflow-x-hidden">
       {/* <input type="text" className="p-2 border text-sm rounded  md:ml-8 mb-4 md:w-1/2 w-full" placeholder="Search" /> */}
       {liveQuiz.length > 0 && (
-        <div>
-          <TitleButton title="Live Quiz" url="/student/quizzes/live" />
-          <Slider ArrowColor="blue" >
-            {liveQuiz.map((item, index) => (
-              <CardQuizzes type="exam" key={index} data={item} isLive={true} url={`/student/quizzes/${item.slug}`} />
-            ))}
-          </Slider>
-        </div>
+        <MainSlider title="Live Quizzes" isLive={true} data={liveQuiz} urlSeeAll="/student/quizzes/live" type="quiz" />
       )}
       {QuizAll.length > 0 && (
         <>
