@@ -40,7 +40,12 @@ const listInstitute = () => instance.auth.get('/students/institutes')
 const listProposalInstitute = (take) => instance.auth.get('/students/institutes/proposal?take=' + take)
 const joinInstitute = (data) => instance.auth.post('/students/institutes/join', data)
 
+const preferred = (take) => instance.auth.get('/students/preferreds?take' + take)
+const preferredExamStore = (data) =>instance.auth.post('/students/preferreds', data)
+
 const apiStudentPage = {
+  preferred, 
+  preferredExamStore,
   instituteExams,
   instituteExamsPast,
   listInstitute,

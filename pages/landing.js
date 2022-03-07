@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect } from 'react'
+import { useState, useEffect } from 'react'
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import Footer from '../components/footer/footer'
@@ -15,6 +15,8 @@ import Image from 'next/image';
 import Slider from '../components/Slider/Slider';
 import CardExams from '../components/Cards/CardExams';
 import Link from 'next/link';
+import apiLanding from '../action/landingPage'
+import CardNews from '../components/Cards/CardNews';
 
 function Landing(props) {
   const Router = useRouter()
@@ -28,15 +30,39 @@ function Landing(props) {
   const [errors, setErrors] = useState(null)
   const { register, handleSubmit, resetField, reset, getValues } = useForm();
 
-  const { pathname } = useRouter();
-
+  const [dataNews, setDataNews] = useState([])
+  const [dataUpcoming, setDataUpcoming] = useState([])
+  useEffect(() => {
+    const getData = async () => {
+      await apiLanding.indexNews('')
+        .then((res) => {
+          console.log(res.data.data)
+          setDataNews(res.data.data)
+        })
+        .catch((err) => {
+          console.log(err)
+        })
+    }
+    const getUpcoming = async () => {
+      await apiLanding.ExamsUpcoming('', 8)
+        .then((res) => {
+          console.log(res.data.data)
+          setDataUpcoming(res.data.data)
+        })
+        .catch((err) => {
+          console.log(err)
+        })
+    }
+    getData()
+    getUpcoming()
+  }, [])
   useEffect(() => {
     // some browsers (like safari) may require a timeout to delay calling this
     // function after a page has loaded; otherwise, it may not update the position
     window.scrollTo(0, 0);
   }, [Router]);
 
-  
+
   useEffect(() => {
     const uri = Router.asPath.split('#')
     if (uri[1] === 'register') {
@@ -342,44 +368,33 @@ function Landing(props) {
         </div>
       </section>
 
-      <section className="bg-blue-1 py-4 md:py-20 px-4 md:px-20">
-        <div className='flex justify-between'>
-          <span className="text-white font-bold text-2xl ml-4">Upcoming Exams</span>
-          <Link href="/upcoming-exam">
-            <a className='inline-block hover:text-blue-4 mt-2 text-white'>
-              See All
-            </a>
-          </Link>
-        </div>
-        <Slider ArrowColor="white">
-          {list.map((item) => (
-            <CardExams key={item} />
+      {dataUpcoming.length > 4 && (
+        <section className="bg-blue-1 py-4 md:py-20 px-4 md:px-20">
+          <div className='flex justify-between'>
+            <span className="text-white font-bold text-2xl ml-4">Upcoming Exams</span>
+            <Link href="/upcoming-exam">
+              <a className='inline-block hover:text-blue-4 mt-2 text-white'>
+                See All
+              </a>
+            </Link>
+          </div>
+          <Slider ArrowColor="white" count={dataUpcoming.length}>
+            {dataUpcoming.map((item, index) => (
+              <CardExams key={index} data={item} />
+            ))}
+          </Slider>
+        </section>
+      )}
+
+      {dataNews.length > 2 && (
+        <section className="py-20">
+          <h1 className="text-2xl text-center font-bold text-black-1 p-1">Lates news from us</h1>
+          <p className="text-black-4 mx-8 text-center">Read and get inspired by these latest news curated by us</p>
+          {dataNews.map((item) => (
+            <CardNews key={item} dataNews={item} url={`/news/${item.slug}`} />
           ))}
-        </Slider>
-      </section>
-
-      <section className="py-20">
-        <h1 className="text-2xl text-center font-bold text-black-1 p-1">Lates news from us</h1>
-        <p className="text-black-4 mx-8 text-center">Read and get inspired by these latest news curated by us</p>
-
-        <div className="grid md:grid-cols-3 px-4 gap-4 md:px-20 mt-8">
-          <div>
-            <img src="/asset/img/news1.png" alt="news image" />
-            <h1 className="font-bold text-1xl">Learn From Home Can Be Fun And More Colorful Nowadays</h1>
-            <p className="text-yellow-1">Read More</p>
-          </div>
-          <div>
-            <img src="/asset/img/news2.png" alt="news image" />
-            <h1 className="font-bold text-1xl">Learn From Home Can Be Fun And More Colorful Nowadays</h1>
-            <p className="text-yellow-1">Read More</p>
-          </div>
-          <div>
-            <img src="/asset/img/news3.png" alt="news image" />
-            <h1 className="font-bold text-1xl">Learn From Home Can Be Fun And More Colorful Nowadays</h1>
-            <p className="text-yellow-1">Read More</p>
-          </div>
-        </div>
-      </section>
+        </section>
+      )}
 
       <section className="py-20 bg-blue-6 flex-row items-center text-center">
         <h1 className="text-2xl text-center  font-bold text-black-1 p-1">Start your preparation for now</h1>

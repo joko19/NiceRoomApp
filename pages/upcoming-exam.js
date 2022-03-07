@@ -2,11 +2,30 @@ import Link from "next/link";
 import Footer from "../components/footer/footer"
 import Header from '../components/Navbar/header';
 import { FaAngleRight } from 'react-icons/fa'
-import Button from "../components/Button/button";
 import CardExams from "../components/Cards/CardExams";
+import { useState, useEffect } from 'react'
+import apiLanding from "../action/landingPage";
 
 function UpcomingExam() {
   const list = [1, 2, 3, 4, 5, 6, 7, 8, 9]
+  const [dataUpcoming, setDataUpcoming] = useState([])
+  const [isEmpty, setIsEmpty] = useState(false)
+  useEffect(() => {
+    const getUpcoming = async () => {
+      await apiLanding.ExamsUpcoming('', '')
+        .then((res) => {
+          console.log(res.data.data)
+          setDataUpcoming(res.data.data)
+          if (res.data.data.length === 0) {
+            setIsEmpty(true)
+          }
+        })
+        .catch((err) => {
+          console.log(err)
+        })
+    }
+    getUpcoming()
+  }, [])
   return (
     <>
       <Header />
@@ -23,10 +42,13 @@ function UpcomingExam() {
               <h1 className="text-2xl">Upcoming Exams</h1>
             </div>
             <div className=" flex mx-auto flex-wrap gap-4 my-4">
-              {list.map((item) => (
-                <CardExams key={item} />
+              {dataUpcoming.map((item, index) => (
+                <CardExams key={index} data={item} />
               ))}
             </div>
+            {isEmpty && (
+              <div>Nothing Upcoming Exams</div>
+            )}
           </div>
         </div>
       </div >

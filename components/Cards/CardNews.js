@@ -3,14 +3,14 @@ import Image from 'next/image'
 import Link from "next/link";
 import instance from "../../action/instance";
 
-export default function CardNews({cover="/asset/img/coverNews.png", titile, idNews, dataNews}) {
+export default function CardNews({cover="/asset/img/coverNews.png", titile, idNews, dataNews, url='#'}) {
   const date = new Date(dataNews?.updated_at)
   if(dataNews?.image !== null){
     cover = instance.pathImg + dataNews?.image
   }
   return (
     <>
-      <Link href={`/student/news/${dataNews?.id}`}>
+      <Link href={url}>
         <a>
           <div className="text-sm m-2 bg-white md:inline-block w-56 rounded-lg hidden cursor-pointer hover:bg-black-7 border">
             <Image src={cover} height={128} width={240} alt="cover news"/>
@@ -19,7 +19,7 @@ export default function CardNews({cover="/asset/img/coverNews.png", titile, idNe
           </div>
         </a>
       </Link>
-      <Link href={`/student/news/${dataNews?.id}`}>
+      <Link href={url}>
         <a>
           <div className="flex m-2 ccc text-sm min-w-1/3 bg-white rounded-lg border md:hidden p-2">
             <Image src={cover} height={150} width={200} className="object-cover" alt="cover news"/>
