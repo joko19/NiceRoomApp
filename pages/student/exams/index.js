@@ -4,6 +4,7 @@ import Slider from '../../../components/Slider/Slider'
 import CardExams from '../../../components/Cards/CardExams'
 import apiStudentPage from "../../../action/student_page"
 import { useState, useEffect } from "react";
+import MainSlider from '../../../components/Slider/MainSlider'
 
 export default function Index() {
   const [live, setLive] = useState([])
@@ -34,26 +35,11 @@ export default function Index() {
         <>
           {/* <input type="text" className="p-2 border text-sm rounded  md:ml-8 mb-4 md:w-1/2 w-full" placeholder="Search" /> */}
           {live.length > 0 && (
-            <div className="">
-              <TitleButton title="Live Exam" url="/student/exams/live" />
-              <Slider ArrowColor="blue" count={live.length} >
-                {live.map((item, index) => {
-                  return (
-                    <CardExams key={index} isLive={true} data={item} url={`/student/exams/${item.slug}`} />
-                  )
-                })}
-              </Slider>
-            </div>
+            <MainSlider title="Live Exams" isLive={true} data={live} urlSeeAll="/student/exams/live" type="exams" />
           )}
+          <div className="my-4"/>
           {recommended.length > 0 && (
-            <div className="mt-4">
-              <TitleButton title="Recomended Exam" url="/student/exams/recommended" />
-              <div className="flex flex-wrap ">
-                {recommended.map((item, index) => (
-                  <CardExams key={index} data={item} url={`/student/exams/${item.slug}`} />
-                ))}
-              </div>
-            </div>
+            <MainSlider title="Recommended Exams" data={recommended} urlSeeAll="/student/exams/recommended" type="exams" />
           )}
         </>
       )}

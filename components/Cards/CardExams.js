@@ -3,7 +3,7 @@ import Button from "../Button/button";
 import Image from 'next/image'
 import Link from "next/link";
 
-export default function CardExams({ isLive = false, data = false, url = "#" }) {
+export default function CardExams({ isLive = false, data = false, url = false }) {
   console.log(data)
   return (
     <div className="flex-nowrap min-w-max  mr-4 mt-4 bg-white rounded-lg pt-4 px-4">
@@ -30,11 +30,20 @@ export default function CardExams({ isLive = false, data = false, url = "#" }) {
           <span>{data?.started ? data?.started : '-'}</span>
         </div>
       </div>
-      <Link href={url} >
-        <a>
-          <Button title="Start Exam" className="w-full my-4" />
-        </a>
-      </Link>
+      {url ? (
+        <Link href={url} >
+          <a>
+            <Button title="Start Exam" className="w-full my-4" />
+          </a>
+        </Link>
+      ) : (
+        <Link href={url} >
+          <a>
+            <Button title="start belum login" className="w-full my-4" />
+          </a>
+        </Link>
+
+      )}
       {/* <p className="text-black-3 text-sm text-center my-4">200 Student are writing this exam</p> */}
     </div>
   )

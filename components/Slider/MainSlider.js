@@ -29,11 +29,11 @@ export default function MainSlider({ title, isLive, urlSeeAll, type, data, Arrow
   };
   return (
     <>
-      <TitleButton title={title} isLive={true} count={data.length} url={urlSeeAll} />
+      <TitleButton title={title} isLive={isLive} count={data.length} url={urlSeeAll} />
       <Slider ArrowColor="blue" count={data.length} >
         {data.map((item, index) => (
           <>{type === 'exams' && (
-            <CardExams key={index} data={item} />
+            <CardExams key={index} data={item} url={`/student/exams/${item.slug}`} />
           )}
           </>
         ))}

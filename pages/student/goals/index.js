@@ -3,9 +3,9 @@ import Layout from "../../../Layout/Layout"
 import Slider from '../../../components/Slider/Slider'
 import CardExam from '../../../components/Cards/CardExams'
 import CardQuizzes from "../../../components/Cards/CardQuizzes"
-import CardNews from '../../../components/Cards/CardNews'
 import apiStudentPage from "../../../action/student_page"
 import { useState, useEffect } from "react";
+import MainSlider from "../../../components/Slider/MainSlider"
 
 export default function Index() {
   const list = [1, 2, 3, 4, 5, 6, 7, 8, 9]
@@ -52,31 +52,17 @@ export default function Index() {
     <div className="mt-12 min-w-full overflow-x-hidden">
       {/* <input type="text" className="p-2 border text-sm rounded  md:ml-8 mb-4 md:w-1/2 w-full" placeholder="Search" /> */}
       {dataPreferred.length > 0 && (
-        <div>
-          <TitleButton title="Your Preferred Exam" url="#" />
-          <Slider ArrowColor="blue" count={dataPreferred.length} >
-            {dataPreferred.map((item, index) => (
-              <CardExam type="exam" key={index} data={item} url={`/student/exams/${item.slug}`} />
-            ))}
-          </Slider>
-        </div>
+        <MainSlider title="Your Preferred Exams" data={dataPreferred} urlSeeAll="/student/exams/preferred" type="exams" />
       )}
       {liveExam.length > 0 && (
-        <div className="mt-4">
-          <TitleButton title="Live Exam" isLive={true} url="/student/exams/live" />
-          <Slider ArrowColor="blue" count={liveExam.length} >
-            {liveExam.map((item, index) => (
-              <CardExam key={index} data={item} url={`/student/exams/${item.slug}`}/>
-            ))}
-          </Slider>
-        </div>
+        <MainSlider title="Live Exams" isLive={true} data={liveExam} urlSeeAll="/student/exams/live" type="exams" />
       )}
       {quiz.length > 0 && (
         <div className="mt-4">
           <TitleButton title="Quizzes" url="/student/quizzes" />
           <Slider ArrowColor="blue" count={list.length} >
             {quiz.map((item, index) => (
-              <CardQuizzes key={index} data={item}  url={`/student/quizzes/${item.slug}`}/>
+              <CardQuizzes key={index} data={item} url={`/student/quizzes/${item.slug}`} />
             ))}
           </Slider>
         </div>

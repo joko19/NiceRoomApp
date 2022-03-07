@@ -1,7 +1,7 @@
 import { TitleButton } from "../../../components/Slider/TitleButton"
 import Layout from "../../../Layout/Layout"
 import Slider from '../../../components/Slider/Slider'
-import CardExam from '../../../components/Cards/CardExams'
+import MainSlider from "../../../components/Slider/MainSlider"
 import CardQuizzes from "../../../components/Cards/CardQuizzes"
 import { CardNews2 } from '../../../components/Cards/CardNews'
 import dynamic from 'next/dynamic';
@@ -190,24 +190,10 @@ export default function Index() {
 
       </div>
       {recommended.length > 0 && (
-        <div>
-          <TitleButton title="Recomended Exam" url="/student/exams/recommended" />
-          <Slider ArrowColor="blue" count={recommended.length} >
-            {recommended.map((item, index) => (
-              <CardExam type="exam" key={index} data={item} />
-            ))}
-          </Slider>
-        </div>
+        <MainSlider title="Recommended Exams" data={recommended} urlSeeAll="/student/exams/recommended" type="exams" />
       )}
       {upcoming.length > 0 && (
-        <div className="mt-4">
-          <TitleButton title="Upcoming Exam" url="/student/exams/upcoming" />
-          <Slider ArrowColor="blue" count={upcoming.length}>
-            {upcoming.map((item, index) => (
-              <CardExam type="exam" key={index} data={item} />
-            ))}
-          </Slider>
-        </div>
+        <MainSlider title="Upcoming Exams" data={upcoming} urlSeeAll="/student/exams/upcoming" type="exams" />
       )}
       {quiz.length > 0 && (
         <div className="mt-4">
