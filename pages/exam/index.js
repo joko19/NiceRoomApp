@@ -7,6 +7,7 @@ import CardExams from '../../components/Cards/CardExams';
 import { TitleButton } from '../../components/Slider/TitleButton';
 import apiLanding from '../../action/landingPage';
 import { useState, useEffect } from 'react'
+import MainSlider from '../../components/Slider/MainSlider';
 
 function Exam() {
   const list = [1, 2, 3, 4, 5, 6, 7]
@@ -39,13 +40,14 @@ function Exam() {
             </Link>
             <FaAngleRight className='mt-1' /> <span className='text-blue-1'>Exam</span>
           </div>
+          <MainSlider title="Live Exams" isLive={true} data={dataLive} urlSeeAll="/exams-live" type="exams"/>
 
-          <TitleButton title="Live Exams" url="/exam/1" isLive={true} count={dataLive.length} />
+          {/* <TitleButton title="Live Exams" url="/exam/1" isLive={true} count={dataLive.length} />
           <Slider ArrowColor="blue" count={dataLive.length} >
             {dataLive.map((item, index) => (
               <CardExams key={index} isLive={true} data={item} />
             ))}
-          </Slider>
+          </Slider> */}
         </div>
 
         {/* <div className="py-4 md:mx-32">

@@ -5,6 +5,7 @@ import { FaAngleRight } from 'react-icons/fa';
 import Slider from '../../components/Slider/Slider';
 import CardPaper from '../../components/Cards/CardPaper';
 import { TitleButton } from '../../components/Slider/TitleButton';
+import MainSlider from '../../components/Slider/MainSlider';
 
 function PrevPaper() {
 
@@ -20,9 +21,10 @@ function PrevPaper() {
             </Link>
             <FaAngleRight className='mt-1' /> <span className='text-blue-1'>Prev Paper</span>
           </div>
+          {/* <MainSlider title="Live"  /> */}
 
-          <TitleButton title="PO, CLERK, SO, Insurance" url="/prev-paper/1" />
-          <Slider ArrowColor="blue" >
+          <TitleButton title="PO, CLERK, SO, Insurance" url="/prev-paper/1" count={list.length} />
+          <Slider ArrowColor="blue" count={list.length} >
             {list.map((item) => (
               <CardPaper key={item} />
             ))}
