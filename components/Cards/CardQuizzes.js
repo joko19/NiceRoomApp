@@ -2,9 +2,13 @@ import React from "react";
 import Button from "../Button/button";
 import Image from 'next/image'
 import Link from "next/link";
+import { ModalLogin } from "../Modal/ModalLogin";
+import {
+  useDisclosure
+} from '@chakra-ui/react'
 
-export default function CardQuizzes({ isLive = false, url = '#', data }) {
-  console.log(data)
+export default function CardQuizzes({url, data }) {
+  const { isOpen, onOpen, onClose } = useDisclosure()
   return (
     <div className="flex-nowrap min-w-max mr-2 mt-2 bg-white rounded-lg p-4">
       <div className="flex flex-row gap-4">
@@ -24,11 +28,18 @@ export default function CardQuizzes({ isLive = false, url = '#', data }) {
           <span>{data?.started ? data?.started : '-'}</span>
         </div>
       </div>
-      <Link href={url} >
-        <a>
-          <Button title="Start Quiz" className="w-full mt-4" />
-        </a>
-      </Link>
+      {url.split("/")[url.split("/").length - 1] !== 'undefined' ? (
+        <Link href={url} >
+          <a>
+            <Button title="Start Quiz" className="w-full my-4" />
+          </a>
+        </Link>
+      ) : (
+        <div onClick={onOpen}>
+          <Button title="Start Quiz" className="w-full mt-2" />
+        </div>
+      )}
+      <ModalLogin isOpen={isOpen} onClose={onClose} />
     </div>
   )
 }

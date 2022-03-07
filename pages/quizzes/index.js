@@ -2,9 +2,7 @@ import Link from 'next/link';
 import Header from '../../components/Navbar/header';
 import Footer from "../../components/footer/footer";
 import { FaAngleRight } from 'react-icons/fa';
-import Slider from '../../components/Slider/Slider';
-import CardQuizzes from '../../components/Cards/CardQuizzes';
-import { TitleButton } from '../../components/Slider/TitleButton';
+import MainSlider from '../../components/Slider/MainSlider';
 import apiLanding from '../../action/landingPage';
 import { useState, useEffect } from 'react'
 
@@ -40,14 +38,7 @@ function Quizzes() {
             <FaAngleRight className='mt-1' /> <span className='text-blue-1'>Quizzes</span>
           </div>
           {dataQuiz.length > 0 && (
-            <>
-              <TitleButton title="Live Quiz" url="/quizzes/1" isLive={true} count={dataQuiz.length} />
-              <Slider ArrowColor="blue" >
-                {dataQuiz.map((item) => (
-                  <CardQuizzes key={item} isLive={true} />
-                ))}
-              </Slider>
-            </>
+            <MainSlider title="Live Quizzes" isLive={true} data={dataQuiz} urlSeeAll="/quizzes/live" type="quiz" />
           )}
         </div>
 
