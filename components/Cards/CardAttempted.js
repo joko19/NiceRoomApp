@@ -6,12 +6,12 @@ import Link from "next/link";
 export default function CardAttempted({ isLive = false, type = false, data, url = '#', score = '#' }) {
   console.log(data)
   return (
-    <div className="flex-nowrap min-w-max m-2 bg-white rounded-lg pt-4 px-4 ">
+    <div className="flex-nowrap w-64 m-2 bg-white rounded-lg pt-4 px-4 ">
       <div className="flex flex-row gap-4">
         <img className='w-9 h-9 my-auto' src="/asset/icon/ic_a+_yellow.png" alt="icon paper" />
         <div className='w-full'>
           <div className='flex justify-between'>
-            <p className="font-bold self-center">{data?.name}</p>
+            <p className="font-bold self-center">{data?.name.length > 10 ? data?.name.substring(0, 10) + "..." : data?.name}</p>
           </div>
         </div>
       </div>

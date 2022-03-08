@@ -5,12 +5,12 @@ import Link from "next/link";
 
 export default function CardPractice({isLive= false, data, url="#"}) {
   return (
-    <div className="flex-nowrap min-w-max  mr-2 mt-2 md:inline-block  bg-white rounded-lg pt-4 px-4 ">
+    <div className="flex-nowrap w-64 mr-2 mt-2 md:inline-block  bg-white rounded-lg pt-4 px-4 ">
       <div className="flex flex-row gap-4">
         <img className='w-9 h-9 my-auto' src="/asset/icon/ic_a+_yellow.png" alt="icon paper" />
         <div className='w-full'>
           <div className='flex justify-between'>
-            <p className="font-bold self-center">{data?.name}</p> 
+            <p className="font-bold self-center">{data?.name.length > 10 ? data?.name.substring(0, 10) + "..." : data?.name}</p> 
           </div>
           <p className="text-black-3 text-sm">By <span className='text-blue-1'>{data?.institute === null ? 'Examz' : data?.institute?.name}</span></p>
         </div>

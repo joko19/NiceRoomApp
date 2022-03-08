@@ -55,10 +55,10 @@ export default function Index() {
           setIsLoading(false)
         })
     }
-    // getPreferred()
-    // getLiveExam()
-    // getQuiz()
-    // getNews()
+    getPreferred()
+    getLiveExam()
+    getQuiz()
+    getNews()
   }, [])
 
   useEffect(() => {
