@@ -14,6 +14,7 @@ const examsUpcomingTake = (total) => instance.auth.get('/students/exams-upcoming
 const examsAttemptedAll = () => instance.auth.get('/students/exams-attempted')
 const examsAttemptedTake = (total) => instance.auth.get('/students/exams-attempted?take=' + total)
 const examsPrevious = () => instance.auth.get('/students/exams-previous')
+const examsPreferred = (take) => instance.auth.get('/students/exams-preferred?take=' + take)
 const examsGraph = () => instance.auth.get('/students/exams-graph')
 const examsGraphFilterDate = (date) => instance.auth.get('/students/exams-graph?date=' + date)
 const storeExams = (slug, data) => instance.auth.post('/students/exams/' + slug, data)
@@ -66,6 +67,7 @@ const apiStudentPage = {
   examsAttemptedAll,
   examsAttemptedTake,
   examsPrevious,
+  examsPreferred,
   examsGraph,
   examsGraphFilterDate,
   showExamsResult,

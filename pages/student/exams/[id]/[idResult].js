@@ -1,4 +1,4 @@
-import Layout from "../../../../Layout/Layout"
+import LayoutTest from "../../../../Layout/LayoutTest"
 import apiStudentPage from "../../../../action/student_page"
 import { useState, useEffect } from "react";
 import Card from '../../../../components/Cards/Card'
@@ -236,4 +236,8 @@ export default function Index() {
   )
 }
 
-Index.layout = Layout
+// This also gets called at build time
+export async function getServerSideProps(context) {
+  return { props: {} }
+}
+Index.layout = LayoutTest

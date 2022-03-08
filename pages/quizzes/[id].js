@@ -25,9 +25,9 @@ function UpcomingExam() {
               <h1 className="text-2xl">PO, CLERK, SO, Insurance</h1>
             </div>
             <div className=" grid md:grid-cols-3 gap-4 my-4">
-              {list.map((item) => (
+              {/* {list.map((item) => (
                 <CardQuizzes key={item} />
-              ))}
+              ))} */}
             </div>
           </div>
         </div>

@@ -419,7 +419,7 @@ export default function AdminNavbar() {
           <ModalCloseButton />
           <ModalBody>
             {/* <input type="text" className="form border mb-4 w-1/2 p-2 text-sm rounded" placeholder="Input Topic Name" {...register("name", { required: true })} /> */}
-            <div className="flex flex-wrap =">
+            <div className="flex flex-wrap">
               {listInstitute.map((item, index) => (
                 <div key={index} className={`flex flex-wrap gap-4my-2 w-1/2 p-2 text-sm cursor-pointer`} onClick={() => setInstituteSelect(item)}>
                   <div className={`${item === instituteSelect ? 'bg-blue-6' : 'bg-white'}  flex  border rounded  w-full p-2 gap-2`}>

@@ -1,4 +1,4 @@
-import Layout from "../../../../Layout/Layout"
+import LayoutTest from "../../../../Layout/LayoutTest"
 import apiStudentPage from "../../../../action/student_page"
 import { useState, useEffect } from "react";
 import Card from '../../../../components/Cards/Card'
@@ -218,12 +218,12 @@ export default function Index() {
               {dataExams.sections[activeSectionId].question_items.map((item, index) => (
                 <div key={index} id={index}>
                   <div key={index} className={` 
-                    ${index === activeQuestionId && item.status !== 'marked' && item.status !== 'marked_and_answered' && item.status !== 'answered' && item.status !== 'not_answered' && 'rounded-full'} 
-                    ${item.status === 'marked' && 'bg-purple-1 rounded-full border-1 border-purple-2'} 
-                    ${item.status === 'marked_and_answered' && 'relative bg-purple-100 rounded-full border-1 border-purple-2'} 
-                    ${item.status === 'answered' && 'bg-green-3 rounded-t-full border-1 border-green-1'}
-                    ${item.status === 'not_answered' && 'bg-red-2 rounded-b-full border-1 border-red-1'}
-                    cursor-pointer flex-nowrap w-12 flex  h-12 border rounded m-2`} onClick={() => setActiveQuestionId(index)}>
+                    ${index === activeQuestionId  && 'rounded-t-full bg-purple-1 border-purple-2 border-1'} 
+                    ${item.status === 'marked' && index !== activeQuestionId && 'bg-purple-1 rounded-full border-1 border-purple-2'} 
+                    ${item.status === 'marked_and_answered' && index !== activeQuestionId && 'relative bg-purple-100 rounded-full border-1 border-purple-2'} 
+                    ${item.status === 'answered' && index !== activeQuestionId && 'bg-green-3 rounded-t-full border-1 border-green-1'}
+                    ${item.status === 'not_answered' && index !== activeQuestionId && 'bg-red-2 rounded-b-full border-1 border-red-1'}
+                    cursor-pointer flex-nowrap w-12 flex  h-12 border  m-2`} onClick={() => setActiveQuestionId(index)}>
                     {item.status === 'marked_and_answered' && (
                       <div className="absolute bottom-2 right-0 rounded-full bg-green-1 w-2 h-2" />
                     )}
@@ -510,12 +510,12 @@ export default function Index() {
                 <div className="flex flex-wrap gap-2">
                   {dataExams.sections[activeSectionId].question_items.map((item, index) => (
                     <div key={index} className={` 
-                    ${index === activeQuestionId && item.status !== 'marked' && item.status !== 'marked_and_answered' && item.status !== 'answered' && item.status !== 'not_answered' && 'rounded-full'} 
-                    ${item.status === 'marked' && 'bg-purple-1 rounded-full border-1 border-purple-2'} 
-                    ${item.status === 'marked_and_answered' && 'relative bg-purple-100 rounded-full border-1 border-purple-2'} 
-                    ${item.status === 'answered' && 'bg-green-3 rounded-t-full border-1 border-green-1'}
-                    ${item.status === 'not_answered' && 'bg-red-2 rounded-b-full border-1 border-red-1'}
-                    cursor-pointer flex w-12 h-12 border rounded`} onClick={() => setActiveQuestionId(index)}>
+                    ${index === activeQuestionId  && 'rounded-t-full bg-purple-1 border-purple-2 border-1'} 
+                    ${item.status === 'marked' && index !== activeQuestionId && 'bg-purple-1 rounded-full border-1 border-purple-2'} 
+                    ${item.status === 'marked_and_answered' && index !== activeQuestionId && 'relative bg-purple-100 rounded-full border-1 border-purple-2'} 
+                    ${item.status === 'answered' && index !== activeQuestionId && 'bg-green-3 rounded-t-full border-1 border-green-1'}
+                    ${item.status === 'not_answered' && index !== activeQuestionId && 'bg-red-2 rounded-b-full border-1 border-red-1'}
+                    cursor-pointer flex-nowrap w-12 flex  h-12 border  m-2`} onClick={() => setActiveQuestionId(index)}>
                       {item.status === 'marked_and_answered' && (
                         <div className="absolute bottom-2 right-0 rounded-full bg-green-1 w-2 h-2" />
                       )}
@@ -660,4 +660,8 @@ export default function Index() {
   )
 }
 
-Index.layout = Layout
+// This also gets called at build time
+export async function getServerSideProps(context) {
+  return { props: {} }
+}
+Index.layout = LayoutTest

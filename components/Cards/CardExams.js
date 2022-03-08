@@ -42,7 +42,7 @@ export default function CardExams({data = false, url = false }) {
         </Link>
       ) : (
         <div onClick={onOpen}>
-          <Button title="Start Quiz" className="w-full mt-2" />
+          <Button title="Start Exam" className="w-full my-2" />
         </div>
       )}
       <ModalLogin isOpen={isOpen} onClose={onClose} />

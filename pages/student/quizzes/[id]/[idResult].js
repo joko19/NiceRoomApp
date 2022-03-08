@@ -1,4 +1,4 @@
-import Layout from "../../../../Layout/Layout"
+import LayoutTest from "../../../../Layout/LayoutTest"
 import apiStudentPage from "../../../../action/student_page"
 import { useState, useEffect } from "react";
 import Card from '../../../../components/Cards/Card'
@@ -105,6 +105,9 @@ export default function Index() {
                 </div>
               )
             })}
+
+            <div className="font-bold mt-4">Answer Explanation</div>
+            <div className="text-container" dangerouslySetInnerHTML={{ __html: dataExams.questions[activeQuestionId].answer_explanation }} />
             <div className="md:flex flex-row gap-4 ">
               <div className="w-full mt-4">
                 {activeQuestionId !== 0 && (
@@ -166,4 +169,8 @@ export default function Index() {
   )
 }
 
-Index.layout = Layout
+// This also gets called at build time
+export async function getServerSideProps(context) {
+  return { props: {} }
+}
+Index.layout = LayoutTest
